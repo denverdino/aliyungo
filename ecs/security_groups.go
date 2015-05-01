@@ -1,7 +1,7 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyun-go/util"
+	"github.com/denverdino/aliyungo/util"
 )
 
 type DescribeSecurityGroupAttributeArgs struct {

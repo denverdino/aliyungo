@@ -3,7 +3,7 @@ package ecs
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/denverdino/aliyun-go/util"
+	"github.com/denverdino/aliyungo/util"
 	"io/ioutil"
 	"log"
 	"net/http"

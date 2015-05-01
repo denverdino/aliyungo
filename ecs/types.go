@@ -2,7 +2,7 @@ package ecs
 
 import (
 	"fmt"
-	"github.com/denverdino/aliyun-go/util"
+	"github.com/denverdino/aliyungo/util"
 	"log"
 	"time"
 )

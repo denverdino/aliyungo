@@ -161,7 +161,13 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	return &response.InstanceAttributesType, err
 }
 
-func (client *Client) WaitForInstance(instanceId string, status string) *ECSError {
+const INSTANCE_WAIT_FOR_INVERVAL = 5
+const INSTANCE_DEFAULT_TIME_OUT = 60
+
+func (client *Client) WaitForInstance(instanceId string, status string, timeout int) *ECSError {
+	if timeout <= 0 {
+		timeout = INSTANCE_DEFAULT_TIME_OUT
+	}
 	for {
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
@@ -170,7 +176,12 @@ func (client *Client) WaitForInstance(instanceId string, status string) *ECSErro
 		if instance.Status == status {
 			break
 		}
-		time.Sleep(5 * time.Second)
+		timeout = timeout - INSTANCE_WAIT_FOR_INVERVAL
+		if timeout <= 0 {
+			return getECSErrorFromString("Timeout")
+		}
+		time.Sleep(INSTANCE_WAIT_FOR_INVERVAL * time.Second)
+
 	}
 	return nil
 }
@@ -225,11 +236,6 @@ func (client *Client) DeleteInstance(instanceId string) *ECSError {
 	return err
 }
 
-type SystemDiskType struct {
-	Category    string
-	DiskName    string
-	Description string
-}
 type DataDiskType struct {
 	Size               int
 	Category           string //Enum cloud, ephemeral, ephemeral_ssd
@@ -249,11 +255,13 @@ type CreateInstanceArgs struct {
 	InstanceName            string
 	Description             string
 	InternetChargeType      string
-	InternetMaxBandwidthIn  string //Integer??
-	InternetMaxBandwidthOut string //Integer??
+	InternetMaxBandwidthIn  int
+	InternetMaxBandwidthOut int
 	HostName                string
 	Password                string
-	SystemDisk              SystemDiskType
+	SystemDisk_Category     string `ArgName:"SystemDisk.Category"`
+	SystemDisk_DiskName     string `ArgName:"SystemDisk.DiskName"`
+	SystemDisk_Description  string `ArgName:"SystemDisk.Description"`
 	DataDisk                []DataDiskType
 	VSwitchId               string
 	PrivateIpAddress        string
@@ -262,11 +270,14 @@ type CreateInstanceArgs struct {
 
 type CreateInstanceResponse struct {
 	CommonResponse
+	InstanceId string
 }
 
-func (client *Client) CreateInstance(instanceId string) *ECSError {
-	args := CreateInstanceArgs{}
+func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId string, err *ECSError) {
 	response := CreateInstanceResponse{}
-	err := client.Invoke("CreateInstance", &args, &response)
-	return err
+	err = client.Invoke("CreateInstance", args, &response)
+	if err != nil {
+		return "", err
+	}
+	return response.InstanceId, err
 }

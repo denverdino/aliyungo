@@ -1,7 +1,7 @@
 package ecs
 
 import (
-	//	"bytes"
+	"bytes"
 	"encoding/json"
 	"github.com/denverdino/aliyun-go/util"
 	"io/ioutil"
@@ -16,27 +16,35 @@ const ECS_API_ENDPOINT = "https://ecs.aliyuncs.com"
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
+	debug           bool
 }
 
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
+		debug:           false,
 	}
-
 	return client
 }
 
-func getECSError(err error) *ECSError {
+func getECSErrorFromString(str string) *ECSError {
 	return &ECSError{
 		ErrorResponse: ErrorResponse{
-			Code:    "HTTPClientFailure",
-			Message: err.Error(),
+			Code:    "ECSClientFailure",
+			Message: str,
 		},
 		StatusCode: -1,
 	}
 }
 
+func getECSError(err error) *ECSError {
+	return getECSErrorFromString(err.Error())
+}
+
+func (client *Client) SetDebug(debug bool) {
+	client.debug = debug
+}
 func (client *Client) Invoke(action string, args interface{}, response interface{}) *ECSError {
 
 	request := Request{}
@@ -68,16 +76,17 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	log.Printf("Invoke %s %s %d (%v)", REQUEST_METHOD, requestURL, statusCode, t1.Sub(t0))
 
 	body, err := ioutil.ReadAll(httpResp.Body)
+	defer httpResp.Body.Close()
 
 	if err != nil {
 		return getECSError(err)
 	}
 
-	//	var prettyJSON bytes.Buffer
-	//	err = json.Indent(&prettyJSON, body, "", "    ")
-	//	log.Println(string(prettyJSON.Bytes()))
-
-	defer httpResp.Body.Close()
+	if client.debug {
+		var prettyJSON bytes.Buffer
+		err = json.Indent(&prettyJSON, body, "", "    ")
+		log.Println(string(prettyJSON.Bytes()))
+	}
 
 	var ecsError *ECSError
 

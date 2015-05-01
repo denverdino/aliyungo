@@ -2,10 +2,9 @@ package ecs
 
 import (
 	"testing"
-	"time"
 )
 
-func TestSnapshot(t *testing.T) {
+func aTestSnapshot(t *testing.T) {
 
 	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
 
@@ -25,34 +24,11 @@ func TestSnapshot(t *testing.T) {
 	}
 
 	for _, snapshot := range snapshots {
-		t.Logf("Snapshot of intance %s: %++v", TEST_INSTANCE_ID, snapshot)
+		t.Logf("Snapshot of instance %s: %++v", TEST_INSTANCE_ID, snapshot)
 	}
 }
 
-func waitSnapShotReady(t *testing.T, client *Client, regionId string, snapshotId string) {
-	for {
-		args1 := DescribeSnapshotsArgs{}
-
-		args1.InstanceId = TEST_INSTANCE_ID
-		args1.RegionId = regionId
-		args1.SnapshotIds = []string{snapshotId}
-		snapshots, _, err := client.DescribeSnapshots(&args1)
-
-		if err != nil {
-			t.Errorf("Failed to DescribeSnapshots for instance %s: %v", TEST_INSTANCE_ID, err)
-		}
-
-		for _, snapshot := range snapshots {
-			t.Logf("Snapshot of intance %s: %++v", TEST_INSTANCE_ID, snapshot)
-			if snapshot.Progress == "100%" {
-				return
-			}
-		}
-		time.Sleep(5 * time.Second)
-	}
-}
-
-func TestSnapshotCreationAndDeletion(t *testing.T) {
+func aTestSnapshotCreationAndDeletion(t *testing.T) {
 
 	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
 
@@ -74,7 +50,7 @@ func TestSnapshotCreationAndDeletion(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to CreateSnapshot for disk %s: %v", diskId, err)
 	}
-	waitSnapShotReady(t, client, instance.RegionId, snapshotId)
+	client.WaitForSnapShotReady(instance.RegionId, snapshotId, 0)
 
 	err = client.DeleteSnapshot(snapshotId)
 	if err != nil {

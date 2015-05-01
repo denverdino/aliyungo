@@ -1,5 +1,9 @@
 package ecs
 
+import (
+	"github.com/denverdino/aliyun-go/util"
+)
+
 type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
 	RegionId        string
@@ -46,8 +50,11 @@ type DescribeSecurityGroupsArgs struct {
 }
 
 type SecurityGroupItemType struct {
-	SecurityGroupId string
-	Description     string
+	SecurityGroupId   string
+	SecurityGroupName string
+	Description       string
+	VpcId             string
+	CreationTime      util.ISO6801Time
 }
 
 type DescribeSecurityGroupsResponse struct {
@@ -71,4 +78,63 @@ func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (
 	}
 
 	return response.SecurityGroups.SecurityGroup, &response.PaginationResult, nil
+}
+
+type CreateSecurityGroupArgs struct {
+	RegionId          string
+	SecurityGroupName string
+	Description       string
+	VpcId             string
+	ClientToken       string
+}
+
+type CreateSecurityGroupResponse struct {
+	CommonResponse
+
+	SecurityGroupId string
+}
+
+func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securityGroupId string, err *ECSError) {
+	response := CreateSecurityGroupResponse{}
+	err = client.Invoke("CreateSecurityGroup", args, &response)
+	if err != nil {
+		return "", err
+	}
+	return response.SecurityGroupId, err
+}
+
+type DeleteSecurityGroupArgs struct {
+	RegionId        string
+	SecurityGroupId string
+}
+
+type DeleteSecurityGroupResponse struct {
+	CommonResponse
+}
+
+func (client *Client) DeleteSecurityGroup(regionId string, securityGroupId string) *ECSError {
+	args := DeleteSecurityGroupArgs{
+		RegionId:        regionId,
+		SecurityGroupId: securityGroupId,
+	}
+	response := DeleteSecurityGroupResponse{}
+	err := client.Invoke("DeleteSecurityGroup", &args, &response)
+	return err
+}
+
+type ModifySecurityGroupAttributeArgs struct {
+	RegionId          string
+	SecurityGroupId   string
+	SecurityGroupName string
+	Description       string
+}
+
+type ModifySecurityGroupAttributeResponse struct {
+	CommonResponse
+}
+
+func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttributeArgs) *ECSError {
+	response := ModifySecurityGroupAttributeResponse{}
+	err := client.Invoke("ModifySecurityGroupAttribute", args, &response)
+	return err
 }

@@ -2,6 +2,7 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyun-go/util"
+	"time"
 )
 
 // Describe `DescribeSnapshots`
@@ -84,4 +85,38 @@ func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId strin
 		snapshotId = response.SnapshotId
 	}
 	return snapshotId, err
+}
+
+const SNAPSHOT_WAIT_FOR_INVERVAL = 5
+const SNAPSHOT_DEFAULT_TIME_OUT = 60
+
+func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, timeout int) *ECSError {
+	if timeout <= 0 {
+		timeout = DISK_DEFAULT_TIME_OUT
+	}
+	for {
+		args := DescribeSnapshotsArgs{
+			RegionId:    regionId,
+			SnapshotIds: []string{snapshotId},
+		}
+
+		snapshots, _, err := client.DescribeSnapshots(&args)
+		if err != nil {
+			return err
+		}
+		if snapshots == nil || len(snapshots) == 0 {
+			return getECSErrorFromString("Not found")
+		}
+		if snapshots[0].Progress == "100%" {
+			break
+		}
+		timeout = timeout - DISK_WAIT_FOR_INVERVAL
+		if timeout <= 0 {
+			return getECSErrorFromString("Timeout")
+		}
+		time.Sleep(DISK_WAIT_FOR_INVERVAL * time.Second)
+
+		time.Sleep(5 * time.Second)
+	}
+	return nil
 }

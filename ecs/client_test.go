@@ -31,7 +31,7 @@ func TestECSDescribe(t *testing.T) {
 			t.Log("instanceStatuses: ", instanceStatuses, pagination, err)
 			for _, instanceStatus := range instanceStatuses {
 				instance, err := client.DescribeInstanceAttribute(instanceStatus.InstanceId)
-				t.Logf("Intances: %++v", instance)
+				t.Logf("Instance: %++v", instance)
 				t.Logf("Error: %++v", err)
 			}
 			args1 := DescribeInstancesArgs{
@@ -43,53 +43,30 @@ func TestECSDescribe(t *testing.T) {
 				t.Errorf("Failed to describe instance %s %s", region.RegionId, zone.ZoneId)
 			} else {
 				for _, instance := range instances {
-					t.Logf("Intances: %++v", instance)
+					t.Logf("Instance: %++v", instance)
 				}
 			}
 
 		}
 		args := DescribeImagesArgs{RegionId: region.RegionId}
 
-		images, pagination, err := client.DescribeImages(&args)
-		t.Logf("Total image count for region %s: %d\n", region.RegionId, pagination.TotalCount)
+		for {
 
-		for _, image := range images {
-			t.Logf("Image: %++v", image)
+			images, pagination, err := client.DescribeImages(&args)
+			if err != nil {
+				t.Fatalf("Failed to describe images: %v", err)
+				break
+			} else {
+				t.Logf("Total image count for region %s: %d", region.RegionId, pagination.TotalCount)
+				for _, image := range images {
+					t.Logf("Image: %++v", image)
+				}
+				nextPage := pagination.NextPage()
+				if nextPage == nil {
+					break
+				}
+				args.Pagination = *nextPage
+			}
 		}
-		t.Logf("Error: %++v", err)
 	}
-}
-
-func TestECSInstance(t *testing.T) {
-
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
-	t.Logf("Intance: %++v  %v\n", instance, err)
-	err = client.StopInstance(TEST_INSTANCE_ID, false)
-	if err != nil {
-		t.Errorf("Failed to stop instance %s: %v", TEST_INSTANCE_ID, err)
-	}
-	err = client.WaitForInstance(TEST_INSTANCE_ID, "Stopped")
-	if err != nil {
-		t.Errorf("Intance %s is failed to stop: %v", TEST_INSTANCE_ID, err)
-	}
-	t.Logf("Intance %s is stopped successfully.", TEST_INSTANCE_ID)
-	err = client.StartInstance(TEST_INSTANCE_ID)
-	if err != nil {
-		t.Errorf("Failed to start instance %s: %v", TEST_INSTANCE_ID, err)
-	}
-	err = client.WaitForInstance(TEST_INSTANCE_ID, "Running")
-	if err != nil {
-		t.Errorf("Intance %s is failed to start: %v", TEST_INSTANCE_ID, err)
-	}
-	t.Logf("Intance %s is running successfully.", TEST_INSTANCE_ID)
-	err = client.RebootInstance(TEST_INSTANCE_ID, true)
-	if err != nil {
-		t.Errorf("Failed to restart instance %s: %v", TEST_INSTANCE_ID, err)
-	}
-	err = client.WaitForInstance(TEST_INSTANCE_ID, "Running")
-	if err != nil {
-		t.Errorf("Intance %s is failed to restart: %v", TEST_INSTANCE_ID, err)
-	}
-	t.Logf("Intance %s is running successfully.", TEST_INSTANCE_ID)
 }

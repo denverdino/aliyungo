@@ -65,10 +65,21 @@ type Pagination struct {
 	PageSize   int
 }
 
+func (p *Pagination) SetPageSize(size int) {
+	p.PageSize = size
+}
+
 type PaginationResult struct {
 	TotalCount int
 	PageNumber int
 	PageSize   int
+}
+
+func (r *PaginationResult) NextPage() *Pagination {
+	if r.PageNumber*r.PageSize >= r.TotalCount {
+		return nil
+	}
+	return &Pagination{PageNumber: r.PageNumber + 1, PageSize: r.PageSize}
 }
 
 func (p *Pagination) validate() {

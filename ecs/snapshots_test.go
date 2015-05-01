@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func aTestSnapshot(t *testing.T) {
+func TestSnapshot(t *testing.T) {
 
 	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
 
@@ -37,6 +37,7 @@ func aTestSnapshotCreationAndDeletion(t *testing.T) {
 		t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TEST_INSTANCE_ID, err)
 	}
 
+	//TODO
 	diskId := "d-25z6kd44o"
 
 	args := CreateSnapshotArgs{

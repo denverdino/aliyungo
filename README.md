@@ -2,11 +2,17 @@
 ================
 This is an unofficial Go SDK for Aliyun Services
 
+
+
 Package Structure
 -------------------
 
-*  ecs: API for Elastic Compute Service
+*  ecs: [API for Elastic Compute Service]()
 *  util: Utility helpers
+
+Documentation
+-------------------
+*  ecs: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs)
 
 
 Test
@@ -26,12 +32,11 @@ Modify "ecs/config_test.go"
 *  TEST_INSTANCE_ID: the existing instance id for testing. It will be stopped and restarted during testing.
 *  TEST_I_AM_RICH(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
 
-Under aliyun-go/ecs and run
+Under "ecs" and run
 
 ```sh
 go test
 ```
-
 
 License and Authors
 -------------------

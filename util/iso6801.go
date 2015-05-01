@@ -5,13 +5,14 @@ import (
 	"time"
 )
 
+//Get timestamp string with ISO8601 format
 func GetISO8601TimeStamp(ts time.Time) string {
 	t := ts.UTC()
 	return fmt.Sprintf("%04d-%02d-%02dT%02d:%02d:%02dZ", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 }
 
-const Format = "2006-01-02T15:04:05Z"
-const jsonFormat = `"` + Format + `"`
+const format_ISO8601 = "2006-01-02T15:04:05Z"
+const jsonFormat_ISO8601 = `"` + format_ISO8601 + `"`
 
 type ISO6801Time time.Time
 
@@ -37,14 +38,14 @@ func (it *ISO6801Time) IsDefault() bool {
 }
 
 func (it ISO6801Time) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(it).Format(jsonFormat)), nil
+	return []byte(time.Time(it).Format(jsonFormat_ISO8601)), nil
 }
 
 func (it *ISO6801Time) UnmarshalJSON(data []byte) error {
 	if string(data) == "\"\"" {
 		return nil
 	}
-	t, err := time.ParseInLocation(jsonFormat, string(data), time.UTC)
+	t, err := time.ParseInLocation(jsonFormat_ISO8601, string(data), time.UTC)
 	if err == nil {
 		*it = ISO6801Time(t)
 	}

@@ -5,12 +5,12 @@ import (
 	"time"
 )
 
-// Describe `DescribeSnapshots`
+// Describe DescribeSnapshots
 type DescribeSnapshotsArgs struct {
 	RegionId    string
 	InstanceId  string
 	DiskId      string
-	SnapshotIds []string //Json Array：["s-xxxxxxxxx", "s-yyyyyyyyy", ..."s-zzzzzzzzz"]
+	SnapshotIds []string //["s-xxxxxxxxx", "s-yyyyyyyyy", ..."s-zzzzzzzzz"]
 	Pagination
 }
 
@@ -21,7 +21,7 @@ type SnapshotType struct {
 	Progress       string
 	SourceDiskId   string
 	SourceDiskSize string //GB Why it is string
-	SourceDiskType string //System | Data
+	SourceDiskType string //enum for System | Data
 	ProductCode    string
 	CreationTime   util.ISO6801Time
 }
@@ -47,7 +47,7 @@ func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots 
 
 }
 
-// Describe `DescribeSnapshots`
+// Delete Snapshot
 type DeleteSnapshotArgs struct {
 	SnapshotId string
 }
@@ -63,7 +63,7 @@ func (client *Client) DeleteSnapshot(snapshotId string) *ECSError {
 	return client.Invoke("DeleteSnapshot", &args, &response)
 }
 
-// Describe `DescribeSnapshots`
+// Create Snapshot
 type CreateSnapshotArgs struct {
 	DiskId       string
 	SnapshotName string
@@ -90,6 +90,7 @@ func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId strin
 const SNAPSHOT_WAIT_FOR_INVERVAL = 5
 const SNAPSHOT_DEFAULT_TIME_OUT = 60
 
+//Wait for snapshot ready
 func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, timeout int) *ECSError {
 	if timeout <= 0 {
 		timeout = DISK_DEFAULT_TIME_OUT

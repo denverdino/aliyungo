@@ -42,7 +42,7 @@ func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroup
 	return response, nil
 }
 
-// Describe `SecurityGroups`
+// Describe Security Groups
 type DescribeSecurityGroupsArgs struct {
 	RegionId string
 	VpcId    string

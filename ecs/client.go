@@ -14,11 +14,12 @@ import (
 const ECS_API_ENDPOINT = "https://ecs.aliyuncs.com"
 
 type Client struct {
-	AccessKeyId     string
-	AccessKeySecret string
+	AccessKeyId     string //Access Key Id
+	AccessKeySecret string //Access Key Secret
 	debug           bool
 }
 
+//Create a new instance of ECS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{
 		AccessKeyId:     accessKeyId,
@@ -45,6 +46,8 @@ func getECSError(err error) *ECSError {
 func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
+
+//Invoke the ECS request
 func (client *Client) Invoke(action string, args interface{}, response interface{}) *ECSError {
 
 	request := Request{}
@@ -109,6 +112,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	return ecsError
 }
 
+// Generate the Client Token
 func (client *Client) GenerateClientToken() string {
 	return util.CreateRandomString()
 }

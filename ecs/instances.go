@@ -95,7 +95,7 @@ type DescribeInstanceAttributeArgs struct {
 }
 
 type OperationLocksType struct {
-	LockReason []string //TODO financial, security
+	LockReason []string //enum for financial, security
 }
 
 type SecurityGroupIdSetType struct {

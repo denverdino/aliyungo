@@ -75,6 +75,7 @@ type PaginationResult struct {
 	PageSize   int
 }
 
+//Get the Next Page of the result set
 func (r *PaginationResult) NextPage() *Pagination {
 	if r.PageNumber*r.PageSize >= r.TotalCount {
 		return nil

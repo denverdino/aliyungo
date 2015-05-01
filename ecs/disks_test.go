@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func aTestDisks(t *testing.T) {
+func TestDisks(t *testing.T) {
 
 	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
 

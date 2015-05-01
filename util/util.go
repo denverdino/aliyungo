@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+//Create random string
 func CreateRandomString() string {
 
 	rand.Seed(time.Now().UnixNano())

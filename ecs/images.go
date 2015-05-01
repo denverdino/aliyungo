@@ -4,8 +4,7 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
-// Describe `Image`s
-
+// Describe Images
 type DescribeImagesArgs struct {
 	RegionId        string
 	ImageId         string
@@ -27,7 +26,7 @@ type DescribeImagesResponse struct {
 
 type DiskDeviceMapping struct {
 	SnapshotId string
-	//Why `Size` Field is string-type.
+	//Why Size Field is string-type.
 	Size   string
 	Device string
 }
@@ -51,6 +50,7 @@ type ImageType struct {
 	CreationTime util.ISO6801Time
 }
 
+// Describe Images
 func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageType, pagination *PaginationResult, err *ECSError) {
 
 	args.validate()
@@ -62,7 +62,7 @@ func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageTy
 	return response.Images.Image, &response.PaginationResult, nil
 }
 
-// Create `Image`
+// Create Image
 type CreateImageArgs struct {
 	RegionId     string
 	SnapshotId   string
@@ -87,7 +87,7 @@ func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err *E
 	return response.ImageId, nil
 }
 
-// DeleteImage
+// Delete Image
 type DeleteImageArgs struct {
 	RegionId string
 	ImageId  string

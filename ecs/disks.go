@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// Describe Disks
 const (
 	DISK_TYPE_ALL    = "all" //Default
 	DISK_TYPE_SYSTEM = "system"
@@ -24,19 +23,20 @@ const (
 	DISK_STATUS_ALL       = "All" //Default
 )
 
+// Describe Disks
 type DescribeDisksArgs struct {
 	RegionId           string
 	ZoneId             string
 	DiskIds            []string
 	InstanceId         string
-	DiskType           string //all(default) | system | data
-	Category           string //all(default) | cloud | ephemeral
-	Status             string //In_use | Available | Attaching | Detaching | Creating | ReIniting | All(default)
+	DiskType           string //enum for all(default) | system | data
+	Category           string //enum for all(default) | cloud | ephemeral
+	Status             string //enum for In_use | Available | Attaching | Detaching | Creating | ReIniting | All(default)
 	SnapshotId         string
 	Name               string
-	Portable           *bool
-	DeleteWithInstance *bool
-	DeleteAutoSnapshot *bool
+	Portable           *bool //optional
+	DeleteWithInstance *bool //optional
+	DeleteAutoSnapshot *bool //optional
 	Pagination
 }
 
@@ -75,6 +75,7 @@ type DescribeDisksResponse struct {
 	}
 }
 
+// Describe Disks
 func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *PaginationResult, err *ECSError) {
 	response := DescribeDisksResponse{}
 
@@ -87,6 +88,7 @@ func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemTy
 	return response.Disks.Disk, &response.PaginationResult, err
 }
 
+// Create Disk
 type CreateDiskArgs struct {
 	RegionId    string
 	ZoneId      string
@@ -102,6 +104,7 @@ type CreateDisksResponse struct {
 	DiskId string
 }
 
+// Create Disk
 func (client *Client) CreateDisk(args *CreateDiskArgs) (diskId string, err *ECSError) {
 	response := CreateDisksResponse{}
 	err = client.Invoke("CreateDisk", args, &response)

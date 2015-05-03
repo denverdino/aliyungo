@@ -49,8 +49,6 @@ type ListBucketResult struct {
 	NextMarker string
 	// IsTruncated is true if the results have been truncated because
 	// there are more keys and prefixes than can fit in MaxKeys.
-	// N.B. this is the opposite sense to that documented (incorrectly) in
-	// http://goo.gl/YjQTc
 	IsTruncated    bool
 	Contents       []Content
 	CommonPrefixes []string `xml:">Prefix"`

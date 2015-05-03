@@ -11,13 +11,20 @@ var (
 	testObject = "api_handler.go"
 )
 
+func TestPutObject(t *testing.T) {
+	err := client.PutObject(TEST_BUCKET, testObject, []byte("Just for text"), "")
+	if err != nil {
+		t.Errorf("Unable to put Object: %++v", err)
+	}
+
+}
+
 func TestPutObjectFromFile(t *testing.T) {
 	file, err := os.Open("../README.md")
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = client.PutObjectFromFile(TEST_BUCKET, testObject, nil, file)
-
+	err = client.PutObjectFromFile(TEST_BUCKET, testObject, file)
 	if err != nil {
 		t.Errorf("Unable to put Object: %++v", err)
 	}
@@ -28,7 +35,7 @@ func TestGetObject(t *testing.T) {
 	body, err := client.GetObject(TEST_BUCKET, testObject, nil)
 	//defer body.Close()
 	if err != nil {
-		t.Errorf("Unable to get object: %v", err)
+		t.Fatalf("Unable to get object: %v", err)
 	}
 	contents, err := ioutil.ReadAll(body)
 	if err != nil {

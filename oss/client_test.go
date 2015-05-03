@@ -69,7 +69,7 @@ func TestGetBucket(t *testing.T) {
 	}
 	result, err = client.GetBucket(TEST_BUCKET, "", "", "", "10")
 	if err != nil {
-		t.Error("Unable to list Bucket with 10 maxkeys: %v", err)
+		t.Errorf("Unable to list Bucket with 10 maxkeys: %v", err)
 	} else {
 		t.Logf("Result: %++v", result)
 	}
@@ -87,14 +87,14 @@ func TestGetBucketACL(t *testing.T) {
 func TestPutBucket(t *testing.T) {
 	err := client.PutBucket("denverdino-test", "")
 	if err != nil {
-		t.Error("Unable to create a new bucket with no acl specified: %v", err)
+		t.Errorf("Unable to create a new bucket with no acl specified: %v", err)
 	}
 	err = client.PutBucket("denverdino-test", "private")
 	if err != nil {
-		t.Error("Unable to create a new bucket with private acl: %v", err)
+		t.Errorf("Unable to create a new bucket with private acl: %v", err)
 	}
 	err = client.DeleteBucket("denverdino-test")
 	if err != nil {
-		t.Error("Unable to delete the test bucket: %v", err)
+		t.Errorf("Unable to delete the test bucket: %v", err)
 	}
 }

@@ -154,5 +154,5 @@ func getGMTime() string {
 }
 
 func getExpires() string {
-	return fmt.Sprint("%d", time.Now().Unix()+60)
+	return fmt.Sprintf("%d", time.Now().Unix()+60)
 }

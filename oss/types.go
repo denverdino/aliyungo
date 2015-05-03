@@ -86,7 +86,7 @@ type Object struct {
 
 type AccessControlPolicy struct {
 	Owner  Owner
-	Grants []string `xml:AccessControlList>Grant"`
+	Grants []string `xml:"AccessControlList>Grant"`
 }
 type CopyObjectResult struct {
 	LastModified string

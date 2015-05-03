@@ -5,7 +5,7 @@ import (
 )
 
 func TestGenerateClientToken(t *testing.T) {
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 	for i := 0; i < 10; i++ {
 		t.Log("GenerateClientToken: ", client.GenerateClientToken())
 	}
@@ -13,7 +13,7 @@ func TestGenerateClientToken(t *testing.T) {
 }
 
 func TestECSDescribe(t *testing.T) {
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
 	regions, err := client.DescribeRegions()
 

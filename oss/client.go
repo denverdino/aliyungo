@@ -17,11 +17,17 @@ import (
 )
 
 const (
-	DEFAULT_CONTENT_TYPE = "application/octet-stream"
-	HEADER_X_OSS_PREFIX  = "x-oss-"
-	HEADER_X_OSS_ACL     = "x-oss-acl"
+	//DefaultContentType is default Content-Type
+	DefaultContentType = "application/octet-stream"
+
+	//HeaderOSSPrefix is prefix of OSS Header
+	HeaderOSSPrefix = "x-oss-"
+
+	//HeaderOSSACL is x-oss-acl Header
+	HeaderOSSACL = "x-oss-acl"
 )
 
+// Client represents client for OSS service
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
@@ -30,6 +36,7 @@ type Client struct {
 	debug           bool
 }
 
+// NewOSSClient create a new instance of OSS client
 func NewOSSClient(endpoint string, accessKeyId string, accessKeySecret string) *Client {
 	return &Client{
 		AccessKeyId:     accessKeyId,
@@ -40,16 +47,23 @@ func NewOSSClient(endpoint string, accessKeyId string, accessKeySecret string) *
 	}
 }
 
+// SetAccessKeyId sets new AccessKeyId
 func (client *Client) SetAccessKeyId(id string) {
 	client.AccessKeyId = id
 }
 
+// SetAccessKeySecret sets new AccessKeySecret
 func (client *Client) SetAccessKeySecret(secret string) {
 	client.AccessKeySecret = secret
 }
 
+// SetDebug sets debug mode to log the request/response message
+func (client *Client) SetDebug(debug bool) {
+	client.debug = debug
+}
+
 func getOSSErrorFromString(str string) error {
-	return &OSSError{
+	return &Error{
 		ErrorResponse: ErrorResponse{
 			Code:    "OSSClientFailure",
 			Message: str,
@@ -62,6 +76,7 @@ func getOSSError(err error) error {
 	return getOSSErrorFromString(err.Error())
 }
 
+// Invoke sends the raw HTTP request for OSS service
 func (client *Client) Invoke(method, url string, body io.Reader, headers http.Header) (httpResp *http.Response, err error) {
 	host := client.Endpoint
 	req, err := http.NewRequest(method, host+url, body)
@@ -113,7 +128,7 @@ func (client *Client) Invoke(method, url string, body io.Reader, headers http.He
 	}
 
 	if statusCode >= 400 && statusCode <= 599 {
-		ossError := &OSSError{}
+		ossError := &Error{}
 		decoder := xml.NewDecoder(httpResp.Body)
 		err := decoder.Decode(ossError)
 		if err != nil {
@@ -139,7 +154,7 @@ func (client *Client) decodeResponse(httpResp *http.Response, response interface
 	return nil
 }
 
-func CopyHeader(header http.Header) (newHeader http.Header) {
+func copyHeader(header http.Header) (newHeader http.Header) {
 	newHeader = make(http.Header)
 	for k, v := range header {
 		newSlice := make([]string, len(v))

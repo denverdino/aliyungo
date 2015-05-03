@@ -6,39 +6,39 @@ import (
 
 func TestDisks(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
-		t.Fatalf("Failed to DescribeInstanceAttribute for instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Fatalf("Failed to DescribeInstanceAttribute for instance %s: %v", TestInstanceId, err)
 	}
 
 	args := DescribeDisksArgs{}
 
-	args.InstanceId = TEST_INSTANCE_ID
+	args.InstanceId = TestInstanceId
 	args.RegionId = instance.RegionId
 	disks, _, err := client.DescribeDisks(&args)
 
 	if err != nil {
-		t.Fatalf("Failed to DescribeDisks for instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Fatalf("Failed to DescribeDisks for instance %s: %v", TestInstanceId, err)
 	}
 
 	for _, disk := range disks {
-		t.Logf("Disk of instance %s: %++v", TEST_INSTANCE_ID, disk)
+		t.Logf("Disk of instance %s: %++v", TestInstanceId, disk)
 	}
 }
 
 func TestDiskCreationAndDeletion(t *testing.T) {
 
-	if TEST_I_AM_RICH == false { //Avoid payment
+	if TestIAmRich == false { //Avoid payment
 		return
 	}
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
-		t.Fatalf("Failed to DescribeInstanceAttribute for instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Fatalf("Failed to DescribeInstanceAttribute for instance %s: %v", TestInstanceId, err)
 	}
 
 	args := CreateDiskArgs{
@@ -65,15 +65,15 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 	} else {
 		t.Logf("Attach disk %s to instance %s successfully", diskId, instance.InstanceId)
 
-		instance, err = client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+		instance, err = client.DescribeInstanceAttribute(TestInstanceId)
 		if err != nil {
-			t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TEST_INSTANCE_ID, err)
+			t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TestInstanceId, err)
 		} else {
 			t.Logf("Instance: %++v  %v", instance, err)
 		}
-		err = client.WaitForDisk(instance.RegionId, diskId, DISK_STATUS_IN_USE, 0)
+		err = client.WaitForDisk(instance.RegionId, diskId, DiskStatusInUse, 0)
 		if err != nil {
-			t.Fatalf("Failed to wait for disk %s to status %s: %v", diskId, DISK_STATUS_IN_USE, err)
+			t.Fatalf("Failed to wait for disk %s to status %s: %v", diskId, DiskStatusInUse, err)
 		}
 		err = client.DetachDisk(instance.InstanceId, diskId)
 		if err != nil {
@@ -82,9 +82,9 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 			t.Logf("Detach disk %s to instance %s successfully", diskId, instance.InstanceId)
 		}
 
-		err = client.WaitForDisk(instance.RegionId, diskId, DISK_STATUS_AVAILABLE, 0)
+		err = client.WaitForDisk(instance.RegionId, diskId, DiskStatusAvailable, 0)
 		if err != nil {
-			t.Fatalf("Failed to wait for disk %s to status %s: %v", diskId, DISK_STATUS_AVAILABLE, err)
+			t.Fatalf("Failed to wait for disk %s to status %s: %v", diskId, DiskStatusAvailable, err)
 		}
 	}
 	err = client.DeleteDisk(diskId)

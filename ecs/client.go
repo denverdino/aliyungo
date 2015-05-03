@@ -11,8 +11,10 @@ import (
 	"time"
 )
 
-const ECS_API_ENDPOINT = "https://ecs.aliyuncs.com"
+// ECSDefaultEndpoint is the default API endpoint of ECS services
+const ECSDefaultEndpoint = "https://ecs.aliyuncs.com"
 
+// A Client represents a client of ECS services
 type Client struct {
 	AccessKeyId     string //Access Key Id
 	AccessKeySecret string //Access Key Secret
@@ -20,7 +22,7 @@ type Client struct {
 	httpClient      *http.Client
 }
 
-//Create a new instance of ECS client
+// NewClient creates a new instance of ECS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{
 		AccessKeyId:     accessKeyId,
@@ -31,16 +33,18 @@ func NewClient(accessKeyId, accessKeySecret string) *Client {
 	return client
 }
 
+// SetAccessKeyId sets new AccessKeyId
 func (client *Client) SetAccessKeyId(id string) {
 	client.AccessKeyId = id
 }
 
+// SetAccessKeySecret sets new AccessKeySecret
 func (client *Client) SetAccessKeySecret(secret string) {
 	client.AccessKeySecret = secret + "&"
 }
 
 func getECSErrorFromString(str string) error {
-	return &ECSError{
+	return &Error{
 		ErrorResponse: ErrorResponse{
 			Code:    "ECSClientFailure",
 			Message: str,
@@ -53,11 +57,12 @@ func getECSError(err error) error {
 	return getECSErrorFromString(err.Error())
 }
 
+// SetDebug sets debug mode to log the request/response message
 func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
 
-//Invoke the ECS request
+// Invoke sends the raw HTTP request for ECS services
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 
 	request := Request{}
@@ -67,12 +72,12 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	util.SetQueryValues(args, &query)
 
 	// Sign request
-	signature := util.CreateSignatureForRequest(REQUEST_METHOD, &query, client.AccessKeySecret)
+	signature := util.CreateSignatureForRequest(ECSRequestMethod, &query, client.AccessKeySecret)
 
 	// Generate the request URL
-	requestURL := ECS_API_ENDPOINT + "?" + query.Encode() + "&Signature=" + url.QueryEscape(signature)
+	requestURL := ECSDefaultEndpoint + "?" + query.Encode() + "&Signature=" + url.QueryEscape(signature)
 
-	httpReq, err := http.NewRequest(REQUEST_METHOD, requestURL, nil)
+	httpReq, err := http.NewRequest(ECSRequestMethod, requestURL, nil)
 	if err != nil {
 		return getECSError(err)
 	}
@@ -85,7 +90,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 	statusCode := httpResp.StatusCode
 
-	log.Printf("Invoke %s %s %d (%v)", REQUEST_METHOD, requestURL, statusCode, t1.Sub(t0))
+	log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
 
 	defer httpResp.Body.Close()
 	body, err := ioutil.ReadAll(httpResp.Body)
@@ -103,23 +108,23 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	if statusCode >= 400 && statusCode <= 599 {
 		errorResponse := ErrorResponse{}
 		err = json.Unmarshal(body, &errorResponse)
-		ecsError := &ECSError{
+		ecsError := &Error{
 			ErrorResponse: errorResponse,
 			StatusCode:    statusCode,
 		}
 		return ecsError
-	} else {
-		err = json.Unmarshal(body, response)
-		//log.Printf("%++v", response)
-		if err != nil {
-			return getECSError(err)
-		}
+	}
+
+	err = json.Unmarshal(body, response)
+	//log.Printf("%++v", response)
+	if err != nil {
+		return getECSError(err)
 	}
 
 	return nil
 }
 
-// Generate the Client Token
+// GenerateClientToken generates the Client Token with random string
 func (client *Client) GenerateClientToken() string {
 	return util.CreateRandomString()
 }

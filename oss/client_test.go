@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	client     = NewOSSClient(TEST_REGION.GetInternetEndpoint(), TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client     = NewOSSClient(TestRegion.GetInternetEndpoint(), TestAccessKeyId, TestAccessKeySecret)
 	testObject = "api_handler.go"
 )
 
 func TestPutObject(t *testing.T) {
-	err := client.PutObject(TEST_BUCKET, testObject, []byte("Just for text"), "")
+	err := client.PutObject(TestBucket, testObject, []byte("Just for text"), "")
 	if err != nil {
 		t.Errorf("Unable to put Object: %++v", err)
 	}
@@ -24,7 +24,7 @@ func TestPutObjectFromFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = client.PutObjectFromFile(TEST_BUCKET, testObject, file)
+	err = client.PutObjectFromFile(TestBucket, testObject, file)
 	if err != nil {
 		t.Errorf("Unable to put Object: %++v", err)
 	}
@@ -32,7 +32,7 @@ func TestPutObjectFromFile(t *testing.T) {
 }
 
 func TestGetObject(t *testing.T) {
-	body, err := client.GetObject(TEST_BUCKET, testObject, nil)
+	body, err := client.GetObject(TestBucket, testObject, nil)
 	//defer body.Close()
 	if err != nil {
 		t.Fatalf("Unable to get object: %v", err)
@@ -45,7 +45,7 @@ func TestGetObject(t *testing.T) {
 }
 
 func TestDeleteObject(t *testing.T) {
-	err := client.DeleteObject(TEST_BUCKET, testObject)
+	err := client.DeleteObject(TestBucket, testObject)
 	if err != nil {
 		t.Errorf("Unable to del object: %v", err)
 	}
@@ -61,13 +61,13 @@ func TestGetService(t *testing.T) {
 }
 
 func TestGetBucket(t *testing.T) {
-	result, err := client.GetBucket(TEST_BUCKET, "", "", "", "")
+	result, err := client.GetBucket(TestBucket, "", "", "", "")
 	if err != nil {
 		t.Errorf("Unable to list Bucket with no params: %v", err)
 	} else {
 		t.Logf("Result: %++v", result)
 	}
-	result, err = client.GetBucket(TEST_BUCKET, "", "", "", "10")
+	result, err = client.GetBucket(TestBucket, "", "", "", "10")
 	if err != nil {
 		t.Errorf("Unable to list Bucket with 10 maxkeys: %v", err)
 	} else {
@@ -76,7 +76,7 @@ func TestGetBucket(t *testing.T) {
 }
 
 func TestGetBucketACL(t *testing.T) {
-	result, err := client.GetBucketAcl(TEST_BUCKET)
+	result, err := client.GetBucketAcl(TestBucket)
 	if err != nil {
 		t.Errorf("Unable to get Bucket ACL: %v", err)
 	} else {

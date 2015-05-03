@@ -6,7 +6,7 @@ import (
 
 func TestSecurityGroups(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 	regions, err := client.DescribeRegions()
 
 	t.Log("regions: ", regions, err)
@@ -42,10 +42,10 @@ func TestSecurityGroups(t *testing.T) {
 
 func TestECSSecurityGroupCreationAndDeletion(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
-		t.Fatalf("Failed to describe instance attribute %s: %v", TEST_INSTANCE_ID, err)
+		t.Fatalf("Failed to describe instance attribute %s: %v", TestInstanceId, err)
 	}
 	regionId := instance.RegionId
 	sgName := "test-security-group"

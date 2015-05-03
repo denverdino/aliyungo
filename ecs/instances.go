@@ -24,6 +24,7 @@ type DescribeInstanceStatusResponse struct {
 	}
 }
 
+// DescribeInstanceStatus describes instance status
 func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeInstanceStatusResponse{}
@@ -46,6 +47,7 @@ type StopInstanceResponse struct {
 	CommonResponse
 }
 
+// StopInstance stops instance
 func (client *Client) StopInstance(instanceId string, forceStop bool) error {
 	args := StopInstanceArgs{
 		InstanceId: instanceId,
@@ -64,6 +66,7 @@ type StartInstanceResponse struct {
 	CommonResponse
 }
 
+// StartInstance starts instance
 func (client *Client) StartInstance(instanceId string) error {
 	args := StartInstanceArgs{InstanceId: instanceId}
 	response := StartInstanceResponse{}
@@ -80,6 +83,7 @@ type RebootInstanceResponse struct {
 	CommonResponse
 }
 
+// RebootInstance reboot instance
 func (client *Client) RebootInstance(instanceId string, forceStop bool) error {
 	request := RebootInstanceArgs{
 		InstanceId: instanceId,
@@ -150,6 +154,7 @@ type DescribeInstanceAttributeResponse struct {
 	InstanceAttributesType
 }
 
+// DescribeInstanceAttribute describes instance attribute
 func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *InstanceAttributesType, err error) {
 	args := DescribeInstanceAttributeArgs{InstanceId: instanceId}
 
@@ -161,12 +166,16 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	return &response.InstanceAttributesType, err
 }
 
-const INSTANCE_WAIT_FOR_INVERVAL = 5
-const INSTANCE_DEFAULT_TIME_OUT = 60
+// Interval for checking instance status in WaitForInstance method
+const InstanceWaitForInterval = 5
 
+// Default timeout value for WaitForInstance method
+const InstanceDefaultTimeout = 60
+
+// WaitForInstance waits for instance to given status
 func (client *Client) WaitForInstance(instanceId string, status string, timeout int) error {
 	if timeout <= 0 {
-		timeout = INSTANCE_DEFAULT_TIME_OUT
+		timeout = InstanceDefaultTimeout
 	}
 	for {
 		instance, err := client.DescribeInstanceAttribute(instanceId)
@@ -176,11 +185,11 @@ func (client *Client) WaitForInstance(instanceId string, status string, timeout 
 		if instance.Status == status {
 			break
 		}
-		timeout = timeout - INSTANCE_WAIT_FOR_INVERVAL
+		timeout = timeout - InstanceWaitForInterval
 		if timeout <= 0 {
 			return getECSErrorFromString("Timeout")
 		}
-		time.Sleep(INSTANCE_WAIT_FOR_INVERVAL * time.Second)
+		time.Sleep(InstanceWaitForInterval * time.Second)
 
 	}
 	return nil
@@ -208,6 +217,7 @@ type DescribeInstancesResponse struct {
 	}
 }
 
+// DescribeInstances describes instances
 func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeInstancesResponse{}
@@ -229,6 +239,7 @@ type DeleteInstanceResponse struct {
 	CommonResponse
 }
 
+// DeleteInstance deletes instance
 func (client *Client) DeleteInstance(instanceId string) error {
 	args := DeleteInstanceArgs{InstanceId: instanceId}
 	response := DeleteInstanceResponse{}
@@ -259,9 +270,9 @@ type CreateInstanceArgs struct {
 	InternetMaxBandwidthOut int
 	HostName                string
 	Password                string
-	SystemDisk_Category     string `ArgName:"SystemDisk.Category"`
-	SystemDisk_DiskName     string `ArgName:"SystemDisk.DiskName"`
-	SystemDisk_Description  string `ArgName:"SystemDisk.Description"`
+	SystemDiskCategory      string `ArgName:"SystemDisk.Category"`
+	SystemDiskDiskName      string `ArgName:"SystemDisk.DiskName"`
+	SystemDiskDescription   string `ArgName:"SystemDisk.Description"`
 	DataDisk                []DataDiskType
 	VSwitchId               string
 	PrivateIpAddress        string
@@ -273,6 +284,7 @@ type CreateInstanceResponse struct {
 	InstanceId string
 }
 
+// CreateInstance creates instance
 func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId string, err error) {
 	response := CreateInstanceResponse{}
 	err = client.Invoke("CreateInstance", args, &response)

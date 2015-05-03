@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-//Create random string
+//CreateRandomString create random string
 func CreateRandomString() string {
 
 	rand.Seed(time.Now().UnixNano())

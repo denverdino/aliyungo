@@ -26,6 +26,7 @@ type DescribeZonesRespones struct {
 	}
 }
 
+// DescribeZones describes zones
 func (client *Client) DescribeZones(regionId string) (zones []ZoneType, err error) {
 	args := DescribeZonesArgs{
 		RegionId: regionId,

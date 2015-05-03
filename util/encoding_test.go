@@ -38,8 +38,8 @@ func TestConvertToQueryValues(t *testing.T) {
 		},
 	}
 	result := ConvertToQueryValues(&request).Encode()
-	const expected_result = "Format=JSON&StructArray.1.A=a&StructArray.1.B=1&StructArray.2.A=x&StructArray.2.B=2&Timestamp=2015-05-26T01%3A02%3A03Z&Version=1.0&bool-ptr=true&int-value=10&str-array=%5B%22abc%22%2C%22xyz%22%5D"
-	if result != expected_result {
+	const expectedResult = "Format=JSON&StructArray.1.A=a&StructArray.1.B=1&StructArray.2.A=x&StructArray.2.B=2&Timestamp=2015-05-26T01%3A02%3A03Z&Version=1.0&bool-ptr=true&int-value=10&str-array=%5B%22abc%22%2C%22xyz%22%5D"
+	if result != expectedResult {
 		t.Error("Incorrect encoding: ", result)
 	}
 

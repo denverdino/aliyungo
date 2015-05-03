@@ -1,21 +1,25 @@
 package oss
 
+// Region represents OSS region
 type Region string
 
+// Constants of region definition
 const (
-	HANGZHOU       = Region("oss-cn-hangzhou")
-	QINGDAO        = Region("oss-cn-qingdao")
-	BEIJING        = Region("oss-cn-beijing")
-	HONGKONG       = Region("oss-cn-hongkong")
-	SHENZHEN       = Region("oss-cn-shenzhen")
-	US_WEST_1      = Region("oss-us-west-1")
-	DEFAULT_REGION = HANGZHOU
+	Hangzhou      = Region("oss-cn-hangzhou")
+	Qingdao       = Region("oss-cn-qingdao")
+	Beijing       = Region("oss-cn-beijing")
+	Hongkong      = Region("oss-cn-hongkong")
+	Shenzhen      = Region("oss-cn-shenzhen")
+	USWest1       = Region("oss-us-west-1")
+	DefaultRegion = Hangzhou
 )
 
+// GetInternetEndpoint return internet endpoint of region
 func (r Region) GetInternetEndpoint() string {
 	return "http://" + string(r) + ".aliyuncs.com"
 }
 
+// GetInternalEndpoint return internal endpoint of region
 func (r Region) GetInternalEndpoint() string {
 	return "http://" + string(r) + "-internal.aliyuncs.com"
 }

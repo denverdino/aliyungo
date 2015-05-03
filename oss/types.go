@@ -2,9 +2,9 @@ package oss
 
 import (
 	"fmt"
-	"io"
 )
 
+// An ErrorResponse represents OSS error response
 type ErrorResponse struct {
 	Code      string
 	Message   string
@@ -12,15 +12,17 @@ type ErrorResponse struct {
 	HostId    string
 }
 
-type OSSError struct {
+// An Error represents custom error for OSS failure response
+type Error struct {
 	ErrorResponse
 	StatusCode int
 }
 
-func (e *OSSError) Error() string {
+func (e *Error) Error() string {
 	return fmt.Sprintf("OSS Error: Code %s: Message %s", e.Code, e.Message)
 }
 
+// BucketList represents response for GetServices and GetBucket
 type BucketList struct {
 	Prefix      string
 	Marker      string
@@ -30,10 +32,12 @@ type BucketList struct {
 	Owner       Owner    `xml:"Owner"`
 	Buckets     []Bucket `xml:"Buckets>Bucket"`
 }
+
 type Owner struct {
 	ID          string
 	DisplayName string
 }
+
 type Bucket struct {
 	Location     string
 	Name         string
@@ -93,8 +97,10 @@ type CopyObjectResult struct {
 	ETag         string
 }
 
+// An ACL presents the ACL setting
 type ACL string
 
+// Constants of ACLs
 const (
 	Private           = ACL("private")
 	PublicRead        = ACL("public-read")
@@ -103,11 +109,3 @@ const (
 	BucketOwnerRead   = ACL("bucket-owner-read")
 	BucketOwnerFull   = ACL("bucket-owner-full-control")
 )
-
-type NOPCloser struct {
-	io.Reader
-}
-
-func (NOPCloser) Close() error {
-	return nil
-}

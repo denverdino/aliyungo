@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-//Create signature for request string
+//CreateSignature creates signature for string following Aliyun rules
 func CreateSignature(stringToSignature, accessKeySecret string) string {
 	// Crypto by HMAC-SHA1
 	hmacSha1 := hmac.New(sha1.New, []byte(accessKeySecret))
@@ -29,12 +29,12 @@ func percentReplace(str string) string {
 	return str
 }
 
-//Create signature for request
-func CreateSignatureForRequest(method string, values *url.Values, accesskeySecret string) string {
+// CreateSignatureForRequest creates signature for query string values
+func CreateSignatureForRequest(method string, values *url.Values, accessKeySecret string) string {
 
 	canonicalizedQueryString := percentReplace(values.Encode())
 
 	stringToSign := method + "&%2F&" + url.QueryEscape(canonicalizedQueryString)
 
-	return CreateSignature(stringToSign, accesskeySecret)
+	return CreateSignature(stringToSign, accessKeySecret)
 }

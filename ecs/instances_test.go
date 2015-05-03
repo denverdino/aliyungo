@@ -6,46 +6,46 @@ import (
 
 func TestECSInstance(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	t.Logf("Instance: %++v  %v", instance, err)
-	err = client.StopInstance(TEST_INSTANCE_ID, false)
+	err = client.StopInstance(TestInstanceId, false)
 	if err != nil {
-		t.Errorf("Failed to stop instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Failed to stop instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TEST_INSTANCE_ID, "Stopped", 0)
+	err = client.WaitForInstance(TestInstanceId, "Stopped", 0)
 	if err != nil {
-		t.Errorf("Instance %s is failed to stop: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Instance %s is failed to stop: %v", TestInstanceId, err)
 	}
-	t.Logf("Instance %s is stopped successfully.", TEST_INSTANCE_ID)
-	err = client.StartInstance(TEST_INSTANCE_ID)
+	t.Logf("Instance %s is stopped successfully.", TestInstanceId)
+	err = client.StartInstance(TestInstanceId)
 	if err != nil {
-		t.Errorf("Failed to start instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Failed to start instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TEST_INSTANCE_ID, "Running", 0)
+	err = client.WaitForInstance(TestInstanceId, "Running", 0)
 	if err != nil {
-		t.Errorf("Instance %s is failed to start: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Instance %s is failed to start: %v", TestInstanceId, err)
 	}
-	t.Logf("Instance %s is running successfully.", TEST_INSTANCE_ID)
-	err = client.RebootInstance(TEST_INSTANCE_ID, true)
+	t.Logf("Instance %s is running successfully.", TestInstanceId)
+	err = client.RebootInstance(TestInstanceId, true)
 	if err != nil {
-		t.Errorf("Failed to restart instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Failed to restart instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TEST_INSTANCE_ID, "Running", 0)
+	err = client.WaitForInstance(TestInstanceId, "Running", 0)
 	if err != nil {
-		t.Errorf("Instance %s is failed to restart: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Instance %s is failed to restart: %v", TestInstanceId, err)
 	}
-	t.Logf("Instance %s is running successfully.", TEST_INSTANCE_ID)
+	t.Logf("Instance %s is running successfully.", TestInstanceId)
 }
 
 func TestECSInstanceCreationAndDeletion(t *testing.T) {
 
-	if TEST_I_AM_RICH == false { // Avoid payment
+	if TestIAmRich == false { // Avoid payment
 		return
 	}
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	t.Logf("Instance: %++v  %v", instance, err)
 
 	args := CreateInstanceArgs{

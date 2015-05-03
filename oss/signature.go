@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var PARAMS_TO_SIGN = map[string]bool{
+var ossParamsToSign = map[string]bool{
 	"acl":                          true,
 	"location":                     true,
 	"logging":                      true,
@@ -41,7 +41,7 @@ func (client *Client) createSignature(request *http.Request) string {
 	query := request.URL.Query()
 	params := make(url.Values)
 	for k, v := range query {
-		if PARAMS_TO_SIGN[k] {
+		if ossParamsToSign[k] {
 			params[k] = v
 		}
 	}
@@ -52,7 +52,7 @@ func (client *Client) createSignature(request *http.Request) string {
 
 	canonicalizedResource := resource
 
-	_, canonicalizedHeader := CanonicalizeHeader(headers)
+	_, canonicalizedHeader := canonicalizeHeader(headers)
 
 	stringToSign := request.Method + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n" + canonicalizedHeader + canonicalizedResource
 	return util.CreateSignature(stringToSign, client.AccessKeySecret)
@@ -76,12 +76,12 @@ func (client *Client) createAuthorizationHeader(request *http.Request) string {
 }
 
 //Have to break the abstraction to append keys with lower case.
-func CanonicalizeHeader(headers http.Header) (newHeaders http.Header, result string) {
-	var canonicalizedHeaders []string = make([]string, 0)
+func canonicalizeHeader(headers http.Header) (newHeaders http.Header, result string) {
+	var canonicalizedHeaders []string
 	newHeaders = http.Header{}
 
 	for k, v := range headers {
-		if lower := strings.ToLower(k); strings.HasPrefix(lower, HEADER_X_OSS_PREFIX) {
+		if lower := strings.ToLower(k); strings.HasPrefix(lower, HeaderOSSPrefix) {
 			newHeaders[lower] = v
 			canonicalizedHeaders = append(canonicalizedHeaders, lower)
 		} else {

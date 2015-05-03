@@ -2,15 +2,17 @@ package ecs
 
 import ()
 
+// Region represents ECS region
 type Region string
 
+// Constants of region definition
 const (
-	HANGZHOU  = Region("cn-hangzhou")
-	QINGDAO   = Region("cn-qingdao")
-	BEIJING   = Region("cn-beijing")
-	HONGKONG  = Region("cn-hongkong")
-	SHENZHEN  = Region("cn-shenzhen")
-	US_WEST_1 = Region("us-west-1")
+	Hangzhou = Region("cn-hangzhou")
+	Qingdao  = Region("cn-qingdao")
+	Beijing  = Region("cn-beijing")
+	Hongkong = Region("cn-hongkong")
+	Shenzhen = Region("cn-shenzhen")
+	USWest1  = Region("us-west-1")
 )
 
 type DescribeRegionsArgs struct {
@@ -28,6 +30,7 @@ type DescribeRegionsRespones struct {
 	}
 }
 
+// DescribeRegions describes regions
 func (client *Client) DescribeRegions() (regions []RegionType, err error) {
 	response := DescribeRegionsRespones{}
 

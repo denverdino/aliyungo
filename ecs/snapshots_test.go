@@ -6,35 +6,35 @@ import (
 
 func TestSnapshot(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
-		t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TestInstanceId, err)
 	}
 
 	args := DescribeSnapshotsArgs{}
 
-	args.InstanceId = TEST_INSTANCE_ID
+	args.InstanceId = TestInstanceId
 	args.RegionId = instance.RegionId
 	snapshots, _, err := client.DescribeSnapshots(&args)
 
 	if err != nil {
-		t.Errorf("Failed to DescribeSnapshots for instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Failed to DescribeSnapshots for instance %s: %v", TestInstanceId, err)
 	}
 
 	for _, snapshot := range snapshots {
-		t.Logf("Snapshot of instance %s: %++v", TEST_INSTANCE_ID, snapshot)
+		t.Logf("Snapshot of instance %s: %++v", TestInstanceId, snapshot)
 	}
 }
 
 func aTestSnapshotCreationAndDeletion(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
-	instance, err := client.DescribeInstanceAttribute(TEST_INSTANCE_ID)
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
-		t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TEST_INSTANCE_ID, err)
+		t.Errorf("Failed to DescribeInstanceAttribute for instance %s: %v", TestInstanceId, err)
 	}
 
 	//TODO

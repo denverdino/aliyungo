@@ -6,7 +6,7 @@ import (
 
 func TestDescribeInstanceTypes(t *testing.T) {
 
-	client := NewClient(TEST_ACCESS_KEY_ID, TEST_ACCESS_KEY_SECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 	instanceTypes, err := client.DescribeInstanceTypes()
 	if err != nil {
 		t.Errorf("Failed to DescribeInstanceTypes: %v", err)

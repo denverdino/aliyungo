@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (client *Client) BucketOp(method, bucket string, headers http.Header, params url.Values, response interface{}) error {
+func (client *Client) bucketOp(method, bucket string, headers http.Header, params url.Values, response interface{}) error {
 
 	if params == nil {
 		params = make(url.Values)
@@ -22,6 +22,7 @@ func (client *Client) BucketOp(method, bucket string, headers http.Header, param
 	return err
 }
 
+// GetService returns list of all buckets
 func (client *Client) GetService() (bucketList *BucketList, err error) {
 	bucketList = &BucketList{}
 	httpResp, err := client.Invoke("GET", "/", strings.NewReader(""), nil)
@@ -31,21 +32,24 @@ func (client *Client) GetService() (bucketList *BucketList, err error) {
 	return
 }
 
+// GetBucketAcl returns ACL of bucket
 func (client *Client) GetBucketAcl(bucket string) (result *AccessControlPolicy, err error) {
 	params := make(url.Values)
 	params.Add("acl", "")
 	result = &AccessControlPolicy{}
-	err = client.BucketOp("GET", bucket, nil, params, result)
+	err = client.bucketOp("GET", bucket, nil, params, result)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
+// GetBucket returns list of buckets
 func (client *Client) GetBucket(bucket, prefix, marker, delimiter, maxkeys string) (result *ListBucketResult, err error) {
 	return client.listBucket(bucket, prefix, marker, delimiter, maxkeys)
 }
 
+// ListBucket returns list of buckets
 func (client *Client) ListBucket(prefix, marker, delimiter, maxkeys string) (result *ListBucketResult, err error) {
 	return client.listBucket("", prefix, marker, delimiter, maxkeys)
 }
@@ -65,25 +69,28 @@ func (client *Client) listBucket(bucket, prefix, marker, delimiter, maxkeys stri
 		params.Add("max-keys", maxkeys) //TODO: check max-keys <= 1000?
 	}
 	result = &ListBucketResult{}
-	err = client.BucketOp("GET", bucket, nil, params, result)
+	err = client.bucketOp("GET", bucket, nil, params, result)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
+// PutBucket creates bucket with optional ACL setting
 func (client *Client) PutBucket(bucket, acl string) error {
 	headers := make(http.Header)
 	if acl != "" {
-		headers.Add(HEADER_X_OSS_ACL, acl)
+		headers.Add(HeaderOSSACL, acl)
 	}
-	return client.BucketOp("PUT", bucket, headers, nil, nil)
+	return client.bucketOp("PUT", bucket, headers, nil, nil)
 }
 
+// CreateBucket creates bucket with optional ACL setting
 func (client *Client) CreateBucket(bucket, acl string) error {
 	return client.PutBucket(bucket, acl)
 }
 
+// DeleteBucket deletes bucket
 func (client *Client) DeleteBucket(bucket string) error {
-	return client.BucketOp("DELETE", bucket, nil, nil, nil)
+	return client.bucketOp("DELETE", bucket, nil, nil, nil)
 }

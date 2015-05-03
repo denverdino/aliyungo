@@ -7,7 +7,7 @@ import (
 type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
 	RegionId        string
-	NicType         string //Enum internet (default) |intranet
+	NicType         string //enum for internet (default) |intranet
 }
 
 type PermissionType struct {
@@ -42,7 +42,6 @@ func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroup
 	return response, nil
 }
 
-// Describe Security Groups
 type DescribeSecurityGroupsArgs struct {
 	RegionId string
 	VpcId    string
@@ -67,6 +66,7 @@ type DescribeSecurityGroupsResponse struct {
 	}
 }
 
+// DescribeSecurityGroups describes security groups
 func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (securityGroupItems []SecurityGroupItemType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeSecurityGroupsResponse{}
@@ -94,6 +94,7 @@ type CreateSecurityGroupResponse struct {
 	SecurityGroupId string
 }
 
+// CreateSecurityGroup creates security group
 func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securityGroupId string, err error) {
 	response := CreateSecurityGroupResponse{}
 	err = client.Invoke("CreateSecurityGroup", args, &response)
@@ -112,6 +113,7 @@ type DeleteSecurityGroupResponse struct {
 	CommonResponse
 }
 
+// DeleteSecurityGroup deletes security group
 func (client *Client) DeleteSecurityGroup(regionId string, securityGroupId string) error {
 	args := DeleteSecurityGroupArgs{
 		RegionId:        regionId,
@@ -133,6 +135,7 @@ type ModifySecurityGroupAttributeResponse struct {
 	CommonResponse
 }
 
+// ModifySecurityGroupAttribute modifies attribute of security group
 func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttributeArgs) error {
 	response := ModifySecurityGroupAttributeResponse{}
 	err := client.Invoke("ModifySecurityGroupAttribute", args, &response)

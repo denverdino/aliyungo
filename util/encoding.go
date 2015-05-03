@@ -10,14 +10,14 @@ import (
 	"time"
 )
 
-//Conver the struct to url.Values
+//ConvertToQueryValues converts the struct to url.Values
 func ConvertToQueryValues(ifc interface{}) url.Values {
 	values := url.Values{}
 	SetQueryValues(ifc, &values)
 	return values
 }
 
-//Set the struct to existing url.Values following ECS encoding rules
+//SetQueryValues sets the struct to existing url.Values following ECS encoding rules
 func SetQueryValues(ifc interface{}, values *url.Values) {
 	setQueryValues(ifc, values, "")
 }

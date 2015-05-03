@@ -4,7 +4,6 @@ package ecs
 
 import ()
 
-// Allocate Public Ip Address
 type AllocatePublicIpAddressArgs struct {
 	InstanceId string
 }
@@ -15,6 +14,7 @@ type AllocatePublicIpAddressResponse struct {
 	IpAddress string
 }
 
+// AllocatePublicIpAddress allocates Public Ip Address
 func (client *Client) AllocatePublicIpAddress(instanceId string) (ipAddress string, err error) {
 	args := AllocatePublicIpAddressArgs{
 		InstanceId: instanceId,

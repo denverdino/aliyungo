@@ -4,7 +4,7 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
-// Describe Images
+// DescribeImagesArgs repsents arguements to describe images
 type DescribeImagesArgs struct {
 	RegionId        string
 	ImageId         string
@@ -50,7 +50,7 @@ type ImageType struct {
 	CreationTime util.ISO6801Time
 }
 
-// Describe Images
+// DescribeImages describes images
 func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageType, pagination *PaginationResult, err error) {
 
 	args.validate()
@@ -62,7 +62,7 @@ func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageTy
 	return response.Images.Image, &response.PaginationResult, nil
 }
 
-// Create Image
+// CreateImageArgs repsents arguements to create image
 type CreateImageArgs struct {
 	RegionId     string
 	SnapshotId   string
@@ -78,6 +78,7 @@ type CreateImageResponse struct {
 	ImageId string
 }
 
+// CreateImage creates a new image
 func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err error) {
 	response := &CreateImageResponse{}
 	err = client.Invoke("CreateImage", args, &response)
@@ -87,7 +88,6 @@ func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err er
 	return response.ImageId, nil
 }
 
-// Delete Image
 type DeleteImageArgs struct {
 	RegionId string
 	ImageId  string
@@ -97,6 +97,7 @@ type DeleteImageResponse struct {
 	CommonResponse
 }
 
+// DeleteImage deletes Image
 func (client *Client) DeleteImage(regionId string, imageId string) error {
 	args := DeleteImageArgs{
 		RegionId: regionId,

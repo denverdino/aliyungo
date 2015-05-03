@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// Describe DescribeSnapshots
 type DescribeSnapshotsArgs struct {
 	RegionId    string
 	InstanceId  string
@@ -34,6 +33,7 @@ type DescribeSnapshotsResponse struct {
 	}
 }
 
+// DescribeSnapshots describe snapshots
 func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots []SnapshotType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeSnapshotsResponse{}
@@ -47,7 +47,6 @@ func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots 
 
 }
 
-// Delete Snapshot
 type DeleteSnapshotArgs struct {
 	SnapshotId string
 }
@@ -56,6 +55,7 @@ type DeleteSnapshotResponse struct {
 	CommonResponse
 }
 
+// DeleteSnapshot deletes snapshot
 func (client *Client) DeleteSnapshot(snapshotId string) error {
 	args := DeleteSnapshotArgs{SnapshotId: snapshotId}
 	response := DeleteSnapshotResponse{}
@@ -63,7 +63,6 @@ func (client *Client) DeleteSnapshot(snapshotId string) error {
 	return client.Invoke("DeleteSnapshot", &args, &response)
 }
 
-// Create Snapshot
 type CreateSnapshotArgs struct {
 	DiskId       string
 	SnapshotName string
@@ -76,6 +75,7 @@ type CreateSnapshotResponse struct {
 	SnapshotId string
 }
 
+// CreateSnapshot creates a new snapshot
 func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId string, err error) {
 
 	response := CreateSnapshotResponse{}
@@ -87,13 +87,16 @@ func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId strin
 	return snapshotId, err
 }
 
-const SNAPSHOT_WAIT_FOR_INVERVAL = 5
-const SNAPSHOT_DEFAULT_TIME_OUT = 60
+// Interval for checking snapshot status in WaitForSnapShotReady method
+const SnapshotWaitForInterval = 5
 
-//Wait for snapshot ready
+// Default timeout value for WaitForSnapShotReady method
+const SnapshotDefaultTimeout = 60
+
+// WaitForSnapShotReady waits for snapshot ready
 func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, timeout int) error {
 	if timeout <= 0 {
-		timeout = DISK_DEFAULT_TIME_OUT
+		timeout = DiskWaitForDefaultTimeout
 	}
 	for {
 		args := DescribeSnapshotsArgs{
@@ -111,11 +114,11 @@ func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, t
 		if snapshots[0].Progress == "100%" {
 			break
 		}
-		timeout = timeout - DISK_WAIT_FOR_INVERVAL
+		timeout = timeout - DiskWaitForInterval
 		if timeout <= 0 {
 			return getECSErrorFromString("Timeout")
 		}
-		time.Sleep(DISK_WAIT_FOR_INVERVAL * time.Second)
+		time.Sleep(DiskWaitForInterval * time.Second)
 
 		time.Sleep(5 * time.Second)
 	}

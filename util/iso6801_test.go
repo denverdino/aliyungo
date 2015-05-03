@@ -14,7 +14,7 @@ func TestISO8601Time(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = time.Parse(`"`+format_ISO8601+`"`, string(data))
+	_, err = time.Parse(`"`+formatISO8601+`"`, string(data))
 	if err != nil {
 		t.Fatal(err)
 	}

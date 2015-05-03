@@ -5,25 +5,32 @@ import (
 	"time"
 )
 
+// Types of disks
 const (
-	DISK_TYPE_ALL    = "all" //Default
-	DISK_TYPE_SYSTEM = "system"
-	DISK_TYPE_DATA   = "data"
-
-	DISK_CATEGORY_ALL       = "all" //Default
-	DISK_CATEGORY_CLOUD     = "cloud"
-	DISK_CATEGORY_EPHEMERAL = "ephemeral"
-
-	DISK_STATUS_IN_USE    = "In_use"
-	DISK_STATUS_AVAILABLE = "Available"
-	DISK_STATUS_ATTACHING = "Attaching"
-	DISK_STATUS_DETACHING = "Detaching"
-	DISK_STATUS_CREATING  = "Creating"
-	DISK_STATUS_REINITING = "ReIniting"
-	DISK_STATUS_ALL       = "All" //Default
+	DiskTypeAll       = "all" //Default
+	DiskTypeAllSystem = "system"
+	DiskTypeAllData   = "data"
 )
 
-// Describe Disks
+// Categories of disks
+const (
+	DiskCategoryAll       = "all" //Default
+	DiskCategoryCloud     = "cloud"
+	DiskCategoryEphemeral = "ephemeral"
+)
+
+// Status of disks
+const (
+	DiskStatusInUse     = "In_use"
+	DiskStatusAvailable = "Available"
+	DiskStatusAttaching = "Attaching"
+	DiskStatusDetaching = "Detaching"
+	DiskStatusCreating  = "Creating"
+	DiskStatusReIniting = "ReIniting"
+	DiskStatusAll       = "All" //Default
+)
+
+// A DescribeDisksArgs defines the arguments to describe disks
 type DescribeDisksArgs struct {
 	RegionId           string
 	ZoneId             string
@@ -75,7 +82,7 @@ type DescribeDisksResponse struct {
 	}
 }
 
-// Describe Disks
+// DescribeDisks describes Disks
 func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *PaginationResult, err error) {
 	response := DescribeDisksResponse{}
 
@@ -88,7 +95,6 @@ func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemTy
 	return response.Disks.Disk, &response.PaginationResult, err
 }
 
-// Create Disk
 type CreateDiskArgs struct {
 	RegionId    string
 	ZoneId      string
@@ -104,7 +110,7 @@ type CreateDisksResponse struct {
 	DiskId string
 }
 
-// Create Disk
+// CreateDisk creates a new disk
 func (client *Client) CreateDisk(args *CreateDiskArgs) (diskId string, err error) {
 	response := CreateDisksResponse{}
 	err = client.Invoke("CreateDisk", args, &response)
@@ -122,6 +128,7 @@ type DeleteDiskResponse struct {
 	CommonResponse
 }
 
+// DeleteDisk deletes disk
 func (client *Client) DeleteDisk(diskId string) error {
 	args := DeleteDiskArgs{
 		DiskId: diskId,
@@ -139,6 +146,7 @@ type ReInitDiskResponse struct {
 	CommonResponse
 }
 
+// ReInitDisk reinitizes disk
 func (client *Client) ReInitDisk(diskId string) error {
 	args := ReInitDiskArgs{
 		DiskId: diskId,
@@ -159,6 +167,7 @@ type AttachDiskResponse struct {
 	CommonResponse
 }
 
+// AttachDisk attaches disk to instance
 func (client *Client) AttachDisk(args *AttachDiskArgs) error {
 	response := AttachDiskResponse{}
 	err := client.Invoke("AttachDisk", args, &response)
@@ -174,6 +183,7 @@ type DetachDiskResponse struct {
 	CommonResponse
 }
 
+// DetachDisk detaches disk from instance
 func (client *Client) DetachDisk(instanceId string, diskId string) error {
 	args := DetachDiskArgs{
 		InstanceId: instanceId,
@@ -193,6 +203,7 @@ type ResetDiskResponse struct {
 	CommonResponse
 }
 
+// ResetDisk resets disk to original status
 func (client *Client) ResetDisk(diskId string, snapshotId string) error {
 	args := ResetDiskArgs{
 		SnapshotId: snapshotId,
@@ -216,18 +227,23 @@ type ModifyDiskAttributeResponse struct {
 	CommonResponse
 }
 
+// ModifyDiskAttribute modifies disk attribute
 func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 	response := ModifyDiskAttributeResponse{}
 	err := client.Invoke("ModifyDiskAttribute", &args, &response)
 	return err
 }
 
-const DISK_WAIT_FOR_INVERVAL = 5
-const DISK_DEFAULT_TIME_OUT = 60
+// Interval for checking disk status in WaitForDisk method
+const DiskWaitForInterval = 5
 
+// Default timeout value for WaitForDisk method
+const DiskWaitForDefaultTimeout = 60
+
+// WaitForDisk waits for disk to given status
 func (client *Client) WaitForDisk(regionId string, diskId string, status string, timeout int) error {
 	if timeout <= 0 {
-		timeout = DISK_DEFAULT_TIME_OUT
+		timeout = DiskWaitForDefaultTimeout
 	}
 	args := DescribeDisksArgs{
 		RegionId: regionId,
@@ -245,11 +261,11 @@ func (client *Client) WaitForDisk(regionId string, diskId string, status string,
 		if disks[0].Status == status {
 			break
 		}
-		timeout = timeout - DISK_WAIT_FOR_INVERVAL
+		timeout = timeout - DiskWaitForInterval
 		if timeout <= 0 {
 			return getECSErrorFromString("Timeout")
 		}
-		time.Sleep(DISK_WAIT_FOR_INVERVAL * time.Second)
+		time.Sleep(DiskWaitForInterval * time.Second)
 	}
 	return nil
 }

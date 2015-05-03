@@ -16,6 +16,7 @@ type DescribeInstanceTypesRespones struct {
 	}
 }
 
+// DescribeInstanceTypes describes all instance types
 func (client *Client) DescribeInstanceTypes() (instanceTypes []InstanceTypeItemType, err error) {
 	response := DescribeInstanceTypesRespones{}
 

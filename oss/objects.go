@@ -11,34 +11,36 @@ import (
 	"strings"
 )
 
-func (client *Client) ObjectOp(method, bucket, object string, headers http.Header, data io.Reader) (httpResp *http.Response, err error) {
+func (client *Client) objectOp(method, bucket, object string, headers http.Header, data io.Reader) (httpResp *http.Response, err error) {
 	url := "/" + bucket + "/" + object
 	httpResp, err = client.Invoke(method, url, data, headers)
 	return
 }
 
+// PutObject creates object/updates with byte array
 func (client *Client) PutObject(bucket, object string, data []byte, contentType string) error {
 	headers := make(http.Header)
 	body := bytes.NewBuffer(data)
 	if contentType == "" {
-		contentType = DEFAULT_CONTENT_TYPE
+		contentType = DefaultContentType
 	}
 
 	headers.Add("Content-Length", strconv.Itoa(len(data)))
 	headers.Add("Content-Type", contentType)
 
-	_, err := client.ObjectOp("PUT", bucket, object, headers, body)
+	_, err := client.objectOp("PUT", bucket, object, headers, body)
 	return err
 }
 
+// PutObjectFromFile creates/updates object with file
 func (client *Client) PutObjectFromFile(bucket, object string, file *os.File) error {
 	headers := make(http.Header)
 
 	if dotPos := strings.LastIndex(file.Name(), "."); dotPos == -1 {
-		headers.Add("Content-Type", DEFAULT_CONTENT_TYPE)
+		headers.Add("Content-Type", DefaultContentType)
 	} else {
 		if mimeType := mime.TypeByExtension(file.Name()[dotPos:]); mimeType == "" {
-			headers.Add("Content-Type", DEFAULT_CONTENT_TYPE)
+			headers.Add("Content-Type", DefaultContentType)
 		} else {
 			headers.Add("Content-Type", mimeType)
 		}
@@ -52,22 +54,24 @@ func (client *Client) PutObjectFromFile(bucket, object string, file *os.File) er
 	//headers.Add("Expect", "100-Continue") //TODO: what's for?
 
 	log.Printf("Header in file put: %v", headers)
-	_, err = client.ObjectOp("PUT", bucket, object, headers, file)
+	_, err = client.objectOp("PUT", bucket, object, headers, file)
 	return err
 }
 
+// GetObject retrieves object content
 func (client *Client) GetObject(bucket, object string, headers http.Header) (body io.ReadCloser, err error) {
 	if headers == nil {
 		headers = make(http.Header)
 	}
-	response, err := client.ObjectOp("GET", bucket, object, headers, nil)
+	response, err := client.objectOp("GET", bucket, object, headers, nil)
 	if err != nil {
 		return nil, err
 	}
 	return response.Body, nil
 }
 
+// DeleteObject deletes object
 func (client *Client) DeleteObject(bucket, object string) error {
-	_, err := client.ObjectOp("DELETE", bucket, object, nil, nil)
+	_, err := client.objectOp("DELETE", bucket, object, nil, nil)
 	return err
 }

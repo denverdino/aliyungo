@@ -22,16 +22,16 @@ Test ECS
 Modify "ecs/config_test.go" 
 
 ```sh
-	TEST_ACCESS_KEY_ID     = "MY_ACCESS_KEY_ID"
-	TEST_ACCESS_KEY_SECRET = "MY_ACCESS_KEY_ID"
-	TEST_INSTANCE_ID       = "MY_INSTANCE_ID"
-	TEST_I_AM_RICH         = false
+	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
+	TestAccessKeySecret = "MY_ACCESS_KEY_ID"
+	TestInstanceId       = "MY_INSTANCE_ID"
+	TestIAmRich         = false
 ```
 
-*  TEST_ACCESS_KEY_ID: the Access Key Id
-*  TEST_ACCESS_KEY_SECRET: the Access Key Secret.
-*  TEST_INSTANCE_ID: the existing instance id for testing. It will be stopped and restarted during testing.
-*  TEST_I_AM_RICH(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
+*  TestAccessKeyId: the Access Key Id
+*  TestAccessKeySecret: the Access Key Secret.
+*  TestInstanceId: the existing instance id for testing. It will be stopped and restarted during testing.
+*  TestIAmRich(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
 
 Under "ecs" and run
 
@@ -45,18 +45,18 @@ Test OSS
 Modify "oss/config_test.go" 
 
 ```sh
-	TEST_ACCESS_KEY_ID     = "MY_ACCESS_KEY_ID"
-	TEST_ACCESS_KEY_SECRET = "MY_ACCESS_KEY_ID"
-	TEST_I_AM_RICH         = false
-	TEST_REGION            = BEIJING
-	TEST_BUCKET            = "denverdino"
+	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
+	TestAccessKeySecret = "MY_ACCESS_KEY_ID"
+	TestIAmRich         = false
+	TestRegion          = BEIJING
+	TestBucket          = "denverdino"
 ```
 
-*  TEST_ACCESS_KEY_ID: the Access Key Id
-*  TEST_ACCESS_KEY_SECRET: the Access Key Secret.
-*  TEST_I_AM_RICH(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
-*  TEST_REGION: the region of OSS for testing
-*  TEST_BUCKET: the bucket name for testing
+*  TestAccessKeyId: the Access Key Id
+*  TestAccessKeySecret: the Access Key Secret.
+*  TestIAmRich(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
+*  TestRegion: the region of OSS for testing
+*  TestBucket: the bucket name for testing
 
 
 Under "oss" and run

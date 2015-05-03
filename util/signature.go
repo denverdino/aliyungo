@@ -11,7 +11,7 @@ import (
 //Create signature for request string
 func CreateSignature(stringToSignature, accessKeySecret string) string {
 	// Crypto by HMAC-SHA1
-	hmacSha1 := hmac.New(sha1.New, []byte(accessKeySecret+"&"))
+	hmacSha1 := hmac.New(sha1.New, []byte(accessKeySecret))
 	hmacSha1.Write([]byte(stringToSignature))
 	sign := hmacSha1.Sum(nil)
 

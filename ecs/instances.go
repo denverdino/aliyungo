@@ -24,7 +24,7 @@ type DescribeInstanceStatusResponse struct {
 	}
 }
 
-func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *PaginationResult, err *ECSError) {
+func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeInstanceStatusResponse{}
 
@@ -46,7 +46,7 @@ type StopInstanceResponse struct {
 	CommonResponse
 }
 
-func (client *Client) StopInstance(instanceId string, forceStop bool) *ECSError {
+func (client *Client) StopInstance(instanceId string, forceStop bool) error {
 	args := StopInstanceArgs{
 		InstanceId: instanceId,
 		ForceStop:  forceStop,
@@ -64,7 +64,7 @@ type StartInstanceResponse struct {
 	CommonResponse
 }
 
-func (client *Client) StartInstance(instanceId string) *ECSError {
+func (client *Client) StartInstance(instanceId string) error {
 	args := StartInstanceArgs{InstanceId: instanceId}
 	response := StartInstanceResponse{}
 	err := client.Invoke("StartInstance", &args, &response)
@@ -80,7 +80,7 @@ type RebootInstanceResponse struct {
 	CommonResponse
 }
 
-func (client *Client) RebootInstance(instanceId string, forceStop bool) *ECSError {
+func (client *Client) RebootInstance(instanceId string, forceStop bool) error {
 	request := RebootInstanceArgs{
 		InstanceId: instanceId,
 		ForceStop:  forceStop,
@@ -150,7 +150,7 @@ type DescribeInstanceAttributeResponse struct {
 	InstanceAttributesType
 }
 
-func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *InstanceAttributesType, err *ECSError) {
+func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *InstanceAttributesType, err error) {
 	args := DescribeInstanceAttributeArgs{InstanceId: instanceId}
 
 	response := DescribeInstanceAttributeResponse{}
@@ -164,7 +164,7 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 const INSTANCE_WAIT_FOR_INVERVAL = 5
 const INSTANCE_DEFAULT_TIME_OUT = 60
 
-func (client *Client) WaitForInstance(instanceId string, status string, timeout int) *ECSError {
+func (client *Client) WaitForInstance(instanceId string, status string, timeout int) error {
 	if timeout <= 0 {
 		timeout = INSTANCE_DEFAULT_TIME_OUT
 	}
@@ -208,7 +208,7 @@ type DescribeInstancesResponse struct {
 	}
 }
 
-func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *PaginationResult, err *ECSError) {
+func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeInstancesResponse{}
 
@@ -229,7 +229,7 @@ type DeleteInstanceResponse struct {
 	CommonResponse
 }
 
-func (client *Client) DeleteInstance(instanceId string) *ECSError {
+func (client *Client) DeleteInstance(instanceId string) error {
 	args := DeleteInstanceArgs{InstanceId: instanceId}
 	response := DeleteInstanceResponse{}
 	err := client.Invoke("DeleteInstance", &args, &response)
@@ -273,7 +273,7 @@ type CreateInstanceResponse struct {
 	InstanceId string
 }
 
-func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId string, err *ECSError) {
+func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId string, err error) {
 	response := CreateInstanceResponse{}
 	err = client.Invoke("CreateInstance", args, &response)
 	if err != nil {

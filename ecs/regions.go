@@ -2,6 +2,17 @@ package ecs
 
 import ()
 
+type Region string
+
+const (
+	HANGZHOU  = Region("cn-hangzhou")
+	QINGDAO   = Region("cn-qingdao")
+	BEIJING   = Region("cn-beijing")
+	HONGKONG  = Region("cn-hongkong")
+	SHENZHEN  = Region("cn-shenzhen")
+	US_WEST_1 = Region("us-west-1")
+)
+
 type DescribeRegionsArgs struct {
 }
 
@@ -17,7 +28,7 @@ type DescribeRegionsRespones struct {
 	}
 }
 
-func (client *Client) DescribeRegions() (regions []RegionType, err *ECSError) {
+func (client *Client) DescribeRegions() (regions []RegionType, err error) {
 	response := DescribeRegionsRespones{}
 
 	err = client.Invoke("DescribeRegions", &DescribeRegionsArgs{}, &response)

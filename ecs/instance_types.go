@@ -16,7 +16,7 @@ type DescribeInstanceTypesRespones struct {
 	}
 }
 
-func (client *Client) DescribeInstanceTypes() (instanceTypes []InstanceTypeItemType, err *ECSError) {
+func (client *Client) DescribeInstanceTypes() (instanceTypes []InstanceTypeItemType, err error) {
 	response := DescribeInstanceTypesRespones{}
 
 	err = client.Invoke("DescribeInstanceTypes", &DescribeInstanceTypesArgs{}, &response)

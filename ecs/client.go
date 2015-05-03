@@ -17,19 +17,29 @@ type Client struct {
 	AccessKeyId     string //Access Key Id
 	AccessKeySecret string //Access Key Secret
 	debug           bool
+	httpClient      *http.Client
 }
 
 //Create a new instance of ECS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{
 		AccessKeyId:     accessKeyId,
-		AccessKeySecret: accessKeySecret,
+		AccessKeySecret: accessKeySecret + "&",
 		debug:           false,
+		httpClient:      &http.Client{},
 	}
 	return client
 }
 
-func getECSErrorFromString(str string) *ECSError {
+func (client *Client) SetAccessKeyId(id string) {
+	client.AccessKeyId = id
+}
+
+func (client *Client) SetAccessKeySecret(secret string) {
+	client.AccessKeySecret = secret + "&"
+}
+
+func getECSErrorFromString(str string) error {
 	return &ECSError{
 		ErrorResponse: ErrorResponse{
 			Code:    "ECSClientFailure",
@@ -39,7 +49,7 @@ func getECSErrorFromString(str string) *ECSError {
 	}
 }
 
-func getECSError(err error) *ECSError {
+func getECSError(err error) error {
 	return getECSErrorFromString(err.Error())
 }
 
@@ -48,7 +58,7 @@ func (client *Client) SetDebug(debug bool) {
 }
 
 //Invoke the ECS request
-func (client *Client) Invoke(action string, args interface{}, response interface{}) *ECSError {
+func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 
 	request := Request{}
 	request.init(action, client.AccessKeyId)
@@ -62,14 +72,13 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	// Generate the request URL
 	requestURL := ECS_API_ENDPOINT + "?" + query.Encode() + "&Signature=" + url.QueryEscape(signature)
 
-	httpClient := &http.Client{}
 	httpReq, err := http.NewRequest(REQUEST_METHOD, requestURL, nil)
 	if err != nil {
 		return getECSError(err)
 	}
 
 	t0 := time.Now()
-	httpResp, err := httpClient.Do(httpReq)
+	httpResp, err := client.httpClient.Do(httpReq)
 	t1 := time.Now()
 	if err != nil {
 		return getECSError(err)
@@ -78,8 +87,8 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 
 	log.Printf("Invoke %s %s %d (%v)", REQUEST_METHOD, requestURL, statusCode, t1.Sub(t0))
 
-	body, err := ioutil.ReadAll(httpResp.Body)
 	defer httpResp.Body.Close()
+	body, err := ioutil.ReadAll(httpResp.Body)
 
 	if err != nil {
 		return getECSError(err)
@@ -91,25 +100,23 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 		log.Println(string(prettyJSON.Bytes()))
 	}
 
-	var ecsError *ECSError
-
 	if statusCode >= 400 && statusCode <= 599 {
 		errorResponse := ErrorResponse{}
 		err = json.Unmarshal(body, &errorResponse)
-		ecsError = &ECSError{
+		ecsError := &ECSError{
 			ErrorResponse: errorResponse,
 			StatusCode:    statusCode,
 		}
+		return ecsError
 	} else {
 		err = json.Unmarshal(body, response)
 		//log.Printf("%++v", response)
+		if err != nil {
+			return getECSError(err)
+		}
 	}
 
-	if err != nil {
-		ecsError = getECSError(err)
-	}
-
-	return ecsError
+	return nil
 }
 
 // Generate the Client Token

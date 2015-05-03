@@ -33,7 +33,7 @@ type DescribeSecurityGroupAttributeResponse struct {
 	VpcId string
 }
 
-func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroupAttributeArgs) (response *DescribeSecurityGroupAttributeResponse, err *ECSError) {
+func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroupAttributeArgs) (response *DescribeSecurityGroupAttributeResponse, err error) {
 	response = &DescribeSecurityGroupAttributeResponse{}
 	err = client.Invoke("DescribeSecurityGroupAttribute", args, response)
 	if err != nil {
@@ -67,7 +67,7 @@ type DescribeSecurityGroupsResponse struct {
 	}
 }
 
-func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (securityGroupItems []SecurityGroupItemType, pagination *PaginationResult, err *ECSError) {
+func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (securityGroupItems []SecurityGroupItemType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeSecurityGroupsResponse{}
 
@@ -94,7 +94,7 @@ type CreateSecurityGroupResponse struct {
 	SecurityGroupId string
 }
 
-func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securityGroupId string, err *ECSError) {
+func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securityGroupId string, err error) {
 	response := CreateSecurityGroupResponse{}
 	err = client.Invoke("CreateSecurityGroup", args, &response)
 	if err != nil {
@@ -112,7 +112,7 @@ type DeleteSecurityGroupResponse struct {
 	CommonResponse
 }
 
-func (client *Client) DeleteSecurityGroup(regionId string, securityGroupId string) *ECSError {
+func (client *Client) DeleteSecurityGroup(regionId string, securityGroupId string) error {
 	args := DeleteSecurityGroupArgs{
 		RegionId:        regionId,
 		SecurityGroupId: securityGroupId,
@@ -133,7 +133,7 @@ type ModifySecurityGroupAttributeResponse struct {
 	CommonResponse
 }
 
-func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttributeArgs) *ECSError {
+func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttributeArgs) error {
 	response := ModifySecurityGroupAttributeResponse{}
 	err := client.Invoke("ModifySecurityGroupAttribute", args, &response)
 	return err

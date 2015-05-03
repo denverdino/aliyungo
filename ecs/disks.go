@@ -76,7 +76,7 @@ type DescribeDisksResponse struct {
 }
 
 // Describe Disks
-func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *PaginationResult, err *ECSError) {
+func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *PaginationResult, err error) {
 	response := DescribeDisksResponse{}
 
 	err = client.Invoke("DescribeDisks", args, &response)
@@ -105,7 +105,7 @@ type CreateDisksResponse struct {
 }
 
 // Create Disk
-func (client *Client) CreateDisk(args *CreateDiskArgs) (diskId string, err *ECSError) {
+func (client *Client) CreateDisk(args *CreateDiskArgs) (diskId string, err error) {
 	response := CreateDisksResponse{}
 	err = client.Invoke("CreateDisk", args, &response)
 	if err != nil {
@@ -122,7 +122,7 @@ type DeleteDiskResponse struct {
 	CommonResponse
 }
 
-func (client *Client) DeleteDisk(diskId string) *ECSError {
+func (client *Client) DeleteDisk(diskId string) error {
 	args := DeleteDiskArgs{
 		DiskId: diskId,
 	}
@@ -139,7 +139,7 @@ type ReInitDiskResponse struct {
 	CommonResponse
 }
 
-func (client *Client) ReInitDisk(diskId string) *ECSError {
+func (client *Client) ReInitDisk(diskId string) error {
 	args := ReInitDiskArgs{
 		DiskId: diskId,
 	}
@@ -159,7 +159,7 @@ type AttachDiskResponse struct {
 	CommonResponse
 }
 
-func (client *Client) AttachDisk(args *AttachDiskArgs) *ECSError {
+func (client *Client) AttachDisk(args *AttachDiskArgs) error {
 	response := AttachDiskResponse{}
 	err := client.Invoke("AttachDisk", args, &response)
 	return err
@@ -174,7 +174,7 @@ type DetachDiskResponse struct {
 	CommonResponse
 }
 
-func (client *Client) DetachDisk(instanceId string, diskId string) *ECSError {
+func (client *Client) DetachDisk(instanceId string, diskId string) error {
 	args := DetachDiskArgs{
 		InstanceId: instanceId,
 		DiskId:     diskId,
@@ -193,7 +193,7 @@ type ResetDiskResponse struct {
 	CommonResponse
 }
 
-func (client *Client) ResetDisk(diskId string, snapshotId string) *ECSError {
+func (client *Client) ResetDisk(diskId string, snapshotId string) error {
 	args := ResetDiskArgs{
 		SnapshotId: snapshotId,
 		DiskId:     diskId,
@@ -216,7 +216,7 @@ type ModifyDiskAttributeResponse struct {
 	CommonResponse
 }
 
-func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) *ECSError {
+func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 	response := ModifyDiskAttributeResponse{}
 	err := client.Invoke("ModifyDiskAttribute", &args, &response)
 	return err
@@ -225,7 +225,7 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) *ECSErr
 const DISK_WAIT_FOR_INVERVAL = 5
 const DISK_DEFAULT_TIME_OUT = 60
 
-func (client *Client) WaitForDisk(regionId string, diskId string, status string, timeout int) *ECSError {
+func (client *Client) WaitForDisk(regionId string, diskId string, status string, timeout int) error {
 	if timeout <= 0 {
 		timeout = DISK_DEFAULT_TIME_OUT
 	}

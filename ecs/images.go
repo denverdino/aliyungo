@@ -51,7 +51,7 @@ type ImageType struct {
 }
 
 // Describe Images
-func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageType, pagination *PaginationResult, err *ECSError) {
+func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageType, pagination *PaginationResult, err error) {
 
 	args.validate()
 	response := DescribeImagesResponse{}
@@ -78,7 +78,7 @@ type CreateImageResponse struct {
 	ImageId string
 }
 
-func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err *ECSError) {
+func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err error) {
 	response := &CreateImageResponse{}
 	err = client.Invoke("CreateImage", args, &response)
 	if err != nil {
@@ -97,7 +97,7 @@ type DeleteImageResponse struct {
 	CommonResponse
 }
 
-func (client *Client) DeleteImage(regionId string, imageId string) *ECSError {
+func (client *Client) DeleteImage(regionId string, imageId string) error {
 	args := DeleteImageArgs{
 		RegionId: regionId,
 		ImageId:  imageId,

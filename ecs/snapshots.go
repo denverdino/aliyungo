@@ -34,7 +34,7 @@ type DescribeSnapshotsResponse struct {
 	}
 }
 
-func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots []SnapshotType, pagination *PaginationResult, err *ECSError) {
+func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots []SnapshotType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeSnapshotsResponse{}
 
@@ -56,7 +56,7 @@ type DeleteSnapshotResponse struct {
 	CommonResponse
 }
 
-func (client *Client) DeleteSnapshot(snapshotId string) *ECSError {
+func (client *Client) DeleteSnapshot(snapshotId string) error {
 	args := DeleteSnapshotArgs{SnapshotId: snapshotId}
 	response := DeleteSnapshotResponse{}
 
@@ -76,7 +76,7 @@ type CreateSnapshotResponse struct {
 	SnapshotId string
 }
 
-func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId string, err *ECSError) {
+func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId string, err error) {
 
 	response := CreateSnapshotResponse{}
 
@@ -91,7 +91,7 @@ const SNAPSHOT_WAIT_FOR_INVERVAL = 5
 const SNAPSHOT_DEFAULT_TIME_OUT = 60
 
 //Wait for snapshot ready
-func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, timeout int) *ECSError {
+func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, timeout int) error {
 	if timeout <= 0 {
 		timeout = DISK_DEFAULT_TIME_OUT
 	}

@@ -15,7 +15,7 @@ type AllocatePublicIpAddressResponse struct {
 	IpAddress string
 }
 
-func (client *Client) AllocatePublicIpAddress(instanceId string) (ipAddress string, err *ECSError) {
+func (client *Client) AllocatePublicIpAddress(instanceId string) (ipAddress string, err error) {
 	args := AllocatePublicIpAddressArgs{
 		InstanceId: instanceId,
 	}

@@ -70,20 +70,22 @@ type Content struct {
 }
 
 type ObjectList struct {
-	BucketName  string `xml:"Name"`
-	Prefix      string
-	Marker      string
-	MaxKeys     int
-	Delimiter   string
-	IsTruncated bool
-	Object      []ObjectInfo `xml:"Contents"`
+	BucketName     string `xml:"Name"`
+	Prefix         string
+	Marker         string
+	MaxKeys        int
+	Delimiter      string
+	NextMarker     string
+	IsTruncated    bool
+	Contents       []ObjectInfo `xml:"Contents"`
+	CommonPrefixes []string     `xml:">Prefix"`
 }
 type ObjectInfo struct {
 	Key          string
 	LastModified string
 	ETag         string
 	Type         string
-	Size         int
+	Size         int64
 	StorageClass string
 	Owner        Owner
 }
@@ -97,6 +99,15 @@ type AccessControlPolicy struct {
 type CopyObjectResult struct {
 	ETag         string
 	LastModified string
+}
+
+type Delete struct {
+	Quiet   bool           `xml:"Quiet,omitempty"`
+	Objects []DeleteObject `xml:"Object"`
+}
+
+type DeleteObject struct {
+	Key string `xml:"Key"`
 }
 
 // An ACL presents the ACL setting

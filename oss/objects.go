@@ -2,6 +2,9 @@ package oss
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/base64"
+	"encoding/xml"
 	"io"
 	"io/ioutil"
 	"log"
@@ -13,9 +16,12 @@ import (
 	"strings"
 )
 
+func (b *Bucket) Path(path string) string {
+	return "/" + b.Name + "/" + path
+}
+
 func (b *Bucket) objectOp(method, path string, headers http.Header, data io.Reader) (httpResp *http.Response, err error) {
-	url := "/" + b.Name + "/" + path
-	httpResp, err = b.Client.Invoke(method, url, data, headers)
+	httpResp, err = b.Client.Invoke(method, b.Path(path), data, headers)
 	return
 }
 
@@ -111,7 +117,7 @@ func (b *Bucket) GetResponse(path string) (resp *http.Response, err error) {
 }
 
 // GetReaderWithHeaders retrieves an object from an OSS bucket
-func (b *Bucket) GetResponseWithHeaders(path string, headers map[string][]string) (resp *http.Response, err error) {
+func (b *Bucket) GetResponseWithHeaders(path string, headers http.Header) (resp *http.Response, err error) {
 	return b.objectOp("GET", path, headers, nil)
 }
 
@@ -147,4 +153,37 @@ func (b *Bucket) Exists(path string) (exists bool, err error) {
 	}
 	return exists, err
 
+}
+
+// DelMulti removes up to 1000 objects from the S3 bucket.
+func (b *Bucket) DeleteMultiple(objects Delete) error {
+	doc, err := xml.Marshal(objects)
+	if err != nil {
+		return err
+	}
+
+	buf := makeXmlBuffer(doc)
+	digest := md5.New()
+	size, err := digest.Write(buf.Bytes())
+	if err != nil {
+		return err
+	}
+
+	headers := make(http.Header)
+
+	headers.Set("Content-Length", strconv.Itoa(size))
+	headers.Set("Content-MD5", base64.StdEncoding.EncodeToString(digest.Sum(nil)))
+	headers.Set("Content-Type", "text/xml")
+
+	_, err = b.objectOp("POST", "/?delete", headers, buf)
+
+	return err
+
+}
+
+func makeXmlBuffer(doc []byte) *bytes.Buffer {
+	buf := new(bytes.Buffer)
+	buf.WriteString(xml.Header)
+	buf.Write(doc)
+	return buf
 }

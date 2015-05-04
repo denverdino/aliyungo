@@ -173,3 +173,8 @@ func getGMTime() string {
 func getExpires() string {
 	return fmt.Sprintf("%d", time.Now().Unix()+60)
 }
+
+func hasCode(err error, code string) bool {
+	ossErr, ok := err.(*Error)
+	return ok && ossErr.Code == code
+}

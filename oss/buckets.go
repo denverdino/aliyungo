@@ -80,6 +80,14 @@ func (b *Bucket) List(prefix, marker, delimiter string, maxkeys int) (result *Ob
 	if err != nil {
 		return nil, err
 	}
+	// if NextMarker is not returned, it should be set to the name of last key,
+	// so let's do it so that each caller doesn't have to
+	if result.IsTruncated && result.NextMarker == "" {
+		n := len(result.Contents)
+		if n > 0 {
+			result.NextMarker = result.Contents[n-1].Key
+		}
+	}
 	return
 }
 

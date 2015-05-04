@@ -3,6 +3,7 @@ package oss
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"log"
 	"mime"
 	"net/http"
@@ -59,19 +60,37 @@ func (client *Client) PutObjectFromFile(bucket, object string, file *os.File) er
 }
 
 // GetObject retrieves object content
-func (client *Client) GetObject(bucket, object string, headers http.Header) (body io.ReadCloser, err error) {
-	if headers == nil {
-		headers = make(http.Header)
+func (client *Client) GetObject(bucket, object string, headers http.Header) (data []byte, err error) {
+
+	body, err := client.GetObjectReader(bucket, object, headers)
+
+	if err != nil {
+		return nil, err
 	}
-	response, err := client.objectOp("GET", bucket, object, headers, nil)
+	data, err = ioutil.ReadAll(body)
+	return
+}
+
+// GetObjectReader retrieves object content as Reader
+func (client *Client) GetObjectReader(bucket, object string, headers http.Header) (body io.ReadCloser, err error) {
+	response, err := client.GetObjectResponse(bucket, object, headers)
 	if err != nil {
 		return nil, err
 	}
 	return response.Body, nil
 }
 
+func (client *Client) GetObjectResponse(bucket, object string, headers http.Header) (httpResp *http.Response, err error) {
+	return client.objectOp("GET", bucket, object, headers, nil)
+}
+
 // DeleteObject deletes object
 func (client *Client) DeleteObject(bucket, object string) error {
 	_, err := client.objectOp("DELETE", bucket, object, nil, nil)
 	return err
+}
+
+// GetObjectMetadata gets object metadata with HEAD request
+func (client *Client) GetObjectMetadata(bucket, object string, headers http.Header) (httpResp *http.Response, err error) {
+	return client.objectOp("HEAD", bucket, object, headers, nil)
 }

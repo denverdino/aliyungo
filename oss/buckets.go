@@ -45,16 +45,8 @@ func (client *Client) GetBucketAcl(bucket string) (result *AccessControlPolicy, 
 }
 
 // GetBucket returns list of buckets
-func (client *Client) GetBucket(bucket, prefix, marker, delimiter, maxkeys string) (result *ListBucketResult, err error) {
-	return client.listBucket(bucket, prefix, marker, delimiter, maxkeys)
-}
+func (client *Client) GetBucket(bucket, prefix, marker, delimiter, maxkeys string) (result *ObjectList, err error) {
 
-// ListBucket returns list of buckets
-func (client *Client) ListBucket(prefix, marker, delimiter, maxkeys string) (result *ListBucketResult, err error) {
-	return client.listBucket("", prefix, marker, delimiter, maxkeys)
-}
-
-func (client *Client) listBucket(bucket, prefix, marker, delimiter, maxkeys string) (result *ListBucketResult, err error) {
 	params := make(url.Values)
 	if prefix != "" {
 		params.Add("prefix", prefix)
@@ -68,7 +60,7 @@ func (client *Client) listBucket(bucket, prefix, marker, delimiter, maxkeys stri
 	if maxkeys != "" {
 		params.Add("max-keys", maxkeys) //TODO: check max-keys <= 1000?
 	}
-	result = &ListBucketResult{}
+	result = &ObjectList{}
 	err = client.bucketOp("GET", bucket, nil, params, result)
 	if err != nil {
 		return nil, err

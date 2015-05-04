@@ -2,7 +2,9 @@ package oss
 
 import (
 	"io/ioutil"
+	"net/http"
 	"os"
+	"strconv"
 	"testing"
 )
 
@@ -26,22 +28,37 @@ func TestPutObjectFromFile(t *testing.T) {
 	}
 	err = client.PutObjectFromFile(TestBucket, testObject, file)
 	if err != nil {
-		t.Errorf("Unable to put Object: %++v", err)
+		t.Errorf("Unable to put object: %v", err)
 	}
 
 }
 
 func TestGetObject(t *testing.T) {
 	body, err := client.GetObject(TestBucket, testObject, nil)
-	//defer body.Close()
 	if err != nil {
 		t.Fatalf("Unable to get object: %v", err)
 	}
-	contents, err := ioutil.ReadAll(body)
+	t.Logf("Content of object %s:", testObject)
+	t.Log(string(body))
+}
+
+// ReadStream retrieves an io.ReadCloser for the content stored at "path" with a
+// given byte offset.
+func TestGetResponse(t *testing.T) {
+	headers := make(http.Header)
+	offset := int64(100)
+	headers.Add("Range", "bytes="+strconv.FormatInt(offset, 10)+"-")
+	httpResp, err := client.GetObjectResponse(TestBucket, testObject, headers)
 	if err != nil {
-		t.Log(err)
+		t.Fatalf("Unable to get object with offset: %v", err)
 	}
-	t.Log(string(contents))
+	data, err := ioutil.ReadAll(httpResp.Body)
+	if err != nil {
+		t.Fatalf("Unable to get object with offset: %v", err)
+	}
+	t.Logf("Content of object %s from offset %d:", testObject, offset)
+	t.Log(string(data))
+	return
 }
 
 func TestDeleteObject(t *testing.T) {

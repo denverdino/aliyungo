@@ -14,12 +14,21 @@ const (
 	DefaultRegion = Hangzhou
 )
 
-// GetInternetEndpoint return internet endpoint of region
+// GetEndpoint returns endpoint of region
+func (r Region) GetEndpoint(internal bool) string {
+	if internal {
+		return r.GetInternalEndpoint()
+	} else {
+		return r.GetInternetEndpoint()
+	}
+}
+
+// GetInternetEndpoint returns internet endpoint of region
 func (r Region) GetInternetEndpoint() string {
 	return "http://" + string(r) + ".aliyuncs.com"
 }
 
-// GetInternalEndpoint return internal endpoint of region
+// GetInternalEndpoint returns internal endpoint of region
 func (r Region) GetInternalEndpoint() string {
 	return "http://" + string(r) + "-internal.aliyuncs.com"
 }

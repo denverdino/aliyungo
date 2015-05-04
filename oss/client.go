@@ -31,17 +31,19 @@ const (
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
-	Endpoint        string
+	Region          Region
+	Internal        bool
 	httpClient      *http.Client
 	debug           bool
 }
 
 // NewOSSClient create a new instance of OSS client
-func NewOSSClient(endpoint string, accessKeyId string, accessKeySecret string) *Client {
+func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string) *Client {
 	return &Client{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
-		Endpoint:        endpoint,
+		Region:          region,
+		Internal:        internal,
 		httpClient:      &http.Client{},
 		debug:           false,
 	}
@@ -78,7 +80,7 @@ func getOSSError(err error) error {
 
 // Invoke sends the raw HTTP request for OSS service
 func (client *Client) Invoke(method, url string, body io.Reader, headers http.Header) (httpResp *http.Response, err error) {
-	host := client.Endpoint
+	host := client.Region.GetEndpoint(client.Internal)
 	req, err := http.NewRequest(method, host+url, body)
 	if err != nil {
 		log.Printf("Error Creating Request: %v\n", err)

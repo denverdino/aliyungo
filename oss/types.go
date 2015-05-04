@@ -29,8 +29,8 @@ type BucketList struct {
 	MaxKeys     int
 	IsTruncated bool
 	NextMarker  string
-	Owner       Owner    `xml:"Owner"`
-	Buckets     []Bucket `xml:"Buckets>Bucket"`
+	Owner       Owner        `xml:"Owner"`
+	Buckets     []BucketInfo `xml:"Buckets>Bucket"`
 }
 
 type Owner struct {
@@ -38,7 +38,7 @@ type Owner struct {
 	DisplayName string
 }
 
-type Bucket struct {
+type BucketInfo struct {
 	Location     string
 	Name         string
 	CreationDate string
@@ -76,9 +76,9 @@ type ObjectList struct {
 	MaxKeys     int
 	Delimiter   string
 	IsTruncated bool
-	Object      []Object `xml:"Contents"`
+	Object      []ObjectInfo `xml:"Contents"`
 }
-type Object struct {
+type ObjectInfo struct {
 	Key          string
 	LastModified string
 	ETag         string
@@ -92,9 +92,11 @@ type AccessControlPolicy struct {
 	Owner  Owner
 	Grants []string `xml:"AccessControlList>Grant"`
 }
+
+// CopyObjectResult is the output from a Copy request
 type CopyObjectResult struct {
-	LastModified string
 	ETag         string
+	LastModified string
 }
 
 // An ACL presents the ACL setting

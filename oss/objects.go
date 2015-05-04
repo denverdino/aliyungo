@@ -7,43 +7,72 @@ import (
 	"log"
 	"mime"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
 )
 
-func (client *Client) objectOp(method, bucket, object string, headers http.Header, data io.Reader) (httpResp *http.Response, err error) {
-	url := "/" + bucket + "/" + object
-	httpResp, err = client.Invoke(method, url, data, headers)
+func (b *Bucket) objectOp(method, path string, headers http.Header, data io.Reader) (httpResp *http.Response, err error) {
+	url := "/" + b.Name + "/" + path
+	httpResp, err = b.Client.Invoke(method, url, data, headers)
 	return
 }
 
 // PutObject creates object/updates with byte array
-func (client *Client) PutObject(bucket, object string, data []byte, contentType string) error {
+func (b *Bucket) Put(path string, data []byte, contentType string) error {
 	headers := make(http.Header)
 	body := bytes.NewBuffer(data)
 	if contentType == "" {
 		contentType = DefaultContentType
 	}
 
-	headers.Add("Content-Length", strconv.Itoa(len(data)))
-	headers.Add("Content-Type", contentType)
+	headers.Set("Content-Length", strconv.Itoa(len(data)))
+	headers.Set("Content-Type", contentType)
 
-	_, err := client.objectOp("PUT", bucket, object, headers, body)
+	_, err := b.objectOp("PUT", path, headers, body)
 	return err
 }
 
-// PutObjectFromFile creates/updates object with file
-func (client *Client) PutObjectFromFile(bucket, object string, file *os.File) error {
-	headers := make(http.Header)
+// PutCopy puts a copy of an object given by the key path into bucket b using b.Path as the target key
+func (b *Bucket) PutCopy(path string, source string, headers http.Header) (*CopyObjectResult, error) {
+	if headers == nil {
+		headers = make(http.Header)
+	}
+	headers.Set("x-oss-copy-source", url.QueryEscape(source))
+	resp, err := b.objectOp("PUT", path, headers, nil)
+	if err == nil {
+		result := &CopyObjectResult{}
+		b.Client.decodeResponse(resp, result)
+		if err == nil {
+			return result, nil
+		}
+	}
+	return nil, err
+}
 
+// PutReader inserts an object into the bucket by consuming data
+// from r until EOF.
+func (b *Bucket) PutReader(path string, body io.Reader, length int64, contType string, headers http.Header) error {
+	if headers == nil {
+		headers = make(http.Header)
+	}
+	headers.Set("Content-Length", strconv.FormatInt(length, 10))
+	headers.Set("Content-Type", contType)
+	_, err := b.objectOp("PUT", path, headers, body)
+	return err
+}
+
+// PutFile creates/updates object with file
+func (b *Bucket) PutFile(path string, file *os.File) error {
+	var contentType string
 	if dotPos := strings.LastIndex(file.Name(), "."); dotPos == -1 {
-		headers.Add("Content-Type", DefaultContentType)
+		contentType = DefaultContentType
 	} else {
 		if mimeType := mime.TypeByExtension(file.Name()[dotPos:]); mimeType == "" {
-			headers.Add("Content-Type", DefaultContentType)
+			contentType = DefaultContentType
 		} else {
-			headers.Add("Content-Type", mimeType)
+			contentType = mimeType
 		}
 	}
 	stats, err := file.Stat()
@@ -51,18 +80,14 @@ func (client *Client) PutObjectFromFile(bucket, object string, file *os.File) er
 		log.Panicf("Unable to read file %s stats.", file.Name())
 		return nil
 	}
-	headers.Add("Content-Length", strconv.FormatInt(stats.Size(), 10))
-	//headers.Add("Expect", "100-Continue") //TODO: what's for?
 
-	log.Printf("Header in file put: %v", headers)
-	_, err = client.objectOp("PUT", bucket, object, headers, file)
-	return err
+	return b.PutReader(path, file, stats.Size(), contentType, nil)
 }
 
 // GetObject retrieves object content
-func (client *Client) GetObject(bucket, object string, headers http.Header) (data []byte, err error) {
+func (b *Bucket) Get(path string) (data []byte, err error) {
 
-	body, err := client.GetObjectReader(bucket, object, headers)
+	body, err := b.GetReader(path)
 
 	if err != nil {
 		return nil, err
@@ -71,26 +96,55 @@ func (client *Client) GetObject(bucket, object string, headers http.Header) (dat
 	return
 }
 
-// GetObjectReader retrieves object content as Reader
-func (client *Client) GetObjectReader(bucket, object string, headers http.Header) (body io.ReadCloser, err error) {
-	response, err := client.GetObjectResponse(bucket, object, headers)
-	if err != nil {
-		return nil, err
+// GetObjectReader retrieves an object content as Reader
+func (b *Bucket) GetReader(path string) (body io.ReadCloser, err error) {
+	resp, err := b.GetResponse(path)
+	if resp != nil {
+		return resp.Body, err
 	}
-	return response.Body, nil
+	return nil, err
 }
 
-func (client *Client) GetObjectResponse(bucket, object string, headers http.Header) (httpResp *http.Response, err error) {
-	return client.objectOp("GET", bucket, object, headers, nil)
+// GetResponse retrieves an object from an OSS bucket,
+func (b *Bucket) GetResponse(path string) (resp *http.Response, err error) {
+	return b.GetResponseWithHeaders(path, make(http.Header))
+}
+
+// GetReaderWithHeaders retrieves an object from an OSS bucket
+func (b *Bucket) GetResponseWithHeaders(path string, headers map[string][]string) (resp *http.Response, err error) {
+	return b.objectOp("GET", path, headers, nil)
 }
 
 // DeleteObject deletes object
-func (client *Client) DeleteObject(bucket, object string) error {
-	_, err := client.objectOp("DELETE", bucket, object, nil, nil)
+func (b *Bucket) Delete(path string) error {
+	_, err := b.objectOp("DELETE", path, nil, nil)
 	return err
 }
 
 // GetObjectMetadata gets object metadata with HEAD request
-func (client *Client) GetObjectMetadata(bucket, object string, headers http.Header) (httpResp *http.Response, err error) {
-	return client.objectOp("HEAD", bucket, object, headers, nil)
+func (b *Bucket) Head(path string, headers http.Header) (httpResp *http.Response, err error) {
+	return b.objectOp("HEAD", path, headers, nil)
+}
+
+// Exists checks whether or not an object exists on an OSS bucket using a HEAD request.
+func (b *Bucket) Exists(path string) (exists bool, err error) {
+
+	resp, err := b.Head(path, nil)
+
+	if err != nil {
+		// We can treat a 403 or 404 as non existance
+		if e, ok := err.(*Error); ok && (e.StatusCode == 403 || e.StatusCode == 404) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	if resp.StatusCode/100 == 2 {
+		exists = true
+	}
+	if resp.Body != nil {
+		resp.Body.Close()
+	}
+	return exists, err
+
 }

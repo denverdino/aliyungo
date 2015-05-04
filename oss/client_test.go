@@ -9,12 +9,13 @@ import (
 )
 
 var (
-	client     = NewOSSClient(TestRegion.GetInternetEndpoint(), TestAccessKeyId, TestAccessKeySecret)
+	client     = NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret)
+	bucket     = client.Bucket(TestBucket)
 	testObject = "api_handler.go"
 )
 
 func TestPutObject(t *testing.T) {
-	err := client.PutObject(TestBucket, testObject, []byte("Just for text"), "")
+	err := bucket.Put(testObject, []byte("Just for text"), "")
 	if err != nil {
 		t.Errorf("Unable to put Object: %++v", err)
 	}
@@ -26,7 +27,7 @@ func TestPutObjectFromFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = client.PutObjectFromFile(TestBucket, testObject, file)
+	err = bucket.PutFile(testObject, file)
 	if err != nil {
 		t.Errorf("Unable to put object: %v", err)
 	}
@@ -34,7 +35,7 @@ func TestPutObjectFromFile(t *testing.T) {
 }
 
 func TestGetObject(t *testing.T) {
-	body, err := client.GetObject(TestBucket, testObject, nil)
+	body, err := bucket.Get(testObject)
 	if err != nil {
 		t.Fatalf("Unable to get object: %v", err)
 	}
@@ -48,7 +49,7 @@ func TestGetResponse(t *testing.T) {
 	headers := make(http.Header)
 	offset := int64(100)
 	headers.Add("Range", "bytes="+strconv.FormatInt(offset, 10)+"-")
-	httpResp, err := client.GetObjectResponse(TestBucket, testObject, headers)
+	httpResp, err := bucket.GetResponse(testObject)
 	if err != nil {
 		t.Fatalf("Unable to get object with offset: %v", err)
 	}
@@ -62,7 +63,7 @@ func TestGetResponse(t *testing.T) {
 }
 
 func TestDeleteObject(t *testing.T) {
-	err := client.DeleteObject(TestBucket, testObject)
+	err := bucket.Delete(testObject)
 	if err != nil {
 		t.Errorf("Unable to del object: %v", err)
 	}
@@ -78,13 +79,13 @@ func TestGetService(t *testing.T) {
 }
 
 func TestGetBucket(t *testing.T) {
-	result, err := client.GetBucket(TestBucket, "", "", "", "")
+	result, err := bucket.List("", "", "", 0)
 	if err != nil {
 		t.Errorf("Unable to list Bucket with no params: %v", err)
 	} else {
 		t.Logf("Result: %++v", result)
 	}
-	result, err = client.GetBucket(TestBucket, "", "", "", "10")
+	result, err = bucket.List("", "", "", 10)
 	if err != nil {
 		t.Errorf("Unable to list Bucket with 10 maxkeys: %v", err)
 	} else {
@@ -93,7 +94,7 @@ func TestGetBucket(t *testing.T) {
 }
 
 func TestGetBucketACL(t *testing.T) {
-	result, err := client.GetBucketAcl(TestBucket)
+	result, err := bucket.GetBucketAcl()
 	if err != nil {
 		t.Errorf("Unable to get Bucket ACL: %v", err)
 	} else {
@@ -102,15 +103,16 @@ func TestGetBucketACL(t *testing.T) {
 }
 
 func TestPutBucket(t *testing.T) {
-	err := client.PutBucket("denverdino-test", "")
+	testBucket := client.Bucket("denverdino-test")
+	err := testBucket.PutBucket("")
 	if err != nil {
 		t.Errorf("Unable to create a new bucket with no acl specified: %v", err)
 	}
-	err = client.PutBucket("denverdino-test", "private")
+	err = testBucket.PutBucket("private")
 	if err != nil {
 		t.Errorf("Unable to create a new bucket with private acl: %v", err)
 	}
-	err = client.DeleteBucket("denverdino-test")
+	err = testBucket.DeleteBucket()
 	if err != nil {
 		t.Errorf("Unable to delete the test bucket: %v", err)
 	}

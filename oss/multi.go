@@ -267,12 +267,12 @@ type listPartsResp struct {
 // That's the default. Here just for testing.
 var listPartsMax = 1000
 
-// Kept for backcompatability. See the documentation for ListPartsFull
+// ListParts for backcompatability. See the documentation for ListPartsFull
 func (m *Multi) ListParts() ([]Part, error) {
 	return m.ListPartsFull(0, listPartsMax)
 }
 
-// ListParts returns the list of previously uploaded parts in m,
+// ListPartsFull returns the list of previously uploaded parts in m,
 // ordered by part number (Only parts with higher part numbers than
 // partNumberMarker will be listed). Only up to maxParts parts will be
 // returned.

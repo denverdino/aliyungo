@@ -26,7 +26,7 @@ import (
 
 const DefaultContentType = "application/octet-stream"
 
-// The OSS type encapsulates operations with an OSS region.
+// The Client type encapsulates operations with an OSS region.
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
@@ -49,7 +49,7 @@ type Owner struct {
 	DisplayName string
 }
 
-// Fold options into an Options struct
+// Options struct
 //
 type Options struct {
 	ServerSideEncryption bool
@@ -216,7 +216,7 @@ func (b *Bucket) GetResponse(path string) (resp *http.Response, err error) {
 	return b.GetResponseWithHeaders(path, make(http.Header))
 }
 
-// GetReaderWithHeaders retrieves an object from an bucket
+// GetResponseWithHeaders retrieves an object from an bucket
 // Accepts custom headers to be sent as the second parameter
 // returning the body of the HTTP response.
 // It is the caller's responsibility to call Close on rc when
@@ -417,7 +417,7 @@ func (o CopyOptions) addHeaders(headers http.Header) {
 	}
 }
 
-func makeXmlBuffer(doc []byte) *bytes.Buffer {
+func makeXMLBuffer(doc []byte) *bytes.Buffer {
 	buf := new(bytes.Buffer)
 	buf.WriteString(xml.Header)
 	buf.Write(doc)
@@ -458,7 +458,7 @@ func (b *Bucket) PutBucketWebsite(configuration WebsiteConfiguration) error {
 		return err
 	}
 
-	buf := makeXmlBuffer(doc)
+	buf := makeXMLBuffer(doc)
 
 	return b.PutBucketSubresource("website", buf, int64(buf.Len()))
 }
@@ -506,7 +506,7 @@ func (b *Bucket) DelMulti(objects Delete) error {
 		return err
 	}
 
-	buf := makeXmlBuffer(doc)
+	buf := makeXMLBuffer(doc)
 	digest := md5.New()
 	size, err := digest.Write(buf.Bytes())
 	if err != nil {
@@ -728,10 +728,9 @@ func (b *Bucket) Location() (string, error) {
 	}
 
 	if resp.Location == "" {
-		return "us-east-1", nil
-	} else {
-		return resp.Location, nil
+		return string(Hangzhou), nil
 	}
+	return resp.Location, nil
 }
 
 func (b *Bucket) Path(path string) string {
@@ -808,16 +807,16 @@ func (b *Bucket) SignedURLWithMethod(method, path string, expires time.Time, par
 // to upload the object at path. The signature is valid until expires.
 // contenttype is a string like image/png
 // name is the resource name in OSS terminology like images/ali.png [obviously excluding the bucket name itself]
-func (b *Bucket) UploadSignedURL(name, method, content_type string, expires time.Time) string {
+func (b *Bucket) UploadSignedURL(name, method, contentType string, expires time.Time) string {
 	//TODO TESTING
-	expire_date := expires.Unix()
+	expireDate := expires.Unix()
 	if method != "POST" {
 		method = "PUT"
 	}
 
 	tokenData := ""
 
-	stringToSign := method + "\n\n" + content_type + "\n" + strconv.FormatInt(expire_date, 10) + "\n" + tokenData + "/" + path.Join(b.Name, name)
+	stringToSign := method + "\n\n" + contentType + "\n" + strconv.FormatInt(expireDate, 10) + "\n" + tokenData + "/" + path.Join(b.Name, name)
 	secretKey := b.AccessKeySecret
 	accessId := b.AccessKeyId
 	mac := hmac.New(sha1.New, []byte(secretKey))
@@ -834,18 +833,18 @@ func (b *Bucket) UploadSignedURL(name, method, content_type string, expires time
 	signedurl.Path = name
 	params := url.Values{}
 	params.Add("OSSAccessKeyId", accessId)
-	params.Add("Expires", strconv.FormatInt(expire_date, 10))
+	params.Add("Expires", strconv.FormatInt(expireDate, 10))
 	params.Add("Signature", signature)
 
 	signedurl.RawQuery = params.Encode()
 	return signedurl.String()
 }
 
-// PostFormArgs returns the action and input fields needed to allow anonymous
+// PostFormArgsEx returns the action and input fields needed to allow anonymous
 // uploads to a bucket within the expiration limit
 // Additional conditions can be specified with conds
 func (b *Bucket) PostFormArgsEx(path string, expires time.Time, redirect string, conds []string) (action string, fields map[string]string) {
-	conditions := make([]string, 0)
+	conditions := []string{}
 	fields = map[string]string{
 		"AWSAccessKeyId": b.AccessKeyId,
 		"key":            path,
@@ -1188,7 +1187,7 @@ type AccessControlPolicy struct {
 	Grants []string `xml:"AccessControlList>Grant"`
 }
 
-// GetBucketAcl returns ACL of bucket
+// ACL returns ACL of bucket
 func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 
 	r, err := b.Get("/?acl")

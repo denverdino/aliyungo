@@ -18,9 +18,8 @@ const (
 func (r Region) GetEndpoint(internal bool) string {
 	if internal {
 		return r.GetInternalEndpoint()
-	} else {
-		return r.GetInternetEndpoint()
 	}
+	return r.GetInternetEndpoint()
 }
 
 // GetInternetEndpoint returns internet endpoint of region

@@ -58,7 +58,6 @@ Modify "oss/config_test.go"
 ```sh
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_ID"
-	TestIAmRich         = false
 	TestRegion          = BEIJING
 	TestBucket          = "denverdino"
 ```

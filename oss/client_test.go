@@ -158,7 +158,7 @@ func TestACL(t *testing.T) {
 	result, err := b.ACL()
 
 	if err != nil {
-		t.Errorf("Failed for Location: %v %s", err)
+		t.Errorf("Failed for Location: %v", err)
 	} else {
 		t.Logf("AccessControlPolicy: %++v", result)
 	}

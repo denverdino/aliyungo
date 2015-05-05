@@ -2,14 +2,18 @@ package oss
 
 import (
 	"github.com/denverdino/aliyungo/util"
+	//"log"
 	"net/http"
 	"net/url"
 	"sort"
 	"strings"
 )
 
+const HeaderOSSPrefix = "x-oss-"
+
 var ossParamsToSign = map[string]bool{
 	"acl":                          true,
+	"delete":                       true,
 	"location":                     true,
 	"logging":                      true,
 	"notification":                 true,
@@ -30,15 +34,23 @@ var ossParamsToSign = map[string]bool{
 	"response-content-encoding":    true,
 }
 
-func (client *Client) createSignature(request *http.Request) string {
-	headers := request.Header
+func (client *Client) signRequest(request *request) {
+	query := request.params
+
+	urlSignature := query.Get("OSSAccessKeyId") != ""
+
+	headers := request.headers
 	contentMd5 := headers.Get("Content-Md5")
 	contentType := headers.Get("Content-Type")
-	date := headers.Get("Date")
+	date := ""
+	if urlSignature {
+		date = query.Get("Expires")
+	} else {
+		date = headers.Get("Date")
+	}
 
-	resource := request.URL.Path
+	resource := request.path
 
-	query := request.URL.Query()
 	params := make(url.Values)
 	for k, v := range query {
 		if ossParamsToSign[k] {
@@ -51,28 +63,21 @@ func (client *Client) createSignature(request *http.Request) string {
 	}
 
 	canonicalizedResource := resource
+	//log.Println("headers: ", headers)
+	//log.Println("params: ", params)
 
 	_, canonicalizedHeader := canonicalizeHeader(headers)
 
-	stringToSign := request.Method + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n" + canonicalizedHeader + canonicalizedResource
-	return util.CreateSignature(stringToSign, client.AccessKeySecret)
-}
+	stringToSign := request.method + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n" + canonicalizedHeader + canonicalizedResource
 
-//func (client *Client) SignUrlAuthWithExpireTime(method, urladdr string, headers http.Header, resource string, timeout int) string {
-//	sendTime := headers.Get("Date")
-//	if sendTime == "" {
-//		headers.Add("Date", getGMTime())
-//	}
-//	auth := client.getAuthorization(method, headers, resource)
-//	params := make(url.Values)
-//	params.Add("OSSAccessKeyId", client.AccessKeyId)
-//	params.Add("Expires", getExpires())
-//	params.Add("Signature", auth)
-//	return url.QueryEscape(urladdr + "?" + params.Encode())
-//}
+	//log.Println("stringToSign: ", stringToSign)
+	signature := util.CreateSignature(stringToSign, client.AccessKeySecret)
 
-func (client *Client) createAuthorizationHeader(request *http.Request) string {
-	return "OSS " + client.AccessKeyId + ":" + client.createSignature(request)
+	if query.Get("OSSAccessKeyId") != "" {
+		query.Set("Signature", signature)
+	} else {
+		headers.Set("Authorization", "OSS "+client.AccessKeyId+":"+signature)
+	}
 }
 
 //Have to break the abstraction to append keys with lower case.

@@ -3,6 +3,7 @@ package util
 import (
 	"bytes"
 	"math/rand"
+	"net/http"
 	"net/url"
 	"sort"
 	"strconv"
@@ -46,4 +47,8 @@ func Encode(v url.Values) string {
 		}
 	}
 	return buf.String()
+}
+
+func GetGMTime() string {
+	return time.Now().UTC().Format(http.TimeFormat)
 }

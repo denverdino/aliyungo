@@ -1,71 +1,188 @@
-package oss
+package oss_test
 
 import (
+	"bytes"
 	"io/ioutil"
-	"net/http"
-	"os"
-	"strconv"
+	//"net/http"
 	"testing"
+	//"time"
+
+	"github.com/denverdino/aliyungo/oss"
 )
 
 var (
-	client     = NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret)
-	bucket     = client.Bucket(TestBucket)
-	testObject = "api_handler.go"
+	client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret)
 )
 
+func TestCreateBucket(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	err := b.PutBucket(oss.Private)
+	if err != nil {
+		t.Errorf("Failed for PutBucket: %v", err)
+	}
+}
+
+func TestHead(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	_, err := b.Head("name", nil)
+
+	if err == nil {
+		t.Errorf("Failed for Head: %v", err)
+	}
+}
+
 func TestPutObject(t *testing.T) {
-	err := bucket.Put(testObject, []byte("Just for text"), "")
+	const DISPOSITION = "attachment; filename=\"0x1a2b3c.jpg\""
+
+	b := client.Bucket(TestBucket)
+	err := b.Put("name", []byte("content"), "content-type", oss.Private, oss.Options{ContentDisposition: DISPOSITION})
 	if err != nil {
-		t.Errorf("Unable to put Object: %++v", err)
+		t.Errorf("Failed for Put: %v", err)
+	}
+}
+
+func TestGet(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	data, err := b.Get("name")
+
+	if err != nil || string(data) != "content" {
+		t.Errorf("Failed for Get: %v", err)
+	}
+}
+
+func TestURL(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	url := b.URL("name")
+
+	t.Log("URL: ", url)
+	//	/c.Assert(req.URL.Path, check.Equals, "/denverdino_test/name")
+}
+
+func TestGetReader(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	rc, err := b.GetReader("name")
+	data, err := ioutil.ReadAll(rc)
+	rc.Close()
+	if err != nil || string(data) != "content" {
+		t.Errorf("Failed for GetReader: %v", err)
+	}
+}
+
+func aTestGetNotFound(t *testing.T) {
+
+	b := client.Bucket("non-existent-bucket")
+	_, err := b.Get("non-existent")
+	if err == nil {
+		t.Fatalf("Failed for TestGetNotFound: %v", err)
+	}
+	ossErr, _ := err.(*oss.Error)
+	if ossErr.StatusCode != 404 || ossErr.BucketName != "non-existent-bucket" {
+		t.Errorf("Failed for TestGetNotFound: %v", err)
 	}
 
 }
 
-func TestPutObjectFromFile(t *testing.T) {
-	file, err := os.Open("../README.md")
-	if err != nil {
-		t.Fatal(err)
+func TestPutCopy(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	t.Log("Source: ", b.Path("name"))
+	res, err := b.PutCopy("newname", oss.Private, oss.CopyOptions{},
+		b.Path("name"))
+	if err == nil {
+		t.Logf("Copy result: %v", res)
+	} else {
+		t.Errorf("Failed for PutCopy: %v", err)
 	}
-	err = bucket.PutFile(testObject, file)
-	if err != nil {
-		t.Errorf("Unable to put object: %v", err)
+}
+
+func TestList(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+
+	data, err := b.List("n", "", "", 0)
+	if err != nil || len(data.Contents) != 2 {
+		t.Errorf("Failed for List: %v", err)
+	} else {
+		t.Logf("Contents = %++v", data)
+	}
+}
+
+func TestListWithDelimiter(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+
+	data, err := b.List("photos/2006/", "/", "some-marker", 1000)
+	if err != nil || len(data.Contents) != 0 {
+		t.Errorf("Failed for List: %v", err)
+	} else {
+		t.Logf("Contents = %++v", data)
 	}
 
 }
 
-func TestGetObject(t *testing.T) {
-	body, err := bucket.Get(testObject)
+func TestPutReader(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	buf := bytes.NewBufferString("content")
+	err := b.PutReader("name", buf, int64(buf.Len()), "content-type", oss.Private, oss.Options{})
 	if err != nil {
-		t.Fatalf("Unable to get object: %v", err)
+		t.Errorf("Failed for PutReader: %v", err)
 	}
-	t.Logf("Content of object %s:", testObject)
-	t.Log(string(body))
+	TestGetReader(t)
 }
 
-// ReadStream retrieves an io.ReadCloser for the content stored at "path" with a
-// given byte offset.
-func TestGetResponse(t *testing.T) {
-	headers := make(http.Header)
-	offset := int64(100)
-	headers.Add("Range", "bytes="+strconv.FormatInt(offset, 10)+"-")
-	httpResp, err := bucket.GetResponse(testObject)
-	if err != nil {
-		t.Fatalf("Unable to get object with offset: %v", err)
+func TestExists(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	result, err := b.Exists("name")
+	if err != nil || result != true {
+		t.Errorf("Failed for Exists: %v", err)
 	}
-	data, err := ioutil.ReadAll(httpResp.Body)
-	if err != nil {
-		t.Fatalf("Unable to get object with offset: %v", err)
-	}
-	t.Logf("Content of object %s from offset %d:", testObject, offset)
-	t.Log(string(data))
-	return
 }
 
-func TestDeleteObject(t *testing.T) {
-	err := bucket.Delete(testObject)
+func TestLocation(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	result, err := b.Location()
+
+	if err != nil || result != string(TestRegion) {
+		t.Errorf("Failed for Location: %v %s", err, result)
+	}
+}
+
+func TestACL(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	result, err := b.ACL()
+
 	if err != nil {
-		t.Errorf("Unable to del object: %v", err)
+		t.Errorf("Failed for Location: %v %s", err)
+	} else {
+		t.Logf("AccessControlPolicy: %++v", result)
+	}
+}
+
+func TestDelObject(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	err := b.Del("name")
+	if err != nil {
+		t.Errorf("Failed for Del: %v", err)
+	}
+}
+
+func TestDelMultiObjects(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	objects := []oss.Object{oss.Object{Key: "newname"}}
+	err := b.DelMulti(oss.Delete{
+		Quiet:   false,
+		Objects: objects,
+	})
+	if err != nil {
+		t.Errorf("Failed for DelMulti: %v", err)
 	}
 }
 
@@ -78,42 +195,11 @@ func TestGetService(t *testing.T) {
 	}
 }
 
-func TestGetBucket(t *testing.T) {
-	result, err := bucket.List("", "", "", 0)
-	if err != nil {
-		t.Errorf("Unable to list Bucket with no params: %v", err)
-	} else {
-		t.Logf("Result: %++v", result)
-	}
-	result, err = bucket.List("", "", "", 10)
-	if err != nil {
-		t.Errorf("Unable to list Bucket with 10 maxkeys: %v", err)
-	} else {
-		t.Logf("Result: %++v", result)
-	}
-}
+func TestDelBucket(t *testing.T) {
 
-func TestGetBucketACL(t *testing.T) {
-	result, err := bucket.GetBucketAcl()
+	b := client.Bucket(TestBucket)
+	err := b.DelBucket()
 	if err != nil {
-		t.Errorf("Unable to get Bucket ACL: %v", err)
-	} else {
-		t.Logf("Result: %++v", result)
-	}
-}
-
-func TestPutBucket(t *testing.T) {
-	testBucket := client.Bucket("denverdino-test")
-	err := testBucket.PutBucket("")
-	if err != nil {
-		t.Errorf("Unable to create a new bucket with no acl specified: %v", err)
-	}
-	err = testBucket.PutBucket("private")
-	if err != nil {
-		t.Errorf("Unable to create a new bucket with private acl: %v", err)
-	}
-	err = testBucket.DeleteBucket()
-	if err != nil {
-		t.Errorf("Unable to delete the test bucket: %v", err)
+		t.Errorf("Failed for DelBucket: %v", err)
 	}
 }

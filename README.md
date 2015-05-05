@@ -79,3 +79,8 @@ go test
 License and Authors
 -------------------
 Authors: denverdino@gmail.com
+
+
+References
+-------------------
+The GO API design of OSS refer the implementation from [https://github.com/AdRoll/goamz](https://github.com/AdRoll)

@@ -94,9 +94,12 @@ func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySec
 }
 
 // Bucket returns a Bucket with the given name.
-func (s3 *Client) Bucket(name string) *Bucket {
+func (client *Client) Bucket(name string) *Bucket {
 	name = strings.ToLower(name)
-	return &Bucket{s3, name}
+	return &Bucket{
+		Client: client,
+		Name:   name,
+	}
 }
 
 type BucketInfo struct {
@@ -110,8 +113,8 @@ type GetServiceResp struct {
 }
 
 // GetService gets a list of all buckets owned by an account.
-func (s3 *Client) GetService() (*GetServiceResp, error) {
-	bucket := s3.Bucket("")
+func (client *Client) GetService() (*GetServiceResp, error) {
+	bucket := client.Bucket("")
 
 	r, err := bucket.Get("")
 	if err != nil {
@@ -144,8 +147,8 @@ var createBucketConfiguration = `<CreateBucketConfiguration>
 
 // locationConstraint returns an io.Reader specifying a LocationConstraint if
 // required for the region.
-func (s3 *Client) locationConstraint() io.Reader {
-	constraint := fmt.Sprintf(createBucketConfiguration, s3.Region)
+func (client *Client) locationConstraint() io.Reader {
+	constraint := fmt.Sprintf(createBucketConfiguration, client.Region)
 	return strings.NewReader(constraint)
 }
 
@@ -804,8 +807,9 @@ func (b *Bucket) SignedURLWithMethod(method, path string, expires time.Time, par
 // UploadSignedURL returns a signed URL that allows anyone holding the URL
 // to upload the object at path. The signature is valid until expires.
 // contenttype is a string like image/png
-// name is the resource name in s3 terminology like images/ali.png [obviously excluding the bucket name itself]
+// name is the resource name in OSS terminology like images/ali.png [obviously excluding the bucket name itself]
 func (b *Bucket) UploadSignedURL(name, method, content_type string, expires time.Time) string {
+	//TODO TESTING
 	expire_date := expires.Unix()
 	if method != "POST" {
 		method = "PUT"
@@ -822,7 +826,7 @@ func (b *Bucket) UploadSignedURL(name, method, content_type string, expires time
 	signature := base64.StdEncoding.EncodeToString([]byte(macsum))
 	signature = strings.TrimSpace(signature)
 
-	signedurl, err := url.Parse("https://" + b.Name + ".s3.amazonaws.com/")
+	signedurl, err := url.Parse("https://" + b.Name + ".client.amazonaws.com/")
 	if err != nil {
 		log.Println("ERROR sining url for OSS upload", err)
 		return ""
@@ -903,12 +907,12 @@ func (req *request) url() (*url.URL, error) {
 // query prepares and runs the req request.
 // If resp is not nil, the XML data contained in the response
 // body will be unmarshalled on it.
-func (s3 *Client) query(req *request, resp interface{}) error {
-	err := s3.prepare(req)
+func (client *Client) query(req *request, resp interface{}) error {
+	err := client.prepare(req)
 	if err != nil {
 		return err
 	}
-	r, err := s3.run(req, resp)
+	r, err := client.run(req, resp)
 	if r != nil && r.Body != nil {
 		r.Body.Close()
 	}
@@ -916,8 +920,8 @@ func (s3 *Client) query(req *request, resp interface{}) error {
 }
 
 // Sets baseurl on req from bucket name and the region endpoint
-func (s3 *Client) setBaseURL(req *request) error {
-	req.baseurl = s3.Region.GetEndpoint(s3.Internal)
+func (client *Client) setBaseURL(req *request) error {
+	req.baseurl = client.Region.GetEndpoint(client.Internal)
 
 	if req.bucket != "" {
 		if req.path != "/" {
@@ -956,7 +960,7 @@ func partiallyEscapedPath(path string) string {
 }
 
 // prepare sets up req to be delivered to OSS.
-func (s3 *Client) prepare(req *request) error {
+func (client *Client) prepare(req *request) error {
 	// Copy so they can be mutated without affecting on retries.
 	params := make(url.Values)
 	headers := copyHeader(req.headers)
@@ -977,20 +981,20 @@ func (s3 *Client) prepare(req *request) error {
 			req.path = "/" + req.path
 		}
 
-		err := s3.setBaseURL(req)
+		err := client.setBaseURL(req)
 		if err != nil {
 			return err
 		}
 	}
 
 	req.headers.Set("Date", util.GetGMTime())
-	s3.signRequest(req)
+	client.signRequest(req)
 
 	return nil
 }
 
 // Prepares an *http.Request for doHttpRequest
-func (s3 *Client) setupHttpRequest(req *request) (*http.Request, error) {
+func (client *Client) setupHttpRequest(req *request) (*http.Request, error) {
 	// Copy so that signing the http request will not mutate it
 
 	u, err := req.url()
@@ -1024,20 +1028,20 @@ func (s3 *Client) setupHttpRequest(req *request) (*http.Request, error) {
 // doHttpRequest sends hreq and returns the http response from the server.
 // If resp is not nil, the XML data contained in the response
 // body will be unmarshalled on it.
-func (s3 *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http.Response, error) {
+func (client *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http.Response, error) {
 	c := http.Client{
 		Transport: &http.Transport{
 			Dial: func(netw, addr string) (c net.Conn, err error) {
-				deadline := time.Now().Add(s3.ReadTimeout)
-				if s3.ConnectTimeout > 0 {
-					c, err = net.DialTimeout(netw, addr, s3.ConnectTimeout)
+				deadline := time.Now().Add(client.ReadTimeout)
+				if client.ConnectTimeout > 0 {
+					c, err = net.DialTimeout(netw, addr, client.ConnectTimeout)
 				} else {
 					c, err = net.Dial(netw, addr)
 				}
 				if err != nil {
 					return
 				}
-				if s3.ReadTimeout > 0 {
+				if client.ReadTimeout > 0 {
 					err = c.SetDeadline(deadline)
 				}
 				return
@@ -1050,19 +1054,19 @@ func (s3 *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http.Res
 	if err != nil {
 		return nil, err
 	}
-	if s3.debug {
+	if client.debug {
 		//log.Printf("%s %s", hreq.Method, hreq.URL.String())
 		dump, _ := httputil.DumpResponse(hresp, true)
 		log.Printf("} -> %s\n", dump)
 	}
 	if hresp.StatusCode != 200 && hresp.StatusCode != 204 && hresp.StatusCode != 206 {
-		return nil, s3.buildError(hresp)
+		return nil, client.buildError(hresp)
 	}
 	if resp != nil {
 		err = xml.NewDecoder(hresp.Body).Decode(resp)
 		hresp.Body.Close()
 
-		if s3.debug {
+		if client.debug {
 			log.Printf("aliyungo.oss> decoded xml into %#v", resp)
 		}
 
@@ -1073,23 +1077,23 @@ func (s3 *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http.Res
 // run sends req and returns the http response from the server.
 // If resp is not nil, the XML data contained in the response
 // body will be unmarshalled on it.
-func (s3 *Client) run(req *request, resp interface{}) (*http.Response, error) {
-	if s3.debug {
+func (client *Client) run(req *request, resp interface{}) (*http.Response, error) {
+	if client.debug {
 		log.Printf("Running OSS request: %#v", req)
 	}
 
-	hreq, err := s3.setupHttpRequest(req)
+	hreq, err := client.setupHttpRequest(req)
 	if err != nil {
 		return nil, err
 	}
 
-	return s3.doHttpRequest(hreq, resp)
+	return client.doHttpRequest(hreq, resp)
 }
 
 // Error represents an error in an operation with OSS.
 type Error struct {
 	StatusCode int    // HTTP status code (200, 403, ...)
-	Code       string // EC2 error code ("UnsupportedOperation", ...)
+	Code       string // OSS error code ("UnsupportedOperation", ...)
 	Message    string // The human-oriented error message
 	BucketName string
 	RequestId  string
@@ -1100,8 +1104,8 @@ func (e *Error) Error() string {
 	return e.Message
 }
 
-func (s3 *Client) buildError(r *http.Response) error {
-	if s3.debug {
+func (client *Client) buildError(r *http.Response) error {
+	if client.debug {
 		log.Printf("got error (status code %v)", r.StatusCode)
 		data, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -1120,7 +1124,7 @@ func (s3 *Client) buildError(r *http.Response) error {
 	if err.Message == "" {
 		err.Message = r.Status
 	}
-	if s3.debug {
+	if client.debug {
 		log.Printf("err: %#v\n", err)
 	}
 	return &err
@@ -1165,8 +1169,8 @@ func shouldRetry(err error) bool {
 }
 
 func hasCode(err error, code string) bool {
-	s3err, ok := err.(*Error)
-	return ok && s3err.Code == code
+	e, ok := err.(*Error)
+	return ok && e.Code == code
 }
 
 func copyHeader(header http.Header) (newHeader http.Header) {

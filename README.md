@@ -35,7 +35,7 @@ Modify "ecs/config_test.go"
 ```sh
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_ID"
-	TestInstanceId       = "MY_INSTANCE_ID"
+	TestInstanceId      = "MY_INSTANCE_ID"
 	TestIAmRich         = false
 ```
 
@@ -58,13 +58,12 @@ Modify "oss/config_test.go"
 ```sh
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_ID"
-	TestRegion          = BEIJING
+	TestRegion          = oss.Beijing
 	TestBucket          = "denverdino"
 ```
 
 *  TestAccessKeyId: the Access Key Id
 *  TestAccessKeySecret: the Access Key Secret.
-*  TestIAmRich(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
 *  TestRegion: the region of OSS for testing
 *  TestBucket: the bucket name for testing
 

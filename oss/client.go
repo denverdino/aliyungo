@@ -899,7 +899,6 @@ func (req *request) url() (*url.URL, error) {
 	}
 	u.RawQuery = req.params.Encode()
 	u.Path = req.path
-	log.Print(u.String())
 	return u, nil
 }
 

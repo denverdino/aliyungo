@@ -89,7 +89,7 @@ func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySec
 		AccessKeySecret: accessKeySecret,
 		Region:          region,
 		Internal:        internal,
-		debug:           true,
+		debug:           false,
 	}
 }
 

@@ -81,7 +81,7 @@ var attempts = util.AttemptStrategy{
 	Delay: 200 * time.Millisecond,
 }
 
-// New creates a new OSS.
+// NewOSSClient creates a new OSS.
 
 func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string) *Client {
 	return &Client{
@@ -89,7 +89,7 @@ func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySec
 		AccessKeySecret: accessKeySecret,
 		Region:          region,
 		Internal:        internal,
-		debug:           false,
+		debug:           true,
 	}
 }
 
@@ -464,9 +464,9 @@ func (b *Bucket) PutBucketWebsite(configuration WebsiteConfiguration) error {
 }
 
 func (b *Bucket) PutBucketSubresource(subresource string, r io.Reader, length int64) error {
-	headers := http.Header{
-		"Content-Length": {strconv.FormatInt(length, 10)},
-	}
+	headers := make(http.Header)
+	headers.Set("Content-Length", strconv.FormatInt(length, 10))
+
 	req := &request{
 		path:    "/",
 		method:  "PUT",
@@ -618,13 +618,12 @@ type Key struct {
 //     }
 //
 func (b *Bucket) List(prefix, delim, marker string, max int) (result *ListResp, err error) {
-	params := url.Values{
-		"prefix":    {prefix},
-		"delimiter": {delim},
-		"marker":    {marker},
-	}
+	params := make(url.Values)
+	params.Set("prefix", prefix)
+	params.Set("delimiter", delim)
+	params.Set("marker", marker)
 	if max != 0 {
-		params["max-keys"] = []string{strconv.FormatInt(int64(max), 10)}
+		params.Set("max-keys", strconv.FormatInt(int64(max), 10))
 	}
 	req := &request{
 		bucket: b.Name,
@@ -960,8 +959,9 @@ func partiallyEscapedPath(path string) string {
 // prepare sets up req to be delivered to OSS.
 func (client *Client) prepare(req *request) error {
 	// Copy so they can be mutated without affecting on retries.
-	params := make(url.Values)
 	headers := copyHeader(req.headers)
+	params := make(url.Values)
+
 	for k, v := range req.params {
 		params[k] = v
 	}
@@ -1011,9 +1011,11 @@ func (client *Client) setupHttpRequest(req *request) (*http.Request, error) {
 		Form:       req.params,
 	}
 
-	if v, ok := req.headers["Content-Length"]; ok {
-		hreq.ContentLength, _ = strconv.ParseInt(v[0], 10, 64)
-		delete(req.headers, "Content-Length")
+	contentLength := req.headers.Get("Content-Length")
+
+	if contentLength != "" {
+		hreq.ContentLength, _ = strconv.ParseInt(contentLength, 10, 64)
+		req.headers.Del("Content-Length")
 	}
 
 	if req.payload != nil {

@@ -9,6 +9,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/url"
 	"sort"
 	"strconv"
 	"strings"
@@ -49,12 +50,12 @@ type listMultiResp struct {
 // into different groupings of keys, similar to how folders would work.
 //
 func (b *Bucket) ListMulti(prefix, delim string) (multis []*Multi, prefixes []string, err error) {
-	params := map[string][]string{
-		"uploads":     {""},
-		"max-uploads": {strconv.FormatInt(int64(listMultiMax), 10)},
-		"prefix":      {prefix},
-		"delimiter":   {delim},
-	}
+	params := make(url.Values)
+	params.Set("uploads", "")
+	params.Set("max-uploads", strconv.FormatInt(int64(listMultiMax), 10))
+	params.Set("prefix", prefix)
+	params.Set("delimiter", delim)
+
 	for attempt := attempts.Start(); attempt.Next(); {
 		req := &request{
 			method: "GET",
@@ -78,8 +79,8 @@ func (b *Bucket) ListMulti(prefix, delim string) (multis []*Multi, prefixes []st
 		if !resp.IsTruncated {
 			return multis, prefixes, nil
 		}
-		params["key-marker"] = []string{resp.NextKeyMarker}
-		params["upload-id-marker"] = []string{resp.NextUploadIdMarker}
+		params.Set("key-marker", resp.NextKeyMarker)
+		params.Set("upload-id-marker", resp.NextUploadIdMarker)
 		attempt = attempts.Start() // Last request worked.
 	}
 	panic("unreachable")
@@ -111,9 +112,8 @@ func (b *Bucket) InitMulti(key string, contType string, perm ACL, options Option
 	headers.Set("x-oss-acl", string(perm))
 
 	options.addHeaders(headers)
-	params := map[string][]string{
-		"uploads": {""},
-	}
+	params := make(url.Values)
+	params.Set("uploads", "")
 	req := &request{
 		method:  "POST",
 		bucket:  b.Name,
@@ -142,10 +142,9 @@ func (m *Multi) PutPartCopy(n int, options CopyOptions, source string) (*CopyObj
 	headers.Set("x-oss-copy-source", source)
 
 	options.addHeaders(headers)
-	params := map[string][]string{
-		"uploadId":   {m.UploadId},
-		"partNumber": {strconv.FormatInt(int64(n), 10)},
-	}
+	params := make(url.Values)
+	params.Set("uploadId", m.UploadId)
+	params.Set("partNumber", strconv.FormatInt(int64(n), 10))
 
 	sourceBucket := m.Bucket.Client.Bucket(strings.TrimRight(strings.SplitAfterN(source, "/", 2)[0], "/"))
 	sourceMeta, err := sourceBucket.Head(strings.SplitAfterN(source, "/", 2)[1], nil)
@@ -193,10 +192,10 @@ func (m *Multi) putPart(n int, r io.ReadSeeker, partSize int64, md5b64 string) (
 	headers.Set("Content-Length", strconv.FormatInt(partSize, 10))
 	headers.Set("Content-MD5", md5b64)
 
-	params := map[string][]string{
-		"uploadId":   {m.UploadId},
-		"partNumber": {strconv.FormatInt(int64(n), 10)},
-	}
+	params := make(url.Values)
+	params.Set("uploadId", m.UploadId)
+	params.Set("partNumber", strconv.FormatInt(int64(n), 10))
+
 	for attempt := attempts.Start(); attempt.Next(); {
 		_, err := r.Seek(0, 0)
 		if err != nil {
@@ -282,11 +281,11 @@ func (m *Multi) ListPartsFull(partNumberMarker int, maxParts int) ([]Part, error
 		maxParts = listPartsMax
 	}
 
-	params := map[string][]string{
-		"uploadId":           {m.UploadId},
-		"max-parts":          {strconv.FormatInt(int64(maxParts), 10)},
-		"part-number-marker": {strconv.FormatInt(int64(partNumberMarker), 10)},
-	}
+	params := make(url.Values)
+	params.Set("uploadId", m.UploadId)
+	params.Set("max-parts", strconv.FormatInt(int64(maxParts), 10))
+	params.Set("part-number-marker", strconv.FormatInt(int64(partNumberMarker), 10))
+
 	var parts partSlice
 	for attempt := attempts.Start(); attempt.Next(); {
 		req := &request{
@@ -308,7 +307,7 @@ func (m *Multi) ListPartsFull(partNumberMarker int, maxParts int) ([]Part, error
 			sort.Sort(parts)
 			return parts, nil
 		}
-		params["part-number-marker"] = []string{resp.NextPartNumberMarker}
+		params.Set("part-number-marker", resp.NextPartNumberMarker)
 		attempt = attempts.Start() // Last request worked.
 	}
 	panic("unreachable")
@@ -393,9 +392,9 @@ func (p completeParts) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 // final object. This operation may take several minutes.
 //
 func (m *Multi) Complete(parts []Part) error {
-	params := map[string][]string{
-		"uploadId": {m.UploadId},
-	}
+	params := make(url.Values)
+	params.Set("uploadId", m.UploadId)
+
 	c := completeUpload{}
 	for _, p := range parts {
 		c.Parts = append(c.Parts, completePart{p.N, p.ETag})
@@ -437,9 +436,9 @@ func (m *Multi) Complete(parts []Part) error {
 // error returned? Is the issue completely undetectable?).
 //
 func (m *Multi) Abort() error {
-	params := map[string][]string{
-		"uploadId": {m.UploadId},
-	}
+	params := make(url.Values)
+	params.Set("uploadId", m.UploadId)
+
 	for attempt := attempts.Start(); attempt.Next(); {
 		req := &request{
 			method: "DELETE",

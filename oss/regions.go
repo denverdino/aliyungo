@@ -1,5 +1,9 @@
 package oss
 
+import (
+	"fmt"
+)
+
 // Region represents OSS region
 type Region string
 
@@ -15,19 +19,25 @@ const (
 )
 
 // GetEndpoint returns endpoint of region
-func (r Region) GetEndpoint(internal bool) string {
+func (r Region) GetEndpoint(internal bool, bucket string) string {
 	if internal {
-		return r.GetInternalEndpoint()
+		return r.GetInternalEndpoint(bucket)
 	}
-	return r.GetInternetEndpoint()
+	return r.GetInternetEndpoint(bucket)
 }
 
 // GetInternetEndpoint returns internet endpoint of region
-func (r Region) GetInternetEndpoint() string {
-	return "http://" + string(r) + ".aliyuncs.com"
+func (r Region) GetInternetEndpoint(bucket string) string {
+	if bucket == "" {
+		return fmt.Sprintf("http://%s.aliyuncs.com", string(r))
+	}
+	return fmt.Sprintf("http://%s.%s.aliyuncs.com", bucket, string(r))
 }
 
 // GetInternalEndpoint returns internal endpoint of region
-func (r Region) GetInternalEndpoint() string {
-	return "http://" + string(r) + "-internal.aliyuncs.com"
+func (r Region) GetInternalEndpoint(bucket string) string {
+	if bucket == "" {
+		return fmt.Sprintf("http://%s-internal.aliyuncs.com", string(r))
+	}
+	return fmt.Sprintf("http://%s.%s-internal.aliyuncs.com", bucket, string(r))
 }

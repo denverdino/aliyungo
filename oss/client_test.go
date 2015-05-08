@@ -66,10 +66,13 @@ func TestGetReader(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
 	rc, err := b.GetReader("name")
+	if err != nil {
+		t.Fatalf("Failed for GetReader: %v", err)
+	}
 	data, err := ioutil.ReadAll(rc)
 	rc.Close()
 	if err != nil || string(data) != "content" {
-		t.Errorf("Failed for GetReader: %v", err)
+		t.Errorf("Failed for ReadAll: %v", err)
 	}
 }
 
@@ -158,7 +161,7 @@ func TestACL(t *testing.T) {
 	result, err := b.ACL()
 
 	if err != nil {
-		t.Errorf("Failed for Location: %v", err)
+		t.Errorf("Failed for ACL: %v", err)
 	} else {
 		t.Logf("AccessControlPolicy: %++v", result)
 	}

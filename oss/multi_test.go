@@ -83,7 +83,7 @@ func TestPutPartCopy(t *testing.T) {
 
 	res, part, err := multi.PutPartCopy(2, oss.CopyOptions{}, b.Path("name"))
 	if err != nil {
-		t.Errorf("Failed for PutPart: %v", err)
+		t.Errorf("Failed for PutPartCopy: %v", err)
 	} else {
 		t.Logf("PutPartCopy result: %++v %++v", part, res)
 	}

@@ -50,7 +50,9 @@ func (client *Client) signRequest(request *request) {
 	}
 
 	resource := request.path
-
+	if request.bucket != "" {
+		resource = "/" + request.bucket + request.path
+	}
 	params := make(url.Values)
 	for k, v := range query {
 		if ossParamsToSign[k] {
@@ -63,8 +65,6 @@ func (client *Client) signRequest(request *request) {
 	}
 
 	canonicalizedResource := resource
-	//log.Println("headers: ", headers)
-	//log.Println("params: ", params)
 
 	_, canonicalizedHeader := canonicalizeHeader(headers)
 

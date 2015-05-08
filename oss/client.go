@@ -93,6 +93,11 @@ func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySec
 	}
 }
 
+// SetDebug sets debug mode to log the request/response message
+func (client *Client) SetDebug(debug bool) {
+	client.debug = debug
+}
+
 // Bucket returns a Bucket with the given name.
 func (client *Client) Bucket(name string) *Bucket {
 	name = strings.ToLower(name)
@@ -225,6 +230,41 @@ func (b *Bucket) GetResponseWithHeaders(path string, headers http.Header) (resp 
 	req := &request{
 		bucket:  b.Name,
 		path:    path,
+		headers: headers,
+	}
+	err = b.Client.prepare(req)
+	if err != nil {
+		return nil, err
+	}
+	for attempt := attempts.Start(); attempt.Next(); {
+		resp, err := b.Client.run(req, nil)
+		if shouldRetry(err) && attempt.HasNext() {
+			continue
+		}
+		if err != nil {
+			return nil, err
+		}
+		return resp, nil
+	}
+	panic("unreachable")
+}
+
+// Get retrieves an object from an bucket.
+func (b *Bucket) GetWithParams(path string, params url.Values) (data []byte, err error) {
+	resp, err := b.GetResponseWithParamsAndHeaders(path, params, nil)
+	if err != nil {
+		return nil, err
+	}
+	data, err = ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	return data, err
+}
+
+func (b *Bucket) GetResponseWithParamsAndHeaders(path string, params url.Values, headers http.Header) (resp *http.Response, err error) {
+	req := &request{
+		bucket:  b.Name,
+		path:    path,
+		params:  params,
 		headers: headers,
 	}
 	err = b.Client.prepare(req)
@@ -715,7 +755,10 @@ type GetLocationResp struct {
 }
 
 func (b *Bucket) Location() (string, error) {
-	r, err := b.Get("/?location")
+	params := make(url.Values)
+	params.Set("location", "")
+	r, err := b.GetWithParams("/", params)
+
 	if err != nil {
 		return "", err
 	}
@@ -918,15 +961,8 @@ func (client *Client) query(req *request, resp interface{}) error {
 
 // Sets baseurl on req from bucket name and the region endpoint
 func (client *Client) setBaseURL(req *request) error {
-	req.baseurl = client.Region.GetEndpoint(client.Internal)
+	req.baseurl = client.Region.GetEndpoint(client.Internal, req.bucket)
 
-	if req.bucket != "" {
-		if req.path != "/" {
-			req.path = "/" + req.bucket + req.path
-		} else {
-			req.path = "/" + req.bucket
-		}
-	}
 	return nil
 }
 
@@ -1055,9 +1091,14 @@ func (client *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http
 		return nil, err
 	}
 	if client.debug {
-		//log.Printf("%s %s", hreq.Method, hreq.URL.String())
-		dump, _ := httputil.DumpResponse(hresp, true)
-		log.Printf("} -> %s\n", dump)
+		log.Printf("%s %s %d\n", hreq.Method, hreq.URL.String(), hresp.StatusCode)
+		contentType := hresp.Header.Get("Content-Type")
+		if contentType == "application/xml" || contentType == "text/xml" {
+			dump, _ := httputil.DumpResponse(hresp, true)
+			log.Printf("} -> %s\n", dump)
+		} else {
+			log.Printf("Response Content-Type: %s\n", contentType)
+		}
 	}
 	if hresp.StatusCode != 200 && hresp.StatusCode != 204 && hresp.StatusCode != 206 {
 		return nil, client.buildError(hresp)
@@ -1191,7 +1232,10 @@ type AccessControlPolicy struct {
 // ACL returns ACL of bucket
 func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 
-	r, err := b.Get("/?acl")
+	params := make(url.Values)
+	params.Set("acl", "")
+
+	r, err := b.GetWithParams("/", params)
 	if err != nil {
 		return nil, err
 	}

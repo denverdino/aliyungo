@@ -8,6 +8,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
+	//"log"
 	"net/http"
 	"net/url"
 	"sort"
@@ -146,8 +147,11 @@ func (m *Multi) PutPartCopy(n int, options CopyOptions, source string) (*CopyObj
 	params.Set("uploadId", m.UploadId)
 	params.Set("partNumber", strconv.FormatInt(int64(n), 10))
 
-	sourceBucket := m.Bucket.Client.Bucket(strings.TrimRight(strings.SplitAfterN(source, "/", 2)[0], "/"))
-	sourceMeta, err := sourceBucket.Head(strings.SplitAfterN(source, "/", 2)[1], nil)
+	sourceBucket := m.Bucket.Client.Bucket(strings.TrimRight(strings.Split(source, "/")[1], "/"))
+	//log.Println("source: ", source)
+	//log.Println("sourceBucket: ", sourceBucket.Name)
+	//log.Println("HEAD: ", strings.Split(source, "/")[2])
+	sourceMeta, err := sourceBucket.Head(strings.Split(source, "/")[2], nil)
 	if err != nil {
 		return nil, Part{}, err
 	}

@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	//"net/http"
 	"testing"
-	//"time"
+	"time"
 
 	"github.com/denverdino/aliyungo/oss"
 )
 
 var (
-	client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret)
+	//If you test on ECS, you can set the internal param to true
+	client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
 )
 
 func TestCreateBucket(t *testing.T) {
@@ -21,6 +22,8 @@ func TestCreateBucket(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed for PutBucket: %v", err)
 	}
+	t.Log("Wait a while for bucket creation ...")
+	time.Sleep(10 * time.Second)
 }
 
 func TestHead(t *testing.T) {

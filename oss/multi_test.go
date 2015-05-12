@@ -10,12 +10,7 @@ import (
 )
 
 func TestCreateBucketMulti(t *testing.T) {
-
-	b := client.Bucket(TestBucket)
-	err := b.PutBucket(oss.Private)
-	if err != nil {
-		t.Errorf("Failed for PutBucket: %v", err)
-	}
+	TestCreateBucket(t)
 }
 
 func TestInitMulti(t *testing.T) {

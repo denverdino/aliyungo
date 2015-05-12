@@ -19,25 +19,35 @@ const (
 )
 
 // GetEndpoint returns endpoint of region
-func (r Region) GetEndpoint(internal bool, bucket string) string {
+func (r Region) GetEndpoint(internal bool, bucket string, secure bool) string {
 	if internal {
-		return r.GetInternalEndpoint(bucket)
+		return r.GetInternalEndpoint(bucket, secure)
 	}
-	return r.GetInternetEndpoint(bucket)
+	return r.GetInternetEndpoint(bucket, secure)
+}
+
+func getProtocol(secure bool) string {
+	protocol := "http"
+	if secure {
+		protocol = "https"
+	}
+	return protocol
 }
 
 // GetInternetEndpoint returns internet endpoint of region
-func (r Region) GetInternetEndpoint(bucket string) string {
+func (r Region) GetInternetEndpoint(bucket string, secure bool) string {
+	protocol := getProtocol(secure)
 	if bucket == "" {
-		return fmt.Sprintf("http://%s.aliyuncs.com", string(r))
+		return fmt.Sprintf("%s://oss.aliyuncs.com", protocol)
 	}
-	return fmt.Sprintf("http://%s.%s.aliyuncs.com", bucket, string(r))
+	return fmt.Sprintf("%s://%s.%s.aliyuncs.com", protocol, bucket, string(r))
 }
 
 // GetInternalEndpoint returns internal endpoint of region
-func (r Region) GetInternalEndpoint(bucket string) string {
+func (r Region) GetInternalEndpoint(bucket string, secure bool) string {
+	protocol := getProtocol(secure)
 	if bucket == "" {
-		return fmt.Sprintf("http://%s-internal.aliyuncs.com", string(r))
+		return fmt.Sprintf("%s://oss-internal.aliyuncs.com", protocol)
 	}
-	return fmt.Sprintf("http://%s.%s-internal.aliyuncs.com", bucket, string(r))
+	return fmt.Sprintf("%s://%s.%s-internal.aliyuncs.com", protocol, bucket, string(r))
 }

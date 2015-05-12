@@ -32,6 +32,7 @@ type Client struct {
 	AccessKeySecret string
 	Region          Region
 	Internal        bool
+	Secure          bool
 	ConnectTimeout  time.Duration
 	ReadTimeout     time.Duration
 	debug           bool
@@ -83,13 +84,14 @@ var attempts = util.AttemptStrategy{
 
 // NewOSSClient creates a new OSS.
 
-func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string) *Client {
+func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string, secure bool) *Client {
 	return &Client{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
 		Region:          region,
 		Internal:        internal,
 		debug:           false,
+		Secure:          secure,
 	}
 }
 
@@ -961,7 +963,7 @@ func (client *Client) query(req *request, resp interface{}) error {
 
 // Sets baseurl on req from bucket name and the region endpoint
 func (client *Client) setBaseURL(req *request) error {
-	req.baseurl = client.Region.GetEndpoint(client.Internal, req.bucket)
+	req.baseurl = client.Region.GetEndpoint(client.Internal, req.bucket, client.Secure)
 
 	return nil
 }

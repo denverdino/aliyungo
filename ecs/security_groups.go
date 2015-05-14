@@ -141,3 +141,27 @@ func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttr
 	err := client.Invoke("ModifySecurityGroupAttribute", args, &response)
 	return err
 }
+
+type AuthorizeSecurityGroupArgs struct {
+	SecurityGroupId         string
+	RegionId                string
+	IpProtocol              string
+	PortRange               string
+	SourceGroupId           string
+	SourceGroupOwnerAccount string
+	SourceCidrIp            string // IPv4 only, default 0.0.0.0/0
+	Policy                  string // enum of accept (default) | drop
+	Priority                int    // 1 - 100, default 1
+	NicType                 string // enum of internet | intranet (default)
+}
+
+type AuthorizeSecurityGroupResponse struct {
+	CommonResponse
+}
+
+// AuthorizeSecurityGroup authorize permissions to security group
+func (client *Client) AuthorizeSecurityGroup(args *AuthorizeSecurityGroupArgs) error {
+	response := AuthorizeSecurityGroupResponse{}
+	err := client.Invoke("AuthorizeSecurityGroup", args, &response)
+	return err
+}

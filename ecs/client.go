@@ -90,7 +90,9 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 	statusCode := httpResp.StatusCode
 
-	log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
+	if client.debug {
+		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
+	}
 
 	defer httpResp.Body.Close()
 	body, err := ioutil.ReadAll(httpResp.Body)

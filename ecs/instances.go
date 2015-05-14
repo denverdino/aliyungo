@@ -5,6 +5,18 @@ import (
 	"time"
 )
 
+// Region represents ECS region
+type InstanceStatus string
+
+// Constants of region definition
+const (
+	Running  = InstanceStatus("Running")
+	Starting = InstanceStatus("Starting")
+
+	Stopped  = InstanceStatus("Stopped")
+	Stopping = InstanceStatus("Stopping")
+)
+
 type DescribeInstanceStatusArgs struct {
 	RegionId string
 	ZoneId   string
@@ -173,7 +185,7 @@ const InstanceWaitForInterval = 5
 const InstanceDefaultTimeout = 60
 
 // WaitForInstance waits for instance to given status
-func (client *Client) WaitForInstance(instanceId string, status string, timeout int) error {
+func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, timeout int) error {
 	if timeout <= 0 {
 		timeout = InstanceDefaultTimeout
 	}
@@ -182,7 +194,7 @@ func (client *Client) WaitForInstance(instanceId string, status string, timeout 
 		if err != nil {
 			return err
 		}
-		if instance.Status == status {
+		if instance.Status == string(status) {
 			break
 		}
 		timeout = timeout - InstanceWaitForInterval

@@ -15,11 +15,13 @@ const (
 	USWest1  = Region("us-west-1")
 )
 
+var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, USWest1}
+
 type DescribeRegionsArgs struct {
 }
 
 type RegionType struct {
-	RegionId  string
+	RegionId  Region
 	LocalName string
 }
 

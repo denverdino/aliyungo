@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-// Region represents ECS region
+// InstanceStatus represents instance status
 type InstanceStatus string
 
-// Constants of region definition
+// Constants of InstanceStatus
 const (
 	Running  = InstanceStatus("Running")
 	Starting = InstanceStatus("Starting")
@@ -18,7 +18,7 @@ const (
 )
 
 type DescribeInstanceStatusArgs struct {
-	RegionId string
+	RegionId Region
 	ZoneId   string
 	Pagination
 }
@@ -140,7 +140,7 @@ type InstanceAttributesType struct {
 	InstanceName     string
 	Description      string
 	ImageId          string
-	RegionId         string
+	RegionId         Region
 	ZoneId           string
 	ClusterId        string
 	InstanceType     string
@@ -208,7 +208,7 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 }
 
 type DescribeInstancesArgs struct {
-	RegionId            string
+	RegionId            Region
 	VpcId               string
 	VSwitchId           string
 	ZoneId              string
@@ -270,7 +270,7 @@ type DataDiskType struct {
 }
 
 type CreateInstanceArgs struct {
-	RegionId                string
+	RegionId                Region
 	ZoneId                  string
 	ImageId                 string
 	InstanceType            string

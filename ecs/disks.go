@@ -32,7 +32,7 @@ const (
 
 // A DescribeDisksArgs defines the arguments to describe disks
 type DescribeDisksArgs struct {
-	RegionId           string
+	RegionId           Region
 	ZoneId             string
 	DiskIds            []string
 	InstanceId         string
@@ -49,7 +49,7 @@ type DescribeDisksArgs struct {
 
 type DiskItemType struct {
 	DiskId             string
-	RegionId           string
+	RegionId           Region
 	ZoneId             string
 	DiskName           string
 	Description        string
@@ -75,7 +75,7 @@ type DiskItemType struct {
 type DescribeDisksResponse struct {
 	CommonResponse
 
-	RegionId string
+	RegionId Region
 	PaginationResult
 	Disks struct {
 		Disk []DiskItemType
@@ -96,7 +96,7 @@ func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemTy
 }
 
 type CreateDiskArgs struct {
-	RegionId    string
+	RegionId    Region
 	ZoneId      string
 	DiskName    string
 	Description string
@@ -241,7 +241,7 @@ const DiskWaitForInterval = 5
 const DiskWaitForDefaultTimeout = 60
 
 // WaitForDisk waits for disk to given status
-func (client *Client) WaitForDisk(regionId string, diskId string, status string, timeout int) error {
+func (client *Client) WaitForDisk(regionId Region, diskId string, status string, timeout int) error {
 	if timeout <= 0 {
 		timeout = DiskWaitForDefaultTimeout
 	}

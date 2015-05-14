@@ -6,7 +6,7 @@ import (
 
 type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
-	RegionId        string
+	RegionId        Region
 	NicType         string //enum for internet (default) |intranet
 }
 
@@ -25,7 +25,7 @@ type DescribeSecurityGroupAttributeResponse struct {
 
 	SecurityGroupId   string
 	SecurityGroupName string
-	RegionId          string
+	RegionId          Region
 	Description       string
 	Permissions       struct {
 		Permission []PermissionType
@@ -43,7 +43,7 @@ func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroup
 }
 
 type DescribeSecurityGroupsArgs struct {
-	RegionId string
+	RegionId Region
 	VpcId    string
 	Pagination
 }
@@ -60,7 +60,7 @@ type DescribeSecurityGroupsResponse struct {
 	CommonResponse
 
 	PaginationResult
-	RegionId       string
+	RegionId       Region
 	SecurityGroups struct {
 		SecurityGroup []SecurityGroupItemType
 	}
@@ -81,7 +81,7 @@ func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (
 }
 
 type CreateSecurityGroupArgs struct {
-	RegionId          string
+	RegionId          Region
 	SecurityGroupName string
 	Description       string
 	VpcId             string
@@ -105,7 +105,7 @@ func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securi
 }
 
 type DeleteSecurityGroupArgs struct {
-	RegionId        string
+	RegionId        Region
 	SecurityGroupId string
 }
 
@@ -114,7 +114,7 @@ type DeleteSecurityGroupResponse struct {
 }
 
 // DeleteSecurityGroup deletes security group
-func (client *Client) DeleteSecurityGroup(regionId string, securityGroupId string) error {
+func (client *Client) DeleteSecurityGroup(regionId Region, securityGroupId string) error {
 	args := DeleteSecurityGroupArgs{
 		RegionId:        regionId,
 		SecurityGroupId: securityGroupId,
@@ -125,7 +125,7 @@ func (client *Client) DeleteSecurityGroup(regionId string, securityGroupId strin
 }
 
 type ModifySecurityGroupAttributeArgs struct {
-	RegionId          string
+	RegionId          Region
 	SecurityGroupId   string
 	SecurityGroupName string
 	Description       string
@@ -144,7 +144,7 @@ func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttr
 
 type AuthorizeSecurityGroupArgs struct {
 	SecurityGroupId         string
-	RegionId                string
+	RegionId                Region
 	IpProtocol              string
 	PortRange               string
 	SourceGroupId           string

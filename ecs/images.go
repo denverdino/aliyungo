@@ -4,13 +4,25 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
+// ImageOwnerAlias represents image owner
+type ImageOwnerAlias string
+
+// Constants of image owner
+const (
+	ImageOwnerSystem      = ImageOwnerAlias("system")
+	ImageOwnerSelf        = ImageOwnerAlias("self")
+	ImageOwnerOthers      = ImageOwnerAlias("others")
+	ImageOwnerMarketplace = ImageOwnerAlias("marketplace")
+	ImageOwnerDefault     = ImageOwnerAlias("") //Return the values for system, self, and others
+)
+
 // DescribeImagesArgs repsents arguements to describe images
 type DescribeImagesArgs struct {
-	RegionId        string
+	RegionId        Region
 	ImageId         string
 	SnapshotId      string
 	ImageName       string
-	ImageOwnerAlias string //Enum system | self | others | marketplace
+	ImageOwnerAlias ImageOwnerAlias
 	Pagination
 }
 
@@ -64,7 +76,7 @@ func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageTy
 
 // CreateImageArgs repsents arguements to create image
 type CreateImageArgs struct {
-	RegionId     string
+	RegionId     Region
 	SnapshotId   string
 	ImageName    string
 	ImageVersion string
@@ -89,7 +101,7 @@ func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err er
 }
 
 type DeleteImageArgs struct {
-	RegionId string
+	RegionId Region
 	ImageId  string
 }
 
@@ -98,7 +110,7 @@ type DeleteImageResponse struct {
 }
 
 // DeleteImage deletes Image
-func (client *Client) DeleteImage(regionId string, imageId string) error {
+func (client *Client) DeleteImage(regionId Region, imageId string) error {
 	args := DeleteImageArgs{
 		RegionId: regionId,
 		ImageId:  imageId,

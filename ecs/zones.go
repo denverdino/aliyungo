@@ -1,7 +1,7 @@
 package ecs
 
 type DescribeZonesArgs struct {
-	RegionId string
+	RegionId Region
 }
 
 type AvailableResourceCreationType struct {
@@ -27,7 +27,7 @@ type DescribeZonesRespones struct {
 }
 
 // DescribeZones describes zones
-func (client *Client) DescribeZones(regionId string) (zones []ZoneType, err error) {
+func (client *Client) DescribeZones(regionId Region) (zones []ZoneType, err error) {
 	args := DescribeZonesArgs{
 		RegionId: regionId,
 	}

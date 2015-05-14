@@ -6,7 +6,7 @@ import (
 )
 
 type DescribeSnapshotsArgs struct {
-	RegionId    string
+	RegionId    Region
 	InstanceId  string
 	DiskId      string
 	SnapshotIds []string //["s-xxxxxxxxx", "s-yyyyyyyyy", ..."s-zzzzzzzzz"]
@@ -94,7 +94,7 @@ const SnapshotWaitForInterval = 5
 const SnapshotDefaultTimeout = 60
 
 // WaitForSnapShotReady waits for snapshot ready
-func (client *Client) WaitForSnapShotReady(regionId string, snapshotId string, timeout int) error {
+func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, timeout int) error {
 	if timeout <= 0 {
 		timeout = DiskWaitForDefaultTimeout
 	}

@@ -17,6 +17,20 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
+type InternetChargeType string
+
+const (
+	PayByBandwidth = InternetChargeType("PayByBandwidth")
+	PayByTraffic   = InternetChargeType("PayByTraffic")
+)
+
+type LockReason string
+
+const (
+	LockReasonFinancial = "financial"
+	LockReasonSecurity  = "security"
+)
+
 type DescribeInstanceStatusArgs struct {
 	RegionId Region
 	ZoneId   string
@@ -111,7 +125,7 @@ type DescribeInstanceAttributeArgs struct {
 }
 
 type OperationLocksType struct {
-	LockReason []string //enum for financial, security
+	LockReason []LockReason //enum for financial, security
 }
 
 type SecurityGroupIdSetType struct {
@@ -132,7 +146,7 @@ type EipAddressAssociateType struct {
 	AllocationId       string
 	IpAddress          string
 	Bandwidth          int
-	InternetChargeType string
+	InternetChargeType InternetChargeType
 }
 
 type InstanceAttributesType struct {
@@ -155,7 +169,7 @@ type InstanceAttributesType struct {
 	InstanceNetworkType     string //enum Classic | Vpc
 	InternetMaxBandwidthIn  int
 	InternetMaxBandwidthOut int
-	InternetChargeType      string           //enum PayByBandwidth | PayByTraffic
+	InternetChargeType      InternetChargeType
 	CreationTime            util.ISO6801Time //time.Time
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
@@ -261,12 +275,18 @@ func (client *Client) DeleteInstance(instanceId string) error {
 
 type DataDiskType struct {
 	Size               int
-	Category           string //Enum cloud, ephemeral, ephemeral_ssd
+	Category           DiskCategory //Enum cloud, ephemeral, ephemeral_ssd
 	SnapshotId         string
 	DiskName           string
 	Description        string
 	Device             string
 	DeleteWithInstance bool
+}
+
+type SystemDiskType struct {
+	Category    DiskCategory //Enum cloud, ephemeral, ephemeral_ssd
+	DiskName    string
+	Description string
 }
 
 type CreateInstanceArgs struct {
@@ -277,14 +297,12 @@ type CreateInstanceArgs struct {
 	SecurityGroupId         string
 	InstanceName            string
 	Description             string
-	InternetChargeType      string
+	InternetChargeType      InternetChargeType
 	InternetMaxBandwidthIn  int
 	InternetMaxBandwidthOut int
 	HostName                string
 	Password                string
-	SystemDiskCategory      string `ArgName:"SystemDisk.Category"`
-	SystemDiskDiskName      string `ArgName:"SystemDisk.DiskName"`
-	SystemDiskDescription   string `ArgName:"SystemDisk.Description"`
+	SystemDisk              SystemDiskType
 	DataDisk                []DataDiskType
 	VSwitchId               string
 	PrivateIpAddress        string

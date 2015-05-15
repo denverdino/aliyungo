@@ -4,20 +4,44 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
+type NicType string
+
+const (
+	NicTypeInternet = NicType("internet")
+	NicTypeIntranet = NicType("intranet")
+)
+
+type IpProtocol string
+
+const (
+	IpProtocolAll  = IpProtocol("all")
+	IpProtocolTCP  = IpProtocol("tcp")
+	IpProtocolUDP  = IpProtocol("udp")
+	IpProtocolICMP = IpProtocol("icmp")
+	IpProtocolGRE  = IpProtocol("gre")
+)
+
+type PermissionPolicy string
+
+const (
+	PermissionPolicyAccept = PermissionPolicy("accept")
+	PermissionPolicyDrop   = PermissionPolicy("drop")
+)
+
 type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
 	RegionId        Region
-	NicType         string //enum for internet (default) |intranet
+	NicType         NicType //enum for internet (default) |intranet
 }
 
 type PermissionType struct {
-	IpProtocol              string
+	IpProtocol              IpProtocol
 	PortRange               string
 	SourceCidrIp            string
 	SourceGroupId           string
 	SourceGroupOwnerAccount string
-	Policy                  string
-	NicType                 string
+	Policy                  PermissionPolicy
+	NicType                 NicType
 }
 
 type DescribeSecurityGroupAttributeResponse struct {
@@ -145,14 +169,14 @@ func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttr
 type AuthorizeSecurityGroupArgs struct {
 	SecurityGroupId         string
 	RegionId                Region
-	IpProtocol              string
+	IpProtocol              IpProtocol
 	PortRange               string
 	SourceGroupId           string
 	SourceGroupOwnerAccount string
-	SourceCidrIp            string // IPv4 only, default 0.0.0.0/0
-	Policy                  string // enum of accept (default) | drop
-	Priority                int    // 1 - 100, default 1
-	NicType                 string // enum of internet | intranet (default)
+	SourceCidrIp            string           // IPv4 only, default 0.0.0.0/0
+	Policy                  PermissionPolicy // enum of accept (default) | drop
+	Priority                int              // 1 - 100, default 1
+	NicType                 NicType          // enum of internet | intranet (default)
 }
 
 type AuthorizeSecurityGroupResponse struct {

@@ -1,15 +1,23 @@
 package ecs
 
+type ResourceType string
+
+const (
+	ResourceTypeInstance = ResourceType("Instance")
+	ResourceTypeDisk     = ResourceType("Disk")
+	ResourceTypeVSwitch  = ResourceType("VSwitch")
+)
+
 type DescribeZonesArgs struct {
 	RegionId Region
 }
 
 type AvailableResourceCreationType struct {
-	ResourceTypes []string //enum for Instance, Disk, VSwitch
+	ResourceTypes []ResourceType //enum for Instance, Disk, VSwitch
 }
 
 type AvailableDiskCategoriesType struct {
-	DiskCategories []string //enum for cloud, ephemeral, ephemeral_ssd
+	DiskCategories []DiskCategory //enum for cloud, ephemeral, ephemeral_ssd
 }
 
 type ZoneType struct {

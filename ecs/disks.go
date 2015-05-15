@@ -6,6 +6,8 @@ import (
 )
 
 // Types of disks
+type DiskType string
+
 const (
 	DiskTypeAll       = "all" //Default
 	DiskTypeAllSystem = "system"
@@ -13,13 +15,18 @@ const (
 )
 
 // Categories of disks
+type DiskCategory string
+
 const (
-	DiskCategoryAll       = "all" //Default
-	DiskCategoryCloud     = "cloud"
-	DiskCategoryEphemeral = "ephemeral"
+	DiskCategoryAll          = "all" //Default
+	DiskCategoryCloud        = "cloud"
+	DiskCategoryEphemeral    = "ephemeral"
+	DiskCategoryEphemeralSSD = "ephemeral_ssd"
 )
 
 // Status of disks
+type DiskStatus string
+
 const (
 	DiskStatusInUse     = "In_use"
 	DiskStatusAvailable = "Available"
@@ -36,9 +43,9 @@ type DescribeDisksArgs struct {
 	ZoneId             string
 	DiskIds            []string
 	InstanceId         string
-	DiskType           string //enum for all(default) | system | data
-	Category           string //enum for all(default) | cloud | ephemeral
-	Status             string //enum for In_use | Available | Attaching | Detaching | Creating | ReIniting | All(default)
+	DiskType           DiskType     //enum for all(default) | system | data
+	Category           DiskCategory //enum for all(default) | cloud | ephemeral
+	Status             DiskStatus   //enum for In_use | Available | Attaching | Detaching | Creating | ReIniting | All(default)
 	SnapshotId         string
 	Name               string
 	Portable           *bool //optional
@@ -53,8 +60,8 @@ type DiskItemType struct {
 	ZoneId             string
 	DiskName           string
 	Description        string
-	Type               string
-	Category           string
+	Type               DiskType
+	Category           DiskCategory
 	Size               int
 	ImageId            string
 	SourceSnapshotId   string

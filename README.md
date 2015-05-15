@@ -76,7 +76,9 @@ go test
 
 License and Authors
 -------------------
-Authors: denverdino@gmail.com
+Author: Li Yi (denverdino@gmail.com)
+
+This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
 
 
 References

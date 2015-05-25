@@ -27,8 +27,8 @@ const (
 type LockReason string
 
 const (
-	LockReasonFinancial = "financial"
-	LockReasonSecurity  = "security"
+	LockReasonFinancial = LockReason("financial")
+	LockReasonSecurity  = LockReason("security")
 )
 
 type DescribeInstanceStatusArgs struct {
@@ -39,7 +39,7 @@ type DescribeInstanceStatusArgs struct {
 
 type InstanceStatusItemType struct {
 	InstanceId string
-	Status     string
+	Status     InstanceStatus
 }
 
 type DescribeInstanceStatusResponse struct {
@@ -159,7 +159,7 @@ type InstanceAttributesType struct {
 	ClusterId        string
 	InstanceType     string
 	HostName         string
-	Status           string
+	Status           InstanceStatus
 	OperationLocks   OperationLocksType
 	SecurityGroupIds struct {
 		SecurityGroupId []string
@@ -208,7 +208,7 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 		if err != nil {
 			return err
 		}
-		if instance.Status == string(status) {
+		if instance.Status == status {
 			break
 		}
 		timeout = timeout - InstanceWaitForInterval

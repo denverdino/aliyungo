@@ -9,32 +9,32 @@ import (
 type DiskType string
 
 const (
-	DiskTypeAll       = "all" //Default
-	DiskTypeAllSystem = "system"
-	DiskTypeAllData   = "data"
+	DiskTypeAll       = DiskType("all") //Default
+	DiskTypeAllSystem = DiskType("system")
+	DiskTypeAllData   = DiskType("data")
 )
 
 // Categories of disks
 type DiskCategory string
 
 const (
-	DiskCategoryAll          = "all" //Default
-	DiskCategoryCloud        = "cloud"
-	DiskCategoryEphemeral    = "ephemeral"
-	DiskCategoryEphemeralSSD = "ephemeral_ssd"
+	DiskCategoryAll          = DiskCategory("all") //Default
+	DiskCategoryCloud        = DiskCategory("cloud")
+	DiskCategoryEphemeral    = DiskCategory("ephemeral")
+	DiskCategoryEphemeralSSD = DiskCategory("ephemeral_ssd")
 )
 
 // Status of disks
 type DiskStatus string
 
 const (
-	DiskStatusInUse     = "In_use"
-	DiskStatusAvailable = "Available"
-	DiskStatusAttaching = "Attaching"
-	DiskStatusDetaching = "Detaching"
-	DiskStatusCreating  = "Creating"
-	DiskStatusReIniting = "ReIniting"
-	DiskStatusAll       = "All" //Default
+	DiskStatusInUse     = DiskStatus("In_use")
+	DiskStatusAvailable = DiskStatus("Available")
+	DiskStatusAttaching = DiskStatus("Attaching")
+	DiskStatusDetaching = DiskStatus("Detaching")
+	DiskStatusCreating  = DiskStatus("Creating")
+	DiskStatusReIniting = DiskStatus("ReIniting")
+	DiskStatusAll       = DiskStatus("All") //Default
 )
 
 // A DescribeDisksArgs defines the arguments to describe disks
@@ -67,7 +67,7 @@ type DiskItemType struct {
 	SourceSnapshotId   string
 	ProductCode        string
 	Portable           bool
-	Status             string
+	Status             DiskStatus
 	OperationLocks     OperationLocksType
 	InstanceId         string
 	Device             string
@@ -248,7 +248,7 @@ const DiskWaitForInterval = 5
 const DiskWaitForDefaultTimeout = 60
 
 // WaitForDisk waits for disk to given status
-func (client *Client) WaitForDisk(regionId Region, diskId string, status string, timeout int) error {
+func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskStatus, timeout int) error {
 	if timeout <= 0 {
 		timeout = DiskWaitForDefaultTimeout
 	}

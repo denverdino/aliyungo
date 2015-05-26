@@ -30,7 +30,7 @@ func testEipAddress(t *testing.T, client *Client, regionId Region, instanceId st
 	}
 	ipAddr, allocationId, err := client.AllocateEipAddress(&args)
 	if err != nil {
-		t.Error("Failed to allocate EIP address: %v", err)
+		t.Errorf("Failed to allocate EIP address: %v", err)
 		return err
 	}
 	t.Logf("EIP address: %s, AllocationId: %s", ipAddr, allocationId)

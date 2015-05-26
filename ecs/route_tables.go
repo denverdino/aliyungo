@@ -2,6 +2,7 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
+	"time"
 )
 
 type DescribeRouteTablesArgs struct {
@@ -46,18 +47,20 @@ type RouteTableSetType struct {
 type DescribeRouteTablesResponse struct {
 	CommonResponse
 	PaginationResult
-	RouteTables []RouteTableSetType
+	RouteTables struct {
+		RouteTable []RouteTableSetType
+	}
 }
 
 // DescribeRouteTables describes Virtual Routers
-func (client *Client) DescribeRouteTables(args *DescribeRouteTablesArgs) (RouteTables []RouteTableSetType, pagination *PaginationResult, err error) {
+func (client *Client) DescribeRouteTables(args *DescribeRouteTablesArgs) (routeTables []RouteTableSetType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeRouteTablesResponse{}
 
 	err = client.Invoke("DescribeRouteTables", args, &response)
 
 	if err == nil {
-		return response.RouteTables, &response.PaginationResult, nil
+		return response.RouteTables.RouteTable, &response.PaginationResult, nil
 	}
 
 	return nil, nil, err
@@ -102,4 +105,43 @@ type DeleteRouteEntryResponse struct {
 func (client *Client) DeleteRouteEntry(args *DeleteRouteEntryArgs) error {
 	response := DeleteRouteEntryResponse{}
 	return client.Invoke("DeleteRouteEntry", args, &response)
+}
+
+// WaitForAllRouteEntriesAvailable waits for all route entries to Available status
+func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTableId string, timeout int) error {
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+	args := DescribeRouteTablesArgs{
+		VRouterId:    vrouterId,
+		RouteTableId: routeTableId,
+	}
+	for {
+
+		routeTables, _, err := client.DescribeRouteTables(&args)
+
+		if err != nil {
+			return err
+		}
+		sucess := true
+
+	loop:
+		for _, routeTable := range routeTables {
+			for _, routeEntry := range routeTable.RouteEntrys.RouteEntry {
+				if routeEntry.Status != RouteEntryStatusAvailable {
+					sucess = false
+					break loop
+				}
+			}
+		}
+		if sucess {
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return getECSErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

@@ -4,6 +4,7 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
+	"time"
 )
 
 type AllocatePublicIpAddressArgs struct {
@@ -92,18 +93,18 @@ func (client *Client) AssociateEipAddress(allocationId string, instanceId string
 }
 
 // Status of disks
-type EIPStatus string
+type EipStatus string
 
 const (
-	EIPStatusAssociating   = EIPStatus("Associating")
-	EIPStatusUnassociating = EIPStatus("Unassociating")
-	EIPStatusInUse         = EIPStatus("In_use")
-	EIPStatusAvailable     = EIPStatus("Available")
+	EipStatusAssociating   = EipStatus("Associating")
+	EipStatusUnassociating = EipStatus("Unassociating")
+	EipStatusInUse         = EipStatus("InUse")
+	EipStatusAvailable     = EipStatus("Available")
 )
 
 type DescribeEipAddressesArgs struct {
 	RegionId     Region
-	Status       EIPStatus //enum Associating | Unassociating | InUse | Available
+	Status       EipStatus //enum Associating | Unassociating | InUse | Available
 	EipAddress   string
 	AllocationId string
 	Pagination
@@ -113,9 +114,9 @@ type EipAddressSetType struct {
 	RegionId           Region
 	IpAddress          string
 	AllocationId       string
-	Status             EIPStatus
+	Status             EipStatus
 	InstanceId         string
-	Bandwidth          int
+	Bandwidth          string // Why string
 	InternetChargeType InternetChargeType
 	OperationLocks     OperationLocksType
 	AllocationTime     util.ISO6801Time
@@ -196,4 +197,30 @@ func (client *Client) ReleaseEipAddress(allocationId string) error {
 	}
 	response := ReleaseEipAddressResponse{}
 	return client.Invoke("ReleaseEipAddress", &args, &response)
+}
+
+// WaitForVSwitchAvailable waits for VSwitch to given status
+func (client *Client) WaitForEip(regionId Region, allocationId string, status EipStatus, timeout int) error {
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+	args := DescribeEipAddressesArgs{
+		RegionId:     regionId,
+		AllocationId: allocationId,
+	}
+	for {
+		vpcs, _, err := client.DescribeEipAddresses(&args)
+		if err != nil {
+			return err
+		}
+		if vpcs[0].Status == status {
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return getECSErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

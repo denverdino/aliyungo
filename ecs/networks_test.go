@@ -20,36 +20,45 @@ func TestAllocatePublicIpAddress(t *testing.T) {
 
 }
 
-func _TestEipAddress(t *testing.T) {
+func testEipAddress(t *testing.T, client *Client, regionId Region, instanceId string) error {
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
-	client.SetDebug(true)
-	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
-	if err != nil {
-		t.Fatalf("Failed to describe instance %s: %v", TestInstanceId, err)
-	}
 	args := AllocateEipAddressArgs{
-		RegionId:           instance.RegionId,
+		RegionId:           regionId,
 		Bandwidth:          5,
 		InternetChargeType: PayByTraffic,
 		ClientToken:        client.GenerateClientToken(),
 	}
 	ipAddr, allocationId, err := client.AllocateEipAddress(&args)
 	if err != nil {
-		t.Fatalf("Failed to allocate EIP address: %v", err)
+		t.Error("Failed to allocate EIP address: %v", err)
+		return err
 	}
 	t.Logf("EIP address: %s, AllocationId: %s", ipAddr, allocationId)
 
-	err = client.AssociateEipAddress(allocationId, TestInstanceId)
+	err = client.WaitForEip(regionId, allocationId, EipStatusAvailable, 0)
+	if err != nil {
+		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
+	}
+
+	err = client.AssociateEipAddress(allocationId, instanceId)
 	if err != nil {
 		t.Errorf("Failed to associate EIP address: %v", err)
 	}
-	client.UnassociateEipAddress(allocationId, TestInstanceId)
+	err = client.WaitForEip(regionId, allocationId, EipStatusInUse, 0)
+	if err != nil {
+		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
+	}
+	err = client.UnassociateEipAddress(allocationId, instanceId)
 	if err != nil {
 		t.Errorf("Failed to unassociate EIP address: %v", err)
 	}
-	client.ReleaseEipAddress(allocationId)
+	err = client.WaitForEip(regionId, allocationId, EipStatusAvailable, 0)
+	if err != nil {
+		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
+	}
+	err = client.ReleaseEipAddress(allocationId)
 	if err != nil {
 		t.Errorf("Failed to release EIP address: %v", err)
 	}
+	return err
 }

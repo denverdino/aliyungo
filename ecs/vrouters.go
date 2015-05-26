@@ -10,13 +10,6 @@ type DescribeVRoutersArgs struct {
 	Pagination
 }
 
-type VRouterStatus string
-
-const (
-	VRouterStatusPending   = VRouterStatus("Pending")
-	VRouterStatusAvailable = VRouterStatus("Available")
-)
-
 type VRouterSetType struct {
 	VRouterId     string
 	RegionId      Region
@@ -25,7 +18,6 @@ type VRouterSetType struct {
 		RouteTableId []string
 	}
 	VRouterName  string
-	Status       VRouterStatus // enum Pending | Available
 	Description  string
 	CreationTime util.ISO6801Time
 }

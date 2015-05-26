@@ -2,6 +2,7 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
+	"time"
 )
 
 type CreateVSwitchArgs struct {
@@ -19,13 +20,13 @@ type CreateVSwitchResponse struct {
 }
 
 // CreateVSwitch creates Virtual Switch
-func (client *Client) CreateVSwitch(args *CreateVSwitchArgs) (VSwitchId *string, err error) {
+func (client *Client) CreateVSwitch(args *CreateVSwitchArgs) (vswitchId string, err error) {
 	response := CreateVSwitchResponse{}
 	err = client.Invoke("CreateVSwitch", args, &response)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return &response.VSwitchId, err
+	return response.VSwitchId, err
 }
 
 type DeleteVSwitchArgs struct {
@@ -108,4 +109,30 @@ type ModifyVSwitchAttributeResponse struct {
 func (client *Client) ModifyVSwitchAttribute(args *ModifyVSwitchAttributeArgs) error {
 	response := ModifyVSwitchAttributeResponse{}
 	return client.Invoke("ModifyVSwitchAttribute", args, &response)
+}
+
+// WaitForVSwitchAvailable waits for VSwitch to given status
+func (client *Client) WaitForVSwitchAvailable(vpcId string, vswitchId string, timeout int) error {
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+	args := DescribeVSwitchesArgs{
+		VpcId:     vpcId,
+		VSwitchId: vswitchId,
+	}
+	for {
+		vpcs, _, err := client.DescribeVSwitches(&args)
+		if err != nil {
+			return err
+		}
+		if vpcs[0].Status == VSwitchStatusAvailable {
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return getECSErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

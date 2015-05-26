@@ -2,11 +2,12 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
+	"time"
 )
 
 type CreateVpcArgs struct {
 	RegionId    Region
-	CidrBlock   string //192.168.0.0/16 or 172.16.0.0/16 (default) ??? why /16
+	CidrBlock   string //192.168.0.0/16 or 172.16.0.0/16 (default)
 	VpcName     string
 	Description string
 	ClientToken string
@@ -60,11 +61,13 @@ type DescribeVpcsArgs struct {
 }
 
 type VpcSetType struct {
-	VpcId        string
-	RegionId     Region
-	Status       VpcStatus // enum Pending | Available
-	VpcName      string
-	VSwitchIds   string
+	VpcId      string
+	RegionId   Region
+	Status     VpcStatus // enum Pending | Available
+	VpcName    string
+	VSwitchIds struct {
+		VSwitchId []string
+	}
 	CidrBlock    string
 	VRouterId    string
 	Description  string
@@ -107,4 +110,30 @@ type ModifyVpcAttributeResponse struct {
 func (client *Client) ModifyVpcAttribute(args *ModifyVpcAttributeArgs) error {
 	response := ModifyVpcAttributeResponse{}
 	return client.Invoke("ModifyVpcAttribute", args, &response)
+}
+
+// WaitForInstance waits for instance to given status
+func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, timeout int) error {
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+	args := DescribeVpcsArgs{
+		RegionId: regionId,
+		VpcId:    vpcId,
+	}
+	for {
+		vpcs, _, err := client.DescribeVpcs(&args)
+		if err != nil {
+			return err
+		}
+		if vpcs[0].Status == VpcStatusAvailable {
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return getECSErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

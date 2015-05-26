@@ -241,16 +241,10 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 	return err
 }
 
-// Interval for checking disk status in WaitForDisk method
-const DiskWaitForInterval = 5
-
-// Default timeout value for WaitForDisk method
-const DiskWaitForDefaultTimeout = 60
-
 // WaitForDisk waits for disk to given status
 func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskStatus, timeout int) error {
 	if timeout <= 0 {
-		timeout = DiskWaitForDefaultTimeout
+		timeout = DefaultTimeout
 	}
 	args := DescribeDisksArgs{
 		RegionId: regionId,
@@ -268,11 +262,11 @@ func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskSta
 		if disks[0].Status == status {
 			break
 		}
-		timeout = timeout - DiskWaitForInterval
+		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
 			return getECSErrorFromString("Timeout")
 		}
-		time.Sleep(DiskWaitForInterval * time.Second)
+		time.Sleep(DefaultWaitForInterval * time.Second)
 	}
 	return nil
 }

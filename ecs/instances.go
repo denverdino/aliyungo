@@ -10,6 +10,7 @@ type InstanceStatus string
 
 // Constants of InstanceStatus
 const (
+	Creating = InstanceStatus("Creating")
 	Running  = InstanceStatus("Running")
 	Starting = InstanceStatus("Starting")
 
@@ -192,11 +193,8 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	return &response.InstanceAttributesType, err
 }
 
-// Interval for checking instance status in WaitForInstance method
-const InstanceWaitForInterval = 5
-
 // Default timeout value for WaitForInstance method
-const InstanceDefaultTimeout = 60
+const InstanceDefaultTimeout = 120
 
 // WaitForInstance waits for instance to given status
 func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, timeout int) error {
@@ -209,13 +207,16 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 			return err
 		}
 		if instance.Status == status {
+			//TODO
+			//Sleep one more time for timing issues
+			time.Sleep(DefaultWaitForInterval * time.Second)
 			break
 		}
-		timeout = timeout - InstanceWaitForInterval
+		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
 			return getECSErrorFromString("Timeout")
 		}
-		time.Sleep(InstanceWaitForInterval * time.Second)
+		time.Sleep(DefaultWaitForInterval * time.Second)
 
 	}
 	return nil

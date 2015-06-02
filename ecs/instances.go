@@ -222,6 +222,28 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 	return nil
 }
 
+type DescribeInstanceVncUrlArgs struct {
+	RegionId   Region
+	InstanceId string
+}
+
+type DescribeInstanceVncUrlResponse struct {
+	CommonResponse
+	VncUrl string
+}
+
+func (client *Client) DescribeInstanceVncUrl(args *DescribeInstanceVncUrlArgs) (string, error) {
+	response := DescribeInstanceVncUrlResponse{}
+
+	err := client.Invoke("DescribeInstanceVncUrl", args, &response)
+
+	if err == nil {
+		return response.VncUrl, nil
+	}
+
+	return "", err
+}
+
 type DescribeInstancesArgs struct {
 	RegionId            Region
 	VpcId               string

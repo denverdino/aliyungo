@@ -76,9 +76,16 @@ go test
 
 License and Authors
 -------------------
-Author: Li Yi (denverdino@gmail.com)
+Authors: Li Yi (denverdino@gmail.com) Tgic (farmer1992@gmail.com)
 
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
+
+
+Related projects
+-------------------
+Aliyun ECS driver for Docker Machine: [Pull request](https://github.com/docker/machine/pull/1182)
+
+Aliyun OSS driver for Docker Registry V2: [Pull request](https://github.com/docker/distribution/pull/514)
 
 
 References

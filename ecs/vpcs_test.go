@@ -3,7 +3,15 @@ package ecs
 import (
 	"testing"
 	"time"
+	"github.com/denverdino/aliyungo/util"
 )
+
+
+var defaultVpcInstanceStrategy = util.AttemptStrategy{
+	Min:   5,
+	Total: 120 * time.Second,
+	Delay: 5 * time.Second,
+}
 
 func TestVPCCreationAndDeletion(t *testing.T) {
 
@@ -87,7 +95,7 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 				if err != nil {
 					t.Errorf("Failed to stop instance %s: %v", instanceId, err)
 				} else {
-					err = client.WaitForInstance(instanceId, Stopped, 0)
+					err = client.WaitForInstanceV2(instanceId, Stopped, defaultVpcInstanceStrategy)
 					if err != nil {
 						t.Errorf("Instance %s is failed to stop: %v", instanceId, err)
 					}
@@ -160,14 +168,14 @@ func testCreateInstanceVpc(t *testing.T, client *Client, regionId Region, vpcId 
 	t.Logf("Instance %s is created successfully.", instanceId)
 	instance, err := client.DescribeInstanceAttribute(instanceId)
 	t.Logf("Instance: %++v  %v", instance, err)
-	err = client.WaitForInstance(instanceId, Stopped, 0)
+	err = client.WaitForInstanceV2(instanceId, Stopped, defaultVpcInstanceStrategy)
 
 	err = client.StartInstance(instanceId)
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", instanceId, err)
 		return instanceId, sgId, err
 	}
-	err = client.WaitForInstance(instanceId, Running, 0)
+	err = client.WaitForInstanceV2(instanceId, Running, defaultVpcInstanceStrategy)
 
 	return instanceId, sgId, err
 }

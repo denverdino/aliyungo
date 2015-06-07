@@ -222,6 +222,24 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 	return nil
 }
 
+
+// WaitForInstanceV2 waits for instance according to the provided strategy
+func (client *Client) WaitForInstanceV2(instanceId string, status InstanceStatus, strategy util.AttemptStrategy) error {
+
+	fn := func() (bool,error) {
+
+		instance, err := client.DescribeInstanceAttribute(instanceId)
+		if err != nil {
+			return false,err
+		}
+		if instance.Status == status {
+			return true,nil
+		}
+		return false,nil
+	}
+	return util.WaitForSignal(strategy,fn);
+}
+
 type DescribeInstanceVncUrlArgs struct {
 	RegionId   Region
 	InstanceId string

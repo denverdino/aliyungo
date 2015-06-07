@@ -20,6 +20,15 @@ const DefaultWaitForInterval = 5
 // Default timeout value for WaitForXXX method
 const DefaultTimeout = 60
 
+
+// Default timeout strategy
+var DefaultStrategy = util.AttemptStrategy{
+Min:   5,
+Total: 60 * time.Second,
+Delay: 5 * time.Second,
+}
+
+
 // A Client represents a client of ECS services
 type Client struct {
 	AccessKeyId     string //Access Key Id

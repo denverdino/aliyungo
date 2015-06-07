@@ -74,10 +74,15 @@ Under "oss" and run
 go test
 ```
 
-License and Authors
+Contributors
 -------------------
-Authors: Li Yi (denverdino@gmail.com) Tgic (farmer1992@gmail.com)
+* Li Yi (denverdino@gmail.com)
+* Tgic (farmer1992@gmail.com)
+* Yuzhou (oscarrr110@gmail.com)
 
+
+License
+-------------------
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
 
 

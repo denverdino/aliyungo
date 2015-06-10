@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 // InstanceStatus represents instance status
@@ -17,6 +16,11 @@ const (
 	Stopped  = InstanceStatus("Stopped")
 	Stopping = InstanceStatus("Stopping")
 )
+
+var FinalStatus = map[InstanceStatus]bool {
+	Running: true,
+	Stopped: true,
+}
 
 type InternetChargeType string
 
@@ -193,52 +197,26 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	return &response.InstanceAttributesType, err
 }
 
-// Default timeout value for WaitForInstance method
-const InstanceDefaultTimeout = 120
-
 // WaitForInstance waits for instance to given status
-func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, timeout int) error {
-	if timeout <= 0 {
-		timeout = InstanceDefaultTimeout
-	}
-	for {
-		instance, err := client.DescribeInstanceAttribute(instanceId)
-		if err != nil {
-			return err
-		}
-		if instance.Status == status {
-			//TODO
-			//Sleep one more time for timing issues
-			time.Sleep(DefaultWaitForInterval * time.Second)
-			break
-		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
+func (client *Client) WaitForInstance(instanceId string, strategy util.AttemptStrategy)(status interface{}, err error)  {
 
-	}
-	return nil
-}
-
-
-// WaitForInstanceV2 waits for instance according to the provided strategy
-func (client *Client) WaitForInstanceV2(instanceId string, status InstanceStatus, strategy util.AttemptStrategy) error {
-
-	fn := func() (bool,error) {
+	fn := func() (bool,interface{},error) {
 
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return false,err
+			return false, "" , err
 		}
-		if instance.Status == status {
-			return true,nil
+		if FinalStatus[instance.Status] {
+			return true,instance.Status,nil
 		}
-		return false,nil
+		return false, "" , nil
 	}
-	return util.WaitForSignal(strategy,fn);
+
+	status,e1 := util.LoopCall(strategy,fn);
+
+	return status,e1
 }
+
 
 type DescribeInstanceVncUrlArgs struct {
 	RegionId   Region

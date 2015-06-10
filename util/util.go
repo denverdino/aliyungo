@@ -13,6 +13,11 @@ import (
 	"errors"
 )
 
+
+const (
+	StatusUnKnown     = "NA"
+)
+
 //CreateRandomString create random string
 func CreateRandomString() string {
 
@@ -134,27 +139,23 @@ func GenerateRandomECSPassword() string {
 
 }
 
-func WaitForSignal(attempts AttemptStrategy,api func() (bool,error)) error{
+
+func LoopCall(attempts AttemptStrategy,api func() (bool,interface{},error))(interface{}, error){
 
 	for attempt := attempts.Start(); attempt.Next(); {
-		needStop,err := api()
+		needStop,status,err := api()
 
 		if(err != nil) {
-			return errors.New("execution failed")
+			return nil, errors.New("execution failed")
 		}
 		if(needStop){
-			return nil;
+			return status,nil;
 		}
 
 		if attempt.HasNext() {
 			continue;
 		}
-
-		if(needStop){
-			return nil;
-		} else {
-			return errors.New("timeout execution ")
-		}
+		return nil,errors.New("timeout execution ")
 	}
 	panic("unreachable")
 }

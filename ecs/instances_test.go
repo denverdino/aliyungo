@@ -7,10 +7,10 @@ import (
 )
 
 var defaultInstanceStrategy = util.AttemptStrategy{
-Min:   5,
-Total: 120 * time.Second,
-Delay: 5 * time.Second,
-}
+		Min:   5,
+		Total: 120 * time.Second,
+		Delay: 5 * time.Second,
+	}
 
 
 func TestECSInstance(t *testing.T) {
@@ -25,8 +25,8 @@ func TestECSInstance(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to stop instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstanceV2(TestInstanceId, Stopped, defaultInstanceStrategy)
-	if err != nil {
+	status, err := client.WaitForInstance(TestInstanceId, defaultInstanceStrategy)
+	if err != nil || status != Stopped {
 		t.Errorf("Instance %s is failed to stop: %v", TestInstanceId, err)
 	}
 	t.Logf("Instance %s is stopped successfully.", TestInstanceId)
@@ -34,8 +34,8 @@ func TestECSInstance(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstanceV2(TestInstanceId, Running, defaultInstanceStrategy)
-	if err != nil {
+	status, err = client.WaitForInstance(TestInstanceId, defaultInstanceStrategy)
+	if err != nil  || status != Running {
 		t.Errorf("Instance %s is failed to start: %v", TestInstanceId, err)
 	}
 	t.Logf("Instance %s is running successfully.", TestInstanceId)
@@ -43,8 +43,8 @@ func TestECSInstance(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to restart instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstanceV2(TestInstanceId, Running, defaultInstanceStrategy)
-	if err != nil {
+	status, err = client.WaitForInstance(TestInstanceId, defaultInstanceStrategy)
+	if err != nil || status != Running {
 		t.Errorf("Instance %s is failed to restart: %v", TestInstanceId, err)
 	}
 	t.Logf("Instance %s is running successfully.", TestInstanceId)
@@ -82,20 +82,30 @@ func TestECSInstanceCreationAndDeletion(t *testing.T) {
 		Delay: 5 * time.Second,
 	}
 
-	err = client.WaitForInstanceV2(instanceId, Stopped, strategy)
+	status, err := client.WaitForInstance(instanceId, strategy)
+
+	if err != nil || status != Stopped {
+		t.Errorf("Instance %s is failed to create: %v", instanceId, err)
+	}
 
 	err = client.StartInstance(instanceId)
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", instanceId, err)
 	}
-	err = client.WaitForInstanceV2(instanceId, Running, defaultInstanceStrategy)
+
+	status, err = client.WaitForInstance(instanceId, defaultInstanceStrategy)
+
+	if err != nil || status != Running {
+		t.Errorf("Instance %s is failed to running: %v", instanceId, err)
+	}
 
 	err = client.StopInstance(instanceId, true)
 	if err != nil {
 		t.Errorf("Failed to stop instance %s: %v", instanceId, err)
 	}
-	err = client.WaitForInstanceV2(instanceId, Stopped, defaultInstanceStrategy)
-	if err != nil {
+	status, err = client.WaitForInstance(instanceId, defaultInstanceStrategy)
+
+	if err != nil  || status != Stopped {
 		t.Errorf("Instance %s is failed to stop: %v", instanceId, err)
 	}
 	t.Logf("Instance %s is stopped successfully.", instanceId)

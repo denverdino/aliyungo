@@ -52,13 +52,13 @@ func TestWaitForSignalWithTimeout(t *testing.T) {
 		Delay: 200 * time.Millisecond,
 	}
 
-	timeoutFunc := func() (bool,error) {
-		return false,nil
+	timeoutFunc := func() (bool,interface{},error) {
+		return false,"-1",nil
 	}
 
 	begin := time.Now()
 
-	timeoutError := WaitForSignal(attempts, timeoutFunc);
+	_, timeoutError := LoopCall(attempts, timeoutFunc);
 	if(timeoutError != nil) {
 		t.Logf("timeout func complete successful")
 	} else {
@@ -73,23 +73,23 @@ func TestWaitForSignalWithTimeout(t *testing.T) {
 		t.Error("timeout func duration is not enough")
 	}
 
-	errorFunc := func() (b bool,e error) {
+	errorFunc := func() (bool, interface{}, error) {
 		err := errors.New("execution failed");
-		return false,err
+		return false,"-1",err
 	}
 
-	failedError := WaitForSignal(attempts, errorFunc);
+	_, failedError := LoopCall(attempts, errorFunc);
 	if(failedError != nil) {
 		t.Logf("error func complete successful: " + failedError.Error())
 	} else {
 		t.Error("Expect error result")
 	}
 
-	successFunc := func() (bool,error) {
-		return true,nil
+	successFunc := func() (bool,interface{}, error) {
+		return true,nil,nil
 	}
 
-	successError := WaitForSignal(attempts, successFunc);
+	_, successError := LoopCall(attempts, successFunc);
 	if(successError != nil) {
 		t.Error("Expect success result")
 	} else {

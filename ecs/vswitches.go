@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 type CreateVSwitchArgs struct {
@@ -61,6 +60,10 @@ const (
 	VSwitchStatusAvailable = VSwitchStatus("Available")
 )
 
+var FinalVswitchStatus = map[VSwitchStatus]bool{
+	VSwitchStatusAvailable: true,
+}
+
 type VSwitchSetType struct {
 	VSwitchId               string
 	VpcId                   string
@@ -112,27 +115,25 @@ func (client *Client) ModifyVSwitchAttribute(args *ModifyVSwitchAttributeArgs) e
 }
 
 // WaitForVSwitchAvailable waits for VSwitch to given status
-func (client *Client) WaitForVSwitchAvailable(vpcId string, vswitchId string, timeout int) error {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	args := DescribeVSwitchesArgs{
-		VpcId:     vpcId,
-		VSwitchId: vswitchId,
-	}
-	for {
+func (client *Client) WaitForVSwitchAvailable(vpcId string, vswitchId string, strategy util.AttemptStrategy) (status interface{}, err error) {
+
+	fn := func() (bool, interface{}, error) {
+		args := DescribeVSwitchesArgs{
+			VpcId:     vpcId,
+			VSwitchId: vswitchId,
+		}
 		vpcs, _, err := client.DescribeVSwitches(&args)
 		if err != nil {
-			return err
+			return false, "N/A", err
 		}
-		if vpcs[0].Status == VSwitchStatusAvailable {
-			break
+
+		if FinalVswitchStatus[vpcs[0].Status] {
+			return true, vpcs[0].Status, nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
+
+		return false, "N/A", nil
 	}
-	return nil
+
+	status, e1 := util.LoopCall(strategy, fn)
+	return status, e1
 }

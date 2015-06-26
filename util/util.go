@@ -4,12 +4,17 @@ import (
 	"bytes"
 	srand "crypto/rand"
 	"encoding/binary"
+	"errors"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"sort"
 	"strconv"
 	"time"
+)
+
+const (
+	StatusUnKnown = "NA"
 )
 
 //CreateRandomString create random string
@@ -131,4 +136,42 @@ func GenerateRandomECSPassword() string {
 
 	return string(s)
 
+}
+
+func SimpleLoopCall(attempts AttemptStrategy, f func() bool) error {
+	for attempt := attempts.Start(); attempt.Next(); {
+
+		stop := f()
+
+		if stop {
+			return nil
+		}
+
+		if attempt.HasNext() {
+			continue
+		}
+
+		return errors.New("timeout execution ")
+	}
+	panic("unreachable")
+}
+
+func LoopCall(attempts AttemptStrategy, f func() (bool, interface{}, error)) (interface{}, error) {
+
+	for attempt := attempts.Start(); attempt.Next(); {
+		needStop, status, err := f()
+
+		if err != nil {
+			return nil, err
+		}
+		if needStop {
+			return status, nil
+		}
+
+		if attempt.HasNext() {
+			continue
+		}
+		return nil, errors.New("timeout execution ")
+	}
+	panic("unreachable")
 }

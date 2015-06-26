@@ -61,7 +61,7 @@ func TestSnapshotCreationAndDeletion(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to CreateSnapshot for disk %s: %v", diskId, err)
 	}
-	client.WaitForSnapShotReady(instance.RegionId, snapshotId, 0)
+	client.WaitForSnapShotReady(instance.RegionId, snapshotId, DefaultStrategy)
 
 	err = client.DeleteSnapshot(snapshotId)
 	if err != nil {

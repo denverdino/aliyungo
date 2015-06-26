@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 // InstanceStatus represents instance status
@@ -17,6 +16,11 @@ const (
 	Stopped  = InstanceStatus("Stopped")
 	Stopping = InstanceStatus("Stopping")
 )
+
+var FinalInstanceStatus = map[InstanceStatus]bool{
+	Running: true,
+	Stopped: true,
+}
 
 type InternetChargeType string
 
@@ -193,33 +197,24 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	return &response.InstanceAttributesType, err
 }
 
-// Default timeout value for WaitForInstance method
-const InstanceDefaultTimeout = 120
-
 // WaitForInstance waits for instance to given status
-func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, timeout int) error {
-	if timeout <= 0 {
-		timeout = InstanceDefaultTimeout
-	}
-	for {
+func (client *Client) WaitForInstance(instanceId string, strategy util.AttemptStrategy) (status interface{}, err error) {
+
+	fn := func() (bool, interface{}, error) {
+
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return err
+			return false, "N/A", err
 		}
-		if instance.Status == status {
-			//TODO
-			//Sleep one more time for timing issues
-			time.Sleep(DefaultWaitForInterval * time.Second)
-			break
+		if FinalInstanceStatus[instance.Status] {
+			return true, instance.Status, nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
-
+		return false, "N/A", nil
 	}
-	return nil
+
+	status, e1 := util.LoopCall(strategy, fn)
+
+	return status, e1
 }
 
 type DescribeInstanceVncUrlArgs struct {

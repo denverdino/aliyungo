@@ -35,8 +35,8 @@ func testEipAddress(t *testing.T, client *Client, regionId Region, instanceId st
 	}
 	t.Logf("EIP address: %s, AllocationId: %s", ipAddr, allocationId)
 
-	err = client.WaitForEip(regionId, allocationId, EipStatusAvailable, 0)
-	if err != nil {
+	status, err := client.WaitForEip(regionId, allocationId, DefaultStrategy)
+	if err != nil || status != EipStatusAvailable {
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
 
@@ -44,16 +44,16 @@ func testEipAddress(t *testing.T, client *Client, regionId Region, instanceId st
 	if err != nil {
 		t.Errorf("Failed to associate EIP address: %v", err)
 	}
-	err = client.WaitForEip(regionId, allocationId, EipStatusInUse, 0)
-	if err != nil {
+	status, err = client.WaitForEip(regionId, allocationId, DefaultStrategy)
+	if err != nil || status != EipStatusInUse {
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
 	err = client.UnassociateEipAddress(allocationId, instanceId)
 	if err != nil {
 		t.Errorf("Failed to unassociate EIP address: %v", err)
 	}
-	err = client.WaitForEip(regionId, allocationId, EipStatusAvailable, 0)
-	if err != nil {
+	status, err = client.WaitForEip(regionId, allocationId, DefaultStrategy)
+	if err != nil || status != EipStatusAvailable {
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
 	err = client.ReleaseEipAddress(allocationId)

@@ -31,7 +31,7 @@ func testRouteTable(t *testing.T, client *Client, regionId Region, vpcId string,
 		t.Logf("RouteTables of VRouter %s: %++v", vrouterId, routeTables)
 	}
 
-	err = client.WaitForAllRouteEntriesAvailable(vrouterId, routeTableId, 60)
+	_, err = client.WaitForAllRouteEntriesAvailable(vrouterId, routeTableId, DefaultStrategy)
 	if err != nil {
 		t.Errorf("Failed to wait route entries: %v", err)
 	}

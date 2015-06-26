@@ -1,9 +1,16 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/util"
 	"testing"
 	"time"
 )
+
+var defaultVpcInstanceStrategy = util.AttemptStrategy{
+	Min:   5,
+	Total: 120 * time.Second,
+	Delay: 5 * time.Second,
+}
 
 func TestVPCCreationAndDeletion(t *testing.T) {
 
@@ -56,10 +63,10 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 	}
 	t.Logf("VPCs: %++v", vpcs)
 	if vpcs[0].VpcName != newName {
-		t.Errorf("Failed to modify VPC with new name: %s", newName)
+		t.Errorf("Failed to modify VPC,current name: %s new name: %s", vpcs[0].VpcName, newName)
 	}
 
-	err = client.WaitForVpcAvailable(regionId, vpcId, 60)
+	_, err = client.WaitForVpcAvailable(regionId, vpcId, DefaultStrategy)
 	if err != nil {
 		t.Errorf("Failed to wait VPC to available: %v", err)
 	}
@@ -87,8 +94,8 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 				if err != nil {
 					t.Errorf("Failed to stop instance %s: %v", instanceId, err)
 				} else {
-					err = client.WaitForInstance(instanceId, Stopped, 0)
-					if err != nil {
+					status, err := client.WaitForInstance(instanceId, defaultVpcInstanceStrategy)
+					if err != nil || status != Stopped {
 						t.Errorf("Instance %s is failed to stop: %v", instanceId, err)
 					}
 					t.Logf("Instance %s is stopped successfully.", instanceId)
@@ -121,12 +128,24 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 		t.Logf("VSwitch %s is deleted successfully.", vSwitchId)
 	}
 
-	err = client.DeleteVpc(vpcId)
+	err = util.SimpleLoopCall(DefaultStrategy, checkDeleteVpcAvailable(t, client, vpcId))
 	if err != nil {
 		t.Errorf("Failed to delete VPC: %v", err)
 	}
 	t.Logf("VPC %s is deleted successfully.", vpcId)
 
+}
+
+func checkDeleteVpcAvailable(t *testing.T, client *Client, vpcId string) func() bool {
+
+	return func() bool {
+		err := client.DeleteVpc(vpcId)
+		if err != nil {
+			t.Logf("Failed to delete vpc, vpcId: %s, retry....", vpcId)
+			return false
+		}
+		return true
+	}
 }
 
 func testCreateInstanceVpc(t *testing.T, client *Client, regionId Region, vpcId string, vswitchId, imageId string) (instanceId string, sgId string, err error) {
@@ -160,14 +179,23 @@ func testCreateInstanceVpc(t *testing.T, client *Client, regionId Region, vpcId 
 	t.Logf("Instance %s is created successfully.", instanceId)
 	instance, err := client.DescribeInstanceAttribute(instanceId)
 	t.Logf("Instance: %++v  %v", instance, err)
-	err = client.WaitForInstance(instanceId, Stopped, 0)
+	status, err := client.WaitForInstance(instanceId, defaultVpcInstanceStrategy)
+
+	if err != nil || status != Stopped {
+		t.Errorf("Instance %s is failed to create: %v", instanceId, err)
+	}
 
 	err = client.StartInstance(instanceId)
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", instanceId, err)
 		return instanceId, sgId, err
 	}
-	err = client.WaitForInstance(instanceId, Running, 0)
+
+	status, err = client.WaitForInstance(instanceId, defaultVpcInstanceStrategy)
+
+	if err != nil || status != Running {
+		t.Errorf("Instance %s is failed to running: %v", instanceId, err)
+	}
 
 	return instanceId, sgId, err
 }

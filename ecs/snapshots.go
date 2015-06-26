@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 type DescribeSnapshotsArgs struct {
@@ -90,12 +89,11 @@ func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId strin
 // Default timeout value for WaitForSnapShotReady method
 const SnapshotDefaultTimeout = 120
 
-// WaitForSnapShotReady waits for snapshot ready
-func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, timeout int) error {
-	if timeout <= 0 {
-		timeout = SnapshotDefaultTimeout
-	}
-	for {
+// WaitForVSwitchAvailable waits for VSwitch to given status
+func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, strategy util.AttemptStrategy) (status interface{}, err error) {
+
+	fn := func() (bool, interface{}, error) {
+
 		args := DescribeSnapshotsArgs{
 			RegionId:    regionId,
 			SnapshotIds: []string{snapshotId},
@@ -103,21 +101,19 @@ func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, t
 
 		snapshots, _, err := client.DescribeSnapshots(&args)
 		if err != nil {
-			return err
+			return false, "N/A", err
 		}
 		if snapshots == nil || len(snapshots) == 0 {
-			return getECSErrorFromString("Not found")
+			return false, "N/A", getECSErrorFromString("Not found")
 		}
 		if snapshots[0].Progress == "100%" {
-			break
+			return true, snapshots[0].Progress, nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
 
-		time.Sleep(5 * time.Second)
+		return false, "N/A", nil
 	}
-	return nil
+
+	status, e1 := util.LoopCall(strategy, fn)
+
+	return status, e1
 }

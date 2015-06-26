@@ -40,7 +40,7 @@ func TestECSDescribe(t *testing.T) {
 			}
 			instances, _, err := client.DescribeInstances(&args1)
 			if err != nil {
-				t.Errorf("Failed to describe instance %s %s", region.RegionId, zone.ZoneId)
+				t.Errorf("Failed to describe instance %s %s , %v", region.RegionId, zone.ZoneId, err)
 			} else {
 				for _, instance := range instances {
 					t.Logf("Instance: %++v", instance)

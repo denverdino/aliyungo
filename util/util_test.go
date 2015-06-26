@@ -44,7 +44,53 @@ func TestGenerateRandomECSPassword(t *testing.T) {
 	}
 }
 
-func TestWaitForSignalWithTimeout(t *testing.T) {
+func TestSimpleLoopCal(t *testing.T) {
+
+	attempts := AttemptStrategy{
+		Min:   5,
+		Total: 5 * time.Second,
+		Delay: 200 * time.Millisecond,
+	}
+
+	timeoutFunc := func() bool {
+		return false
+	}
+
+	successFunc := func() bool {
+		return true
+	}
+
+	begin := time.Now()
+
+	err := SimpleLoopCall(attempts, timeoutFunc)
+
+	if err != nil {
+		t.Logf("timeout func complete successful")
+	} else {
+		t.Error("Expect timeout result")
+	}
+
+	end := time.Now()
+	duration := end.Sub(begin).Seconds()
+
+	t.Logf("loop call duration: %f", duration)
+
+	if duration > (float64(attempts.Min) - 1) {
+		t.Logf("timeout func duration is enough")
+	} else {
+		t.Error("timeout func duration is not enough")
+	}
+
+	err = SimpleLoopCall(attempts, successFunc)
+
+	if err != nil {
+		t.Error("Expect success result")
+	} else {
+		t.Logf("success func complete successful")
+	}
+}
+
+func TestLoopCall(t *testing.T) {
 
 	attempts := AttemptStrategy{
 		Min:   5,

@@ -4,7 +4,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 type AllocatePublicIpAddressArgs struct {
@@ -101,6 +100,12 @@ const (
 	EipStatusInUse         = EipStatus("InUse")
 	EipStatusAvailable     = EipStatus("Available")
 )
+
+var FinalNetworkStatus = map[EipStatus]bool {
+	EipStatusInUse: true,
+	EipStatusAvailable: true,
+}
+
 
 type DescribeEipAddressesArgs struct {
 	RegionId     Region
@@ -199,28 +204,29 @@ func (client *Client) ReleaseEipAddress(allocationId string) error {
 	return client.Invoke("ReleaseEipAddress", &args, &response)
 }
 
+
 // WaitForVSwitchAvailable waits for VSwitch to given status
-func (client *Client) WaitForEip(regionId Region, allocationId string, status EipStatus, timeout int) error {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	args := DescribeEipAddressesArgs{
-		RegionId:     regionId,
-		AllocationId: allocationId,
-	}
-	for {
+func (client *Client) WaitForEip(regionId Region, allocationId string, strategy util.AttemptStrategy) (status interface{}, err error) {
+
+	fn := func() (bool,interface{},error) {
+
+		args := DescribeEipAddressesArgs{
+			RegionId:     regionId,
+			AllocationId: allocationId,
+		}
+
 		vpcs, _, err := client.DescribeEipAddresses(&args)
 		if err != nil {
-			return err
+			return false, "N/A" , err
 		}
-		if vpcs[0].Status == status {
-			break
+
+		if FinalNetworkStatus[vpcs[0].Status] {
+			return true,vpcs[0].Status,nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
+		return false, "N/A" , nil
 	}
-	return nil
+
+	status,e1 := util.LoopCall(strategy,fn);
+
+	return status,e1
 }

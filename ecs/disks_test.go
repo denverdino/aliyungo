@@ -71,20 +71,20 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 		} else {
 			t.Logf("Instance: %++v  %v", instance, err)
 		}
-		err = client.WaitForDisk(instance.RegionId, diskId, DiskStatusInUse, 0)
-		if err != nil {
-			t.Fatalf("Failed to wait for disk %s to status %s: %v", diskId, DiskStatusInUse, err)
+		status, err := client.WaitForDisk(instance.RegionId, diskId, DefaultStrategy)
+		if err != nil || status != DiskStatusInUse {
+			t.Fatalf("Failed to wait for disk %s to status %s, current status %s: %v", diskId, DiskStatusInUse, status, err)
 		}
 		err = client.DetachDisk(instance.InstanceId, diskId)
 		if err != nil {
 			t.Errorf("Failed to detach disk: %v", err)
 		} else {
-			t.Logf("Detach disk %s to instance %s successfully", diskId, instance.InstanceId)
+			t.Logf("Detach disk %s to instance %s successfully, current status: %s", diskId, instance.InstanceId, status)
 		}
 
-		err = client.WaitForDisk(instance.RegionId, diskId, DiskStatusAvailable, 0)
-		if err != nil {
-			t.Fatalf("Failed to wait for disk %s to status %s: %v", diskId, DiskStatusAvailable, err)
+		status, err = client.WaitForDisk(instance.RegionId, diskId, DefaultStrategy)
+		if err != nil || status != DiskStatusAvailable {
+			t.Fatalf("Failed to wait for disk %s to status %s, current status %s: %v", diskId, DiskStatusAvailable,status, err)
 		}
 	}
 	err = client.DeleteDisk(diskId)

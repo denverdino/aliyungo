@@ -17,7 +17,7 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-var FinalStatus = map[InstanceStatus]bool {
+var FinalInstanceStatus = map[InstanceStatus]bool {
 	Running: true,
 	Stopped: true,
 }
@@ -204,12 +204,12 @@ func (client *Client) WaitForInstance(instanceId string, strategy util.AttemptSt
 
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return false, "" , err
+			return false, "N/A" , err
 		}
-		if FinalStatus[instance.Status] {
+		if FinalInstanceStatus[instance.Status] {
 			return true,instance.Status,nil
 		}
-		return false, "" , nil
+		return false, "N/A" , nil
 	}
 
 	status,e1 := util.LoopCall(strategy,fn);

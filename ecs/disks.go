@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 // Types of disks
@@ -36,6 +35,14 @@ const (
 	DiskStatusReIniting = DiskStatus("ReIniting")
 	DiskStatusAll       = DiskStatus("All") //Default
 )
+
+
+var FinalDiskStatus = map[DiskStatus]bool {
+	DiskStatusInUse: true,
+	DiskStatusAvailable: true,
+}
+
+
 
 // A DescribeDisksArgs defines the arguments to describe disks
 type DescribeDisksArgs struct {
@@ -241,32 +248,32 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 	return err
 }
 
-// WaitForDisk waits for disk to given status
-func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskStatus, timeout int) error {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	args := DescribeDisksArgs{
-		RegionId: regionId,
-		DiskIds:  []string{diskId},
-	}
+// WaitForDisk waits for disk to the final status
+func (client *Client) WaitForDisk(regionId Region, diskId string, strategy util.AttemptStrategy)(status interface{}, err error)  {
 
-	for {
+	fn := func() (bool,interface{},error) {
+
+		args := DescribeDisksArgs{
+			RegionId: regionId,
+			DiskIds:  []string{diskId},
+		}
+
 		disks, _, err := client.DescribeDisks(&args)
 		if err != nil {
-			return err
+			return false, "N/A" , err
 		}
+
 		if disks == nil || len(disks) == 0 {
-			return getECSErrorFromString("Not found")
+			return false, getECSErrorFromString("Not found"),nil
 		}
-		if disks[0].Status == status {
-			break
+
+		if FinalDiskStatus[disks[0].Status] {
+			return true,disks[0].Status,nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
+		return false, "N/A" , nil
 	}
-	return nil
+
+	status,e1 := util.LoopCall(strategy,fn);
+
+	return status,e1
 }

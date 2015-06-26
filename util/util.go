@@ -140,13 +140,31 @@ func GenerateRandomECSPassword() string {
 }
 
 
-func LoopCall(attempts AttemptStrategy,api func() (bool,interface{},error))(interface{}, error){
+func SimpleLoopCall(attempts AttemptStrategy, f func() bool) error {
+	for attempt := attempts.Start(); attempt.Next(); {
+
+		stop := f()
+
+		if stop {
+			return nil
+		}
+
+		if attempt.HasNext() {
+			continue;
+		}
+
+		return errors.New("timeout execution ")
+	}
+	panic("unreachable")
+}
+
+func LoopCall(attempts AttemptStrategy,f func() (bool,interface{},error))(interface{}, error){
 
 	for attempt := attempts.Start(); attempt.Next(); {
-		needStop,status,err := api()
+		needStop,status,err := f()
 
 		if(err != nil) {
-			return nil, errors.New("execution failed")
+			return nil, err
 		}
 		if(needStop){
 			return status,nil;

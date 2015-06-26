@@ -57,7 +57,6 @@ var FinalVpcStatus = map[VpcStatus]bool{
 	VpcStatusAvailable: true,
 }
 
-
 type DescribeVpcsArgs struct {
 	VpcId    string
 	RegionId Region
@@ -116,11 +115,10 @@ func (client *Client) ModifyVpcAttribute(args *ModifyVpcAttributeArgs) error {
 	return client.Invoke("ModifyVpcAttribute", args, &response)
 }
 
-
 // WaitForVSwitchAvailable waits for VSwitch to given status
 func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, strategy util.AttemptStrategy) (status interface{}, err error) {
 
-	fn := func() (bool,interface{},error) {
+	fn := func() (bool, interface{}, error) {
 
 		args := DescribeVpcsArgs{
 			RegionId: regionId,
@@ -129,17 +127,16 @@ func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, strateg
 
 		vpcs, _, err := client.DescribeVpcs(&args)
 		if err != nil {
-			return false, "N/A" , err
+			return false, "N/A", err
 		}
 
 		if FinalVpcStatus[vpcs[0].Status] {
-			return true,vpcs[0].Status,nil
+			return true, vpcs[0].Status, nil
 		}
-		return false, "N/A" , nil
+		return false, "N/A", nil
 	}
 
-	status,e1 := util.LoopCall(strategy,fn);
+	status, e1 := util.LoopCall(strategy, fn)
 
-	return status,e1
+	return status, e1
 }
-

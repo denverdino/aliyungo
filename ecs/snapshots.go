@@ -92,7 +92,7 @@ const SnapshotDefaultTimeout = 120
 // WaitForVSwitchAvailable waits for VSwitch to given status
 func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, strategy util.AttemptStrategy) (status interface{}, err error) {
 
-	fn := func() (bool,interface{},error) {
+	fn := func() (bool, interface{}, error) {
 
 		args := DescribeSnapshotsArgs{
 			RegionId:    regionId,
@@ -101,19 +101,19 @@ func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, s
 
 		snapshots, _, err := client.DescribeSnapshots(&args)
 		if err != nil {
-			return false, "N/A" , err
+			return false, "N/A", err
 		}
 		if snapshots == nil || len(snapshots) == 0 {
-			return false, "N/A" , getECSErrorFromString("Not found")
+			return false, "N/A", getECSErrorFromString("Not found")
 		}
 		if snapshots[0].Progress == "100%" {
-			return true,snapshots[0].Progress,nil
+			return true, snapshots[0].Progress, nil
 		}
 
-		return false, "N/A" , nil
+		return false, "N/A", nil
 	}
 
-	status,e1 := util.LoopCall(strategy,fn);
+	status, e1 := util.LoopCall(strategy, fn)
 
-	return status,e1
+	return status, e1
 }

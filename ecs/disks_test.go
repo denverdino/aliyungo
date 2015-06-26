@@ -84,7 +84,7 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 
 		status, err = client.WaitForDisk(instance.RegionId, diskId, DefaultStrategy)
 		if err != nil || status != DiskStatusAvailable {
-			t.Fatalf("Failed to wait for disk %s to status %s, current status %s: %v", diskId, DiskStatusAvailable,status, err)
+			t.Fatalf("Failed to wait for disk %s to status %s, current status %s: %v", diskId, DiskStatusAvailable, status, err)
 		}
 	}
 	err = client.DeleteDisk(diskId)

@@ -101,11 +101,10 @@ const (
 	EipStatusAvailable     = EipStatus("Available")
 )
 
-var FinalNetworkStatus = map[EipStatus]bool {
-	EipStatusInUse: true,
+var FinalNetworkStatus = map[EipStatus]bool{
+	EipStatusInUse:     true,
 	EipStatusAvailable: true,
 }
-
 
 type DescribeEipAddressesArgs struct {
 	RegionId     Region
@@ -204,11 +203,10 @@ func (client *Client) ReleaseEipAddress(allocationId string) error {
 	return client.Invoke("ReleaseEipAddress", &args, &response)
 }
 
-
 // WaitForVSwitchAvailable waits for VSwitch to given status
 func (client *Client) WaitForEip(regionId Region, allocationId string, strategy util.AttemptStrategy) (status interface{}, err error) {
 
-	fn := func() (bool,interface{},error) {
+	fn := func() (bool, interface{}, error) {
 
 		args := DescribeEipAddressesArgs{
 			RegionId:     regionId,
@@ -217,16 +215,16 @@ func (client *Client) WaitForEip(regionId Region, allocationId string, strategy 
 
 		vpcs, _, err := client.DescribeEipAddresses(&args)
 		if err != nil {
-			return false, "N/A" , err
+			return false, "N/A", err
 		}
 
 		if FinalNetworkStatus[vpcs[0].Status] {
-			return true,vpcs[0].Status,nil
+			return true, vpcs[0].Status, nil
 		}
-		return false, "N/A" , nil
+		return false, "N/A", nil
 	}
 
-	status,e1 := util.LoopCall(strategy,fn);
+	status, e1 := util.LoopCall(strategy, fn)
 
-	return status,e1
+	return status, e1
 }

@@ -1,8 +1,8 @@
 package util
 
 import (
-	"testing"
 	"errors"
+	"testing"
 	"time"
 )
 
@@ -52,14 +52,14 @@ func TestWaitForSignalWithTimeout(t *testing.T) {
 		Delay: 200 * time.Millisecond,
 	}
 
-	timeoutFunc := func() (bool,interface{},error) {
-		return false,"-1",nil
+	timeoutFunc := func() (bool, interface{}, error) {
+		return false, "-1", nil
 	}
 
 	begin := time.Now()
 
-	_, timeoutError := LoopCall(attempts, timeoutFunc);
-	if(timeoutError != nil) {
+	_, timeoutError := LoopCall(attempts, timeoutFunc)
+	if timeoutError != nil {
 		t.Logf("timeout func complete successful")
 	} else {
 		t.Error("Expect timeout result")
@@ -67,30 +67,30 @@ func TestWaitForSignalWithTimeout(t *testing.T) {
 
 	end := time.Now()
 	duration := end.Sub(begin).Seconds()
-	if( duration  > (float64(attempts.Min) -1)) {
+	if duration > (float64(attempts.Min) - 1) {
 		t.Logf("timeout func duration is enough")
 	} else {
 		t.Error("timeout func duration is not enough")
 	}
 
 	errorFunc := func() (bool, interface{}, error) {
-		err := errors.New("execution failed");
-		return false,"-1",err
+		err := errors.New("execution failed")
+		return false, "-1", err
 	}
 
-	_, failedError := LoopCall(attempts, errorFunc);
-	if(failedError != nil) {
+	_, failedError := LoopCall(attempts, errorFunc)
+	if failedError != nil {
 		t.Logf("error func complete successful: " + failedError.Error())
 	} else {
 		t.Error("Expect error result")
 	}
 
-	successFunc := func() (bool,interface{}, error) {
-		return true,nil,nil
+	successFunc := func() (bool, interface{}, error) {
+		return true, nil, nil
 	}
 
-	_, successError := LoopCall(attempts, successFunc);
-	if(successError != nil) {
+	_, successError := LoopCall(attempts, successFunc)
+	if successError != nil {
 		t.Error("Expect success result")
 	} else {
 		t.Logf("success func complete successful")

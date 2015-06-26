@@ -109,7 +109,7 @@ func (client *Client) DeleteRouteEntry(args *DeleteRouteEntryArgs) error {
 // WaitForAllRouteEntriesAvailable waits for all route entries to Available status
 func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTableId string, strategy util.AttemptStrategy) (status interface{}, err error) {
 
-	fn := func() (bool,interface{},error) {
+	fn := func() (bool, interface{}, error) {
 
 		args := DescribeRouteTablesArgs{
 			VRouterId:    vrouterId,
@@ -119,12 +119,12 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 		routeTables, _, err := client.DescribeRouteTables(&args)
 
 		if err != nil {
-			return  false, "N/A" , err
+			return false, "N/A", err
 		}
 
 		sucess := true
 
-		loop:
+	loop:
 		for _, routeTable := range routeTables {
 			for _, routeEntry := range routeTable.RouteEntrys.RouteEntry {
 				if routeEntry.Status != RouteEntryStatusAvailable {
@@ -134,13 +134,13 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 			}
 		}
 		if sucess {
-			return true,"N/A",nil
+			return true, "N/A", nil
 		}
 
-		return false, "N/A" , nil
+		return false, "N/A", nil
 	}
 
-	status,e1 := util.LoopCall(strategy,fn);
+	status, e1 := util.LoopCall(strategy, fn)
 
-	return status,e1
+	return status, e1
 }

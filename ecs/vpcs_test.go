@@ -1,11 +1,10 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/util"
 	"testing"
 	"time"
-	"github.com/denverdino/aliyungo/util"
 )
-
 
 var defaultVpcInstanceStrategy = util.AttemptStrategy{
 	Min:   5,
@@ -142,10 +141,10 @@ func checkDeleteVpcAvailable(t *testing.T, client *Client, vpcId string) func() 
 	return func() bool {
 		err := client.DeleteVpc(vpcId)
 		if err != nil {
-			t.Logf("Failed to delete vpc, vpcId: %s, retry....", vpcId);
-			return false;
+			t.Logf("Failed to delete vpc, vpcId: %s, retry....", vpcId)
+			return false
 		}
-		return true;
+		return true
 	}
 }
 

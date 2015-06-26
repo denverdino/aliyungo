@@ -36,13 +36,10 @@ const (
 	DiskStatusAll       = DiskStatus("All") //Default
 )
 
-
-var FinalDiskStatus = map[DiskStatus]bool {
-	DiskStatusInUse: true,
+var FinalDiskStatus = map[DiskStatus]bool{
+	DiskStatusInUse:     true,
 	DiskStatusAvailable: true,
 }
-
-
 
 // A DescribeDisksArgs defines the arguments to describe disks
 type DescribeDisksArgs struct {
@@ -249,9 +246,9 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 }
 
 // WaitForDisk waits for disk to the final status
-func (client *Client) WaitForDisk(regionId Region, diskId string, strategy util.AttemptStrategy)(status interface{}, err error)  {
+func (client *Client) WaitForDisk(regionId Region, diskId string, strategy util.AttemptStrategy) (status interface{}, err error) {
 
-	fn := func() (bool,interface{},error) {
+	fn := func() (bool, interface{}, error) {
 
 		args := DescribeDisksArgs{
 			RegionId: regionId,
@@ -260,20 +257,20 @@ func (client *Client) WaitForDisk(regionId Region, diskId string, strategy util.
 
 		disks, _, err := client.DescribeDisks(&args)
 		if err != nil {
-			return false, "N/A" , err
+			return false, "N/A", err
 		}
 
 		if disks == nil || len(disks) == 0 {
-			return false, getECSErrorFromString("Not found"),nil
+			return false, getECSErrorFromString("Not found"), nil
 		}
 
 		if FinalDiskStatus[disks[0].Status] {
-			return true,disks[0].Status,nil
+			return true, disks[0].Status, nil
 		}
-		return false, "N/A" , nil
+		return false, "N/A", nil
 	}
 
-	status,e1 := util.LoopCall(strategy,fn);
+	status, e1 := util.LoopCall(strategy, fn)
 
-	return status,e1
+	return status, e1
 }

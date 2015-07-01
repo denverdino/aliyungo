@@ -1,91 +1,89 @@
 package ecs
 
 import (
-	"testing"
+	"fmt"
 )
-func ExampleClient_DescribeInstanceStatus(t *testing.T) {
-	t.Logf("DescribeInstanceStatus Example\n")
 
-	pagination := &Pagination{1, 1}
-	regionId := Region("cn-beijing")
-	zoneId := "cn-beijing-b"
+func ExampleClient_DescribeInstanceStatus() {
+	fmt.Printf("DescribeInstanceStatus Example\n")
 
-	var describeInstanceStatusArgs DescribeInstanceStatusArgs
-	describeInstanceStatusArgs.RegionId = regionId
-	describeInstanceStatusArgs.ZoneId = zoneId
-	describeInstanceStatusArgs.Pagination = *pagination
+	args := DescribeInstanceStatusArgs{
+		RegionId:   "cn-beijing",
+		ZoneId:     "cn-beijing-b",
+		Pagination: Pagination{1, 1},
+	}
 
 	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
-	instanceStatus, _, err := client.DescribeInstanceStatus(&describeInstanceStatusArgs)
+	instanceStatus, _, err := client.DescribeInstanceStatus(&args)
 
 	if err != nil {
-		t.Errorf("Failed to describe Instance: %s status:%v", TestInstanceId, err)
+		fmt.Printf("Failed to describe Instance: %s status:%v \n", TestInstanceId, err)
 	} else {
 		for i := 0; i < len(instanceStatus); i++ {
-			t.Logf("Instance %s Status: %s ", instanceStatus[i].InstanceId, instanceStatus[i].Status)
+			fmt.Printf("Instance %s Status: %s \n", instanceStatus[i].InstanceId, instanceStatus[i].Status)
 		}
 	}
 }
 
-func ExampleClient_DescribeInstanceAttribute(t *testing.T) {
-	t.Logf("DescribeInstanceAttribute Example\n")
+func ExampleClient_DescribeInstanceAttribute() {
+	fmt.Printf("DescribeInstanceAttribute Example\n")
 
 	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
 	instanceAttributeType, err := client.DescribeInstanceAttribute(TestInstanceId)
 
 	if err != nil {
-		t.Errorf("Failed to describe Instance %s attribute: %v", TestInstanceId, err)
+		fmt.Printf("Failed to describe Instance %s attribute: %v\n", TestInstanceId, err)
 	} else {
-		t.Logf("Instance Information")
-		t.Logf("InstanceId = %s ", instanceAttributeType.InstanceId)
-		t.Logf("InstanceName = %s ", instanceAttributeType.InstanceName)
-		t.Logf("HostName = %s ", instanceAttributeType.HostName)
-		t.Logf("ZoneId = %s ", instanceAttributeType.ZoneId)
-		t.Logf("RegionId = %s ", instanceAttributeType.RegionId)
+		fmt.Printf("Instance Information\n")
+		fmt.Printf("InstanceId = %s \n", instanceAttributeType.InstanceId)
+		fmt.Printf("InstanceName = %s \n", instanceAttributeType.InstanceName)
+		fmt.Printf("HostName = %s \n", instanceAttributeType.HostName)
+		fmt.Printf("ZoneId = %s \n", instanceAttributeType.ZoneId)
+		fmt.Printf("RegionId = %s \n", instanceAttributeType.RegionId)
 	}
 }
 
-func ExampleClient_DescribeInstanceVncUrl(t *testing.T) {
-	t.Logf("DescribeInstanceVncUrl Example\n")
+func ExampleClient_DescribeInstanceVncUrl() {
+	fmt.Printf("DescribeInstanceVncUrl Example\n")
 
-	region := Region("cn-beijing")
-
-	var describeInstanceVncUrlArgs DescribeInstanceVncUrlArgs
-	describeInstanceVncUrlArgs.RegionId = region
-	describeInstanceVncUrlArgs.InstanceId = TestInstanceId
+	args := DescribeInstanceVncUrlArgs{
+		RegionId:   "cn-beijing",
+		InstanceId: TestInstanceId,
+	}
 
 	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
-	instanceVncUrl, err := client.DescribeInstanceVncUrl(&describeInstanceVncUrlArgs)
+	instanceVncUrl, err := client.DescribeInstanceVncUrl(&args)
 
 	if err != nil {
-		t.Errorf("Failed to describe Instance %s vnc url: %v", TestInstanceId, err)
+		fmt.Printf("Failed to describe Instance %s vnc url: %v \n", TestInstanceId, err)
 	} else {
-		t.Logf("VNC URL = %s ", instanceVncUrl)
+		fmt.Printf("VNC URL = %s \n", instanceVncUrl)
 	}
 }
-
-func ExampleClient_StopInstance(t *testing.T) {
-	t.Logf("Stop Instance Example\n")
+
+func ExampleClient_StopInstance() {
+	fmt.Printf("Stop Instance Example\n")
 
 	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
 	err := client.StopInstance(TestInstanceId, true)
 
 	if err != nil {
-		t.Errorf("Failed to stop Instance %s vnc url: %v", TestInstanceId, err)
+		fmt.Printf("Failed to stop Instance %s vnc url: %v \n", TestInstanceId, err)
 	}
 }
 
-func ExampleClient_DeleteInstance(t *testing.T) {
-	t.Logf("Delete Instance Example")
+func ExampleClient_DeleteInstance() {
+	fmt.Printf("Delete Instance Example")
+
 	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 
 	err := client.DeleteInstance(TestInstanceId)
 
 	if err != nil {
-		t.Errorf("Failed to delete Instance %s vnc url: %v", TestInstanceId, err)
+		fmt.Printf("Failed to delete Instance %s vnc url: %v \n", TestInstanceId, err)
 	}
 }
 

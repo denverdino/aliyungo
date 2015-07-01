@@ -2,6 +2,7 @@ package ecs
 
 import (
 	"fmt"
+	"testing"
 )
 
 func ExampleClient_DescribeInstanceStatus() {
@@ -62,7 +63,7 @@ func ExampleClient_DescribeInstanceVncUrl() {
 		fmt.Printf("VNC URL = %s \n", instanceVncUrl)
 	}
 }
-
+
 func ExampleClient_StopInstance() {
 	fmt.Printf("Stop Instance Example\n")
 
@@ -85,7 +86,7 @@ func ExampleClient_DeleteInstance() {
 	if err != nil {
 		fmt.Printf("Failed to delete Instance %s vnc url: %v \n", TestInstanceId, err)
 	}
-}
+}
 
 func TestECSInstance(t *testing.T) {
 

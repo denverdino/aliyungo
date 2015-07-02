@@ -53,7 +53,10 @@ type DescribeRouteTablesResponse struct {
 }
 
 // DescribeRouteTables describes Virtual Routers
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/routertable&describeroutetables
 func (client *Client) DescribeRouteTables(args *DescribeRouteTablesArgs) (routeTables []RouteTableSetType, pagination *PaginationResult, err error) {
+
 	args.validate()
 	response := DescribeRouteTablesResponse{}
 
@@ -86,7 +89,10 @@ type CreateRouteEntryResponse struct {
 }
 
 // CreateRouteEntry creates route entry
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/routertable&createrouteentry
 func (client *Client) CreateRouteEntry(args *CreateRouteEntryArgs) error {
+
 	response := CreateRouteEntryResponse{}
 	return client.Invoke("CreateRouteEntry", args, &response)
 }
@@ -102,13 +108,19 @@ type DeleteRouteEntryResponse struct {
 }
 
 // DeleteRouteEntry deletes route entry
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/routertable&deleterouteentry
 func (client *Client) DeleteRouteEntry(args *DeleteRouteEntryArgs) error {
+
 	response := DeleteRouteEntryResponse{}
 	return client.Invoke("DeleteRouteEntry", args, &response)
 }
 
 // WaitForAllRouteEntriesAvailable waits for all route entries to Available status
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/routertable&waitforallrouteentriesavailable
 func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTableId string, timeout int) error {
+
 	if timeout <= 0 {
 		timeout = DefaultTimeout
 	}

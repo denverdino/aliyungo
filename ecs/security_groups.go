@@ -57,7 +57,10 @@ type DescribeSecurityGroupAttributeResponse struct {
 	VpcId string
 }
 
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&describesecuritygroupattribute
 func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroupAttributeArgs) (response *DescribeSecurityGroupAttributeResponse, err error) {
+
 	response = &DescribeSecurityGroupAttributeResponse{}
 	err = client.Invoke("DescribeSecurityGroupAttribute", args, response)
 	if err != nil {
@@ -91,7 +94,10 @@ type DescribeSecurityGroupsResponse struct {
 }
 
 // DescribeSecurityGroups describes security groups
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&describesecuritygroups
 func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (securityGroupItems []SecurityGroupItemType, pagination *PaginationResult, err error) {
+
 	args.validate()
 	response := DescribeSecurityGroupsResponse{}
 
@@ -119,7 +125,10 @@ type CreateSecurityGroupResponse struct {
 }
 
 // CreateSecurityGroup creates security group
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&createsecuritygroup
 func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securityGroupId string, err error) {
+
 	response := CreateSecurityGroupResponse{}
 	err = client.Invoke("CreateSecurityGroup", args, &response)
 	if err != nil {
@@ -138,7 +147,10 @@ type DeleteSecurityGroupResponse struct {
 }
 
 // DeleteSecurityGroup deletes security group
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&deletesecuritygroup
 func (client *Client) DeleteSecurityGroup(regionId Region, securityGroupId string) error {
+
 	args := DeleteSecurityGroupArgs{
 		RegionId:        regionId,
 		SecurityGroupId: securityGroupId,
@@ -160,7 +172,10 @@ type ModifySecurityGroupAttributeResponse struct {
 }
 
 // ModifySecurityGroupAttribute modifies attribute of security group
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&modifysecuritygroupattribute
 func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttributeArgs) error {
+
 	response := ModifySecurityGroupAttributeResponse{}
 	err := client.Invoke("ModifySecurityGroupAttribute", args, &response)
 	return err
@@ -184,7 +199,10 @@ type AuthorizeSecurityGroupResponse struct {
 }
 
 // AuthorizeSecurityGroup authorize permissions to security group
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&authorizesecuritygroup
 func (client *Client) AuthorizeSecurityGroup(args *AuthorizeSecurityGroupArgs) error {
+
 	response := AuthorizeSecurityGroupResponse{}
 	err := client.Invoke("AuthorizeSecurityGroup", args, &response)
 	return err

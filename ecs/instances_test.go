@@ -86,7 +86,7 @@ func ExampleClient_DeleteInstance() {
 	if err != nil {
 		fmt.Printf("Failed to delete Instance %s vnc url: %v \n", TestInstanceId, err)
 	}
-}
+}
 
 func TestECSInstance(t *testing.T) {
 

@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 type DescribeRouteTablesArgs struct {
@@ -108,21 +107,21 @@ func (client *Client) DeleteRouteEntry(args *DeleteRouteEntryArgs) error {
 }
 
 // WaitForAllRouteEntriesAvailable waits for all route entries to Available status
-func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTableId string, timeout int) error {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	args := DescribeRouteTablesArgs{
-		VRouterId:    vrouterId,
-		RouteTableId: routeTableId,
-	}
-	for {
+func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTableId string, strategy util.AttemptStrategy) (status interface{}, err error) {
+
+	fn := func() (bool, interface{}, error) {
+
+		args := DescribeRouteTablesArgs{
+			VRouterId:    vrouterId,
+			RouteTableId: routeTableId,
+		}
 
 		routeTables, _, err := client.DescribeRouteTables(&args)
 
 		if err != nil {
-			return err
+			return false, util.StatusNotAvailable, err
 		}
+
 		sucess := true
 
 	loop:
@@ -135,13 +134,13 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 			}
 		}
 		if sucess {
-			break
+			return true, util.StatusNotAvailable, nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
+
+		return false, util.StatusNotAvailable, nil
 	}
-	return nil
+
+	status, e1 := util.LoopCall(strategy, fn)
+
+	return status, e1
 }

@@ -24,8 +24,8 @@ func testCreateVSwitch(t *testing.T, client *Client, regionId Region, zoneId str
 
 	t.Logf("VSwitch is created successfully: %s", vSwitchId)
 
-	err = client.WaitForVSwitchAvailable(vpcId, vSwitchId, 60)
-	if err != nil {
+	status, err := client.WaitForVSwitchAvailable(vpcId, vSwitchId, DefaultStrategy)
+	if err != nil || status != VSwitchStatusAvailable {
 		t.Errorf("Failed to wait VSwitch %s to available: %v", vSwitchId, err)
 	}
 

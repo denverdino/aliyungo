@@ -17,7 +17,7 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-var FinalStatus = map[InstanceStatus]bool {
+var FinalInstanceStatus = map[InstanceStatus]bool{
 	Running: true,
 	Stopped: true,
 }
@@ -198,25 +198,24 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 }
 
 // WaitForInstance waits for instance to given status
-func (client *Client) WaitForInstance(instanceId string, strategy util.AttemptStrategy)(status interface{}, err error)  {
+func (client *Client) WaitForInstance(instanceId string, strategy util.AttemptStrategy) (status interface{}, err error) {
 
-	fn := func() (bool,interface{},error) {
+	fn := func() (bool, interface{}, error) {
 
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return false, "" , err
+			return false, util.StatusNotAvailable, err
 		}
-		if FinalStatus[instance.Status] {
-			return true,instance.Status,nil
+		if FinalInstanceStatus[instance.Status] {
+			return true, instance.Status, nil
 		}
-		return false, "" , nil
+		return false, util.StatusNotAvailable, nil
 	}
 
-	status,e1 := util.LoopCall(strategy,fn);
+	status, e1 := util.LoopCall(strategy, fn)
 
-	return status,e1
+	return status, e1
 }
-
 
 type DescribeInstanceVncUrlArgs struct {
 	RegionId   Region

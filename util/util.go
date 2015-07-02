@@ -4,18 +4,17 @@ import (
 	"bytes"
 	srand "crypto/rand"
 	"encoding/binary"
+	"errors"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"sort"
 	"strconv"
 	"time"
-	"errors"
 )
 
-
 const (
-	StatusUnKnown     = "NA"
+	StatusNotAvailable = "N/A"
 )
 
 //CreateRandomString create random string
@@ -139,23 +138,40 @@ func GenerateRandomECSPassword() string {
 
 }
 
-
-func LoopCall(attempts AttemptStrategy,api func() (bool,interface{},error))(interface{}, error){
-
+func SimpleLoopCall(attempts AttemptStrategy, f func() bool) error {
 	for attempt := attempts.Start(); attempt.Next(); {
-		needStop,status,err := api()
 
-		if(err != nil) {
-			return nil, errors.New("execution failed")
-		}
-		if(needStop){
-			return status,nil;
+		stop := f()
+
+		if stop {
+			return nil
 		}
 
 		if attempt.HasNext() {
-			continue;
+			continue
 		}
-		return nil,errors.New("timeout execution ")
+
+		return errors.New("timeout execution ")
+	}
+	panic("unreachable")
+}
+
+func LoopCall(attempts AttemptStrategy, f func() (bool, interface{}, error)) (interface{}, error) {
+
+	for attempt := attempts.Start(); attempt.Next(); {
+		needStop, status, err := f()
+
+		if err != nil {
+			return nil, err
+		}
+		if needStop {
+			return status, nil
+		}
+
+		if attempt.HasNext() {
+			continue
+		}
+		return nil, errors.New("timeout execution ")
 	}
 	panic("unreachable")
 }

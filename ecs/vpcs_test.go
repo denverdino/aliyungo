@@ -1,11 +1,10 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/util"
 	"testing"
 	"time"
-	"github.com/denverdino/aliyungo/util"
 )
-
 
 var defaultVpcInstanceStrategy = util.AttemptStrategy{
 	Min:   5,
@@ -67,7 +66,7 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 		t.Errorf("Failed to modify VPC,current name: %s new name: %s", vpcs[0].VpcName, newName)
 	}
 
-	err = client.WaitForVpcAvailable(regionId, vpcId, 60)
+	_, err = client.WaitForVpcAvailable(regionId, vpcId, DefaultStrategy)
 	if err != nil {
 		t.Errorf("Failed to wait VPC to available: %v", err)
 	}
@@ -129,12 +128,24 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 		t.Logf("VSwitch %s is deleted successfully.", vSwitchId)
 	}
 
-	err = client.DeleteVpc(vpcId)
+	err = util.SimpleLoopCall(DefaultStrategy, checkDeleteVpcAvailable(t, client, vpcId))
 	if err != nil {
 		t.Errorf("Failed to delete VPC: %v", err)
 	}
 	t.Logf("VPC %s is deleted successfully.", vpcId)
 
+}
+
+func checkDeleteVpcAvailable(t *testing.T, client *Client, vpcId string) func() bool {
+
+	return func() bool {
+		err := client.DeleteVpc(vpcId)
+		if err != nil {
+			t.Logf("Failed to delete vpc, vpcId: %s, retry....", vpcId)
+			return false
+		}
+		return true
+	}
 }
 
 func testCreateInstanceVpc(t *testing.T, client *Client, regionId Region, vpcId string, vswitchId, imageId string) (instanceId string, sgId string, err error) {

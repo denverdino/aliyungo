@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 type CreateVpcArgs struct {
@@ -53,6 +52,10 @@ const (
 	VpcStatusPending   = VpcStatus("Pending")
 	VpcStatusAvailable = VpcStatus("Available")
 )
+
+var FinalVpcStatus = map[VpcStatus]bool{
+	VpcStatusAvailable: true,
+}
 
 type DescribeVpcsArgs struct {
 	VpcId    string
@@ -112,28 +115,28 @@ func (client *Client) ModifyVpcAttribute(args *ModifyVpcAttributeArgs) error {
 	return client.Invoke("ModifyVpcAttribute", args, &response)
 }
 
-// WaitForInstance waits for instance to given status
-func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, timeout int) error {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	args := DescribeVpcsArgs{
-		RegionId: regionId,
-		VpcId:    vpcId,
-	}
-	for {
+// WaitForVSwitchAvailable waits for VSwitch to given status
+func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, strategy util.AttemptStrategy) (status interface{}, err error) {
+
+	fn := func() (bool, interface{}, error) {
+
+		args := DescribeVpcsArgs{
+			RegionId: regionId,
+			VpcId:    vpcId,
+		}
+
 		vpcs, _, err := client.DescribeVpcs(&args)
 		if err != nil {
-			return err
+			return false, util.StatusNotAvailable, err
 		}
-		if vpcs[0].Status == VpcStatusAvailable {
-			break
+
+		if FinalVpcStatus[vpcs[0].Status] {
+			return true, vpcs[0].Status, nil
 		}
-		timeout = timeout - DefaultWaitForInterval
-		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
-		}
-		time.Sleep(DefaultWaitForInterval * time.Second)
+		return false, util.StatusNotAvailable, nil
 	}
-	return nil
+
+	status, e1 := util.LoopCall(strategy, fn)
+
+	return status, e1
 }

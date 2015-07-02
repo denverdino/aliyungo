@@ -119,7 +119,7 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 		routeTables, _, err := client.DescribeRouteTables(&args)
 
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 
 		sucess := true
@@ -134,10 +134,10 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 			}
 		}
 		if sucess {
-			return true, "N/A", nil
+			return true, util.StatusNotAvailable, nil
 		}
 
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

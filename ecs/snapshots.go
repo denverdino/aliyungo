@@ -101,16 +101,16 @@ func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, s
 
 		snapshots, _, err := client.DescribeSnapshots(&args)
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 		if snapshots == nil || len(snapshots) == 0 {
-			return false, "N/A", getECSErrorFromString("Not found")
+			return false, util.StatusNotAvailable, getECSErrorFromString("Not found")
 		}
 		if snapshots[0].Progress == "100%" {
 			return true, snapshots[0].Progress, nil
 		}
 
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

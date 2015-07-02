@@ -124,14 +124,14 @@ func (client *Client) WaitForVSwitchAvailable(vpcId string, vswitchId string, st
 		}
 		vpcs, _, err := client.DescribeVSwitches(&args)
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 
 		if FinalVswitchStatus[vpcs[0].Status] {
 			return true, vpcs[0].Status, nil
 		}
 
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

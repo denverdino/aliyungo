@@ -127,13 +127,13 @@ func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, strateg
 
 		vpcs, _, err := client.DescribeVpcs(&args)
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 
 		if FinalVpcStatus[vpcs[0].Status] {
 			return true, vpcs[0].Status, nil
 		}
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

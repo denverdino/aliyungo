@@ -99,7 +99,7 @@ func TestLoopCall(t *testing.T) {
 	}
 
 	timeoutFunc := func() (bool, interface{}, error) {
-		return false, "-1", nil
+		return false, StatusNotAvailable, nil
 	}
 
 	begin := time.Now()
@@ -121,7 +121,7 @@ func TestLoopCall(t *testing.T) {
 
 	errorFunc := func() (bool, interface{}, error) {
 		err := errors.New("execution failed")
-		return false, "-1", err
+		return false, StatusNotAvailable, err
 	}
 
 	_, failedError := LoopCall(attempts, errorFunc)
@@ -132,7 +132,7 @@ func TestLoopCall(t *testing.T) {
 	}
 
 	successFunc := func() (bool, interface{}, error) {
-		return true, nil, nil
+		return true, StatusNotAvailable, nil
 	}
 
 	_, successError := LoopCall(attempts, successFunc)

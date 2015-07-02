@@ -204,12 +204,12 @@ func (client *Client) WaitForInstance(instanceId string, strategy util.AttemptSt
 
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 		if FinalInstanceStatus[instance.Status] {
 			return true, instance.Status, nil
 		}
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

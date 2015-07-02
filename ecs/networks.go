@@ -215,13 +215,13 @@ func (client *Client) WaitForEip(regionId Region, allocationId string, strategy 
 
 		vpcs, _, err := client.DescribeEipAddresses(&args)
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 
 		if FinalNetworkStatus[vpcs[0].Status] {
 			return true, vpcs[0].Status, nil
 		}
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

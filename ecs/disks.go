@@ -257,7 +257,7 @@ func (client *Client) WaitForDisk(regionId Region, diskId string, strategy util.
 
 		disks, _, err := client.DescribeDisks(&args)
 		if err != nil {
-			return false, "N/A", err
+			return false, util.StatusNotAvailable, err
 		}
 
 		if disks == nil || len(disks) == 0 {
@@ -267,7 +267,7 @@ func (client *Client) WaitForDisk(regionId Region, diskId string, strategy util.
 		if FinalDiskStatus[disks[0].Status] {
 			return true, disks[0].Status, nil
 		}
-		return false, "N/A", nil
+		return false, util.StatusNotAvailable, nil
 	}
 
 	status, e1 := util.LoopCall(strategy, fn)

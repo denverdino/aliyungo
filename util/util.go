@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	StatusUnKnown = "NA"
+	StatusNotAvailable = "N/A"
 )
 
 //CreateRandomString create random string

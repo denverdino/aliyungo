@@ -90,7 +90,10 @@ type DescribeDisksResponse struct {
 }
 
 // DescribeDisks describes Disks
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&describedisks
 func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *PaginationResult, err error) {
+
 	response := DescribeDisksResponse{}
 
 	err = client.Invoke("DescribeDisks", args, &response)
@@ -118,7 +121,10 @@ type CreateDisksResponse struct {
 }
 
 // CreateDisk creates a new disk
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&createdisk
 func (client *Client) CreateDisk(args *CreateDiskArgs) (diskId string, err error) {
+
 	response := CreateDisksResponse{}
 	err = client.Invoke("CreateDisk", args, &response)
 	if err != nil {
@@ -136,7 +142,10 @@ type DeleteDiskResponse struct {
 }
 
 // DeleteDisk deletes disk
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&deletedisk
 func (client *Client) DeleteDisk(diskId string) error {
+
 	args := DeleteDiskArgs{
 		DiskId: diskId,
 	}
@@ -154,7 +163,10 @@ type ReInitDiskResponse struct {
 }
 
 // ReInitDisk reinitizes disk
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&reinitdisk
 func (client *Client) ReInitDisk(diskId string) error {
+
 	args := ReInitDiskArgs{
 		DiskId: diskId,
 	}
@@ -175,7 +187,10 @@ type AttachDiskResponse struct {
 }
 
 // AttachDisk attaches disk to instance
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&attachdisk
 func (client *Client) AttachDisk(args *AttachDiskArgs) error {
+
 	response := AttachDiskResponse{}
 	err := client.Invoke("AttachDisk", args, &response)
 	return err
@@ -191,7 +206,10 @@ type DetachDiskResponse struct {
 }
 
 // DetachDisk detaches disk from instance
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&detachdisk
 func (client *Client) DetachDisk(instanceId string, diskId string) error {
+
 	args := DetachDiskArgs{
 		InstanceId: instanceId,
 		DiskId:     diskId,
@@ -211,7 +229,10 @@ type ResetDiskResponse struct {
 }
 
 // ResetDisk resets disk to original status
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&resetdisk
 func (client *Client) ResetDisk(diskId string, snapshotId string) error {
+
 	args := ResetDiskArgs{
 		SnapshotId: snapshotId,
 		DiskId:     diskId,
@@ -235,14 +256,20 @@ type ModifyDiskAttributeResponse struct {
 }
 
 // ModifyDiskAttribute modifies disk attribute
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&modifydiskattribute
 func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
+
 	response := ModifyDiskAttributeResponse{}
 	err := client.Invoke("ModifyDiskAttribute", &args, &response)
 	return err
 }
 
 // WaitForDisk waits for disk to given status
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/disk&waitfordisk
 func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskStatus, timeout int) error {
+
 	if timeout <= 0 {
 		timeout = DefaultTimeout
 	}

@@ -33,7 +33,10 @@ type DescribeRegionsResponse struct {
 }
 
 // DescribeRegions describes regions
+//
+// You can read doc at:http://docs.aliyun.com/#/pub/ecs/open-api/region&describeregions
 func (client *Client) DescribeRegions() (regions []RegionType, err error) {
+
 	response := DescribeRegionsResponse{}
 
 	err = client.Invoke("DescribeRegions", &DescribeRegionsArgs{}, &response)

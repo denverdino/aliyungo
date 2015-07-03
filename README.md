@@ -7,14 +7,38 @@ This is an unofficial Go SDK for Aliyun Services
 Package Structure
 -------------------
 
-*  ecs: [Elastic Compute Service](http://docs.aliyun.com/?spm=5176.100054.3.1.1uupTM#/ecs)
-*  oss: [Open Storage Service](http://docs.aliyun.com/?spm=5176.100054.3.5.1uupTM#/oss)
+*  ecs: [Elastic Compute Service](http://docs.aliyun.com/#/pub/ecs)
+*  oss: [Open Storage Service](http://docs.aliyun.com/#/pub/oss)
 *  util: Utility helpers
 
 Documentation
 -------------------
-*  ecs: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
-*  oss: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
+
+ * Quick Start
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/denverdino/aliyungo/ecs"
+)
+
+const ACCESS_KEY_ID = "<YOUR_ID>"
+const ACCESS_KEY_SECRET = "<****>"
+
+func main() {
+	client := ecs.NewClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET)
+	fmt.Print(client.DescribeRegions())
+}
+
+```
+
+More API can be found at
+
+*  ECS: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
+*  OSS: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
 
 
 Build and Install
@@ -77,8 +101,9 @@ go test
 Contributors
 -------------------
 * Li Yi (denverdino@gmail.com)
-* Tgic (farmer1992@gmail.com)
-* Yuzhou (oscarrr110@gmail.com)
+* tgic (farmer1992@gmail.com)
+* Yu Zhou (oscarrr110@gmail.com)
+* Yufei Zhang
 
 
 License

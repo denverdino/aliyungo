@@ -52,6 +52,8 @@ type DescribeInstanceStatusResponse struct {
 }
 
 // DescribeInstanceStatus describes instance status
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstancestatus
 func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeInstanceStatusResponse{}
@@ -75,6 +77,8 @@ type StopInstanceResponse struct {
 }
 
 // StopInstance stops instance
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&stopinstance
 func (client *Client) StopInstance(instanceId string, forceStop bool) error {
 	args := StopInstanceArgs{
 		InstanceId: instanceId,
@@ -94,6 +98,8 @@ type StartInstanceResponse struct {
 }
 
 // StartInstance starts instance
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&startinstance
 func (client *Client) StartInstance(instanceId string) error {
 	args := StartInstanceArgs{InstanceId: instanceId}
 	response := StartInstanceResponse{}
@@ -111,6 +117,8 @@ type RebootInstanceResponse struct {
 }
 
 // RebootInstance reboot instance
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&rebootinstance
 func (client *Client) RebootInstance(instanceId string, forceStop bool) error {
 	request := RebootInstanceArgs{
 		InstanceId: instanceId,
@@ -182,6 +190,8 @@ type DescribeInstanceAttributeResponse struct {
 }
 
 // DescribeInstanceAttribute describes instance attribute
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstanceattribute
 func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *InstanceAttributesType, err error) {
 	args := DescribeInstanceAttributeArgs{InstanceId: instanceId}
 
@@ -232,6 +242,8 @@ type DescribeInstanceVncUrlResponse struct {
 	VncUrl string
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstancevncurl
 func (client *Client) DescribeInstanceVncUrl(args *DescribeInstanceVncUrlArgs) (string, error) {
 	response := DescribeInstanceVncUrlResponse{}
 
@@ -267,6 +279,8 @@ type DescribeInstancesResponse struct {
 }
 
 // DescribeInstances describes instances
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstances
 func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeInstancesResponse{}
@@ -289,6 +303,8 @@ type DeleteInstanceResponse struct {
 }
 
 // DeleteInstance deletes instance
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&deleteinstance
 func (client *Client) DeleteInstance(instanceId string) error {
 	args := DeleteInstanceArgs{InstanceId: instanceId}
 	response := DeleteInstanceResponse{}
@@ -338,6 +354,8 @@ type CreateInstanceResponse struct {
 }
 
 // CreateInstance creates instance
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&createinstance
 func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId string, err error) {
 	response := CreateInstanceResponse{}
 	err = client.Invoke("CreateInstance", args, &response)

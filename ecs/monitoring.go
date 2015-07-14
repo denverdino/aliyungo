@@ -35,6 +35,8 @@ type DescribeInstanceMonitorDataResponse struct {
 }
 
 // DescribeInstanceMonitorData describes instance monitoring data
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/monitor&describeinstancemonitordata
 func (client *Client) DescribeInstanceMonitorData(args *DescribeInstanceMonitorDataArgs) (monitorData []InstanceMonitorDataType, err error) {
 	if args.Period == 0 {
 		args.Period = 60
@@ -71,6 +73,8 @@ type DescribeEipMonitorDataResponse struct {
 }
 
 // DescribeEipMonitorData describes EIP monitoring data
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/monitor&describeeipmonitordata
 func (client *Client) DescribeEipMonitorData(args *DescribeEipMonitorDataArgs) (monitorData []EipMonitorDataType, err error) {
 	if args.Period == 0 {
 		args.Period = 60
@@ -110,6 +114,8 @@ type DescribeDiskMonitorDataResponse struct {
 }
 
 // DescribeDiskMonitorData describes disk monitoring data
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/monitor&describediskmonitordata
 func (client *Client) DescribeDiskMonitorData(args *DescribeDiskMonitorDataArgs) (monitorData []DiskMonitorDataType, totalCount int, err error) {
 	if args.Period == 0 {
 		args.Period = 60

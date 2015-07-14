@@ -168,6 +168,8 @@ func (client *Client) SetEndpoint(endpoint string) {
 }
 
 // PutBucket creates a new bucket.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/bucket&PutBucket
 func (b *Bucket) PutBucket(perm ACL) error {
 	headers := make(http.Header)
 	if perm != "" {
@@ -185,6 +187,8 @@ func (b *Bucket) PutBucket(perm ACL) error {
 
 // DelBucket removes an existing bucket. All objects in the bucket must
 // be removed before the bucket itself can be removed.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/bucket&DeleteBucket
 func (b *Bucket) DelBucket() (err error) {
 	req := &request{
 		method: "DELETE",
@@ -201,6 +205,8 @@ func (b *Bucket) DelBucket() (err error) {
 }
 
 // Get retrieves an object from an bucket.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&GetObject
 func (b *Bucket) Get(path string) (data []byte, err error) {
 	body, err := b.GetReader(path)
 	if err != nil {
@@ -332,6 +338,8 @@ func (b *Bucket) Exists(path string) (exists bool, err error) {
 }
 
 // Head HEADs an object in the bucket, returns the response with
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&HeadObject
 func (b *Bucket) Head(path string, headers http.Header) (*http.Response, error) {
 	req := &request{
 		method:  "HEAD",
@@ -358,12 +366,16 @@ func (b *Bucket) Head(path string, headers http.Header) (*http.Response, error) 
 }
 
 // Put inserts an object into the bucket.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&PutObject
 func (b *Bucket) Put(path string, data []byte, contType string, perm ACL, options Options) error {
 	body := bytes.NewBuffer(data)
 	return b.PutReader(path, body, int64(len(data)), contType, perm, options)
 }
 
 // PutCopy puts a copy of an object given by the key path into bucket b using b.Path as the target key
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&CopyObject
 func (b *Bucket) PutCopy(path string, perm ACL, options CopyOptions, source string) (*CopyObjectResult, error) {
 	headers := make(http.Header)
 
@@ -502,6 +514,8 @@ type WebsiteConfiguration struct {
 }
 
 // PutBucketWebsite configures a bucket as a website.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/bucket&PutBucketWebsite
 func (b *Bucket) PutBucketWebsite(configuration WebsiteConfiguration) error {
 	doc, err := xml.Marshal(configuration)
 	if err != nil {
@@ -530,6 +544,8 @@ func (b *Bucket) PutBucketSubresource(subresource string, r io.Reader, length in
 }
 
 // Del removes an object from the bucket.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&DeleteObject
 func (b *Bucket) Del(path string) error {
 	req := &request{
 		method: "DELETE",
@@ -550,6 +566,8 @@ type Object struct {
 }
 
 // DelMulti removes up to 1000 objects from the bucket.
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&DeleteMultipleObjects
 func (b *Bucket) DelMulti(objects Delete) error {
 	doc, err := xml.Marshal(objects)
 	if err != nil {
@@ -667,6 +685,8 @@ type Key struct {
 //         },
 //     }
 //
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/bucket&GetBucket
 func (b *Bucket) List(prefix, delim, marker string, max int) (result *ListResp, err error) {
 	params := make(url.Values)
 	params.Set("prefix", prefix)
@@ -1245,6 +1265,8 @@ type AccessControlPolicy struct {
 }
 
 // ACL returns ACL of bucket
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/bucket&GetBucketAcl
 func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 
 	params := make(url.Values)

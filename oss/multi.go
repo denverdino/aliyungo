@@ -106,6 +106,8 @@ func (b *Bucket) Multi(key, contType string, perm ACL, options Options) (*Multi,
 // InitMulti initializes a new multipart upload at the provided
 // key inside b and returns a value for manipulating it.
 //
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/multipart-upload&InitiateMultipartUpload
 func (b *Bucket) InitMulti(key string, contType string, perm ACL, options Options) (*Multi, error) {
 	headers := make(http.Header)
 	headers.Set("Content-Length", "0")
@@ -138,6 +140,8 @@ func (b *Bucket) InitMulti(key string, contType string, perm ACL, options Option
 	return &Multi{Bucket: b, Key: key, UploadId: resp.UploadId}, nil
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/multipart-upload&UploadPartCopy
 func (m *Multi) PutPartCopy(n int, options CopyOptions, source string) (*CopyObjectResult, Part, error) {
 	// TODO source format a /BUCKET/PATH/TO/OBJECT
 	// TODO not a good design. API could be changed to PutPartCopyWithinBucket(..., path) and PutPartCopyFromBucket(bucket, path)
@@ -187,6 +191,8 @@ func (m *Multi) PutPartCopy(n int, options CopyOptions, source string) (*CopyObj
 // PutPart sends part n of the multipart upload, reading all the content from r.
 // Each part, except for the last one, must be at least 5MB in size.
 //
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/multipart-upload&UploadPart
 func (m *Multi) PutPart(n int, r io.ReadSeeker) (Part, error) {
 	partSize, _, md5b64, err := seekerInfo(r)
 	if err != nil {
@@ -443,6 +449,8 @@ func (m *Multi) Complete(parts []Part) error {
 // handled internally, but it's not clear what happens precisely (Is an
 // error returned? Is the issue completely undetectable?).
 //
+//
+// You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/multipart-upload&AbortMultipartUpload
 func (m *Multi) Abort() error {
 	params := make(url.Values)
 	params.Set("uploadId", m.UploadId)

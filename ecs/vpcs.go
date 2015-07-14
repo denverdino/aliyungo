@@ -21,6 +21,8 @@ type CreateVpcResponse struct {
 }
 
 // CreateVpc creates Virtual Private Cloud
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/vpc&createvpc
 func (client *Client) CreateVpc(args *CreateVpcArgs) (resp *CreateVpcResponse, err error) {
 	response := CreateVpcResponse{}
 	err = client.Invoke("CreateVpc", args, &response)
@@ -39,6 +41,8 @@ type DeleteVpcResponse struct {
 }
 
 // DeleteVpc deletes Virtual Private Cloud
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/vpc&deletevpc
 func (client *Client) DeleteVpc(vpcId string) error {
 	args := DeleteVpcArgs{
 		VpcId: vpcId,
@@ -83,6 +87,8 @@ type DescribeVpcsResponse struct {
 }
 
 // DescribeInstanceStatus describes instance status
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/vpc&describevpcs
 func (client *Client) DescribeVpcs(args *DescribeVpcsArgs) (vpcs []VpcSetType, pagination *PaginationResult, err error) {
 	args.validate()
 	response := DescribeVpcsResponse{}
@@ -107,6 +113,8 @@ type ModifyVpcAttributeResponse struct {
 }
 
 // ModifyVpcAttribute modifies attribute of Virtual Private Cloud
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/vpc&modifyvpcattribute
 func (client *Client) ModifyVpcAttribute(args *ModifyVpcAttributeArgs) error {
 	response := ModifyVpcAttributeResponse{}
 	return client.Invoke("ModifyVpcAttribute", args, &response)

@@ -34,6 +34,8 @@ type DescribeSecurityGroupAttributeArgs struct {
 	NicType         NicType //enum for internet (default) |intranet
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&permissiontype
 type PermissionType struct {
 	IpProtocol              IpProtocol
 	PortRange               string
@@ -74,6 +76,8 @@ type DescribeSecurityGroupsArgs struct {
 	Pagination
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&securitygroupitemtype
 type SecurityGroupItemType struct {
 	SecurityGroupId   string
 	SecurityGroupName string

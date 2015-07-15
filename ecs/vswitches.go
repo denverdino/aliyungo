@@ -65,6 +65,8 @@ const (
 	VSwitchStatusAvailable = VSwitchStatus("Available")
 )
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&vswitchsettype
 type VSwitchSetType struct {
 	VSwitchId               string
 	VpcId                   string

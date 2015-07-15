@@ -26,6 +26,8 @@ const (
 	RouteEntryStatusModifying = RouteEntryStatus("Modifying")
 )
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&routeentrysettype
 type RouteEntrySetType struct {
 	RouteTableId         string
 	DestinationCidrBlock string
@@ -34,6 +36,8 @@ type RouteEntrySetType struct {
 	Status               RouteEntryStatus // enum Pending | Available | Modifying
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&routetablesettype
 type RouteTableSetType struct {
 	VRouterId    string
 	RouteTableId string

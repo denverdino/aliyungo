@@ -64,6 +64,8 @@ type DescribeVpcsArgs struct {
 	Pagination
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&vpcsettype
 type VpcSetType struct {
 	VpcId      string
 	RegionId   Region

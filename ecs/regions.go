@@ -20,6 +20,8 @@ var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, USWe
 type DescribeRegionsArgs struct {
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&regiontype
 type RegionType struct {
 	RegionId  Region
 	LocalName string

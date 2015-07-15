@@ -11,6 +11,8 @@ type DescribeInstanceMonitorDataArgs struct {
 	Period     int //Default 60s
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instancemonitordatatype
 type InstanceMonitorDataType struct {
 	InstanceId        string
 	CPU               int
@@ -56,6 +58,8 @@ type DescribeEipMonitorDataArgs struct {
 	Period       int //Default 60s
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&eipmonitordatatype
 type EipMonitorDataType struct {
 	EipRX        int
 	EipTX        int
@@ -94,6 +98,8 @@ type DescribeDiskMonitorDataArgs struct {
 	Period    int //Default 60s
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&diskmonitordatatype
 type DiskMonitorDataType struct {
 	DiskId    string
 	IOPSRead  int

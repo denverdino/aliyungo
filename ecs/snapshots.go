@@ -13,6 +13,8 @@ type DescribeSnapshotsArgs struct {
 	Pagination
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&snapshottype
 type SnapshotType struct {
 	SnapshotId     string
 	SnapshotName   string

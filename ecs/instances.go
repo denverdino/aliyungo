@@ -38,6 +38,8 @@ type DescribeInstanceStatusArgs struct {
 	Pagination
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instancestatusitemtype
 type InstanceStatusItemType struct {
 	InstanceId string
 	Status     InstanceStatus
@@ -133,17 +135,25 @@ type DescribeInstanceAttributeArgs struct {
 	InstanceId string
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&operationlockstype
 type OperationLocksType struct {
 	LockReason []LockReason //enum for financial, security
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&securitygroupidsettype
 type SecurityGroupIdSetType struct {
 	SecurityGroupId string
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&ipaddresssettype
 type IpAddressSetType struct {
 	IpAddress []string
 }
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&vpcattributestype
 type VpcAttributesType struct {
 	VpcId            string
 	VSwitchId        string
@@ -151,6 +161,8 @@ type VpcAttributesType struct {
 	NatIpAddress     string
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&eipaddressassociatetype
 type EipAddressAssociateType struct {
 	AllocationId       string
 	IpAddress          string
@@ -158,6 +170,8 @@ type EipAddressAssociateType struct {
 	InternetChargeType InternetChargeType
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
 	InstanceId       string
 	InstanceName     string

@@ -54,6 +54,8 @@ type DescribeDisksArgs struct {
 	Pagination
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&diskitemtype
 type DiskItemType struct {
 	DiskId             string
 	RegionId           Region

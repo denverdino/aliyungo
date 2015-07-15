@@ -36,6 +36,8 @@ type DescribeImagesResponse struct {
 	}
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&diskdevicemapping
 type DiskDeviceMapping struct {
 	SnapshotId string
 	//Why Size Field is string-type.
@@ -52,6 +54,8 @@ const (
 	ImageStatusCreateFailed = ImageStatus("CreateFailed")
 )
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&imagetype
 type ImageType struct {
 	ImageId            string
 	ImageVersion       string

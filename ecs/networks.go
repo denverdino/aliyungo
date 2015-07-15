@@ -118,6 +118,8 @@ type DescribeEipAddressesArgs struct {
 	Pagination
 }
 
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&eipaddresssettype
 type EipAddressSetType struct {
 	RegionId           Region
 	IpAddress          string

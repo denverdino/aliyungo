@@ -32,7 +32,7 @@ type RouteEntrySetType struct {
 	RouteTableId         string
 	DestinationCidrBlock string
 	Type                 RouteTableType
-	NextHopId            string
+	InstanceId           string
 	Status               RouteEntryStatus // enum Pending | Available | Modifying
 }
 

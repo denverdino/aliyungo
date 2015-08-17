@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/denverdino/aliyungo"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -87,7 +88,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	httpReq, err := http.NewRequest(ECSRequestMethod, requestURL, nil)
 
 	// TODO move to util and add build val flag
-	httpReq.Header.Set("X-SDK-Client", `AliyunGO 1.0`)
+	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+aliyungo.Version)
 
 	if err != nil {
 		return getECSError(err)

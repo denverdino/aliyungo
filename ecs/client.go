@@ -84,6 +84,10 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	requestURL := ECSDefaultEndpoint + "?" + query.Encode() + "&Signature=" + url.QueryEscape(signature)
 
 	httpReq, err := http.NewRequest(ECSRequestMethod, requestURL, nil)
+
+	// TODO move to util and add build val flag
+	httpReq.Header.Set("X-SDK-Client", `AliyunGO 1.0`)
+
 	if err != nil {
 		return getECSError(err)
 	}

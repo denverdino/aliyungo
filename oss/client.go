@@ -1082,6 +1082,8 @@ func (client *Client) setupHttpRequest(req *request) (*http.Request, error) {
 		Form:       req.params,
 	}
 
+	hreq.Header.Set("X-SDK-Client", `AliyunGO 1.0`)
+
 	contentLength := req.headers.Get("Content-Length")
 
 	if contentLength != "" {

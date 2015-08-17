@@ -3,8 +3,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/util"
 	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 type AllocatePublicIpAddressArgs struct {

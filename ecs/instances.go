@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/util"
 	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 // InstanceStatus represents instance status
@@ -152,6 +153,7 @@ type SecurityGroupIdSetType struct {
 type IpAddressSetType struct {
 	IpAddress []string
 }
+
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&vpcattributestype
 type VpcAttributesType struct {

@@ -2,9 +2,10 @@ package ecs
 
 import (
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
 	"log"
 	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 // Constants for ECS requests

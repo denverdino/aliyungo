@@ -1,7 +1,5 @@
 package ecs
 
-import ()
-
 // Region represents ECS region
 type Region string
 

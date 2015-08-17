@@ -3,12 +3,13 @@ package ecs
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/denverdino/aliyungo/util"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 // ECSDefaultEndpoint is the default API endpoint of ECS services

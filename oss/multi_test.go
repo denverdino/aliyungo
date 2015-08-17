@@ -2,8 +2,9 @@ package oss_test
 
 import (
 	//"encoding/xml"
-	"github.com/denverdino/aliyungo/oss"
 	"testing"
+
+	"github.com/denverdino/aliyungo/oss"
 	//"io"
 	//"io/ioutil"
 	"strings"

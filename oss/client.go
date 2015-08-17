@@ -8,7 +8,6 @@ import (
 	"encoding/base64"
 	"encoding/xml"
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
 	"io"
 	"io/ioutil"
 	"log"
@@ -22,6 +21,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 const DefaultContentType = "application/octet-stream"

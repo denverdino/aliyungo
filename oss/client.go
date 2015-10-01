@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/denverdino/aliyungo"
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -1084,7 +1084,7 @@ func (client *Client) setupHttpRequest(req *request) (*http.Request, error) {
 		Form:       req.params,
 	}
 
-	hreq.Header.Set("X-SDK-Client", `AliyunGO/`+aliyungo.Version)
+	hreq.Header.Set("X-SDK-Client", `AliyunGO/`+common.Version)
 
 	contentLength := req.headers.Get("Content-Length")
 

@@ -6,7 +6,7 @@ import (
 
 func TestAllocatePublicIpAddress(t *testing.T) {
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
 		t.Fatalf("Failed to describe instance %s: %v", TestInstanceId, err)

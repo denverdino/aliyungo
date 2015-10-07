@@ -22,7 +22,7 @@ type SnapshotType struct {
 	Description    string
 	Progress       string
 	SourceDiskId   string
-	SourceDiskSize string //GB Why it is string
+	SourceDiskSize int
 	SourceDiskType string //enum for System | Data
 	ProductCode    string
 	CreationTime   util.ISO6801Time

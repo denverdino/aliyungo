@@ -6,7 +6,7 @@ import (
 
 func TestImageCreationAndDeletion(t *testing.T) {
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {

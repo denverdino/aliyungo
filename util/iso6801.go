@@ -13,6 +13,8 @@ func GetISO8601TimeStamp(ts time.Time) string {
 
 const formatISO8601 = "2006-01-02T15:04:05Z"
 const jsonFormatISO8601 = `"` + formatISO8601 + `"`
+const formatISO8601withoutSeconds = "2006-01-02T15:04Z"
+const jsonFormatISO8601withoutSeconds = `"` + formatISO8601withoutSeconds + `"`
 
 // A ISO6801Time represents a time in ISO8601 format
 type ISO6801Time time.Time
@@ -50,6 +52,9 @@ func (it *ISO6801Time) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 	t, err := time.ParseInLocation(jsonFormatISO8601, string(data), time.UTC)
+	if err != nil {
+		t, err = time.ParseInLocation(jsonFormatISO8601withoutSeconds, string(data), time.UTC)
+	}
 	if err == nil {
 		*it = ISO6801Time(t)
 	}

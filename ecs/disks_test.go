@@ -6,7 +6,7 @@ import (
 
 func TestDisks(t *testing.T) {
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
@@ -34,7 +34,7 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 		return
 	}
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {

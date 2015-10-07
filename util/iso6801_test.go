@@ -48,3 +48,29 @@ func TestISO8601Time(t *testing.T) {
 	}
 	t.Logf("ISO6801Time String(): %s", now2.String())
 }
+
+func TestISO8601TimeWithoutSeconds(t *testing.T) {
+
+	const dateStr = "\"2015-10-02T12:36Z\""
+
+	var date ISO6801Time
+
+	err := json.Unmarshal([]byte(dateStr), &date)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	const dateStr2 = "\"2015-10-02T12:36:00Z\""
+
+	var date2 ISO6801Time
+
+	err = json.Unmarshal([]byte(dateStr2), &date2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if date != date2 {
+		t.Error("The two dates shoudl be equal.")
+	}
+
+}

@@ -25,6 +25,7 @@ type TestStruct struct {
 	StructArray []SubStruct
 	test        TestString
 	tests       []TestString
+	Tag         map[string]string
 }
 
 func TestConvertToQueryValues(t *testing.T) {
@@ -42,9 +43,10 @@ func TestConvertToQueryValues(t *testing.T) {
 		},
 		test:  TestString("test"),
 		tests: []TestString{TestString("test1"), TestString("test2")},
+		Tag:   map[string]string{"abc": "xyz", "123": "456"},
 	}
 	result := ConvertToQueryValues(&request).Encode()
-	const expectedResult = "Format=JSON&StructArray.1.A=a&StructArray.1.B=1&StructArray.2.A=x&StructArray.2.B=2&Timestamp=2015-05-26T01%3A02%3A03Z&Version=1.0&bool-ptr=true&int-value=10&str-array=%5B%22abc%22%2C%22xyz%22%5D&test=test&tests=%5B%22test1%22%2C%22test2%22%5D"
+	const expectedResult = "Format=JSON&StructArray.1.A=a&StructArray.1.B=1&StructArray.2.A=x&StructArray.2.B=2&Tag.1.Key=abc&Tag.1.Value=xyz&Tag.2.Key=123&Tag.2.Value=456&Timestamp=2015-05-26T01%3A02%3A03Z&Version=1.0&bool-ptr=true&int-value=10&str-array=%5B%22abc%22%2C%22xyz%22%5D&test=test&tests=%5B%22test1%22%2C%22test2%22%5D"
 	if result != expectedResult {
 		t.Error("Incorrect encoding: ", result)
 	}

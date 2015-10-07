@@ -3,9 +3,10 @@ package ecs
 type ResourceType string
 
 const (
-	ResourceTypeInstance = ResourceType("Instance")
-	ResourceTypeDisk     = ResourceType("Disk")
-	ResourceTypeVSwitch  = ResourceType("VSwitch")
+	ResourceTypeInstance            = ResourceType("Instance")
+	ResourceTypeDisk                = ResourceType("Disk")
+	ResourceTypeVSwitch             = ResourceType("VSwitch")
+	ResourceTypeIOOptimizedInstance = ResourceType("IoOptimized")
 )
 
 type DescribeZonesArgs struct {

@@ -29,7 +29,7 @@ type DescribeImagesArgs struct {
 type DescribeImagesResponse struct {
 	CommonResponse
 
-	Pagination string
+	RegionId Region
 	PaginationResult
 	Images struct {
 		Image []ImageType

@@ -5,7 +5,7 @@ import (
 )
 
 func TestGenerateClientToken(t *testing.T) {
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 	for i := 0; i < 10; i++ {
 		t.Log("GenerateClientToken: ", client.GenerateClientToken())
 	}
@@ -13,7 +13,10 @@ func TestGenerateClientToken(t *testing.T) {
 }
 
 func TestECSDescribe(t *testing.T) {
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	if TestQuick {
+		return
+	}
+	client := NewTestClient()
 
 	regions, err := client.DescribeRegions()
 
@@ -28,7 +31,7 @@ func TestECSDescribe(t *testing.T) {
 				ZoneId:   zone.ZoneId,
 			}
 			instanceStatuses, pagination, err := client.DescribeInstanceStatus(&args)
-			t.Log("instanceStatuses: ", instanceStatuses, pagination, err)
+			t.Logf("instanceStatuses: %v, %++v, %v", instanceStatuses, pagination, err)
 			for _, instanceStatus := range instanceStatuses {
 				instance, err := client.DescribeInstanceAttribute(instanceStatus.InstanceId)
 				t.Logf("Instance: %++v", instance)
@@ -40,7 +43,7 @@ func TestECSDescribe(t *testing.T) {
 			}
 			instances, _, err := client.DescribeInstances(&args1)
 			if err != nil {
-				t.Errorf("Failed to describe instance %s %s", region.RegionId, zone.ZoneId)
+				t.Errorf("Failed to describe instance by region %s zone %s: %v", region.RegionId, zone.ZoneId, err)
 			} else {
 				for _, instance := range instances {
 					t.Logf("Instance: %++v", instance)

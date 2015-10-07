@@ -6,7 +6,7 @@ import (
 
 func TestSnapshot(t *testing.T) {
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {
@@ -29,8 +29,11 @@ func TestSnapshot(t *testing.T) {
 }
 
 func TestSnapshotCreationAndDeletion(t *testing.T) {
+	if TestQuick {
+		return
+	}
 
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 )
 
 func TestMonitoring(t *testing.T) {
-	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
+	client := NewTestClient()
 	//client.SetDebug(true)
 
 	//Describe test instance

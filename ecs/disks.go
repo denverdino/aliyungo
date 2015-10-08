@@ -20,10 +20,12 @@ const (
 type DiskCategory string
 
 const (
-	DiskCategoryAll          = DiskCategory("all") //Default
-	DiskCategoryCloud        = DiskCategory("cloud")
-	DiskCategoryEphemeral    = DiskCategory("ephemeral")
-	DiskCategoryEphemeralSSD = DiskCategory("ephemeral_ssd")
+	DiskCategoryAll             = DiskCategory("all") //Default
+	DiskCategoryCloud           = DiskCategory("cloud")
+	DiskCategoryEphemeral       = DiskCategory("ephemeral")
+	DiskCategoryEphemeralSSD    = DiskCategory("ephemeral_ssd")
+	DiskCategoryCloudEfficiency = DiskCategory("cloud_efficiency")
+	DiskCategoryCloudSSD        = DiskCategory("cloud_ssd")
 )
 
 // Status of disks
@@ -108,13 +110,14 @@ func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemTy
 }
 
 type CreateDiskArgs struct {
-	RegionId    common.Region
-	ZoneId      string
-	DiskName    string
-	Description string
-	Size        int
-	SnapshotId  string
-	ClientToken string
+	RegionId     common.Region
+	ZoneId       string
+	DiskName     string
+	Description  string
+	DiskCategory DiskCategory
+	Size         int
+	SnapshotId   string
+	ClientToken  string
 }
 
 type CreateDisksResponse struct {

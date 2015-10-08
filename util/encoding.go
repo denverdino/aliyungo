@@ -98,7 +98,7 @@ func setQueryValues(i interface{}, values *url.Values, prefix string) {
 				for j := 0; j < l; j++ {
 					prefixName := fmt.Sprintf("%s.%d.", fieldName, (j + 1))
 					ifc := field.Index(j).Interface()
-					log.Printf("%s : %v", prefixName, ifc)
+					//log.Printf("%s : %v", prefixName, ifc)
 					if ifc != nil {
 						setQueryValues(ifc, values, prefixName)
 					}

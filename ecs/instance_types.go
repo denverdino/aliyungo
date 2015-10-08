@@ -1,5 +1,7 @@
 package ecs
 
+import "github.com/denverdino/aliyungo/common"
+
 type DescribeInstanceTypesArgs struct {
 }
 
@@ -12,7 +14,7 @@ type InstanceTypeItemType struct {
 }
 
 type DescribeInstanceTypesResponse struct {
-	CommonResponse
+	common.Response
 	InstanceTypes struct {
 		InstanceType []InstanceTypeItemType
 	}

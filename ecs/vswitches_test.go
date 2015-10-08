@@ -2,9 +2,11 @@ package ecs
 
 import (
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
-func testCreateVSwitch(t *testing.T, client *Client, regionId Region, zoneId string, vpcId string, vrouterId string) (vSwitchId string, err error) {
+func testCreateVSwitch(t *testing.T, client *Client, regionId common.Region, zoneId string, vpcId string, vrouterId string) (vSwitchId string, err error) {
 
 	args := CreateVSwitchArgs{
 		ZoneId:      zoneId,

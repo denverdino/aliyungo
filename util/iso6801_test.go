@@ -74,3 +74,18 @@ func TestISO8601TimeWithoutSeconds(t *testing.T) {
 	}
 
 }
+
+func TestISO8601TimeInt(t *testing.T) {
+
+	const dateStr = "1405544146000"
+
+	var date ISO6801Time
+
+	err := json.Unmarshal([]byte(dateStr), &date)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Logf("date: %s", date)
+
+}

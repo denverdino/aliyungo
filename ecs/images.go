@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -18,20 +19,20 @@ const (
 
 // DescribeImagesArgs repsents arguements to describe images
 type DescribeImagesArgs struct {
-	RegionId        Region
+	RegionId        common.Region
 	ImageId         string
 	SnapshotId      string
 	ImageName       string
 	ImageOwnerAlias ImageOwnerAlias
-	Pagination
+	common.Pagination
 }
 
 type DescribeImagesResponse struct {
-	CommonResponse
+	common.Response
+	common.PaginationResult
 
-	RegionId Region
-	PaginationResult
-	Images struct {
+	RegionId common.Region
+	Images   struct {
 		Image []ImageType
 	}
 }
@@ -78,9 +79,9 @@ type ImageType struct {
 // DescribeImages describes images
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/image&describeimages
-func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageType, pagination *PaginationResult, err error) {
+func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageType, pagination *common.PaginationResult, err error) {
 
-	args.validate()
+	args.Validate()
 	response := DescribeImagesResponse{}
 	err = client.Invoke("DescribeImages", args, &response)
 	if err != nil {
@@ -91,7 +92,7 @@ func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageTy
 
 // CreateImageArgs repsents arguements to create image
 type CreateImageArgs struct {
-	RegionId     Region
+	RegionId     common.Region
 	SnapshotId   string
 	ImageName    string
 	ImageVersion string
@@ -100,7 +101,7 @@ type CreateImageArgs struct {
 }
 
 type CreateImageResponse struct {
-	CommonResponse
+	common.Response
 
 	ImageId string
 }
@@ -118,18 +119,18 @@ func (client *Client) CreateImage(args *CreateImageArgs) (imageId string, err er
 }
 
 type DeleteImageArgs struct {
-	RegionId Region
+	RegionId common.Region
 	ImageId  string
 }
 
 type DeleteImageResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteImage deletes Image
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/image&deleteimage
-func (client *Client) DeleteImage(regionId Region, imageId string) error {
+func (client *Client) DeleteImage(regionId common.Region, imageId string) error {
 	args := DeleteImageArgs{
 		RegionId: regionId,
 		ImageId:  imageId,

@@ -7,7 +7,10 @@ This is an unofficial Go SDK for Aliyun Services
 
 *  ecs: [Elastic Compute Service](http://docs.aliyun.com/#/pub/ecs)
 *  oss: [Open Storage Service](http://docs.aliyun.com/#/pub/oss)
+*  slb: [Server Load Balancer](http://docs.aliyun.com/#/pub/slb)
+*  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
+
 
 
 ## Quick Start
@@ -35,6 +38,7 @@ func main() {
 
   *  ECS: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
   *  OSS: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
+  *  SLB: [https://godoc.org/github.com/denverdino/aliyungo/slb](https://godoc.org/github.com/denverdino/aliyungo/slb) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/slb?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/slb)
 
 
 ## Build and Install

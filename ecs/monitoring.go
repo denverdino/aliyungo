@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -30,7 +31,7 @@ type InstanceMonitorDataType struct {
 }
 
 type DescribeInstanceMonitorDataResponse struct {
-	CommonResponse
+	common.Response
 	MonitorData struct {
 		InstanceMonitorData []InstanceMonitorDataType
 	}
@@ -70,7 +71,7 @@ type EipMonitorDataType struct {
 }
 
 type DescribeEipMonitorDataResponse struct {
-	CommonResponse
+	common.Response
 	EipMonitorDatas struct {
 		EipMonitorData []EipMonitorDataType
 	}
@@ -112,7 +113,7 @@ type DiskMonitorDataType struct {
 }
 
 type DescribeDiskMonitorDataResponse struct {
-	CommonResponse
+	common.Response
 	TotalCount  int
 	MonitorData struct {
 		DiskMonitorData []DiskMonitorDataType

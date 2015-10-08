@@ -3,11 +3,12 @@ package ecs
 import (
 	"time"
 
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
 type CreateVpcArgs struct {
-	RegionId    Region
+	RegionId    common.Region
 	CidrBlock   string //192.168.0.0/16 or 172.16.0.0/16 (default)
 	VpcName     string
 	Description string
@@ -15,7 +16,7 @@ type CreateVpcArgs struct {
 }
 
 type CreateVpcResponse struct {
-	CommonResponse
+	common.Response
 	VpcId        string
 	VRouterId    string
 	RouteTableId string
@@ -38,7 +39,7 @@ type DeleteVpcArgs struct {
 }
 
 type DeleteVpcResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteVpc deletes Virtual Private Cloud
@@ -61,15 +62,15 @@ const (
 
 type DescribeVpcsArgs struct {
 	VpcId    string
-	RegionId Region
-	Pagination
+	RegionId common.Region
+	common.Pagination
 }
 
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&vpcsettype
 type VpcSetType struct {
 	VpcId      string
-	RegionId   Region
+	RegionId   common.Region
 	Status     VpcStatus // enum Pending | Available
 	VpcName    string
 	VSwitchIds struct {
@@ -82,8 +83,8 @@ type VpcSetType struct {
 }
 
 type DescribeVpcsResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	Vpcs struct {
 		Vpc []VpcSetType
 	}
@@ -92,8 +93,8 @@ type DescribeVpcsResponse struct {
 // DescribeInstanceStatus describes instance status
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/vpc&describevpcs
-func (client *Client) DescribeVpcs(args *DescribeVpcsArgs) (vpcs []VpcSetType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeVpcs(args *DescribeVpcsArgs) (vpcs []VpcSetType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeVpcsResponse{}
 
 	err = client.Invoke("DescribeVpcs", args, &response)
@@ -112,7 +113,7 @@ type ModifyVpcAttributeArgs struct {
 }
 
 type ModifyVpcAttributeResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ModifyVpcAttribute modifies attribute of Virtual Private Cloud
@@ -124,7 +125,7 @@ func (client *Client) ModifyVpcAttribute(args *ModifyVpcAttributeArgs) error {
 }
 
 // WaitForInstance waits for instance to given status
-func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, timeout int) error {
+func (client *Client) WaitForVpcAvailable(regionId common.Region, vpcId string, timeout int) error {
 	if timeout <= 0 {
 		timeout = DefaultTimeout
 	}
@@ -142,7 +143,7 @@ func (client *Client) WaitForVpcAvailable(regionId Region, vpcId string, timeout
 		}
 		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
+			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
 	}

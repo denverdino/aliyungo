@@ -1,4 +1,4 @@
-package ecs
+package slb
 
 //Modify with your Access Key Id and Access Key Secret
 
@@ -6,9 +6,8 @@ const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	TestInstanceId      = "MY_INSTANCE_ID"
-
-	TestIAmRich = false
-	TestQuick   = false
+	TestIAmRich         = false
+	TestQuick           = false
 )
 
 var testClient *Client

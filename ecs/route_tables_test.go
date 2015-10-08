@@ -2,9 +2,11 @@ package ecs
 
 import (
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
-func testRouteTable(t *testing.T, client *Client, regionId Region, vpcId string, vrouterId string, routeTableId string, instanceId string) {
+func testRouteTable(t *testing.T, client *Client, regionId common.Region, vpcId string, vrouterId string, routeTableId string, instanceId string) {
 	cidrBlock := "0.0.0.0/0"
 	createArgs := CreateRouteEntryArgs{
 		RouteTableId:         routeTableId,

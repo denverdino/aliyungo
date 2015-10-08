@@ -3,6 +3,7 @@ package ecs
 import (
 	"time"
 
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -40,7 +41,7 @@ const (
 
 // A DescribeDisksArgs defines the arguments to describe disks
 type DescribeDisksArgs struct {
-	RegionId           Region
+	RegionId           common.Region
 	ZoneId             string
 	DiskIds            []string
 	InstanceId         string
@@ -52,14 +53,14 @@ type DescribeDisksArgs struct {
 	Portable           *bool //optional
 	DeleteWithInstance *bool //optional
 	DeleteAutoSnapshot *bool //optional
-	Pagination
+	common.Pagination
 }
 
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&diskitemtype
 type DiskItemType struct {
 	DiskId             string
-	RegionId           Region
+	RegionId           common.Region
 	ZoneId             string
 	DiskName           string
 	Description        string
@@ -83,11 +84,10 @@ type DiskItemType struct {
 }
 
 type DescribeDisksResponse struct {
-	CommonResponse
-
-	RegionId Region
-	PaginationResult
-	Disks struct {
+	common.Response
+	common.PaginationResult
+	RegionId common.Region
+	Disks    struct {
 		Disk []DiskItemType
 	}
 }
@@ -95,7 +95,7 @@ type DescribeDisksResponse struct {
 // DescribeDisks describes Disks
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/disk&describedisks
-func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *PaginationResult, err error) {
+func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemType, pagination *common.PaginationResult, err error) {
 	response := DescribeDisksResponse{}
 
 	err = client.Invoke("DescribeDisks", args, &response)
@@ -108,7 +108,7 @@ func (client *Client) DescribeDisks(args *DescribeDisksArgs) (disks []DiskItemTy
 }
 
 type CreateDiskArgs struct {
-	RegionId    Region
+	RegionId    common.Region
 	ZoneId      string
 	DiskName    string
 	Description string
@@ -118,7 +118,7 @@ type CreateDiskArgs struct {
 }
 
 type CreateDisksResponse struct {
-	CommonResponse
+	common.Response
 	DiskId string
 }
 
@@ -139,7 +139,7 @@ type DeleteDiskArgs struct {
 }
 
 type DeleteDiskResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteDisk deletes disk
@@ -159,7 +159,7 @@ type ReInitDiskArgs struct {
 }
 
 type ReInitDiskResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ReInitDisk reinitizes disk
@@ -182,7 +182,7 @@ type AttachDiskArgs struct {
 }
 
 type AttachDiskResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // AttachDisk attaches disk to instance
@@ -200,7 +200,7 @@ type DetachDiskArgs struct {
 }
 
 type DetachDiskResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DetachDisk detaches disk from instance
@@ -222,7 +222,7 @@ type ResetDiskArgs struct {
 }
 
 type ResetDiskResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ResetDisk resets disk to original status
@@ -248,7 +248,7 @@ type ModifyDiskAttributeArgs struct {
 }
 
 type ModifyDiskAttributeResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ModifyDiskAttribute modifies disk attribute
@@ -261,7 +261,7 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 }
 
 // WaitForDisk waits for disk to given status
-func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskStatus, timeout int) error {
+func (client *Client) WaitForDisk(regionId common.Region, diskId string, status DiskStatus, timeout int) error {
 	if timeout <= 0 {
 		timeout = DefaultTimeout
 	}
@@ -276,14 +276,14 @@ func (client *Client) WaitForDisk(regionId Region, diskId string, status DiskSta
 			return err
 		}
 		if disks == nil || len(disks) == 0 {
-			return getECSErrorFromString("Not found")
+			return common.GetClientErrorFromString("Not found")
 		}
 		if disks[0].Status == status {
 			break
 		}
 		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
+			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
 	}

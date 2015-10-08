@@ -3,6 +3,7 @@ package ecs
 import (
 	"time"
 
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -19,13 +20,6 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-type InternetChargeType string
-
-const (
-	PayByBandwidth = InternetChargeType("PayByBandwidth")
-	PayByTraffic   = InternetChargeType("PayByTraffic")
-)
-
 type LockReason string
 
 const (
@@ -34,9 +28,9 @@ const (
 )
 
 type DescribeInstanceStatusArgs struct {
-	RegionId Region
+	RegionId common.Region
 	ZoneId   string
-	Pagination
+	common.Pagination
 }
 
 //
@@ -47,8 +41,8 @@ type InstanceStatusItemType struct {
 }
 
 type DescribeInstanceStatusResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	InstanceStatuses struct {
 		InstanceStatus []InstanceStatusItemType
 	}
@@ -57,8 +51,8 @@ type DescribeInstanceStatusResponse struct {
 // DescribeInstanceStatus describes instance status
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstancestatus
-func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeInstanceStatusResponse{}
 
 	err = client.Invoke("DescribeInstanceStatus", args, &response)
@@ -76,7 +70,7 @@ type StopInstanceArgs struct {
 }
 
 type StopInstanceResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // StopInstance stops instance
@@ -97,7 +91,7 @@ type StartInstanceArgs struct {
 }
 
 type StartInstanceResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // StartInstance starts instance
@@ -116,7 +110,7 @@ type RebootInstanceArgs struct {
 }
 
 type RebootInstanceResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // RebootInstance reboot instance
@@ -169,7 +163,7 @@ type EipAddressAssociateType struct {
 	AllocationId       string
 	IpAddress          string
 	Bandwidth          int
-	InternetChargeType InternetChargeType
+	InternetChargeType common.InternetChargeType
 }
 
 //
@@ -179,7 +173,7 @@ type InstanceAttributesType struct {
 	InstanceName     string
 	Description      string
 	ImageId          string
-	RegionId         Region
+	RegionId         common.Region
 	ZoneId           string
 	ClusterId        string
 	InstanceType     string
@@ -194,14 +188,14 @@ type InstanceAttributesType struct {
 	InstanceNetworkType     string //enum Classic | Vpc
 	InternetMaxBandwidthIn  int
 	InternetMaxBandwidthOut int
-	InternetChargeType      InternetChargeType
+	InternetChargeType      common.InternetChargeType
 	CreationTime            util.ISO6801Time //time.Time
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 }
 
 type DescribeInstanceAttributeResponse struct {
-	CommonResponse
+	common.Response
 	InstanceAttributesType
 }
 
@@ -240,7 +234,7 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 		}
 		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
+			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
 
@@ -249,12 +243,12 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 }
 
 type DescribeInstanceVncUrlArgs struct {
-	RegionId   Region
+	RegionId   common.Region
 	InstanceId string
 }
 
 type DescribeInstanceVncUrlResponse struct {
-	CommonResponse
+	common.Response
 	VncUrl string
 }
 
@@ -273,7 +267,7 @@ func (client *Client) DescribeInstanceVncUrl(args *DescribeInstanceVncUrlArgs) (
 }
 
 type DescribeInstancesArgs struct {
-	RegionId            Region
+	RegionId            common.Region
 	VpcId               string
 	VSwitchId           string
 	ZoneId              string
@@ -283,12 +277,12 @@ type DescribeInstancesArgs struct {
 	InnerIpAddresses    string
 	PublicIpAddresses   string
 	SecurityGroupId     string
-	Pagination
+	common.Pagination
 }
 
 type DescribeInstancesResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	Instances struct {
 		Instance []InstanceAttributesType
 	}
@@ -297,8 +291,8 @@ type DescribeInstancesResponse struct {
 // DescribeInstances describes instances
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstances
-func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeInstancesResponse{}
 
 	err = client.Invoke("DescribeInstances", args, &response)
@@ -315,7 +309,7 @@ type DeleteInstanceArgs struct {
 }
 
 type DeleteInstanceResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteInstance deletes instance
@@ -345,14 +339,14 @@ type SystemDiskType struct {
 }
 
 type CreateInstanceArgs struct {
-	RegionId                Region
+	RegionId                common.Region
 	ZoneId                  string
 	ImageId                 string
 	InstanceType            string
 	SecurityGroupId         string
 	InstanceName            string
 	Description             string
-	InternetChargeType      InternetChargeType
+	InternetChargeType      common.InternetChargeType
 	InternetMaxBandwidthIn  int
 	InternetMaxBandwidthOut int
 	HostName                string
@@ -365,7 +359,7 @@ type CreateInstanceArgs struct {
 }
 
 type CreateInstanceResponse struct {
-	CommonResponse
+	common.Response
 	InstanceId string
 }
 

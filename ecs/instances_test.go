@@ -3,15 +3,20 @@ package ecs
 import (
 	"fmt"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 func ExampleClient_DescribeInstanceStatus() {
 	fmt.Printf("DescribeInstanceStatus Example\n")
 
 	args := DescribeInstanceStatusArgs{
-		RegionId:   "cn-beijing",
-		ZoneId:     "cn-beijing-b",
-		Pagination: Pagination{1, 1},
+		RegionId: "cn-beijing",
+		ZoneId:   "cn-beijing-b",
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   1,
+		},
 	}
 
 	client := NewTestClient()

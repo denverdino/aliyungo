@@ -3,15 +3,16 @@ package ecs
 import (
 	"time"
 
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
 type DescribeSnapshotsArgs struct {
-	RegionId    Region
+	RegionId    common.Region
 	InstanceId  string
 	DiskId      string
 	SnapshotIds []string //["s-xxxxxxxxx", "s-yyyyyyyyy", ..."s-zzzzzzzzz"]
-	Pagination
+	common.Pagination
 }
 
 //
@@ -29,8 +30,8 @@ type SnapshotType struct {
 }
 
 type DescribeSnapshotsResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	Snapshots struct {
 		Snapshot []SnapshotType
 	}
@@ -39,8 +40,8 @@ type DescribeSnapshotsResponse struct {
 // DescribeSnapshots describe snapshots
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/snapshot&describesnapshots
-func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots []SnapshotType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeSnapshots(args *DescribeSnapshotsArgs) (snapshots []SnapshotType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeSnapshotsResponse{}
 
 	err = client.Invoke("DescribeSnapshots", args, &response)
@@ -57,7 +58,7 @@ type DeleteSnapshotArgs struct {
 }
 
 type DeleteSnapshotResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteSnapshot deletes snapshot
@@ -78,7 +79,7 @@ type CreateSnapshotArgs struct {
 }
 
 type CreateSnapshotResponse struct {
-	CommonResponse
+	common.Response
 	SnapshotId string
 }
 
@@ -100,7 +101,7 @@ func (client *Client) CreateSnapshot(args *CreateSnapshotArgs) (snapshotId strin
 const SnapshotDefaultTimeout = 120
 
 // WaitForSnapShotReady waits for snapshot ready
-func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, timeout int) error {
+func (client *Client) WaitForSnapShotReady(regionId common.Region, snapshotId string, timeout int) error {
 	if timeout <= 0 {
 		timeout = SnapshotDefaultTimeout
 	}
@@ -115,14 +116,14 @@ func (client *Client) WaitForSnapShotReady(regionId Region, snapshotId string, t
 			return err
 		}
 		if snapshots == nil || len(snapshots) == 0 {
-			return getECSErrorFromString("Not found")
+			return common.GetClientErrorFromString("Not found")
 		}
 		if snapshots[0].Progress == "100%" {
 			break
 		}
 		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
+			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
 

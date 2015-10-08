@@ -2,6 +2,8 @@ package ecs
 
 import (
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 func TestSecurityGroups(t *testing.T) {
@@ -52,7 +54,7 @@ func TestECSSecurityGroupCreationAndDeletion(t *testing.T) {
 
 }
 
-func _testECSSecurityGroupCreationAndDeletion(t *testing.T, client *Client, regionId Region, vpcId string) {
+func _testECSSecurityGroupCreationAndDeletion(t *testing.T, client *Client, regionId common.Region, vpcId string) {
 
 	sgName := "test-security-group"
 	args := CreateSecurityGroupArgs{

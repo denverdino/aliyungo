@@ -1,5 +1,7 @@
 package ecs
 
+import "github.com/denverdino/aliyungo/common"
+
 type TagResourceType string
 
 const (
@@ -12,12 +14,12 @@ const (
 type AddTagsArgs struct {
 	ResourceId   string
 	ResourceType TagResourceType //image, instance, snapshot or disk
-	RegionId     Region
+	RegionId     common.Region
 	Tag          map[string]string
 }
 
 type AddTagsResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // AddTags Add tags to resource
@@ -35,12 +37,12 @@ func (client *Client) AddTags(args *AddTagsArgs) error {
 type RemoveTagsArgs struct {
 	ResourceId   string
 	ResourceType TagResourceType //image, instance, snapshot or disk
-	RegionId     Region
+	RegionId     common.Region
 	Tag          map[string]string
 }
 
 type RemoveTagsResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // RemoveTags remove tags to resource
@@ -58,19 +60,19 @@ func (client *Client) RemoveTags(args *RemoveTagsArgs) error {
 type ResourceItemType struct {
 	ResourceId   string
 	ResourceType TagResourceType
-	RegionId     Region
+	RegionId     common.Region
 }
 
 type DescribeResourceByTagsArgs struct {
 	ResourceType TagResourceType //image, instance, snapshot or disk
-	RegionId     Region
+	RegionId     common.Region
 	Tag          map[string]string
-	Pagination
+	common.Pagination
 }
 
 type DescribeResourceByTagsResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	Resources struct {
 		Resource []ResourceItemType
 	}
@@ -79,7 +81,8 @@ type DescribeResourceByTagsResponse struct {
 // DescribeResourceByTags describe resource by tags
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/tags&describeresourcebytags
-func (client *Client) DescribeResourceByTags(args *DescribeResourceByTagsArgs) (resources []ResourceItemType, pagination *PaginationResult, err error) {
+func (client *Client) DescribeResourceByTags(args *DescribeResourceByTagsArgs) (resources []ResourceItemType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeResourceByTagsResponse{}
 	err = client.Invoke("DescribeResourceByTags", args, &response)
 	if err != nil {
@@ -94,16 +97,16 @@ type TagItemType struct {
 }
 
 type DescribeTagsArgs struct {
-	RegionId     Region
+	RegionId     common.Region
 	ResourceType TagResourceType //image, instance, snapshot or disk
 	ResourceId   string
 	Tag          map[string]string
-	Pagination
+	common.Pagination
 }
 
 type DescribeTagsResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	Tags struct {
 		Tag []TagItemType
 	}
@@ -112,7 +115,8 @@ type DescribeTagsResponse struct {
 // DescribeResourceByTags describe resource by tags
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/tags&describeresourcebytags
-func (client *Client) DescribeTags(args *DescribeTagsArgs) (tags []TagItemType, pagination *PaginationResult, err error) {
+func (client *Client) DescribeTags(args *DescribeTagsArgs) (tags []TagItemType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeTagsResponse{}
 	err = client.Invoke("DescribeTags", args, &response)
 	if err != nil {

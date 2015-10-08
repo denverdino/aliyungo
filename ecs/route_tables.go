@@ -3,13 +3,14 @@ package ecs
 import (
 	"time"
 
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
 type DescribeRouteTablesArgs struct {
 	VRouterId    string
 	RouteTableId string
-	Pagination
+	common.Pagination
 }
 
 type RouteTableType string
@@ -50,8 +51,8 @@ type RouteTableSetType struct {
 }
 
 type DescribeRouteTablesResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	RouteTables struct {
 		RouteTable []RouteTableSetType
 	}
@@ -60,8 +61,8 @@ type DescribeRouteTablesResponse struct {
 // DescribeRouteTables describes Virtual Routers
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/routertable&describeroutetables
-func (client *Client) DescribeRouteTables(args *DescribeRouteTablesArgs) (routeTables []RouteTableSetType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeRouteTables(args *DescribeRouteTablesArgs) (routeTables []RouteTableSetType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeRouteTablesResponse{}
 
 	err = client.Invoke("DescribeRouteTables", args, &response)
@@ -89,7 +90,7 @@ type CreateRouteEntryArgs struct {
 }
 
 type CreateRouteEntryResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // CreateRouteEntry creates route entry
@@ -107,7 +108,7 @@ type DeleteRouteEntryArgs struct {
 }
 
 type DeleteRouteEntryResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteRouteEntry deletes route entry
@@ -150,7 +151,7 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 		}
 		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
+			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
 	}

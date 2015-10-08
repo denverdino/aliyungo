@@ -1,4 +1,4 @@
-package ecs
+package slb
 
 import "github.com/denverdino/aliyungo/common"
 
@@ -21,7 +21,7 @@ type DescribeRegionsResponse struct {
 
 // DescribeRegions describes regions
 //
-// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/region&describeregions
+// You can read doc at http://docs.aliyun.com/#/pub/slb/api-reference/api-related-loadbalancer&DescribeRegions
 func (client *Client) DescribeRegions() (regions []RegionType, err error) {
 	response := DescribeRegionsResponse{}
 

@@ -1,4 +1,4 @@
-package ecs
+package common
 
 import (
 	"fmt"
@@ -8,9 +8,8 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
-// Constants for ECS requests
+// Constants for Aliyun API requests
 const (
-	ECSAPIVersion      = "2014-05-26"
 	SignatureVersion   = "1.0"
 	SignatureMethod    = "HMAC-SHA1"
 	JSONResponseFormat = "JSON"
@@ -31,10 +30,10 @@ type Request struct {
 	Action               string
 }
 
-func (request *Request) init(action string, AccessKeyId string) {
+func (request *Request) init(version string, action string, AccessKeyId string) {
 	request.Format = JSONResponseFormat
 	request.Timestamp = util.NewISO6801Time(time.Now().UTC())
-	request.Version = ECSAPIVersion
+	request.Version = version
 	request.SignatureVersion = SignatureVersion
 	request.SignatureMethod = SignatureMethod
 	request.SignatureNonce = util.CreateRandomString()
@@ -42,12 +41,12 @@ func (request *Request) init(action string, AccessKeyId string) {
 	request.AccessKeyId = AccessKeyId
 }
 
-type CommonResponse struct {
+type Response struct {
 	RequestId string
 }
 
 type ErrorResponse struct {
-	CommonResponse
+	Response
 	HostId  string
 	Code    string
 	Message string
@@ -72,7 +71,21 @@ func (p *Pagination) SetPageSize(size int) {
 	p.PageSize = size
 }
 
-// A PaginationResult represents a result with pagination information
+func (p *Pagination) Validate() {
+	if p.PageNumber < 0 {
+		log.Printf("Invalid PageNumber: %d", p.PageNumber)
+		p.PageNumber = 1
+	}
+	if p.PageSize < 0 {
+		log.Printf("Invalid PageSize: %d", p.PageSize)
+		p.PageSize = 10
+	} else if p.PageSize > 50 {
+		log.Printf("Invalid PageSize: %d", p.PageSize)
+		p.PageSize = 50
+	}
+}
+
+// A PaginationResponse represents a response with pagination information
 type PaginationResult struct {
 	TotalCount int
 	PageNumber int
@@ -85,18 +98,4 @@ func (r *PaginationResult) NextPage() *Pagination {
 		return nil
 	}
 	return &Pagination{PageNumber: r.PageNumber + 1, PageSize: r.PageSize}
-}
-
-func (p *Pagination) validate() {
-	if p.PageNumber < 0 {
-		log.Printf("Invalid PageNumber: %d", p.PageNumber)
-		p.PageNumber = 1
-	}
-	if p.PageSize < 0 {
-		log.Printf("Invalid PageSize: %d", p.PageSize)
-		p.PageSize = 10
-	} else if p.PageSize > 50 {
-		log.Printf("Invalid PageSize: %d", p.PageSize)
-		p.PageSize = 50
-	}
 }

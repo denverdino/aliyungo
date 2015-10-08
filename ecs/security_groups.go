@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -30,7 +31,7 @@ const (
 
 type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
-	RegionId        Region
+	RegionId        common.Region
 	NicType         NicType //enum for internet (default) |intranet
 }
 
@@ -47,11 +48,11 @@ type PermissionType struct {
 }
 
 type DescribeSecurityGroupAttributeResponse struct {
-	CommonResponse
+	common.Response
 
 	SecurityGroupId   string
 	SecurityGroupName string
-	RegionId          Region
+	RegionId          common.Region
 	Description       string
 	Permissions       struct {
 		Permission []PermissionType
@@ -71,9 +72,9 @@ func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroup
 }
 
 type DescribeSecurityGroupsArgs struct {
-	RegionId Region
+	RegionId common.Region
 	VpcId    string
-	Pagination
+	common.Pagination
 }
 
 //
@@ -87,10 +88,10 @@ type SecurityGroupItemType struct {
 }
 
 type DescribeSecurityGroupsResponse struct {
-	CommonResponse
+	common.Response
+	common.PaginationResult
 
-	PaginationResult
-	RegionId       Region
+	RegionId       common.Region
 	SecurityGroups struct {
 		SecurityGroup []SecurityGroupItemType
 	}
@@ -99,8 +100,8 @@ type DescribeSecurityGroupsResponse struct {
 // DescribeSecurityGroups describes security groups
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&describesecuritygroups
-func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (securityGroupItems []SecurityGroupItemType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (securityGroupItems []SecurityGroupItemType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeSecurityGroupsResponse{}
 
 	err = client.Invoke("DescribeSecurityGroups", args, &response)
@@ -113,7 +114,7 @@ func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (
 }
 
 type CreateSecurityGroupArgs struct {
-	RegionId          Region
+	RegionId          common.Region
 	SecurityGroupName string
 	Description       string
 	VpcId             string
@@ -121,7 +122,7 @@ type CreateSecurityGroupArgs struct {
 }
 
 type CreateSecurityGroupResponse struct {
-	CommonResponse
+	common.Response
 
 	SecurityGroupId string
 }
@@ -139,18 +140,18 @@ func (client *Client) CreateSecurityGroup(args *CreateSecurityGroupArgs) (securi
 }
 
 type DeleteSecurityGroupArgs struct {
-	RegionId        Region
+	RegionId        common.Region
 	SecurityGroupId string
 }
 
 type DeleteSecurityGroupResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // DeleteSecurityGroup deletes security group
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/securitygroup&deletesecuritygroup
-func (client *Client) DeleteSecurityGroup(regionId Region, securityGroupId string) error {
+func (client *Client) DeleteSecurityGroup(regionId common.Region, securityGroupId string) error {
 	args := DeleteSecurityGroupArgs{
 		RegionId:        regionId,
 		SecurityGroupId: securityGroupId,
@@ -161,14 +162,14 @@ func (client *Client) DeleteSecurityGroup(regionId Region, securityGroupId strin
 }
 
 type ModifySecurityGroupAttributeArgs struct {
-	RegionId          Region
+	RegionId          common.Region
 	SecurityGroupId   string
 	SecurityGroupName string
 	Description       string
 }
 
 type ModifySecurityGroupAttributeResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ModifySecurityGroupAttribute modifies attribute of security group
@@ -182,7 +183,7 @@ func (client *Client) ModifySecurityGroupAttribute(args *ModifySecurityGroupAttr
 
 type AuthorizeSecurityGroupArgs struct {
 	SecurityGroupId         string
-	RegionId                Region
+	RegionId                common.Region
 	IpProtocol              IpProtocol
 	PortRange               string
 	SourceGroupId           string
@@ -194,7 +195,7 @@ type AuthorizeSecurityGroupArgs struct {
 }
 
 type AuthorizeSecurityGroupResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // AuthorizeSecurityGroup authorize permissions to security group

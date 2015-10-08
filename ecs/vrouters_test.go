@@ -2,9 +2,11 @@ package ecs
 
 import (
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
-func testVRouter(t *testing.T, client *Client, regionId Region, vpcId string, vrouterId string, instanceId string) {
+func testVRouter(t *testing.T, client *Client, regionId common.Region, vpcId string, vrouterId string, instanceId string) {
 
 	newName := "My_Aliyun_test_VRouter"
 

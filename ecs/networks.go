@@ -5,6 +5,7 @@ package ecs
 import (
 	"time"
 
+	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
 
@@ -13,7 +14,7 @@ type AllocatePublicIpAddressArgs struct {
 }
 
 type AllocatePublicIpAddressResponse struct {
-	CommonResponse
+	common.Response
 
 	IpAddress string
 }
@@ -40,7 +41,7 @@ type ModifyInstanceNetworkSpec struct {
 }
 
 type ModifyInstanceNetworkSpecResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ModifyInstanceNetworkSpec modifies instance network spec
@@ -53,14 +54,14 @@ func (client *Client) ModifyInstanceNetworkSpec(args *ModifyInstanceNetworkSpec)
 }
 
 type AllocateEipAddressArgs struct {
-	RegionId           Region
+	RegionId           common.Region
 	Bandwidth          int
-	InternetChargeType InternetChargeType
+	InternetChargeType common.InternetChargeType
 	ClientToken        string
 }
 
 type AllocateEipAddressResponse struct {
-	CommonResponse
+	common.Response
 	EipAddress   string
 	AllocationId string
 }
@@ -86,7 +87,7 @@ type AssociateEipAddressArgs struct {
 }
 
 type AssociateEipAddressResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // AssociateEipAddress associates EIP address to VM instance
@@ -112,30 +113,30 @@ const (
 )
 
 type DescribeEipAddressesArgs struct {
-	RegionId     Region
+	RegionId     common.Region
 	Status       EipStatus //enum Associating | Unassociating | InUse | Available
 	EipAddress   string
 	AllocationId string
-	Pagination
+	common.Pagination
 }
 
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&eipaddresssettype
 type EipAddressSetType struct {
-	RegionId           Region
+	RegionId           common.Region
 	IpAddress          string
 	AllocationId       string
 	Status             EipStatus
 	InstanceId         string
 	Bandwidth          string // Why string
-	InternetChargeType InternetChargeType
+	InternetChargeType common.InternetChargeType
 	OperationLocks     OperationLocksType
 	AllocationTime     util.ISO6801Time
 }
 
 type DescribeEipAddressesResponse struct {
-	CommonResponse
-	PaginationResult
+	common.Response
+	common.PaginationResult
 	EipAddresses struct {
 		EipAddress []EipAddressSetType
 	}
@@ -144,8 +145,8 @@ type DescribeEipAddressesResponse struct {
 // DescribeInstanceStatus describes instance status
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/network&describeeipaddresses
-func (client *Client) DescribeEipAddresses(args *DescribeEipAddressesArgs) (eipAddresses []EipAddressSetType, pagination *PaginationResult, err error) {
-	args.validate()
+func (client *Client) DescribeEipAddresses(args *DescribeEipAddressesArgs) (eipAddresses []EipAddressSetType, pagination *common.PaginationResult, err error) {
+	args.Validate()
 	response := DescribeEipAddressesResponse{}
 
 	err = client.Invoke("DescribeEipAddresses", args, &response)
@@ -163,7 +164,7 @@ type ModifyEipAddressAttributeArgs struct {
 }
 
 type ModifyEipAddressAttributeResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ModifyEipAddressAttribute Modifies EIP attribute
@@ -184,7 +185,7 @@ type UnallocateEipAddressArgs struct {
 }
 
 type UnallocateEipAddressResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // UnassociateEipAddress unallocates Eip Address from instance
@@ -204,7 +205,7 @@ type ReleaseEipAddressArgs struct {
 }
 
 type ReleaseEipAddressResponse struct {
-	CommonResponse
+	common.Response
 }
 
 // ReleaseEipAddress releases Eip address
@@ -219,7 +220,7 @@ func (client *Client) ReleaseEipAddress(allocationId string) error {
 }
 
 // WaitForVSwitchAvailable waits for VSwitch to given status
-func (client *Client) WaitForEip(regionId Region, allocationId string, status EipStatus, timeout int) error {
+func (client *Client) WaitForEip(regionId common.Region, allocationId string, status EipStatus, timeout int) error {
 	if timeout <= 0 {
 		timeout = DefaultTimeout
 	}
@@ -237,7 +238,7 @@ func (client *Client) WaitForEip(regionId Region, allocationId string, status Ei
 		}
 		timeout = timeout - DefaultWaitForInterval
 		if timeout <= 0 {
-			return getECSErrorFromString("Timeout")
+			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
 	}

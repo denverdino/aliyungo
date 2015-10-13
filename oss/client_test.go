@@ -2,7 +2,12 @@ package oss_test
 
 import (
 	"bytes"
+	"io"
 	"io/ioutil"
+	"math/rand"
+	"net/http"
+	"strconv"
+	"sync"
 	//"net/http"
 	"testing"
 	"time"
@@ -134,11 +139,77 @@ func TestPutReader(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
 	buf := bytes.NewBufferString("content")
-	err := b.PutReader("name", buf, int64(buf.Len()), "content-type", oss.Private, oss.Options{})
+	err := b.PutReader("name", buf, int64(buf.Len()), "application/octet-stream", oss.Private, oss.Options{})
 	if err != nil {
 		t.Errorf("Failed for PutReader: %v", err)
 	}
 	TestGetReader(t)
+}
+
+var _fileSize int64 = 50 * 1024 * 1024
+var _offset int64 = 10 * 1024 * 1024
+
+func TestPutLargeFile(t *testing.T) {
+
+	reader := newRandReader(_fileSize)
+
+	b := client.Bucket(TestBucket)
+	err := b.PutReader("largefile", reader, _fileSize, "application/octet-stream", oss.Private, oss.Options{})
+	if err != nil {
+		t.Errorf("Failed for PutReader: %v", err)
+	}
+}
+
+func TestGetLargeFile(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	headers := http.Header{}
+	resp, err := b.GetResponseWithHeaders("largefile", headers)
+	if err != nil {
+		t.Fatalf("Failed for GetResponseWithHeaders: %v", err)
+	}
+	if resp.ContentLength != _fileSize {
+		t.Errorf("Read file with incorrect ContentLength: %d", resp.ContentLength)
+
+	}
+	t.Logf("Large file response headers: %++v", resp.Header)
+
+	data, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		t.Errorf("Failed for Read file: %v", err)
+	}
+
+	if len(data) != int(_fileSize) {
+		t.Errorf("Incorrect length for Read with offset: %v", len(data))
+	}
+}
+
+func TestGetLargeFileWithOffset(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	headers := http.Header{}
+	headers.Add("Range", "bytes="+strconv.FormatInt(_offset, 10)+"-")
+	resp, err := b.GetResponseWithHeaders("largefile", headers)
+	if err != nil {
+		t.Fatalf("Failed for GetResponseWithHeaders: %v", err)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Errorf("Failed for Read with offset: %v", err)
+	}
+	if len(data) != int(_fileSize-_offset) {
+		t.Errorf("Incorrect length for Read with offset: %v", len(data))
+	}
+	resp.Body.Close()
+}
+
+func TestDelLargeObject(t *testing.T) {
+
+	b := client.Bucket(TestBucket)
+	err := b.Del("largefile")
+	if err != nil {
+		t.Errorf("Failed for Del: %v", err)
+	}
 }
 
 func TestExists(t *testing.T) {
@@ -208,4 +279,27 @@ func TestDelBucket(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed for DelBucket: %v", err)
 	}
+}
+
+type randReader struct {
+	r int64
+	m sync.Mutex
+}
+
+func (rr *randReader) Read(p []byte) (n int, err error) {
+	rr.m.Lock()
+	defer rr.m.Unlock()
+	for i := 0; i < len(p) && rr.r > 0; i++ {
+		p[i] = byte(rand.Intn(255))
+		n++
+		rr.r--
+	}
+	if rr.r == 0 {
+		err = io.EOF
+	}
+	return
+}
+
+func newRandReader(n int64) *randReader {
+	return &randReader{r: n}
 }

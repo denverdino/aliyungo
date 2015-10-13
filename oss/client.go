@@ -192,12 +192,13 @@ func (b *Bucket) PutBucket(perm ACL) error {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/bucket&DeleteBucket
 func (b *Bucket) DelBucket() (err error) {
-	req := &request{
-		method: "DELETE",
-		bucket: b.Name,
-		path:   "/",
-	}
 	for attempt := attempts.Start(); attempt.Next(); {
+		req := &request{
+			method: "DELETE",
+			bucket: b.Name,
+			path:   "/",
+		}
+
 		err = b.Client.query(req, nil)
 		if !shouldRetry(err) {
 			break
@@ -245,16 +246,17 @@ func (b *Bucket) GetResponse(path string) (resp *http.Response, err error) {
 // It is the caller's responsibility to call Close on rc when
 // finished reading
 func (b *Bucket) GetResponseWithHeaders(path string, headers http.Header) (resp *http.Response, err error) {
-	req := &request{
-		bucket:  b.Name,
-		path:    path,
-		headers: headers,
-	}
-	err = b.Client.prepare(req)
-	if err != nil {
-		return nil, err
-	}
 	for attempt := attempts.Start(); attempt.Next(); {
+		req := &request{
+			bucket:  b.Name,
+			path:    path,
+			headers: headers,
+		}
+		err = b.Client.prepare(req)
+		if err != nil {
+			return nil, err
+		}
+
 		resp, err := b.Client.run(req, nil)
 		if shouldRetry(err) && attempt.HasNext() {
 			continue
@@ -279,17 +281,18 @@ func (b *Bucket) GetWithParams(path string, params url.Values) (data []byte, err
 }
 
 func (b *Bucket) GetResponseWithParamsAndHeaders(path string, params url.Values, headers http.Header) (resp *http.Response, err error) {
-	req := &request{
-		bucket:  b.Name,
-		path:    path,
-		params:  params,
-		headers: headers,
-	}
-	err = b.Client.prepare(req)
-	if err != nil {
-		return nil, err
-	}
 	for attempt := attempts.Start(); attempt.Next(); {
+		req := &request{
+			bucket:  b.Name,
+			path:    path,
+			params:  params,
+			headers: headers,
+		}
+		err = b.Client.prepare(req)
+		if err != nil {
+			return nil, err
+		}
+
 		resp, err := b.Client.run(req, nil)
 		if shouldRetry(err) && attempt.HasNext() {
 			continue
@@ -304,16 +307,17 @@ func (b *Bucket) GetResponseWithParamsAndHeaders(path string, params url.Values,
 
 // Exists checks whether or not an object exists on an bucket using a HEAD request.
 func (b *Bucket) Exists(path string) (exists bool, err error) {
-	req := &request{
-		method: "HEAD",
-		bucket: b.Name,
-		path:   path,
-	}
-	err = b.Client.prepare(req)
-	if err != nil {
-		return
-	}
 	for attempt := attempts.Start(); attempt.Next(); {
+		req := &request{
+			method: "HEAD",
+			bucket: b.Name,
+			path:   path,
+		}
+		err = b.Client.prepare(req)
+		if err != nil {
+			return
+		}
+
 		resp, err := b.Client.run(req, nil)
 
 		if shouldRetry(err) && attempt.HasNext() {
@@ -343,18 +347,19 @@ func (b *Bucket) Exists(path string) (exists bool, err error) {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/oss/api-reference/object&HeadObject
 func (b *Bucket) Head(path string, headers http.Header) (*http.Response, error) {
-	req := &request{
-		method:  "HEAD",
-		bucket:  b.Name,
-		path:    path,
-		headers: headers,
-	}
-	err := b.Client.prepare(req)
-	if err != nil {
-		return nil, err
-	}
 
 	for attempt := attempts.Start(); attempt.Next(); {
+		req := &request{
+			method:  "HEAD",
+			bucket:  b.Name,
+			path:    path,
+			headers: headers,
+		}
+		err := b.Client.prepare(req)
+		if err != nil {
+			return nil, err
+		}
+
 		resp, err := b.Client.run(req, nil)
 		if shouldRetry(err) && attempt.HasNext() {
 			continue
@@ -697,12 +702,12 @@ func (b *Bucket) List(prefix, delim, marker string, max int) (result *ListResp, 
 	if max != 0 {
 		params.Set("max-keys", strconv.FormatInt(int64(max), 10))
 	}
-	req := &request{
-		bucket: b.Name,
-		params: params,
-	}
 	result = &ListResp{}
 	for attempt := attempts.Start(); attempt.Next(); {
+		req := &request{
+			bucket: b.Name,
+			params: params,
+		}
 		err = b.Client.query(req, result)
 		if !shouldRetry(err) {
 			break
@@ -721,66 +726,6 @@ func (b *Bucket) List(prefix, delim, marker string, max int) (result *ListResp, 
 	}
 	return result, nil
 }
-
-//// The VersionsResp type holds the results of a list bucket Versions operation.
-//type VersionsResp struct {
-//	Name            string
-//	Prefix          string
-//	KeyMarker       string
-//	VersionIdMarker string
-//	MaxKeys         int
-//	Delimiter       string
-//	IsTruncated     bool
-//	Versions        []Version `xml:"Version"`
-//	CommonPrefixes  []string  `xml:">Prefix"`
-//}
-
-//// The Version type represents an object version stored in an bucket.
-//type Version struct {
-//	Key          string
-//	VersionId    string
-//	IsLatest     bool
-//	LastModified string
-//	// ETag gives the hex-encoded MD5 sum of the contents,
-//	// surrounded with double-quotes.
-//	ETag         string
-//	Size         int64
-//	Owner        Owner
-//	StorageClass string
-//}
-
-//func (b *Bucket) Versions(prefix, delim, keyMarker string, versionIdMarker string, max int) (result *VersionsResp, err error) {
-//	params := url.Values{}
-//	params.Set("versions", "")
-//	params.Set("prefix", prefix)
-//	params.Set("delimiter", delim)
-
-//	if len(versionIdMarker) != 0 {
-//		params["version-id-marker"] = []string{versionIdMarker}
-//	}
-//	if len(keyMarker) != 0 {
-//		params["key-marker"] = []string{keyMarker}
-//	}
-
-//	if max != 0 {
-//		params["max-keys"] = []string{strconv.FormatInt(int64(max), 10)}
-//	}
-//	req := &request{
-//		bucket: b.Name,
-//		params: params,
-//	}
-//	result = &VersionsResp{}
-//	for attempt := attempts.Start(); attempt.Next(); {
-//		err = b.Client.query(req, result)
-//		if !shouldRetry(err) {
-//			break
-//		}
-//	}
-//	if err != nil {
-//		return nil, err
-//	}
-//	return result, nil
-//}
 
 type GetLocationResp struct {
 	Location string `xml:",innerxml"`

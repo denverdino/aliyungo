@@ -182,6 +182,7 @@ func TestGetLargeFile(t *testing.T) {
 	if len(data) != int(_fileSize) {
 		t.Errorf("Incorrect length for Read with offset: %v", len(data))
 	}
+	resp.Body.Close()
 }
 
 func TestGetLargeFileWithOffset(t *testing.T) {
@@ -192,12 +193,35 @@ func TestGetLargeFileWithOffset(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed for GetResponseWithHeaders: %v", err)
 	}
+	t.Logf("Large file response headers: %++v", resp.Header)
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Errorf("Failed for Read with offset: %v", err)
 	}
 	if len(data) != int(_fileSize-_offset) {
+		t.Errorf("Incorrect length for Read with offset: %v", len(data))
+	}
+	resp.Body.Close()
+}
+
+func TestSignedURL(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	expires := time.Now().Add(20 * time.Minute)
+	url := b.SignedURL("largefile", expires)
+	resp, err := http.Get(url)
+	t.Logf("Large file response headers: %++v", resp.Header)
+
+	if err != nil {
+		t.Fatalf("Failed for GetResponseWithHeaders: %v", err)
+	}
+	data, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		t.Errorf("Failed for Read file: %v", err)
+	}
+
+	if len(data) != int(_fileSize) {
 		t.Errorf("Incorrect length for Read with offset: %v", len(data))
 	}
 	resp.Body.Close()

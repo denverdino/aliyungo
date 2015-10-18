@@ -227,12 +227,41 @@ func TestSignedURL(t *testing.T) {
 	resp.Body.Close()
 }
 
+func TestCopyLargeFile(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	source := b.Path("largefile")
+	err := b.CopyLargeFileFrom("largefile2", source, "application/octet-stream", oss.Private, oss.Options{})
+	if err != nil {
+		t.Errorf("Failed for copy large file: %v", err)
+	}
+	t.Log("Large file copy successfully.")
+	resp, err := b.Head("largefile", nil)
+
+	if err != nil {
+		t.Fatalf("Failed for Head file: %v", err)
+	}
+	resp2, err := b.Head("largefile2", nil)
+
+	if err != nil {
+		t.Fatalf("Failed for Head file: %v", err)
+	}
+
+	if resp.Header.Get("Content-Length") != resp2.Header.Get("Content-Length") {
+		t.Fatalf("Content-Length should be equal %s!=%s", resp.Header.Get("Content-Length"), resp2.Header.Get("Content-Length"))
+	}
+
+}
+
 func TestDelLargeObject(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
 	err := b.Del("largefile")
 	if err != nil {
-		t.Errorf("Failed for Del: %v", err)
+		t.Errorf("Failed for Del largefile: %v", err)
+	}
+	err = b.Del("largefile2")
+	if err != nil {
+		t.Errorf("Failed for Del largefile2: %v", err)
 	}
 }
 

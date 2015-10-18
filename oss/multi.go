@@ -8,6 +8,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
+	"time"
 	//"log"
 	"net/http"
 	"net/url"
@@ -198,10 +199,18 @@ func (m *Multi) PutPart(n int, r io.ReadSeeker) (Part, error) {
 	if err != nil {
 		return Part{}, err
 	}
-	return m.putPart(n, r, partSize, md5b64)
+	return m.putPart(n, r, partSize, md5b64, 0)
 }
 
-func (m *Multi) putPart(n int, r io.ReadSeeker, partSize int64, md5b64 string) (Part, error) {
+func (m *Multi) PutPartWithTimeout(n int, r io.ReadSeeker, timeout time.Duration) (Part, error) {
+	partSize, _, md5b64, err := seekerInfo(r)
+	if err != nil {
+		return Part{}, err
+	}
+	return m.putPart(n, r, partSize, md5b64, timeout)
+}
+
+func (m *Multi) putPart(n int, r io.ReadSeeker, partSize int64, md5b64 string, timeout time.Duration) (Part, error) {
 	headers := make(http.Header)
 	headers.Set("Content-Length", strconv.FormatInt(partSize, 10))
 	headers.Set("Content-MD5", md5b64)
@@ -222,6 +231,7 @@ func (m *Multi) putPart(n int, r io.ReadSeeker, partSize int64, md5b64 string) (
 			headers: headers,
 			params:  params,
 			payload: r,
+			timeout: timeout,
 		}
 		err = m.Bucket.Client.prepare(req)
 		if err != nil {
@@ -376,7 +386,7 @@ NextSection:
 		}
 
 		// Part wasn't found or doesn't match. Send it.
-		part, err := m.putPart(current, section, partSize, md5b64)
+		part, err := m.putPart(current, section, partSize, md5b64, 0)
 		if err != nil {
 			return nil, err
 		}

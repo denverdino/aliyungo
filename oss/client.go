@@ -22,6 +22,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
@@ -36,7 +37,6 @@ type Client struct {
 	Internal        bool
 	Secure          bool
 	ConnectTimeout  time.Duration
-	ReadTimeout     time.Duration
 
 	endpoint string
 	debug    bool
@@ -395,6 +395,7 @@ func (b *Bucket) PutCopy(path string, perm ACL, options CopyOptions, source stri
 		bucket:  b.Name,
 		path:    path,
 		headers: headers,
+		timeout: 5 * time.Minute,
 	}
 	resp := &CopyObjectResult{}
 	err := b.Client.query(req, resp)
@@ -909,6 +910,7 @@ type request struct {
 	baseurl  string
 	payload  io.Reader
 	prepared bool
+	timeout  time.Duration
 }
 
 func (req *request) url() (*url.URL, error) {
@@ -1048,28 +1050,11 @@ func (client *Client) setupHttpRequest(req *request) (*http.Request, error) {
 // doHttpRequest sends hreq and returns the http response from the server.
 // If resp is not nil, the XML data contained in the response
 // body will be unmarshalled on it.
-func (client *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http.Response, error) {
-	c := http.Client{
-		Transport: &http.Transport{
-			Dial: func(netw, addr string) (c net.Conn, err error) {
-				deadline := time.Now().Add(client.ReadTimeout)
-				if client.ConnectTimeout > 0 {
-					c, err = net.DialTimeout(netw, addr, client.ConnectTimeout)
-				} else {
-					c, err = net.Dial(netw, addr)
-				}
-				if err != nil {
-					return
-				}
-				if client.ReadTimeout > 0 {
-					err = c.SetDeadline(deadline)
-				}
-				return
-			},
-			Proxy: http.ProxyFromEnvironment,
-		},
-	}
+func (client *Client) doHttpRequest(c *http.Client, hreq *http.Request, resp interface{}) (*http.Response, error) {
 
+	if true {
+		log.Printf("%s %s ...\n", hreq.Method, hreq.URL.String())
+	}
 	hresp, err := c.Do(hreq)
 	if err != nil {
 		return nil, err
@@ -1079,7 +1064,7 @@ func (client *Client) doHttpRequest(hreq *http.Request, resp interface{}) (*http
 		contentType := hresp.Header.Get("Content-Type")
 		if contentType == "application/xml" || contentType == "text/xml" {
 			dump, _ := httputil.DumpResponse(hresp, true)
-			log.Printf("} -> %s\n", dump)
+			log.Printf("%s\n", dump)
 		} else {
 			log.Printf("Response Content-Type: %s\n", contentType)
 		}
@@ -1112,7 +1097,25 @@ func (client *Client) run(req *request, resp interface{}) (*http.Response, error
 		return nil, err
 	}
 
-	return client.doHttpRequest(hreq, resp)
+	c := &http.Client{
+		Transport: &http.Transport{
+			Dial: func(netw, addr string) (c net.Conn, err error) {
+				if client.ConnectTimeout > 0 {
+					c, err = net.DialTimeout(netw, addr, client.ConnectTimeout)
+				} else {
+					c, err = net.Dial(netw, addr)
+				}
+				if err != nil {
+					return
+				}
+				return
+			},
+			Proxy: http.ProxyFromEnvironment,
+		},
+		Timeout: req.timeout,
+	}
+
+	return client.doHttpRequest(c, hreq, resp)
 }
 
 // Error represents an error in an operation with OSS.
@@ -1155,10 +1158,23 @@ func (client *Client) buildError(r *http.Response) error {
 	return &err
 }
 
+type TimeoutError interface {
+	error
+	Timeout() bool // Is the error a timeout?
+}
+
 func shouldRetry(err error) bool {
 	if err == nil {
 		return false
 	}
+
+	log.Printf("shouldRetry err: %#v\n", err)
+
+	_, ok := err.(TimeoutError)
+	if ok {
+		return true
+	}
+
 	switch err {
 	case io.ErrUnexpectedEOF, io.EOF:
 		return true
@@ -1233,4 +1249,20 @@ func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 	}
 
 	return &resp, nil
+}
+
+func (b *Bucket) CopyLargeFileFrom(destPath string, sourcePath string, contentType string, perm ACL, options Options) error {
+	logrus.Infof("Copy large file from %s to %s", sourcePath, destPath)
+
+	multi, err := b.InitMulti(destPath, contentType, perm, options)
+
+	_, part, err := multi.PutPartCopy(1, CopyOptions{}, sourcePath)
+
+	if err != nil {
+		return err
+	}
+
+	err = multi.Complete([]Part{part})
+
+	return err
 }

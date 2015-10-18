@@ -22,7 +22,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
@@ -438,8 +437,8 @@ func (b *Bucket) PutFile(path string, file *os.File, perm ACL, options Options) 
 	}
 	stats, err := file.Stat()
 	if err != nil {
-		log.Panicf("Unable to read file %s stats.", file.Name())
-		return nil
+		log.Printf("Unable to read file %s stats.\n", file.Name())
+		return err
 	}
 
 	return b.PutReader(path, file, stats.Size(), contentType, perm, options)
@@ -1252,7 +1251,7 @@ func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 }
 
 func (b *Bucket) CopyLargeFileFrom(destPath string, sourcePath string, contentType string, perm ACL, options Options) error {
-	logrus.Infof("Copy large file from %s to %s", sourcePath, destPath)
+	log.Printf("Copy large file from %s to %s\n", sourcePath, destPath)
 
 	multi, err := b.InitMulti(destPath, contentType, perm, options)
 

@@ -366,6 +366,9 @@ func (b *Bucket) Head(path string, headers http.Header) (*http.Response, error) 
 		if err != nil {
 			return nil, err
 		}
+		if resp != nil && resp.Body != nil {
+			resp.Body.Close()
+		}
 		return resp, err
 	}
 	return nil, fmt.Errorf("OSS Currently Unreachable")
@@ -1167,8 +1170,6 @@ func shouldRetry(err error) bool {
 		return false
 	}
 
-	log.Printf("shouldRetry err: %#v\n", err)
-
 	_, ok := err.(TimeoutError)
 	if ok {
 		return true
@@ -1250,18 +1251,73 @@ func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 	return &resp, nil
 }
 
+const minChunkSize = 5 << 20
+const defaultChunkSize = 2 * minChunkSize
+
+func (b *Bucket) GetContentLength(sourcePath string) (int64, error) {
+	resp, err := b.Head(sourcePath, nil)
+	if err != nil {
+		return 0, err
+	}
+
+	currentLength := resp.ContentLength
+
+	return currentLength, err
+}
+
 func (b *Bucket) CopyLargeFileFrom(destPath string, sourcePath string, contentType string, perm ACL, options Options) error {
+
 	log.Printf("Copy large file from %s to %s\n", sourcePath, destPath)
 
-	multi, err := b.InitMulti(destPath, contentType, perm, options)
-
-	_, part, err := multi.PutPartCopy(1, CopyOptions{}, sourcePath)
+	currentLength, err := b.GetContentLength(sourcePath)
 
 	if err != nil {
 		return err
 	}
 
-	err = multi.Complete([]Part{part})
+	multi, err := b.InitMulti(destPath, contentType, perm, options)
+	if err != nil {
+		return err
+	}
+
+	parts := []Part{}
+
+	defer func() {
+		if len(parts) > 0 {
+			if multi == nil {
+				// Parts should be empty if the multi is not initialized
+				panic("Unreachable")
+			} else {
+				if multi.Complete(parts) != nil {
+					multi.Abort()
+				}
+			}
+		}
+	}()
+
+	var start int64 = 0
+	var to int64 = 0
+	var partNumber = 0
+	sourcePathForCopy := b.Path(sourcePath)
+
+	for start = 0; start < currentLength; start = to {
+		to = start + defaultChunkSize
+		if to > currentLength {
+			to = currentLength
+		}
+		partNumber++
+
+		rangeStr := fmt.Sprintf("bytes=%d-%d", start, to-1)
+
+		_, part, err := multi.PutPartCopy(partNumber,
+			CopyOptions{CopySourceOptions: rangeStr},
+			sourcePathForCopy)
+
+		if err != nil {
+			return err
+		}
+		parts = append(parts, part)
+	}
 
 	return err
 }

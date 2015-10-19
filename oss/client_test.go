@@ -146,7 +146,7 @@ func TestPutReader(t *testing.T) {
 	TestGetReader(t)
 }
 
-var _fileSize int64 = 50 * 1024 * 1024
+var _fileSize int64 = 25 * 1024 * 1024
 var _offset int64 = 10 * 1024 * 1024
 
 func TestPutLargeFile(t *testing.T) {
@@ -229,27 +229,38 @@ func TestSignedURL(t *testing.T) {
 
 func TestCopyLargeFile(t *testing.T) {
 	b := client.Bucket(TestBucket)
-	source := b.Path("largefile")
-	err := b.CopyLargeFileFrom("largefile2", source, "application/octet-stream", oss.Private, oss.Options{})
+	err := b.CopyLargeFileFrom("largefile2", "largefile", "application/octet-stream", oss.Private, oss.Options{})
 	if err != nil {
 		t.Errorf("Failed for copy large file: %v", err)
 	}
 	t.Log("Large file copy successfully.")
-	resp, err := b.Head("largefile", nil)
+	len1, err := b.GetContentLength("largefile")
 
 	if err != nil {
 		t.Fatalf("Failed for Head file: %v", err)
 	}
-	resp2, err := b.Head("largefile2", nil)
+	len2, err := b.GetContentLength("largefile2")
 
 	if err != nil {
 		t.Fatalf("Failed for Head file: %v", err)
 	}
 
-	if resp.Header.Get("Content-Length") != resp2.Header.Get("Content-Length") {
-		t.Fatalf("Content-Length should be equal %s!=%s", resp.Header.Get("Content-Length"), resp2.Header.Get("Content-Length"))
+	if len1 != len2 || len1 != _fileSize {
+		t.Fatalf("Content-Length should be equal %d != %d", len1, len2)
 	}
 
+	bytes1, err := b.Get("largefile")
+	if err != nil {
+		t.Fatalf("Failed for Get file: %v", err)
+	}
+	bytes2, err := b.Get("largefile2")
+	if err != nil {
+		t.Fatalf("Failed for Get file: %v", err)
+	}
+
+	if bytes.Compare(bytes1, bytes2) != 0 {
+		t.Fatal("The result should be equal")
+	}
 }
 
 func TestDelLargeObject(t *testing.T) {

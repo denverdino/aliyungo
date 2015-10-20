@@ -9,8 +9,7 @@ type DescribeDomainRecordsArgs struct {
 	DomainName string
 
 	//optional
-	PageNumber   int32
-	PageSize     int32
+	common.Pagination
 	RRKeyWord    string
 	TypeKeyWord  string
 	ValueKeyWord string
@@ -18,10 +17,8 @@ type DescribeDomainRecordsArgs struct {
 
 type DescribeDomainRecordsResponse struct {
 	common.Response
+	common.PaginationResult
 	InstanceId    string
-	TotalCount    int32
-	PageNumber    int32
-	PageSize      int32
 	DomainRecords struct {
 		Record []RecordType
 	}

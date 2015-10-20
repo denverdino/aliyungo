@@ -10,7 +10,7 @@ type Client struct {
 
 const (
 	// DNSDefaultEndpoint is the default API endpoint of DNS services
-	DNSDefaultEndpoint = "https://dns.aliyuncs.com"
+	DNSDefaultEndpoint = "http://dns.aliyuncs.com"
 	DNSAPIVersion      = "2015-01-09"
 )
 

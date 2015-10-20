@@ -27,3 +27,5 @@ func TestDeleteDomainRecord(t *testing.T) {
 		t.Fatalf("Failed to DeleteDomainRecord: %s", deleteDomainRecordArgs.RecordId)
 	}
 }
+
+

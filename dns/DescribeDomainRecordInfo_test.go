@@ -9,8 +9,8 @@ func TestDescribeDomainRecordInfo(t *testing.T) {
 	client := NewTestClient()
 	describeArgs := DescribeDomainRecordsArgs{
 		DomainName: TestDomainName,
-		PageSize:   1,
 	}
+	describeArgs.PageSize = 100
 
 	describeResponse, err := client.DescribeDomainRecords(&describeArgs)
 	if err == nil {

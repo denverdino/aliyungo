@@ -33,7 +33,7 @@ func (client *Client) AddDomainRecord(args *AddDomainRecordArgs) (response *AddD
 	if err == nil {
 		return response, nil
 	} else {
-		log.Fatalf("%s error, %v", action, err)
+		log.Printf("%s error, %v", action, err)
 		return response, err
 	}
 }

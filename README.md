@@ -8,6 +8,7 @@ This is an unofficial Go SDK for Aliyun Services
 *  ecs: [Elastic Compute Service](http://docs.aliyun.com/#/pub/ecs)
 *  oss: [Open Storage Service](http://docs.aliyun.com/#/pub/oss)
 *  slb: [Server Load Balancer](http://docs.aliyun.com/#/pub/slb)
+*  dns: [DNS](http://docs.aliyun.com/#/pub/dns)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -39,6 +40,7 @@ func main() {
   *  ECS: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
   *  OSS: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
   *  SLB: [https://godoc.org/github.com/denverdino/aliyungo/slb](https://godoc.org/github.com/denverdino/aliyungo/slb) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/slb?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/slb)
+  *  DNS: [https://godoc.org/github.com/denverdino/aliyungo/dns](https://godoc.org/github.com/denverdino/aliyungo/dns) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dns)
 
 
 ## Build and Install
@@ -101,7 +103,7 @@ go test
   * tgic (farmer1992@gmail.com)
   * Yu Zhou (oscarrr110@gmail.com)
   * Yufei Zhang
-
+  * linuxlikerqq
 
 ## License
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.

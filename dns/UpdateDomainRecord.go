@@ -25,7 +25,7 @@ type UpdateDomainRecordResponse struct {
 
 // UpdateDomainRecord
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/record-related&UpdateDomainRecord
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&UpdateDomainRecord
 func (client *Client) UpdateDomainRecord(args *UpdateDomainRecordArgs) (response *UpdateDomainRecordResponse, err error) {
 	action := "UpdateDomainRecord"
 	response = &UpdateDomainRecordResponse{}

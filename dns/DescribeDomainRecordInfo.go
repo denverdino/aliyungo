@@ -16,7 +16,7 @@ type DescribeDomainRecordInfoResponse struct {
 
 // DescribeDomainRecordInfo
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/record-related&DescribeDomainRecordInfo
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&DescribeDomainRecordInfo
 func (client *Client) DescribeDomainRecordInfo(args *DescribeDomainRecordInfoArgs) (response *DescribeDomainRecordInfoResponse, err error) {
 	action := "DescribeDomainRecordInfo"
 	response = &DescribeDomainRecordInfoResponse{}

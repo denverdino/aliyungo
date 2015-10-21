@@ -27,7 +27,7 @@ type DescribeSubDomainRecordsResponse struct {
 
 // DescribeSubDomainRecords
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/record-related&DescribeSubDomainRecords
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&DescribeSubDomainRecords
 func (client *Client) DescribeSubDomainRecords(args *DescribeSubDomainRecordsArgs) (response *DescribeSubDomainRecordsResponse, err error) {
 	action := "DescribeSubDomainRecords"
 	response = &DescribeSubDomainRecordsResponse{}

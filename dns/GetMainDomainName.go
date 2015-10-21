@@ -19,7 +19,7 @@ type GetMainDomainNameResponse struct {
 
 // GetMainDomainName
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/domain-related&GetMainDomainName
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/domain-related&GetMainDomainName
 func (client *Client) GetMainDomainName(args *GetMainDomainNameArgs) (response *GetMainDomainNameResponse, err error) {
 	action := "GetMainDomainName"
 	response = &GetMainDomainNameResponse{}

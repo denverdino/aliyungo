@@ -25,7 +25,7 @@ type AddDomainRecordResponse struct {
 
 // AddDomainRecord
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/record-related&AddDomainRecord
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&AddDomainRecord
 func (client *Client) AddDomainRecord(args *AddDomainRecordArgs) (response *AddDomainRecordResponse, err error) {
 	action := "AddDomainRecord"
 	response = &AddDomainRecordResponse{}

@@ -22,7 +22,7 @@ type DeleteSubDomainRecordsResponse struct {
 
 // DeleteSubDomainRecords
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/record-related&DeleteSubDomainRecords
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&DeleteSubDomainRecords
 func (client *Client) DeleteSubDomainRecords(args *DeleteSubDomainRecordsArgs) (response *DeleteSubDomainRecordsResponse, err error) {
 	action := "DeleteSubDomainRecords"
 	response = &DeleteSubDomainRecordsResponse{}

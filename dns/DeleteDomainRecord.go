@@ -17,7 +17,7 @@ type DeleteDomainRecordResponse struct {
 
 // DeleteDomainRecord
 //
-// You can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/record-related&DeleteDomainRecord
+// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&DeleteDomainRecord
 func (client *Client) DeleteDomainRecord(args *DeleteDomainRecordArgs) (response *DeleteDomainRecordResponse, err error) {
 	action := "DeleteDomainRecord"
 	response = &DeleteDomainRecordResponse{}

@@ -1,7 +1,7 @@
 package dns
 
 //
-//you can read doc at https://docs.aliyun.com/?spm=5176.100054.201.106.OeZ3dN#/pub/dns/api-reference/enum-type&record-format
+//you can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/enum-type&record-format
 const (
 	ARecord           = "A"
 	NSRecord          = "NS"

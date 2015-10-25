@@ -59,7 +59,7 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("ECS Error: Status Code %d: Code %s: Message %s", e.StatusCode, e.Code, e.Message)
+	return fmt.Sprintf("Aliyun Error: Status Code %d: Code %s: Message %s", e.StatusCode, e.Code, e.Message)
 }
 
 type Pagination struct {

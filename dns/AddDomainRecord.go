@@ -1,8 +1,9 @@
 package dns
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"log"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type AddDomainRecordArgs struct {

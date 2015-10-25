@@ -229,7 +229,7 @@ func TestSignedURL(t *testing.T) {
 
 func TestCopyLargeFile(t *testing.T) {
 	b := client.Bucket(TestBucket)
-	err := b.CopyLargeFileFrom("largefile2", "largefile", "application/octet-stream", oss.Private, oss.Options{})
+	err := b.CopyLargeFile("largefile", "largefile2", "application/octet-stream", oss.Private, oss.Options{})
 	if err != nil {
 		t.Errorf("Failed for copy large file: %v", err)
 	}

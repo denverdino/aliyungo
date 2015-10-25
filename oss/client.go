@@ -1265,7 +1265,8 @@ func (b *Bucket) GetContentLength(sourcePath string) (int64, error) {
 	return currentLength, err
 }
 
-func (b *Bucket) CopyLargeFileFrom(destPath string, sourcePath string, contentType string, perm ACL, options Options) error {
+// Copy large file in the same bucket
+func (b *Bucket) CopyLargeFile(sourcePath string, destPath string, contentType string, perm ACL, options Options) error {
 
 	log.Printf("Copy large file from %s to %s\n", sourcePath, destPath)
 

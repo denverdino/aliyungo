@@ -655,7 +655,7 @@ type Key struct {
 // will return keys alphabetically greater than the marker.
 //
 // The max parameter specifies how many keys + common prefixes to return in
-// the response. The default is 1000.
+// the response, at most 1000. The default is 100.
 //
 // For example, given these keys in a bucket:
 //

@@ -15,6 +15,6 @@ func TestDescribeSubDomainRecords(t *testing.T) {
 	if err == nil {
 		t.Logf("DescribeSubDomainRecords success: %v ", describeResponse)
 	} else {
-		t.Fatalf("Failed to DescribeSubDomainRecords: %s", describeArgs.SubDomain)
+		t.Errorf("Failed to DescribeSubDomainRecords: %s", describeArgs.SubDomain)
 	}
 }

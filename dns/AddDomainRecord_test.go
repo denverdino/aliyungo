@@ -22,6 +22,6 @@ func TestAddDomainRecord(t *testing.T) {
 		}
 		client.DeleteDomainRecord(&deleteDomainRecordArgs)
 	} else {
-		t.Fatalf("Failed to AddDomainRecord: testaddr for domain: %s", TestDomainName)
+		t.Errorf("Failed to AddDomainRecord: testaddr for domain: %s", TestDomainName)
 	}
 }

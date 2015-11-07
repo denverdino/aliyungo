@@ -16,6 +16,6 @@ func TestDescribeDomainRecords(t *testing.T) {
 	if err == nil {
 		t.Logf("DescribeDomainRecords success: TotalCount:%d ", describeResponse.TotalCount)
 	} else {
-		t.Fatalf("Failed to DescribeDomainRecords: %s", describeArgs.DomainName)
+		t.Errorf("Failed to DescribeDomainRecords: %s", describeArgs.DomainName)
 	}
 }

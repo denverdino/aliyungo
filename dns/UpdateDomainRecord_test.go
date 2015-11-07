@@ -28,7 +28,7 @@ func TestUpdateDomainRecord(t *testing.T) {
 	if err == nil {
 		t.Logf("UpdateDomainRecord success: RR:%s Value:%s", updateArgs.RR, updateArgs.Value)
 	} else {
-		t.Fatalf("Failed to UpdateDomainRecord: %s", updateArgs.RecordId)
+		t.Errorf("Failed to UpdateDomainRecord: %s", updateArgs.RecordId)
 	}
 
 	//clearup

@@ -1,10 +1,6 @@
 package dns
 
-import (
-	"log"
-
-	"github.com/denverdino/aliyungo/common"
-)
+import "github.com/denverdino/aliyungo/common"
 
 type GetMainDomainNameArgs struct {
 	InputString string
@@ -28,7 +24,6 @@ func (client *Client) GetMainDomainName(args *GetMainDomainNameArgs) (response *
 	if err == nil {
 		return response, nil
 	} else {
-		log.Fatalf("%s error, %v", action, err)
-		return response, err
+		return nil, err
 	}
 }

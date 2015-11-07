@@ -22,9 +22,9 @@ func TestDescribeDomainRecordInfo(t *testing.T) {
 		if err == nil {
 			t.Logf("DescribeDomainRecordInfo success: %v", response)
 		} else {
-			t.Fatalf("Failed to DescribeDomainRecordInfo: %s", describeArgs.DomainName)
+			t.Errorf("Failed to DescribeDomainRecordInfo: %s", describeArgs.DomainName)
 		}
 	} else {
-		t.Fatalf("Failed to DescribeDomainRecords: %s", describeArgs.DomainName)
+		t.Errorf("Failed to DescribeDomainRecords: %s", describeArgs.DomainName)
 	}
 }

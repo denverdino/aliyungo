@@ -15,6 +15,6 @@ func TestGetMainDomainName(t *testing.T) {
 	if err == nil {
 		t.Logf("GetMainDomainName success: %v ", resp)
 	} else {
-		t.Fatalf("Failed to GetMainDomainName: %s", args.InputString)
+		t.Errorf("Failed to GetMainDomainName: %s", args.InputString)
 	}
 }

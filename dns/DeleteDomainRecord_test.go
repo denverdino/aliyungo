@@ -24,6 +24,6 @@ func TestDeleteDomainRecord(t *testing.T) {
 	if err == nil {
 		t.Logf("DeleteDomainRecord: %v", deleteResponse)
 	} else {
-		t.Fatalf("Failed to DeleteDomainRecord: %s", deleteDomainRecordArgs.RecordId)
+		t.Errorf("Failed to DeleteDomainRecord: %s", deleteDomainRecordArgs.RecordId)
 	}
 }

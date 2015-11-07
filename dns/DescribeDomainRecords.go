@@ -1,10 +1,6 @@
 package dns
 
-import (
-	"log"
-
-	"github.com/denverdino/aliyungo/common"
-)
+import "github.com/denverdino/aliyungo/common"
 
 type DescribeDomainRecordsArgs struct {
 	DomainName string
@@ -35,7 +31,6 @@ func (client *Client) DescribeDomainRecords(args *DescribeDomainRecordsArgs) (re
 	if err == nil {
 		return response, nil
 	} else {
-		log.Fatalf("%s error, %v", action, err)
-		return response, err
+		return nil, err
 	}
 }

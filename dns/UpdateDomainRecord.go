@@ -1,10 +1,6 @@
 package dns
 
-import (
-	"log"
-
-	"github.com/denverdino/aliyungo/common"
-)
+import "github.com/denverdino/aliyungo/common"
 
 type UpdateDomainRecordArgs struct {
 	RecordId string
@@ -34,7 +30,6 @@ func (client *Client) UpdateDomainRecord(args *UpdateDomainRecordArgs) (response
 	if err == nil {
 		return response, nil
 	} else {
-		log.Fatalf("%s error, %v", action, err)
-		return response, err
+		return nil, err
 	}
 }

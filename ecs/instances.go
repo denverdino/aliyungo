@@ -338,6 +338,13 @@ type SystemDiskType struct {
 	Description string
 }
 
+type IoOptimized string
+
+var (
+	IoOptimizedNone      = "none"
+	IoOptimizedOptimized = "optimized"
+)
+
 type CreateInstanceArgs struct {
 	RegionId                common.Region
 	ZoneId                  string
@@ -351,6 +358,7 @@ type CreateInstanceArgs struct {
 	InternetMaxBandwidthOut int
 	HostName                string
 	Password                string
+	IoOptimized             string
 	SystemDisk              SystemDiskType
 	DataDisk                []DataDiskType
 	VSwitchId               string

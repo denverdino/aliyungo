@@ -32,6 +32,16 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 	client.version = version
 }
 
+// SetEndpoint sets custom endpoint
+func (client *Client) SetEndpoint(endpoint string) {
+	client.endpoint = endpoint
+}
+
+// SetEndpoint sets custom version
+func (client *Client) SetVersion(version string) {
+	client.version = version
+}
+
 // SetAccessKeyId sets new AccessKeyId
 func (client *Client) SetAccessKeyId(id string) {
 	client.AccessKeyId = id

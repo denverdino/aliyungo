@@ -7,14 +7,14 @@ type Client struct {
 }
 
 const (
-	// ECSDefaultEndpoint is the default API endpoint of ECS services
-	ECSDefaultEndpoint = "https://slb.aliyuncs.com"
-	ECSAPIVersion      = "2014-05-15"
+	// SLBDefaultEndpoint is the default API endpoint of SLB services
+	SLBDefaultEndpoint = "https://slb.aliyuncs.com"
+	SLBAPIVersion      = "2014-05-15"
 )
 
 // NewClient creates a new instance of ECS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{}
-	client.Init(ECSDefaultEndpoint, ECSAPIVersion, accessKeyId, accessKeySecret)
+	client.Init(SLBDefaultEndpoint, SLBAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }

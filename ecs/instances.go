@@ -358,7 +358,7 @@ type CreateInstanceArgs struct {
 	InternetMaxBandwidthOut int
 	HostName                string
 	Password                string
-	IoOptimized             string
+	IoOptimized             IoOptimized
 	SystemDisk              SystemDiskType
 	DataDisk                []DataDiskType
 	VSwitchId               string

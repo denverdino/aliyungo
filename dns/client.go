@@ -20,3 +20,10 @@ func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client.Init(DNSDefaultEndpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }
+
+// NewCustomClient creates a new instance of ECS client with customized API endpoint
+func NewCustomClient(accessKeyId, accessKeySecret string, endpoint string) *Client {
+	client := &Client{}
+	client.Init(endpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
+	return client
+}

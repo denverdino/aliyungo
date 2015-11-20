@@ -341,8 +341,8 @@ type SystemDiskType struct {
 type IoOptimized string
 
 var (
-	IoOptimizedNone      = "none"
-	IoOptimizedOptimized = "optimized"
+	IoOptimizedNone      = IoOptimized("none")
+	IoOptimizedOptimized = IoOptimized("optimized")
 )
 
 type CreateInstanceArgs struct {

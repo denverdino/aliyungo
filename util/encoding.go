@@ -30,6 +30,7 @@ func setQueryValues(i interface{}, values *url.Values, prefix string) {
 	elemType := elem.Type()
 	for i := 0; i < elem.NumField(); i++ {
 		fieldName := elemType.Field(i).Name
+		anonymous := elemType.Field(i).Anonymous
 		field := elem.Field(i)
 		// TODO Use Tag for validation
 		// tag := typ.Field(i).Tag.Get("tagname")
@@ -117,7 +118,12 @@ func setQueryValues(i interface{}, values *url.Values, prefix string) {
 			default:
 				ifc := field.Interface()
 				if ifc != nil {
-					SetQueryValues(ifc, values)
+					if anonymous {
+						SetQueryValues(ifc, values)
+					} else {
+						prefixName := fieldName + "."
+						setQueryValues(ifc, values, prefixName)
+					}
 					continue
 				}
 			}

@@ -60,7 +60,7 @@ func TestECSDescribe(t *testing.T) {
 				t.Fatalf("Failed to describe images: %v", err)
 				break
 			} else {
-				t.Logf("Total image count for region %s: %d", region.RegionId, pagination.TotalCount)
+				t.Logf("Image count for region %s total %d from %d", region.RegionId, pagination.TotalCount, pagination.PageNumber*pagination.PageSize)
 				for _, image := range images {
 					t.Logf("Image: %++v", image)
 				}

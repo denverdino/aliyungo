@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/common"
 	"testing"
 )
 
@@ -47,4 +48,23 @@ func TestImageCreationAndDeletion(t *testing.T) {
 		t.Logf("Image %s is deleted successfully.", imageId)
 
 	}
+}
+
+func TestModifyImageSharePermission(t *testing.T) {
+	req := ModifyImageSharePermissionArgs{
+		RegionId:   common.Beijing,
+		ImageId:    "xxxx",
+		AddAccount: []string{"xxxxx"},
+	}
+	client := NewTestClient()
+	err := client.ModifyImageSharePermission(&req)
+	if err != nil {
+		t.Errorf("Failed to ShareImage: %v", err)
+	}
+
+	shareInfo, err := client.DescribeImageSharePermission(&req)
+	if err != nil {
+		t.Errorf("Failed to ShareImage: %v", err)
+	}
+	t.Logf("result:image: %++v", shareInfo)
 }

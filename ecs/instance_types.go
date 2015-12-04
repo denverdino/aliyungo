@@ -32,4 +32,5 @@ func (client *Client) DescribeInstanceTypes() (instanceTypes []InstanceTypeItemT
 		return []InstanceTypeItemType{}, err
 	}
 	return response.InstanceTypes.InstanceType, nil
+
 }

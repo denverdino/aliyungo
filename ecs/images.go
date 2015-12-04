@@ -3,6 +3,8 @@ package ecs
 import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
+	"net/url"
+	"strconv"
 )
 
 // ImageOwnerAlias represents image owner
@@ -138,4 +140,49 @@ func (client *Client) DeleteImage(regionId common.Region, imageId string) error 
 
 	response := &DeleteImageResponse{}
 	return client.Invoke("DeleteImage", &args, &response)
+}
+
+// ModifyImageSharePermission repsents arguements to share image
+type ModifyImageSharePermissionArgs struct {
+	RegionId      common.Region
+	ImageId       string
+	AddAccount    []string
+	RemoveAccount []string
+}
+
+// You can read doc at http://help.aliyun.com/document_detail/ecs/open-api/image/modifyimagesharepermission.html
+func (client *Client) ModifyImageSharePermission(args *ModifyImageSharePermissionArgs) error {
+	req := url.Values{}
+	req.Add("RegionId", string(args.RegionId))
+	req.Add("ImageId", args.ImageId)
+
+	for i, item := range args.AddAccount {
+		req.Add("AddAccount."+strconv.Itoa(i+1), item)
+	}
+	for i, item := range args.RemoveAccount {
+		req.Add("RemoveAccount."+strconv.Itoa(i+1), item)
+	}
+
+	return client.Invoke("ModifyImageSharePermission", req, &common.Response{})
+}
+
+type AccountType struct {
+	AliyunId string
+}
+type ImageSharePermissionResponse struct {
+	common.Response
+	ImageId  string
+	RegionId string
+	Accounts struct {
+		Account []AccountType
+	}
+	TotalCount int
+	PageNumber int
+	PageSize   int
+}
+
+func (client *Client) DescribeImageSharePermission(args *ModifyImageSharePermissionArgs) (*ImageSharePermissionResponse, error) {
+	response := ImageSharePermissionResponse{}
+	err := client.Invoke("DescribeImageSharePermission", args, &response)
+	return &response, err
 }

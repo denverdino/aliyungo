@@ -23,11 +23,21 @@ func SetQueryValues(ifc interface{}, values *url.Values) {
 }
 
 func setQueryValues(i interface{}, values *url.Values, prefix string) {
+	// add to support url.Values
+	mapValues, ok := i.(url.Values)
+	if ok {
+		for k, _ := range mapValues {
+			values.Set(k, mapValues.Get(k))
+		}
+		return
+	}
+
 	elem := reflect.ValueOf(i)
 	if elem.Kind() == reflect.Ptr {
 		elem = elem.Elem()
 	}
 	elemType := elem.Type()
+
 	for i := 0; i < elem.NumField(); i++ {
 		fieldName := elemType.Field(i).Name
 		anonymous := elemType.Field(i).Anonymous

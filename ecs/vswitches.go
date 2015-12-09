@@ -132,11 +132,14 @@ func (client *Client) WaitForVSwitchAvailable(vpcId string, vswitchId string, ti
 		VSwitchId: vswitchId,
 	}
 	for {
-		vpcs, _, err := client.DescribeVSwitches(&args)
+		vswitches, _, err := client.DescribeVSwitches(&args)
 		if err != nil {
 			return err
 		}
-		if vpcs[0].Status == VSwitchStatusAvailable {
+		if len(vswitches) == 0 {
+			return common.GetClientErrorFromString("Not found")
+		}
+		if vswitches[0].Status == VSwitchStatusAvailable {
 			break
 		}
 		timeout = timeout - DefaultWaitForInterval

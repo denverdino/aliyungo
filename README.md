@@ -104,6 +104,7 @@ go test
   * Yu Zhou (oscarrr110@gmail.com)
   * Yufei Zhang
   * linuxlikerqq
+  * Changhai Yan (changhai.ych@alibaba-inc.com)
 
 ## License
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.

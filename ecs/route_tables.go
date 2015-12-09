@@ -135,18 +135,21 @@ func (client *Client) WaitForAllRouteEntriesAvailable(vrouterId string, routeTab
 		if err != nil {
 			return err
 		}
-		sucess := true
+		if len(routeTables) == 0 {
+			return common.GetClientErrorFromString("Not found")
+		}
+		success := true
 
 	loop:
 		for _, routeTable := range routeTables {
 			for _, routeEntry := range routeTable.RouteEntrys.RouteEntry {
 				if routeEntry.Status != RouteEntryStatusAvailable {
-					sucess = false
+					success = false
 					break loop
 				}
 			}
 		}
-		if sucess {
+		if success {
 			break
 		}
 		timeout = timeout - DefaultWaitForInterval

@@ -229,11 +229,14 @@ func (client *Client) WaitForEip(regionId common.Region, allocationId string, st
 		AllocationId: allocationId,
 	}
 	for {
-		vpcs, _, err := client.DescribeEipAddresses(&args)
+		eips, _, err := client.DescribeEipAddresses(&args)
 		if err != nil {
 			return err
 		}
-		if vpcs[0].Status == status {
+		if len(eips) == 0 {
+			return common.GetClientErrorFromString("Not found")
+		}
+		if eips[0].Status == status {
 			break
 		}
 		timeout = timeout - DefaultWaitForInterval

@@ -41,6 +41,30 @@ func (request *Request) init(version string, action string, AccessKeyId string) 
 	request.AccessKeyId = AccessKeyId
 }
 
+type APIError interface {
+	GetCode() string
+	GetHostId() string
+	GetMessage() string
+	GetResponseId() string
+	Error() string
+}
+
+func (e *Error) GetCode() string {
+	return e.Code
+}
+
+func (e *Error) GetHostId() string {
+	return e.HostId
+}
+
+func (e *Error) GetMessage() string {
+	return e.Message
+}
+
+func (e *Error) GetResponseId() string {
+	return e.RequestId
+}
+
 type Response struct {
 	RequestId string
 }

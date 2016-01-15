@@ -6,6 +6,7 @@ const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	TestInstanceId      = "MY_INSTANCE_ID"
+	TestImageId         = "MY_IMAGE_ID"
 
 	TestIAmRich = false
 	TestQuick   = false

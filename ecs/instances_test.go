@@ -183,3 +183,19 @@ func TestECSInstanceCreationAndDeletion(t *testing.T) {
 	}
 	t.Logf("Instance %s is deleted successfully.", instanceId)
 }
+
+func TestModifyInstanceAttribute(t *testing.T) {
+	client := NewTestClient()
+
+	args := ModifyInstanceAttributeArgs{
+		InstanceId: TestInstanceId,
+		Password:   "Just$test",
+	}
+
+	err := client.ModifyInstanceAttribute(&args)
+	if err != nil {
+		t.Errorf("Failed to modify instance attribute %s: %v", TestInstanceId, err)
+	}
+
+	t.Logf("Modify instance attribute successfully")
+}

@@ -263,6 +263,30 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 	return err
 }
 
+type ReplaceSystemDiskArgs struct {
+	InstanceId     string
+	ImageId        string
+	SystemDiskSize int
+	ClientToken    string
+}
+
+type ReplaceSystemDiskResponse struct {
+	common.Response
+	DiskId string
+}
+
+// ReplaceSystemDisk replace system disk
+//
+// You can read doc at https://help.aliyun.com/document_detail/ecs/open-api/disk/replacesystemdisk.html
+func (client *Client) ReplaceSystemDisk(args *ReplaceSystemDiskArgs) (diskId string, err error) {
+	response := ReplaceSystemDiskResponse{}
+	err = client.Invoke("ReplaceSystemDisk", args, &response)
+	if err != nil {
+		return "", err
+	}
+	return response.DiskId, nil
+}
+
 // WaitForDisk waits for disk to given status
 func (client *Client) WaitForDisk(regionId common.Region, diskId string, status DiskStatus, timeout int) error {
 	if timeout <= 0 {

@@ -93,3 +93,35 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 	}
 	t.Logf("Delete disk %s successfully", diskId)
 }
+
+func TestReplaceSystemDisk(t *testing.T) {
+	client := NewTestClient()
+
+	err := client.WaitForInstance(TestInstanceId, Running, 0)
+	err = client.StopInstance(TestInstanceId, true)
+	if err != nil {
+		t.Errorf("Failed to stop instance %s: %v", TestInstanceId, err)
+	}
+	err = client.WaitForInstance(TestInstanceId, Stopped, 0)
+	if err != nil {
+		t.Errorf("Instance %s is failed to stop: %v", TestInstanceId, err)
+	}
+	t.Logf("Instance %s is stopped successfully.", TestInstanceId)
+
+	args := ReplaceSystemDiskArgs{
+		InstanceId: TestInstanceId,
+		ImageId:    TestImageId,
+	}
+
+	diskId, err := client.ReplaceSystemDisk(&args)
+	if err != nil {
+		t.Errorf("Failed to replace system disk %v", err)
+	}
+	err = client.WaitForInstance(TestInstanceId, Stopped, 60)
+	err = client.StartInstance(TestInstanceId)
+	if err != nil {
+		t.Errorf("Failed to start instance %s: %v", TestInstanceId, err)
+	}
+
+	t.Logf("Replace system disk  %s successfully ", diskId)
+}

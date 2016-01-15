@@ -110,7 +110,7 @@ func TestReplaceSystemDisk(t *testing.T) {
 
 	args := ReplaceSystemDiskArgs{
 		InstanceId: TestInstanceId,
-		ImageId:    "m-25i16eaw8",
+		ImageId:    TestImageId,
 	}
 
 	diskId, err := client.ReplaceSystemDisk(&args)

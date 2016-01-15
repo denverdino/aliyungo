@@ -213,6 +213,27 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	return &response.InstanceAttributesType, err
 }
 
+type ModifyInstanceAttributeArgs struct {
+	InstanceId   string
+	InstanceName string
+	Description  string
+	Password     string
+	HostName     string
+}
+
+type ModifyInstanceAttributeResponse struct {
+	common.Response
+}
+
+//ModifyInstanceAttribute  modify instance attrbute
+//
+// You can read doc at https://help.aliyun.com/document_detail/ecs/open-api/instance/modifyinstanceattribute.html
+func (client *Client) ModifyInstanceAttribute(args *ModifyInstanceAttributeArgs) error {
+	response := ModifyInstanceAttributeResponse{}
+	err := client.Invoke("ModifyInstanceAttribute", args, &response)
+	return err
+}
+
 // Default timeout value for WaitForInstance method
 const InstanceDefaultTimeout = 120
 

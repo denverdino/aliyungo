@@ -50,21 +50,22 @@ type RamClientInterface interface {
 	ListRoles()
 	DeleteRole()
 
-	//policy
-
+	//DONE policy
 	CreatePolicy(policyReq PolicyRequest) (PolicyResponse, error)
 	GetPolicy(policyReq PolicyRequest) (PolicyResponse, error)
 	DeletePolicy(policyReq PolicyRequest) (RamCommonResponse, error)
 	ListPolicies(policyQuery PolicyQueryRequest) (PolicyQueryResponse, error)
+	ListPoliciesForUser(userQuery UserQueryRequest) (PolicyResponse, error)
+
+	//TODO policy
 	CreatePolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)
 	GetPolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)
 	DeletePolicyVersion(policyReq PolicyRequest) (RamCommonResponse, error)
 	ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionResponse, error)
-	SetDefaultPolicyVersion()
 	AttachPolicyToUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error)
 	DetachPolicyFromUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error)
 	ListEnitiesForPolicy()
-	ListPoliciesForUser(userQuery UserQueryRequest) (PolicyResponse, error)
+	SetDefaultPolicyVersion()
 	ListPoliciesForGroup()
 	ListPoliciesForRole()
 

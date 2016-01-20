@@ -25,10 +25,10 @@ type ListUserRequest struct {
 
 type ListUserResponse struct {
 	RamCommonResponse
-	IsTruncated bool   `json:"IsTruncated,omitempty"`
-	Marker      string `json:"Marker,omitempty"`
+	IsTruncated bool
+	Marker      string
 	Users       struct {
-		User []User `json:"User,omitempty"`
+		User []User
 	}
 }
 

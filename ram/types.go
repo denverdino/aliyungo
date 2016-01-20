@@ -27,15 +27,15 @@ type UserQueryRequest struct {
 }
 
 type User struct {
-	UserId        string `json:"UserId,omitempty"`
-	UserName      string `json:"UserName"`
-	DisplayName   string `json:"DisplayName,omitempty"`
-	MobilePhone   string `json:"MobilePhone,omitempty"`
-	Email         string `json:"Email,omitempty"`
-	Comments      string `json:"Comments,omitempty"`
-	CreateDate    string `json:"CreateDate,omitempty"`
-	UpdateDate    string `json:"UpdateDate,omitempty"`
-	LastLoginDate string `json:"LastLoginDate,omitempty"`
+	UserId        string
+	UserName      string
+	DisplayName   string
+	MobilePhone   string
+	Email         string
+	Comments      string
+	CreateDate    string
+	UpdateDate    string
+	LastLoginDate string
 }
 
 type LoginProfile struct {
@@ -92,11 +92,11 @@ type PolicyItem struct {
 */
 
 type PasswordPolicy struct {
-	MinimumPasswordLength      int8 `json:"MinimumPasswordLength"`
-	RequireLowercaseCharacters bool `json:"RequireLowercaseCharacters"`
-	RequireUppercaseCharacters bool `json:"RequireUppercaseCharacters"`
-	RequireNumbers             bool `json:"RequireNumbers"`
-	RequireSymbols             bool `json:"RequireSymbols"`
+	MinimumPasswordLength      int8
+	RequireLowercaseCharacters bool
+	RequireUppercaseCharacters bool
+	RequireNumbers             bool
+	RequireSymbols             bool
 }
 
 type RamCommonResponse struct {

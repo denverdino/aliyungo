@@ -22,7 +22,7 @@ type UpdateAccessKeyRequest struct {
 type AccessKeyListResponse struct {
 	RamCommonResponse
 	AccessKeys struct {
-		AccessKey []AccessKey `json:"AccessKey,omitempty"`
+		AccessKey []AccessKey
 	}
 }
 

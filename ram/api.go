@@ -55,7 +55,7 @@ type RamClientInterface interface {
 	GetPolicy(policyReq PolicyRequest) (PolicyResponse, error)
 	DeletePolicy(policyReq PolicyRequest) (RamCommonResponse, error)
 	ListPolicies(policyQuery PolicyQueryRequest) (PolicyQueryResponse, error)
-	ListPoliciesForUser(userQuery UserQueryRequest) (PolicyResponse, error)
+	ListPoliciesForUser(userQuery UserQueryRequest) (PolicyListResponse, error)
 
 	//TODO policy
 	CreatePolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)

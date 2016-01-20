@@ -8,6 +8,12 @@ type PolicyRequest struct {
 	SetAsDefault   string
 	VersionId      string
 }
+type PolicyListResponse struct {
+	RamCommonResponse
+	Policies struct {
+		Policy []Policy
+	}
+}
 
 type PolicyResponse struct {
 	RamCommonResponse
@@ -137,11 +143,11 @@ func (client *RamClient) DetachPolicyFromUser(attachPolicyRequest AttachPolicyRe
 //TODO
 func (client *RamClient) ListEnitiesForPolicy() {}
 
-func (client *RamClient) ListPoliciesForUser(userQuery UserQueryRequest) (PolicyResponse, error) {
-	var resp PolicyResponse
+func (client *RamClient) ListPoliciesForUser(userQuery UserQueryRequest) (PolicyListResponse, error) {
+	var resp PolicyListResponse
 	err := client.Invoke("ListPoliciesForUser", userQuery, &resp)
 	if err != nil {
-		return PolicyResponse{}, err
+		return PolicyListResponse{}, err
 	}
 	return resp, nil
 }

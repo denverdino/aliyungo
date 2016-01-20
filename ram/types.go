@@ -22,14 +22,20 @@ const (
 */
 type AccountAlias string
 
+type UserQueryRequest struct {
+	UserName string
+}
+
 type User struct {
-	UserId      string
-	UserName    string
-	DisplayName string
-	MobilePhone string
-	Email       string
-	Comments    string
-	CreateDate  string
+	UserId        string `json:"UserId,omitempty"`
+	UserName      string `json:"UserName"`
+	DisplayName   string `json:"DisplayName,omitempty"`
+	MobilePhone   string `json:"MobilePhone,omitempty"`
+	Email         string `json:"Email,omitempty"`
+	Comments      string `json:"Comments,omitempty"`
+	CreateDate    string `json:"CreateDate,omitempty"`
+	UpdateDate    string `json:"UpdateDate,omitempty"`
+	LastLoginDate string `json:"LastLoginDate,omitempty"`
 }
 
 type LoginProfile struct {
@@ -55,9 +61,24 @@ type Role struct {
 }
 
 type Policy struct {
+	PolicyName      string
+	PolicyType      string
+	Description     string
+	DefaultVersion  string
+	CreateDate      string
+	UpdateDate      string
+	AttachmentCount int64
 }
 
-type PolicyVersion struct {
+type PolicyDocument struct {
+	Statement []PolicyItem
+	Version   string
+}
+
+type PolicyItem struct {
+	Action   string
+	Effect   string
+	Resource string
 }
 
 /*

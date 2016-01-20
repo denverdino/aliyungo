@@ -18,13 +18,14 @@ var (
 			Comments:    "no any comments",
 		},
 	}
-	NewUserName = strconv.FormatInt((time.Now().Unix() + offset), 10)
+	newUserName = strconv.FormatInt((time.Now().Unix() + offset), 10)
 	NewUser     = UpdateUserRequest{
 		UserName:       username,
-		NewUserName:    NewUserName,
+		NewUserName:    newUserName,
 		NewDisplayName: "unit_test_account_new",
 	}
 	listParams = ListUserRequest{}
+	userQuery  = UserQueryRequest{UserName: username}
 )
 
 func TestCreateUser(t *testing.T) {
@@ -38,7 +39,7 @@ func TestCreateUser(t *testing.T) {
 
 func TestGetUser(t *testing.T) {
 	client := NewTestClient()
-	resp, err := client.GetUser(username)
+	resp, err := client.GetUser(userQuery)
 	if err != nil {
 		t.Errorf("Failed to GetUser %v", err)
 	}
@@ -56,7 +57,7 @@ func TestUpdateUsernewUser(t *testing.T) {
 
 func TestListUser(t *testing.T) {
 	client := NewTestClient()
-	resp, err := client.ListUser(listParams)
+	resp, err := client.ListUsers(listParams)
 	if err != nil {
 		t.Errorf("Failed to ListUser %v", err)
 	}
@@ -65,7 +66,8 @@ func TestListUser(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 	client := NewTestClient()
-	resp, err := client.DeleteUser(username)
+	userQuery.UserName = newUserName
+	resp, err := client.DeleteUser(userQuery)
 	if err != nil {
 		t.Errorf("Failed to DeletUser %v", err)
 	}

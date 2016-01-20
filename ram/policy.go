@@ -1,31 +1,153 @@
 package ram
 
-func (client *RamClient) CreatePolicy() {}
+type PolicyRequest struct {
+	PolicyName     string
+	PolicyType     string
+	Description    string
+	PolicyDocument string
+	SetAsDefault   string
+	VersionId      string
+}
 
-func (client *RamClient) GetPolicy() {}
+type PolicyResponse struct {
+	RamCommonResponse
+	Policy Policy
+}
 
-func (client *RamClient) DeletePolicy() {}
+type PolicyQueryRequest struct {
+	PolicyType string
+	Marker     string
+	MaxItems   int8
+}
 
-func (client *RamClient) ListPolicies() {}
+type PolicyQueryResponse struct {
+	IsTruncated bool
+	Marker      string
+	Policies    struct {
+		Policy []Policy
+	}
+}
 
-func (client *RamClient) CreatePolicyVersion() {}
+type PolicyVersionResponse struct {
+	RamCommonResponse
+	IsDefaultVersion bool
+	VersionId        string
+	CreateDate       string
+	PolicyDocument   string
+}
 
-func (client *RamClient) GetPolicyVersion() {}
+type AttachPolicyRequest struct {
+	PolicyRequest
+	UserName string
+}
 
-func (client *RamClient) DeletePolicyVersion() {}
+func (client *RamClient) CreatePolicy(policyReq PolicyRequest) (PolicyResponse, error) {
+	var resp PolicyResponse
+	err := client.Invoke("CreatePolicy", policyReq, &resp)
+	if err != nil {
+		return PolicyResponse{}, err
+	}
+	return resp, nil
+}
 
-func (client *RamClient) ListPolicyVersions() {}
+func (client *RamClient) GetPolicy(policyReq PolicyRequest) (PolicyResponse, error) {
+	var resp PolicyResponse
+	err := client.Invoke("GetPolicy", policyReq, &resp)
+	if err != nil {
+		return PolicyResponse{}, err
+	}
+	return resp, nil
+}
 
+func (client *RamClient) DeletePolicy(policyReq PolicyRequest) (RamCommonResponse, error) {
+	var resp RamCommonResponse
+	err := client.Invoke("DeletePolicy", policyReq, &resp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return resp, nil
+}
+
+func (client *RamClient) ListPolicies(policyQuery PolicyQueryRequest) (PolicyQueryResponse, error) {
+	var resp PolicyQueryResponse
+	err := client.Invoke("ListPolicies", policyQuery, &resp)
+	if err != nil {
+		return PolicyQueryResponse{}, err
+	}
+	return resp, nil
+}
+
+func (client *RamClient) CreatePolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error) {
+	var resp PolicyVersionResponse
+	err := client.Invoke("CreatePolicyVersion", policyReq, &resp)
+	if err != nil {
+		return PolicyVersionResponse{}, err
+	}
+	return resp, nil
+}
+
+func (client *RamClient) GetPolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error) {
+	var resp PolicyVersionResponse
+	err := client.Invoke("GetPolicyVersion", policyReq, &resp)
+	if err != nil {
+		return PolicyVersionResponse{}, err
+	}
+	return resp, nil
+}
+
+func (client *RamClient) DeletePolicyVersion(policyReq PolicyRequest) (RamCommonResponse, error) {
+	var resp RamCommonResponse
+	err := client.Invoke("DeletePolicyVersion", policyReq, &resp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return resp, nil
+}
+
+func (client *RamClient) ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionResponse, error) {
+	var resp PolicyVersionResponse
+	err := client.Invoke("ListPolicyVersions", policyReq, &resp)
+	if err != nil {
+		return PolicyVersionResponse{}, err
+	}
+	return resp, nil
+}
+
+//TODO
 func (client *RamClient) SetDefaultPolicyVersion() {}
 
-func (client *RamClient) AttachPolicyToUser() {}
+func (client *RamClient) AttachPolicyToUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error) {
+	var resp RamCommonResponse
+	err := client.Invoke("AttachPolicyToUser", attachPolicyRequest, &resp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return resp, nil
+}
 
-func (client *RamClient) DetachPolicyFromUser() {}
+func (client *RamClient) DetachPolicyFromUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error) {
+	var resp RamCommonResponse
+	err := client.Invoke("DetachPolicyFromUser", attachPolicyRequest, &resp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return resp, nil
+}
 
+//TODO
 func (client *RamClient) ListEnitiesForPolicy() {}
 
-func (client *RamClient) ListPoliciesForUser() {}
+func (client *RamClient) ListPoliciesForUser(userQuery UserQueryRequest) (PolicyResponse, error) {
+	var resp PolicyResponse
+	err := client.Invoke("ListPoliciesForUser", userQuery, &resp)
+	if err != nil {
+		return PolicyResponse{}, err
+	}
+	return resp, nil
+}
 
+//TODO
 func (client *RamClient) ListPoliciesForGroup() {}
 
+//TODO
 func (client *RamClient) ListPoliciesForRole() {}

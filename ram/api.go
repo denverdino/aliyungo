@@ -8,10 +8,10 @@ package ram
 type RamClientInterface interface {
 	//ram user
 	CreateUser(user UserRequest) (UserResponse, error)
-	GetUser(username string) (UserResponse, error)
+	GetUser(userQuery UserQueryRequest) (UserResponse, error)
 	UpdateUser(newUser UpdateUserRequest) (UserResponse, error)
-	DeleteUser(username string) (RamCommonResponse, error)
-	ListUser(listParams ListUserRequest) (ListUserResponse, error)
+	DeleteUser(userQuery UserQueryRequest) (RamCommonResponse, error)
+	ListUsers(listParams ListUserRequest) (ListUserResponse, error)
 
 	//TODO login ram console
 	CreateLoginProfile()
@@ -20,10 +20,10 @@ type RamClientInterface interface {
 	UpdateLoginProfile()
 
 	//ram ak
-	CreateAccessKey(username string) (AccessKeyResponse, error)
+	CreateAccessKey(userQuery UserQueryRequest) (AccessKeyResponse, error)
 	UpdateAccessKey(accessKeyRequest UpdateAccessKeyRequest) (RamCommonResponse, error)
 	DeleteAccessKey(accessKeyRequest UpdateAccessKeyRequest) (RamCommonResponse, error)
-	ListAccessKeys(username string) (AccessKeyListResponse, error)
+	ListAccessKeys(userQuery UserQueryRequest) (AccessKeyListResponse, error)
 
 	//TODO MFA
 	CreateVirtualMFADevices()
@@ -52,19 +52,19 @@ type RamClientInterface interface {
 
 	//policy
 
-	CreatePolicy()
-	GetPolicy()
-	DeletePolicy()
-	ListPolicies()
-	CreatePolicyVersion()
-	GetPolicyVersion()
-	DeletePolicyVersion()
-	ListPolicyVersions()
+	CreatePolicy(policyReq PolicyRequest) (PolicyResponse, error)
+	GetPolicy(policyReq PolicyRequest) (PolicyResponse, error)
+	DeletePolicy(policyReq PolicyRequest) (RamCommonResponse, error)
+	ListPolicies(policyQuery PolicyQueryRequest) (PolicyQueryResponse, error)
+	CreatePolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)
+	GetPolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)
+	DeletePolicyVersion(policyReq PolicyRequest) (RamCommonResponse, error)
+	ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionResponse, error)
 	SetDefaultPolicyVersion()
-	AttachPolicyToUser()
-	DetachPolicyFromUser()
+	AttachPolicyToUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error)
+	DetachPolicyFromUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error)
 	ListEnitiesForPolicy()
-	ListPoliciesForUser()
+	ListPoliciesForUser(userQuery UserQueryRequest) (PolicyResponse, error)
 	ListPoliciesForGroup()
 	ListPoliciesForRole()
 

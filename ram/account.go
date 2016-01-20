@@ -25,27 +25,54 @@ type ListUserRequest struct {
 
 type ListUserResponse struct {
 	RamCommonResponse
-	IsTruncated bool
-	Marker      string
-	Users       []User
+	IsTruncated bool   `json:"IsTruncated,omitempty"`
+	Marker      string `json:"Marker,omitempty"`
+	Users       struct {
+		User []User `json:"User,omitempty"`
+	}
 }
 
 func (client *RamClient) CreateUser(user UserRequest) (UserResponse, error) {
-	return UserResponse{}, nil
+	var userResponse UserResponse
+	err := client.Invoke("CreateUser", user, &userResponse)
+	if err != nil {
+		return UserResponse{}, err
+	}
+	return userResponse, nil
 }
 
-func (client *RamClient) GetUser(username string) (UserResponse, error) {
-	return UserResponse{}, nil
+func (client *RamClient) GetUser(userQuery UserQueryRequest) (UserResponse, error) {
+	var userResponse UserResponse
+	err := client.Invoke("GetUser", userQuery, &userResponse)
+	if err != nil {
+		return UserResponse{}, nil
+	}
+	return userResponse, nil
 }
 
 func (client *RamClient) UpdateUser(newUser UpdateUserRequest) (UserResponse, error) {
-	return UserResponse{}, nil
+	var userResponse UserResponse
+	err := client.Invoke("UpdateUser", newUser, &userResponse)
+	if err != nil {
+		return UserResponse{}, err
+	}
+	return userResponse, nil
 }
 
-func (client *RamClient) DeleteUser(username string) (RamCommonResponse, error) {
-	return RamCommonResponse{}, nil
+func (client *RamClient) DeleteUser(userQuery UserQueryRequest) (RamCommonResponse, error) {
+	var commonResp RamCommonResponse
+	err := client.Invoke("DeleteUser", userQuery, &commonResp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return commonResp, nil
 }
 
-func (client *RamClient) ListUser(listParams ListUserRequest) (ListUserResponse, error) {
-	return ListUserResponse{}, nil
+func (client *RamClient) ListUsers(listParams ListUserRequest) (ListUserResponse, error) {
+	var userList ListUserResponse
+	err := client.Invoke("ListUsers", listParams, &userList)
+	if err != nil {
+		return ListUserResponse{}, err
+	}
+	return userList, nil
 }

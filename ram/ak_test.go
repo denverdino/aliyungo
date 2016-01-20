@@ -57,7 +57,7 @@ func TestUpdateAccessKey(t *testing.T) {
 
 	accessKeyResponse, err := client.UpdateAccessKey(updateAccessKeyRequest)
 	if err != nil {
-		t.Errorf("Failed to UpdateAccessKey %", err)
+		t.Errorf("Failed to UpdateAccessKey %v", err)
 	}
 	t.Logf("pass UpdateAccessKey %v", accessKeyResponse)
 }

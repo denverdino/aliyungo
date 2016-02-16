@@ -1,9 +1,9 @@
 package sls
 
 import (
+	"fmt"
 	"github.com/denverdino/aliyungo/common"
 	"net/http"
-	"fmt"
 	"time"
 )
 
@@ -36,23 +36,23 @@ type LogGroupItem struct {
 
 const (
 	SLSDefaultEndpoint = "sls.aliyuncs.com"
-	SLSAPIVersion = "0.6.0"
-	METHOD_GET = "GET"
-	METHOD_POST = "POST"
-	METHOD_PUT = "PUT"
-	METHOD_DELETE = "DELETE"
+	SLSAPIVersion      = "0.6.0"
+	METHOD_GET         = "GET"
+	METHOD_POST        = "POST"
+	METHOD_PUT         = "PUT"
+	METHOD_DELETE      = "DELETE"
 )
 
 // NewClient creates a new instance of ECS client
 func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
 	return &Client{
-		accessKeyId: accessKeyId,
+		accessKeyId:     accessKeyId,
 		accessKeySecret: accessKeySecret,
-		internal: internal,
-		region: region,
-		version: SLSAPIVersion,
-		endpoint: SLSDefaultEndpoint,
-		httpClient: &http.Client{},
+		internal:        internal,
+		region:          region,
+		version:         SLSAPIVersion,
+		endpoint:        SLSDefaultEndpoint,
+		httpClient:      &http.Client{},
 	}
 }
 
@@ -108,4 +108,3 @@ func (client *Client) Project(name string) (*Project, error) {
 //		LogGroupList: logGroups,
 //	})
 //}
-

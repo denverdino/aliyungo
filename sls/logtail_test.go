@@ -1,7 +1,8 @@
 package sls
+
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestLogtailConfigs(t *testing.T) {
@@ -25,24 +26,24 @@ func TestDelete(t *testing.T) {
 func TestCreateLogtailConfig(t *testing.T) {
 	p := DefaultProject()
 	logtailConfig := &LogtailConfig{
-		Name: "logtail-test",
+		Name:      "logtail-test",
 		InputType: "file",
 		InputDetail: LogtailInput{
-			LogType: "common_reg_log",
-			LogPath: "/abc",
-			FilePattern: "*.log",
-			LocalStorage: false,
-			TimeFormat: "",
+			LogType:       "common_reg_log",
+			LogPath:       "/abc",
+			FilePattern:   "*.log",
+			LocalStorage:  false,
+			TimeFormat:    "",
 			LogBeginRegex: ".*",
-			Regex: "(.*)",
-			Key: []string{"content"},
-			FilterKey:[]string{"content"},
-			FilterRegex: []string{".*"},
-			TopicFormat: "none",
+			Regex:         "(.*)",
+			Key:           []string{"content"},
+			FilterKey:     []string{"content"},
+			FilterRegex:   []string{".*"},
+			TopicFormat:   "none",
 		},
-		OutputType:"LogService",
-		Sample: "sample",
-		OutputDetail:LogtailOutput{
+		OutputType: "LogService",
+		Sample:     "sample",
+		OutputDetail: LogtailOutput{
 			LogstoreName: "test-jjz",
 		},
 	}

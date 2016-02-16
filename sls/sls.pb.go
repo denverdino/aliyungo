@@ -34,9 +34,9 @@ type Log struct {
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *Log) Reset() { *m = Log{} }
-func (m *Log) String() string { return proto.CompactTextString(m) }
-func (*Log) ProtoMessage() {}
+func (m *Log) Reset()                    { *m = Log{} }
+func (m *Log) String() string            { return proto.CompactTextString(m) }
+func (*Log) ProtoMessage()               {}
 func (*Log) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 func (m *Log) GetTime() uint32 {
@@ -59,9 +59,9 @@ type Log_Content struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Log_Content) Reset() { *m = Log_Content{} }
-func (m *Log_Content) String() string { return proto.CompactTextString(m) }
-func (*Log_Content) ProtoMessage() {}
+func (m *Log_Content) Reset()                    { *m = Log_Content{} }
+func (m *Log_Content) String() string            { return proto.CompactTextString(m) }
+func (*Log_Content) ProtoMessage()               {}
 func (*Log_Content) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0, 0} }
 
 func (m *Log_Content) GetKey() string {
@@ -86,9 +86,9 @@ type LogGroup struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *LogGroup) Reset() { *m = LogGroup{} }
-func (m *LogGroup) String() string { return proto.CompactTextString(m) }
-func (*LogGroup) ProtoMessage() {}
+func (m *LogGroup) Reset()                    { *m = LogGroup{} }
+func (m *LogGroup) String() string            { return proto.CompactTextString(m) }
+func (*LogGroup) ProtoMessage()               {}
 func (*LogGroup) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 func (m *LogGroup) GetLogs() []*Log {
@@ -124,9 +124,9 @@ type LogGroupList struct {
 	XXX_unrecognized []byte      `json:"-"`
 }
 
-func (m *LogGroupList) Reset() { *m = LogGroupList{} }
-func (m *LogGroupList) String() string { return proto.CompactTextString(m) }
-func (*LogGroupList) ProtoMessage() {}
+func (m *LogGroupList) Reset()                    { *m = LogGroupList{} }
+func (m *LogGroupList) String() string            { return proto.CompactTextString(m) }
+func (*LogGroupList) ProtoMessage()               {}
 func (*LogGroupList) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 func (m *LogGroupList) GetLogGroupList() []*LogGroup {
@@ -159,4 +159,3 @@ var fileDescriptor0 = []byte{
 	0xcf, 0xcd, 0x39, 0xba, 0x04, 0x00, 0x00, 0xff, 0xff, 0x77, 0xa0, 0x66, 0x2b, 0xe9, 0x00, 0x00,
 	0x00,
 }
-

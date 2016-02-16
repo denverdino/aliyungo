@@ -1,16 +1,16 @@
 package sls
+
 import (
+	"bytes"
+	"errors"
+	"github.com/denverdino/aliyungo/util"
+	"github.com/docker/docker/vendor/src/github.com/jfrazelle/go/canonical/json"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"github.com/denverdino/aliyungo/util"
-	"io"
-	"bytes"
-	"io/ioutil"
-	"github.com/docker/docker/vendor/src/github.com/jfrazelle/go/canonical/json"
-	"errors"
 	"strconv"
 )
-
 
 type request struct {
 	endpoint    string
@@ -32,9 +32,9 @@ func (req *request) url() string {
 	}
 
 	u := url.URL{
-		Scheme: "http",
-		Host:req.endpoint,
-		Path: req.path,
+		Scheme:   "http",
+		Host:     req.endpoint,
+		Path:     req.path,
 		RawQuery: params.Encode(),
 	}
 	return u.String()

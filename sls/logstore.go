@@ -1,13 +1,13 @@
 package sls
+
 import "encoding/json"
 
 type Logstore struct {
 	client *Client
-	TTL    int `json:"ttl,omitempty"`
-	Shard  int `json:"shardCount,omitempty"`
+	TTL    int    `json:"ttl,omitempty"`
+	Shard  int    `json:"shardCount,omitempty"`
 	Name   string `json:"logstoreName,omitempty"`
 }
-
 
 func (proj *Project) CreateLogstore(logstore *Logstore) error {
 
@@ -17,10 +17,10 @@ func (proj *Project) CreateLogstore(logstore *Logstore) error {
 	}
 
 	req := &request{
-		method:METHOD_POST,
-		path: "/logstores",
-		contentType:"application/json",
-		payload: data,
+		method:      METHOD_POST,
+		path:        "/logstores",
+		contentType: "application/json",
+		payload:     data,
 	}
 
 	return proj.client.requestWithClose(req)
@@ -29,7 +29,7 @@ func (proj *Project) CreateLogstore(logstore *Logstore) error {
 func (proj *Project) Logstore(name string) (*Logstore, error) {
 	req := &request{
 		method: METHOD_GET,
-		path: "/logstores/" + name,
+		path:   "/logstores/" + name,
 	}
 
 	ls := &Logstore{}
@@ -40,10 +40,10 @@ func (proj *Project) Logstore(name string) (*Logstore, error) {
 	return ls, nil
 }
 
-func (ls *Logstore ) Delete() error {
+func (ls *Logstore) Delete() error {
 	req := &request{
-		method:METHOD_DELETE,
-		path: "/logstores/" + ls.Name,
+		method: METHOD_DELETE,
+		path:   "/logstores/" + ls.Name,
 	}
 	return ls.client.requestWithClose(req)
 }
@@ -55,25 +55,25 @@ func (ls *Logstore) Update() error {
 		return err
 	}
 	req := &request{
-		method: METHOD_PUT,
-		path :"/logstores/" + ls.Name,
-		contentType:"application/json",
-		payload: data,
+		method:      METHOD_PUT,
+		path:        "/logstores/" + ls.Name,
+		contentType: "application/json",
+		payload:     data,
 	}
 
 	return ls.client.requestWithClose(req)
 }
 
 type LogstoreList struct {
-	Count     int `json:"count,omitempty"`
-	Total     int `json:"total,omitempty"`
+	Count     int      `json:"count,omitempty"`
+	Total     int      `json:"total,omitempty"`
 	Logstores []string `json:"logstores,omitempty"`
 }
 
 func (proj *Project) Logstores() (*LogstoreList, error) {
 	req := &request{
 		method: METHOD_GET,
-		path: "/logstores",
+		path:   "/logstores",
 	}
 	list := &LogstoreList{}
 	if err := proj.client.requestWithJsonResponse(req, list); err != nil {
@@ -89,7 +89,7 @@ type shard struct {
 func (ls *Logstore) Shards() ([]int, error) {
 	req := &request{
 		method: METHOD_GET,
-		path: "/logstores/" + ls.Name + "/shards",
+		path:   "/logstores/" + ls.Name + "/shards",
 	}
 
 	var resp []*shard
@@ -103,4 +103,3 @@ func (ls *Logstore) Shards() ([]int, error) {
 	}
 	return shards, nil
 }
-

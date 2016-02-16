@@ -1,7 +1,8 @@
 package sls
+
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestShards(t *testing.T) {
@@ -19,7 +20,6 @@ func TestShards(t *testing.T) {
 	fmt.Println(shards)
 }
 
-
 func TestLogstores(t *testing.T) {
 	p := DefaultProject()
 	list, err := p.Logstores()
@@ -32,9 +32,9 @@ func TestLogstores(t *testing.T) {
 func TestCreateLogstore(t *testing.T) {
 	p := DefaultProject()
 	logstore := &Logstore{
-		TTL: 2,
+		TTL:   2,
 		Shard: 3,
-		Name: "test-hello",
+		Name:  "test-hello",
 	}
 	if err := p.CreateLogstore(logstore); err != nil {
 		t.Fatalf("error create logstore %v", err)
@@ -47,4 +47,3 @@ func TestCreateLogstore(t *testing.T) {
 		t.Fatalf("error delete logstore %v", err)
 	}
 }
-

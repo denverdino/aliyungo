@@ -1,7 +1,8 @@
 package sls
+
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestListMachineGroups(t *testing.T) {
@@ -26,16 +27,14 @@ func TestMachineGroup(t *testing.T) {
 	fmt.Println(group)
 }
 
-
 func TestCreateMachineGroup(t *testing.T) {
 	p := DefaultProject()
 	groupName := "testGroup"
 	group := &MachineGroup{
-		Name: groupName,
+		Name:                groupName,
 		MachineIdentifyType: "ip",
-		Attribute: &GroupAttribute{
-		},
-		MachineList:[]string{
+		Attribute:           &GroupAttribute{},
+		MachineList: []string{
 			"127.0.0.1",
 			"127.0.0.2",
 		},

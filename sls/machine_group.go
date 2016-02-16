@@ -2,11 +2,10 @@ package sls
 
 import (
 	"encoding/json"
-	"strconv"
 	"errors"
 	"fmt"
+	"strconv"
 )
-
 
 type GroupAttribute struct {
 	Topic        string `json:"groupTopic,omitempty"`
@@ -15,13 +14,13 @@ type GroupAttribute struct {
 
 type MachineGroup struct {
 	client              *Client
-	Name                string `json:"groupName,omitempty"`
-	Type                string `json:"groupType,omitempty"`
-	MachineIdentifyType string `json:"machineIdentifyType,omitempty"`
+	Name                string          `json:"groupName,omitempty"`
+	Type                string          `json:"groupType,omitempty"`
+	MachineIdentifyType string          `json:"machineIdentifyType,omitempty"`
 	Attribute           *GroupAttribute `json:"attribute,omitempty"`
-	MachineList         []string `json:"machineList,omitempty"`
-	CreateTime          uint32 `json:"createTime,omitempty"`
-	LastModifyTime      uint32 `json:"lastModifyTime,omitempty"`
+	MachineList         []string        `json:"machineList,omitempty"`
+	CreateTime          uint32          `json:"createTime,omitempty"`
+	LastModifyTime      uint32          `json:"lastModifyTime,omitempty"`
 }
 
 func (proj *Project) CreateMachineGroup(machineGroup *MachineGroup) error {
@@ -31,9 +30,9 @@ func (proj *Project) CreateMachineGroup(machineGroup *MachineGroup) error {
 		return err
 	}
 	req := &request{
-		method: METHOD_POST,
-		path: "/machinegroups",
-		payload:data,
+		method:      METHOD_POST,
+		path:        "/machinegroups",
+		payload:     data,
 		contentType: "application/json",
 	}
 
@@ -42,23 +41,21 @@ func (proj *Project) CreateMachineGroup(machineGroup *MachineGroup) error {
 
 type MachineGroupList struct {
 	Groups []string `json:"machinegroups"`
-	Count  int `json:"count"`
-	Total  int `json:"total"`
+	Count  int      `json:"count"`
+	Total  int      `json:"total"`
 }
 
 func (proj *Project) MachineGroups(offset, size int) (*MachineGroupList, error) {
 	req := &request{
-		path: "/machinegroups",
+		path:   "/machinegroups",
 		method: METHOD_GET,
 		params: map[string]string{
-			"size": strconv.Itoa(size),
+			"size":   strconv.Itoa(size),
 			"offset": strconv.Itoa(offset),
 		},
 	}
 
-
 	groups := &MachineGroupList{}
-
 
 	if err := proj.client.requestWithJsonResponse(req, groups); err != nil {
 		return nil, err
@@ -70,7 +67,7 @@ func (proj *Project) MachineGroups(offset, size int) (*MachineGroupList, error) 
 func (proj *Project) MachineGroup(name string) (*MachineGroup, error) {
 	req := &request{
 		method: METHOD_GET,
-		path: "/machinegroups/" + name,
+		path:   "/machinegroups/" + name,
 	}
 
 	group := &MachineGroup{}
@@ -83,16 +80,14 @@ func (proj *Project) MachineGroup(name string) (*MachineGroup, error) {
 	return group, nil
 }
 
-
 func (mg *MachineGroup) Delete() error {
 	req := &request{
 		method: METHOD_DELETE,
-		path: "/machinegroups/" + mg.Name,
+		path:   "/machinegroups/" + mg.Name,
 	}
 
 	return mg.client.requestWithClose(req)
 }
-
 
 func (mg *MachineGroup) Update() error {
 	data, err := json.Marshal(mg)
@@ -100,9 +95,9 @@ func (mg *MachineGroup) Update() error {
 		return err
 	}
 	req := &request{
-		method : METHOD_PUT,
-		path: "/machinegroups/" + mg.Name,
-		payload: data,
+		method:      METHOD_PUT,
+		path:        "/machinegroups/" + mg.Name,
+		payload:     data,
 		contentType: "application/json",
 	}
 
@@ -111,8 +106,8 @@ func (mg *MachineGroup) Update() error {
 
 func (mg *MachineGroup) ApplyConfig(config string) error {
 	req := &request{
-		method:METHOD_PUT,
-		path: "/machinegroups/" + mg.Name + "/configs/" + config,
+		method: METHOD_PUT,
+		path:   "/machinegroups/" + mg.Name + "/configs/" + config,
 	}
 	return mg.client.requestWithClose(req)
 }
@@ -124,17 +119,17 @@ type Machine struct {
 }
 
 type MachineList struct {
-	Count    int `json:"count,omitempty"`
-	Total    int `json:"total,omitempty"`
+	Count    int       `json:"count,omitempty"`
+	Total    int       `json:"total,omitempty"`
 	Machines []Machine `json:"machines,omitempty"`
 }
 
 func (mg *MachineGroup) ListMachines(offset, size int) (*MachineList, error) {
 	req := &request{
 		method: METHOD_GET,
-		path: "/machinegroups/" + mg.Name + "/machines",
+		path:   "/machinegroups/" + mg.Name + "/machines",
 		params: map[string]string{
-			"size": strconv.Itoa(size),
+			"size":   strconv.Itoa(size),
 			"offset": strconv.Itoa(offset),
 		},
 	}
@@ -148,8 +143,8 @@ func (mg *MachineGroup) ListMachines(offset, size int) (*MachineList, error) {
 
 func (mg *MachineGroup) AppliedConfigs() ([]string, error) {
 	req := &request{
-		method:METHOD_GET,
-		path: "/machinegroups/" + mg.Name + "/configs",
+		method: METHOD_GET,
+		path:   "/machinegroups/" + mg.Name + "/configs",
 	}
 
 	configs := make(map[string]interface{})
@@ -163,4 +158,3 @@ func (mg *MachineGroup) AppliedConfigs() ([]string, error) {
 
 	return nil, errors.New(fmt.Sprintf("%v is not a string array", configs["config"]))
 }
-

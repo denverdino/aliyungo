@@ -1,17 +1,16 @@
 package sls
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"github.com/denverdino/aliyungo/util"
+	"net/url"
 	"sort"
 	"strings"
-	"crypto/md5"
-	"net/url"
-	"github.com/denverdino/aliyungo/util"
-	"encoding/hex"
 )
 
 const HeaderSLSPrefix1 = "x-log-"
 const HeaderSLSPrefix2 = "x-acs-"
-
 
 func (client *Client) signRequest(req *request, payload []byte) {
 
@@ -49,16 +48,16 @@ func (client *Client) signRequest(req *request, payload []byte) {
 
 func canonicalizeResource(req *request) string {
 	canonicalizedResource := req.path
-	var paramNames  []string
+	var paramNames []string
 	if req.params != nil && len(req.params) > 0 {
 		for k, _ := range req.params {
 			paramNames = append(paramNames, k)
 		}
 		sort.Strings(paramNames)
 
-		var query  []string
+		var query []string
 		for _, k := range paramNames {
-			query = append(query, url.QueryEscape(k) + "=" + url.QueryEscape(req.params[k]))
+			query = append(query, url.QueryEscape(k)+"="+url.QueryEscape(req.params[k]))
 		}
 		canonicalizedResource = canonicalizedResource + "?" + strings.Join(query, "&")
 	}
@@ -80,7 +79,7 @@ func canonicalizeHeader(headers map[string]string) string {
 	var headersWithValue []string
 
 	for _, k := range canonicalizedHeaders {
-		headersWithValue = append(headersWithValue, k + ":" + headers[k])
+		headersWithValue = append(headersWithValue, k+":"+headers[k])
 	}
 	return strings.Join(headersWithValue, "\n")
 }

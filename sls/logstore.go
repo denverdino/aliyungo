@@ -65,9 +65,9 @@ func (ls *Logstore) Update() error {
 }
 
 type LogstoreList struct {
-	count     int `json:"count,omitempty"`
-	total     int `json:"total,omitempty"`
-	logstores []string `json:"logstores,omitempty"`
+	Count     int `json:"count,omitempty"`
+	Total     int `json:"total,omitempty"`
+	Logstores []string `json:"logstores,omitempty"`
 }
 
 func (proj *Project) Logstores() (*LogstoreList, error) {

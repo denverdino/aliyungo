@@ -89,7 +89,7 @@ func (proj *Project) LogtailConfig(name string) (*LogtailConfig, error) {
 
 func (lc *LogtailConfig) AppliedMachineGroups() ([]string, error) {
 	type appliedMachineGroups struct {
-		machinegroups []string `json:"machinegroups,omitempty"`
+		Machinegroups []string `json:"machinegroups,omitempty"`
 	}
 
 	req := &request{
@@ -103,7 +103,7 @@ func (lc *LogtailConfig) AppliedMachineGroups() ([]string, error) {
 		return nil, err
 	}
 
-	return group.machinegroups, nil
+	return group.Machinegroups, nil
 }
 
 func (lc *LogtailConfig) Delete() error {

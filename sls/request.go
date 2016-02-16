@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"errors"
 	"github.com/denverdino/aliyungo/util"
-	"github.com/docker/docker/vendor/src/github.com/jfrazelle/go/canonical/json"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
+	"encoding/json"
 )
 
 type request struct {

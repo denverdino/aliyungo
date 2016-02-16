@@ -8,14 +8,14 @@ type LogtailInput struct {
 	LogType       string `json:"logType,omitempty"`
 	LogPath       string `json:"logPath,omitempty"`
 	FilePattern   string `json:"filePattern,omitempty"`
-	LocalStorage  bool `json:"localStorage,omitempty"`
-	TimeFormat    string `json:"timeFormat,omitempty"`
-	logBeginRegex string `json:"logBeginRegex,omitempty"`
-	regex         string `json:"regex,omitempty"`
-	key           []string `json:"key,omitempty"`
-	filterKey     []string `json:"filterKey,omitempty"`
-	filterRegex   []string `json:"filterRegex,omitempty"`
-	topicFormat   string `json:"topicFormat,omitempty"`
+	LocalStorage  bool `json:"localStorage"`
+	TimeFormat    string `json:"timeFormat"`
+	LogBeginRegex string `json:"logBeginRegex,omitempty"`
+	Regex         string `json:"regex,omitempty"`
+	Key           []string `json:"key,omitempty"`
+	FilterKey     []string `json:"filterKey,omitempty"`
+	FilterRegex   []string `json:"filterRegex,omitempty"`
+	TopicFormat   string `json:"topicFormat,omitempty"`
 }
 
 type LogtailOutput struct {
@@ -26,9 +26,10 @@ type LogtailConfig struct {
 	client       *Client
 	Name         string `json:"configName,omitempty"`
 	InputType    string `json:"inputType,omitempty"`
-	InputDetail  LogtailInput `json:inputDetail,omitempty`
-	OutputType   LogtailInput `json:outputType,omitempty`
-	OutputDetail LogtailOutput `json:outputDetail,omitempty`
+	InputDetail  LogtailInput `json:"inputDetail,omitempty"`
+	OutputType   string `json:"outputType,omitempty"`
+	Sample       string `json:"logSample,omitempty"`
+	OutputDetail LogtailOutput `json:"outputDetail,omitempty"`
 }
 
 func (proj *Project) CreateLogtailConfig(config *LogtailConfig) error {
@@ -48,9 +49,9 @@ func (proj *Project) CreateLogtailConfig(config *LogtailConfig) error {
 }
 
 type LogtailConfigList struct {
-	count   int `json:"count,omitempty"`
-	total   int `json:"total,omitempty"`
-	configs int `json:"configs,omitempty"`
+	Count   int `json:"count,omitempty"`
+	Total   int `json:"total,omitempty"`
+	Configs []string `json:"configs,omitempty"`
 }
 
 func (proj *Project) LogtailConfigs(offset, size int) (*LogtailConfigList, error) {
@@ -106,7 +107,7 @@ func (lc *LogtailConfig) AppliedMachineGroups() ([]string, error) {
 }
 
 func (lc *LogtailConfig) Delete() error {
-	req := request{
+	req := &request{
 		method: METHOD_DELETE,
 		path:"/configs/" + lc.Name,
 	}

@@ -3,12 +3,13 @@ package sls
 import "github.com/denverdino/aliyungo/common"
 
 
-const(
-	AccessKeySecret =""
+const (
 	AccessKeyId = ""
+	AccessKeySecret = ""
 	Region = common.Hangzhou
 )
 func DefaultProject() *Project {
 	client := NewClient(Region, false, AccessKeyId, AccessKeySecret)
-	return client.Project("yunqi-test")
+	p, _ := client.Project("yunqi-test")
+	return p
 }

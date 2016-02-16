@@ -32,14 +32,14 @@ func TestLogstores(t *testing.T) {
 func TestCreateLogstore(t *testing.T) {
 	p := DefaultProject()
 	logstore := &Logstore{
-		TTL: 3,
+		TTL: 2,
 		Shard: 3,
-		Name: "test-jjz",
+		Name: "test-hello",
 	}
 	if err := p.CreateLogstore(logstore); err != nil {
 		t.Fatalf("error create logstore %v", err)
 	}
-	logstore, err := p.Logstore("test-jjz")
+	logstore, err := p.Logstore("test-hello")
 	if err != nil {
 		t.Fatalf("error find logstore %v", err)
 	}

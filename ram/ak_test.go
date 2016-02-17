@@ -13,7 +13,12 @@ var (
 func TestCreateAccessKey(t *testing.T) {
 	var ramUser User
 	client := NewTestClient()
-	listParams := ListUserRequest{}
+	listParams := ListUserRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
+	}
 	listUserResp, err := client.ListUsers(listParams)
 	if err != nil {
 		t.Errorf("Failed to list user %v", err)
@@ -31,7 +36,13 @@ func TestCreateAccessKey(t *testing.T) {
 	//TODO 添加到公共变量中
 	ram_ak_username = ramUser.UserName
 
-	userQuery := UserQueryRequest{UserName: ram_ak_username}
+	userQuery := UserQueryRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
+		UserName: ram_ak_username,
+	}
 	accessKeyResponse, err := client.CreateAccessKey(userQuery)
 	//加入到公共变量中
 	accessKeyId = accessKeyResponse.AccessKey.AccessKeyId
@@ -46,6 +57,10 @@ func TestCreateAccessKey(t *testing.T) {
 func TestUpdateAccessKey(t *testing.T) {
 	client := NewTestClient()
 	updateAccessKeyRequest := UpdateAccessKeyRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		UserAccessKeyId: accessKeyId,
 		UserName:        ram_ak_username,
 	}
@@ -64,7 +79,12 @@ func TestUpdateAccessKey(t *testing.T) {
 
 func TestListAccessKeys(t *testing.T) {
 	client := NewTestClient()
-	userQuery := UserQueryRequest{UserName: ram_ak_username}
+	userQuery := UserQueryRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		}, UserName: ram_ak_username,
+	}
 	resp, err := client.ListAccessKeys(userQuery)
 	if err != nil {
 		t.Errorf("Failed to list ListAccessKeys %v", err)
@@ -75,6 +95,10 @@ func TestListAccessKeys(t *testing.T) {
 func TestDeleteAccessKey(t *testing.T) {
 	client := NewTestClient()
 	accessKeyRequest := UpdateAccessKeyRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		UserAccessKeyId: accessKeyId,
 		UserName:        ram_ak_username,
 	}

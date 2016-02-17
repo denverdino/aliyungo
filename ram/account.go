@@ -1,6 +1,7 @@
 package ram
 
 type UserRequest struct {
+	RamBasedRequest
 	User
 }
 
@@ -10,6 +11,7 @@ type UserResponse struct {
 }
 
 type UpdateUserRequest struct {
+	RamBasedRequest
 	UserName       string
 	NewUserName    string
 	NewDisplayName string
@@ -19,6 +21,7 @@ type UpdateUserRequest struct {
 }
 
 type ListUserRequest struct {
+	RamBasedRequest
 	Marker   string
 	MaxItems int8
 }

@@ -14,6 +14,7 @@ type AccessKeyResponse struct {
 }
 
 type UpdateAccessKeyRequest struct {
+	RamBasedRequest
 	UserAccessKeyId string
 	Status          State
 	UserName        string

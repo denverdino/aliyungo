@@ -1,6 +1,7 @@
 package ram
 
 type PolicyRequest struct {
+	RamBasedRequest
 	PolicyName     string
 	PolicyType     string
 	Description    string
@@ -21,6 +22,7 @@ type PolicyResponse struct {
 }
 
 type PolicyQueryRequest struct {
+	RamBasedRequest
 	PolicyType string
 	Marker     string
 	MaxItems   int8
@@ -43,6 +45,7 @@ type PolicyVersionResponse struct {
 }
 
 type AttachPolicyRequest struct {
+	RamBasedRequest
 	PolicyRequest
 	UserName string
 }

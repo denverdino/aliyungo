@@ -7,9 +7,14 @@ import (
 )
 
 var (
-	offset   int64 = 100
-	username       = strconv.FormatInt(time.Now().Unix(), 10)
-	user           = UserRequest{
+	offset          int64 = 100
+	RAM_CONSOLE_VIP       = "140.205.62.78"
+	username              = strconv.FormatInt(time.Now().Unix(), 10)
+	user                  = UserRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		User: User{
 			UserName:    username,
 			DisplayName: "unit_test_account",
@@ -20,12 +25,27 @@ var (
 	}
 	newUserName = strconv.FormatInt((time.Now().Unix() + offset), 10)
 	NewUser     = UpdateUserRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		UserName:       username,
 		NewUserName:    newUserName,
 		NewDisplayName: "unit_test_account_new",
 	}
-	listParams = ListUserRequest{}
-	userQuery  = UserQueryRequest{UserName: username}
+	listParams = ListUserRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
+	}
+	userQuery = UserQueryRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
+		UserName: username,
+	}
 )
 
 func TestCreateUser(t *testing.T) {

@@ -20,6 +20,10 @@ var (
 		Version: "1",
 	}
 	policy_req = PolicyRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		PolicyName:  "unit_tesst_policy",
 		Description: "nothing",
 		PolicyType:  "Custom",
@@ -60,7 +64,12 @@ func TestGetPolicy(t *testing.T) {
 
 func TestAttachPolicyToUser(t *testing.T) {
 	client := NewTestClient()
-	listParams := ListUserRequest{}
+	listParams := ListUserRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
+	}
 	resp, err := client.ListUsers(listParams)
 	if err != nil {
 		t.Errorf("Failed to ListUser %v", err)
@@ -69,6 +78,10 @@ func TestAttachPolicyToUser(t *testing.T) {
 	policy_username = resp.Users.User[0].UserName
 	attachPolicyRequest := AttachPolicyRequest{
 		PolicyRequest: PolicyRequest{
+			RamBasedRequest: RamBasedRequest{
+				SourceIp:        RAM_CONSOLE_VIP,
+				SecureTransport: "true",
+			},
 			PolicyType: "Custom",
 			PolicyName: policy_name,
 		},
@@ -85,6 +98,10 @@ func TestAttachPolicyToUser(t *testing.T) {
 func TestListPoliciesForUser(t *testing.T) {
 	client := NewTestClient()
 	userQuery := UserQueryRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		UserName: policy_username,
 	}
 	resp, err := client.ListPoliciesForUser(userQuery)
@@ -98,6 +115,10 @@ func TestListPoliciesForUser(t *testing.T) {
 func TestDetachPolicyFromUser(t *testing.T) {
 	client := NewTestClient()
 	detachPolicyRequest := AttachPolicyRequest{
+		RamBasedRequest: RamBasedRequest{
+			SourceIp:        RAM_CONSOLE_VIP,
+			SecureTransport: "true",
+		},
 		PolicyRequest: PolicyRequest{
 			PolicyType: "Custom",
 			PolicyName: policy_name,

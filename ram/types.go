@@ -22,7 +22,13 @@ const (
 */
 type AccountAlias string
 
+type RamBasedRequest struct {
+	SourceIp        string
+	SecureTransport string
+}
+
 type UserQueryRequest struct {
+	RamBasedRequest
 	UserName string
 }
 

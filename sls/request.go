@@ -2,14 +2,14 @@ package sls
 
 import (
 	"bytes"
-	"errors"
+	"encoding/json"
 	"github.com/denverdino/aliyungo/util"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
-	"encoding/json"
+	"fmt"
 )
 
 type request struct {
@@ -90,13 +90,8 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 		return nil, err
 	}
 
-	if resp.StatusCode >= 400 {
-		defer resp.Body.Close()
-		data, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.New(string(data))
+	if resp.StatusCode != 200 && resp.StatusCode != 204 && resp.StatusCode != 206 {
+		return nil, buildError(resp)
 	}
 	return resp, nil
 }
@@ -124,4 +119,25 @@ func (client *Client) requestWithClose(req *request) error {
 
 	resp.Body.Close()
 	return nil
+}
+
+type Error struct {
+	StatusCode int
+	Code       string `json:"errorCode,omitempty"`
+	Message    string `json:"errorMessage,omitempty"`
+}
+
+func (err *Error) Error() string {
+	return fmt.Sprintf("Aliyun API Error: Status Code: %d Code: %s Message: %s", err.StatusCode, err.Code, err.Message)
+}
+
+func buildError(resp *http.Response) error {
+	defer resp.Body.Close()
+	err := &Error{}
+	json.NewDecoder(resp.Body).Decode(err)
+	err.StatusCode = resp.StatusCode
+	if err.Message == "" {
+		err.Message = resp.Status
+	}
+	return err
 }

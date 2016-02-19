@@ -5,6 +5,7 @@ import (
 	"github.com/denverdino/aliyungo/common"
 	"net/http"
 	"time"
+	"encoding/json"
 )
 
 type Client struct {
@@ -19,8 +20,9 @@ type Client struct {
 }
 
 type Project struct {
-	client *Client
-	name   string
+	client      *Client
+	Name        string `json:"projectName,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 type LogItem struct {
@@ -36,11 +38,11 @@ type LogGroupItem struct {
 
 const (
 	SLSDefaultEndpoint = "sls.aliyuncs.com"
-	SLSAPIVersion      = "0.6.0"
-	METHOD_GET         = "GET"
-	METHOD_POST        = "POST"
-	METHOD_PUT         = "PUT"
-	METHOD_DELETE      = "DELETE"
+	SLSAPIVersion = "0.6.0"
+	METHOD_GET = "GET"
+	METHOD_POST = "POST"
+	METHOD_PUT = "PUT"
+	METHOD_DELETE = "DELETE"
 )
 
 // NewClient creates a new instance of ECS client
@@ -57,6 +59,24 @@ func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret
 }
 
 func (client *Client) Project(name string) (*Project, error) {
+
+	newClient := client.forProject(name)
+
+	req := &request{
+		method: METHOD_GET,
+		path: "/",
+	}
+
+	project := &Project{}
+
+	if err := newClient.requestWithJsonResponse(req, project); err != nil {
+		return nil, err
+	}
+	project.client = newClient
+	return project, nil
+}
+
+func (client *Client) forProject(name string) *Client {
 	newclient := *client
 
 	region := string(client.region)
@@ -64,13 +84,37 @@ func (client *Client) Project(name string) (*Project, error) {
 		region = fmt.Sprintf("%s-intranet", region)
 	}
 	newclient.endpoint = fmt.Sprintf("%s.%s.%s", name, region, SLSDefaultEndpoint)
+	return &newclient
+}
 
-	proj := &Project{
-		&newclient, //get a copy of client
-		name,
+func (proj *Project) Delete() error {
+	req := &request{
+		method: METHOD_DELETE,
+		path: "/",
 	}
 
-	return proj, nil
+	return proj.client.requestWithClose(req)
+}
+
+func (client *Client) CreateProject(name string, description string) error {
+	project := &Project{
+		Name: name,
+		Description: description,
+	}
+	data, err := json.Marshal(project)
+	if err != nil {
+		return err
+	}
+
+	req := &request{
+		method: METHOD_POST,
+		path: "/",
+		payload:     data,
+		contentType: "application/json",
+	}
+
+	newClient := client.forProject(name)
+	return newClient.requestWithClose(req)
 }
 
 //

@@ -192,7 +192,7 @@ type InstanceAttributesType struct {
 	CreationTime            util.ISO6801Time //time.Time
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
-	IoOptimized             bool
+	//	IoOptimized             bool
 }
 
 type DescribeInstanceAttributeResponse struct {

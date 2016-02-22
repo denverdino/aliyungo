@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 func TestImageCreationAndDeletion(t *testing.T) {
@@ -53,8 +54,8 @@ func TestImageCreationAndDeletion(t *testing.T) {
 func TestModifyImageSharePermission(t *testing.T) {
 	req := ModifyImageSharePermissionArgs{
 		RegionId:   common.Beijing,
-		ImageId:    "xxxx",
-		AddAccount: []string{"xxxxx"},
+		ImageId:    TestImageId,
+		AddAccount: []string{TestAccountId},
 	}
 	client := NewTestClient()
 	err := client.ModifyImageSharePermission(&req)

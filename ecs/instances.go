@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"encoding/json"
+	"strconv"
 	"time"
 
 	"github.com/denverdino/aliyungo/common"
@@ -192,7 +194,7 @@ type InstanceAttributesType struct {
 	CreationTime            util.ISO6801Time //time.Time
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
-	//	IoOptimized             bool
+	IoOptimized             StringOrBool
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -361,6 +363,36 @@ type SystemDiskType struct {
 }
 
 type IoOptimized string
+
+type StringOrBool struct {
+	Value bool
+}
+
+// UnmarshalJSON implements the json.Unmarshaller interface.
+func (io *StringOrBool) UnmarshalJSON(value []byte) error {
+	if value[0] == '"' {
+		var str string
+		err := json.Unmarshal(value, &str)
+		if err == nil {
+			io.Value = (str == "true" || str == "optimized")
+		}
+		return err
+	}
+	var boolVal bool
+	err := json.Unmarshal(value, &boolVal)
+	if err == nil {
+		io.Value = boolVal
+	}
+	return err
+}
+
+func (io StringOrBool) Bool() bool {
+	return io.Value
+}
+
+func (io StringOrBool) String() string {
+	return strconv.FormatBool(io.Value)
+}
 
 var (
 	IoOptimizedNone      = IoOptimized("none")

@@ -5,10 +5,12 @@ This is an unofficial Go SDK for Aliyun Services
 
 ## Package Structure
 
-*  ecs: [Elastic Compute Service](http://docs.aliyun.com/#/pub/ecs)
-*  oss: [Open Storage Service](http://docs.aliyun.com/#/pub/oss)
-*  slb: [Server Load Balancer](http://docs.aliyun.com/#/pub/slb)
-*  dns: [DNS](http://docs.aliyun.com/#/pub/dns)
+*  ecs: [Elastic Compute Service](https://help.aliyun.com/document_detail/ecs/open-api/summary.html)
+*  oss: [Open Storage Service](https://help.aliyun.com/document_detail/oss/api-reference/abstract.html)
+*  slb: [Server Load Balancer](https://help.aliyun.com/document_detail/slb/api-reference/brief-introduction.html)
+*  dns: [DNS](https://help.aliyun.com/document_detail/dns/api-reference/summary.html)
+*  sls: [SLS](https://help.aliyun.com/document_detail/sls/api/overview.html)
+*  ram: [RAM](https://help.aliyun.com/document_detail/ram/ram-api-reference/intro/intro.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -105,6 +107,7 @@ go test
   * Yufei Zhang
   * linuxlikerqq
   * Changhai Yan (changhai.ych@alibaba-inc.com)
+  * Jizhong Jiang (jiangjizhong@gmail.com)
 
 ## License
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.

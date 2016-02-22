@@ -123,6 +123,8 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 		t.Logf("VSwitch %s is deleted successfully.", vSwitchId)
 	}
 
+	time.Sleep(20 * time.Second)
+
 	err = client.DeleteVpc(vpcId)
 	if err != nil {
 		t.Errorf("Failed to delete VPC: %v", err)

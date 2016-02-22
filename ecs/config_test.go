@@ -5,8 +5,9 @@ package ecs
 const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
-	TestInstanceId      = "MY_INSTANCE_ID"
-	TestImageId         = "MY_IMAGE_ID"
+	TestInstanceId      = "MY_TEST_INSTANCE_ID"
+	TestImageId         = "MY_TEST_IMAGE_ID"
+	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
 
 	TestIAmRich = false
 	TestQuick   = false

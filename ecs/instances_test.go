@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -198,4 +199,36 @@ func TestModifyInstanceAttribute(t *testing.T) {
 	}
 
 	t.Logf("Modify instance attribute successfully")
+}
+
+func TestIoOptimized(t *testing.T) {
+
+	type TestStruct struct {
+		Str  string
+		Flag StringOrBool
+	}
+
+	var test TestStruct
+
+	txt := "{\"Str\":\"abc\", \"Flag\": true}"
+
+	err := json.Unmarshal([]byte(txt), &test)
+	if err != nil {
+		t.Errorf("Failed to Unmarshal IoOptimized: %v", err)
+	} else {
+		if test.Flag.Value != true {
+			t.Errorf("Failed to Unmarshal IoOptimized with expected value: %s", test.Flag)
+		}
+	}
+
+	txt1 := "{\"Str\":\"abc\", \"Flag\": \"false\"}"
+
+	err = json.Unmarshal([]byte(txt1), &test)
+	if err != nil {
+		t.Errorf("Failed to Unmarshal IoOptimized: %v", err)
+	} else {
+		if test.Flag.Value != false {
+			t.Errorf("Failed to Unmarshal IoOptimized with expected value: %s", test.Flag)
+		}
+	}
 }

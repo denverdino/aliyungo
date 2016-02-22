@@ -121,7 +121,11 @@ func TestReplaceSystemDisk(t *testing.T) {
 	err = client.StartInstance(TestInstanceId)
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", TestInstanceId, err)
+	} else {
+		err = client.WaitForInstance(TestInstanceId, Running, 0)
+		if err != nil {
+			t.Errorf("Failed to wait for instance %s running: %v", TestInstanceId, err)
+		}
 	}
-
-	t.Logf("Replace system disk  %s successfully ", diskId)
+	t.Logf("Replace system disk %s successfully ", diskId)
 }

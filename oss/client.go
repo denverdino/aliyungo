@@ -847,7 +847,7 @@ func (b *Bucket) UploadSignedURL(name, method, contentType string, expires time.
 	signature := base64.StdEncoding.EncodeToString([]byte(macsum))
 	signature = strings.TrimSpace(signature)
 
-	signedurl, err := url.Parse("https://" + b.Name + ".client.amazonaws.com/")
+	signedurl, err := url.Parse(b.Region.GetEndpoint(b.Internal, b.Name, b.Secure))
 	if err != nil {
 		log.Println("ERROR sining url for OSS upload", err)
 		return ""

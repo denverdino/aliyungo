@@ -12,11 +12,12 @@ func TestLogtailConfigs(t *testing.T) {
 		t.Fatalf("error list logtail configs: %v", err)
 	}
 	fmt.Println(list)
+	t.FailNow()
 }
 
 func TestDelete(t *testing.T) {
 	p := DefaultProject(t)
-	_, e := p.LogtailConfig("logtail-test")
+	_, e := p.GetConfig("logtail-test")
 	if e != nil {
 		t.Fatalf("error %v", e)
 	}
@@ -48,7 +49,7 @@ func TestCreateLogtailConfig(t *testing.T) {
 		},
 	}
 
-	if err := p.CreateLogtailConfig(logtailConfig); err != nil {
+	if err := p.CreateConfig(logtailConfig); err != nil {
 		t.Fatalf("error create logtail config: %v", err)
 	}
 }

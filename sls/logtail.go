@@ -32,7 +32,7 @@ type LogtailConfig struct {
 	OutputDetail LogtailOutput `json:"outputDetail,omitempty"`
 }
 
-func (proj *Project) CreateLogtailConfig(config *LogtailConfig) error {
+func (proj *Project) CreateConfig(config *LogtailConfig) error {
 	data, err := json.Marshal(config)
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (proj *Project) ListConfig(offset, size int) (*LogtailConfigList, error) {
 	return list, nil
 }
 
-func (proj *Project) LogtailConfig(name string) (*LogtailConfig, error) {
+func (proj *Project) GetConfig(name string) (*LogtailConfig, error) {
 	req := &request{
 		method: METHOD_GET,
 		path:   "/configs/" + name,
@@ -83,7 +83,6 @@ func (proj *Project) LogtailConfig(name string) (*LogtailConfig, error) {
 	}
 
 	return config, nil
-
 }
 
 func (proj *Project) GetAppliedMachineGroups(configName string) ([]string, error) {

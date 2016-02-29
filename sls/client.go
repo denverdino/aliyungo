@@ -87,13 +87,14 @@ func (client *Client) forProject(name string) *Client {
 	return &newclient
 }
 
-func (proj *Project) Delete() error {
+func (client *Client) DeleteProject(name string) error {
 	req := &request{
 		method: METHOD_DELETE,
 		path: "/",
 	}
 
-	return proj.client.requestWithClose(req)
+	newClient := client.forProject(name)
+	return newClient.requestWithClose(req)
 }
 
 func (client *Client) CreateProject(name string, description string) error {

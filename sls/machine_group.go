@@ -13,7 +13,6 @@ type GroupAttribute struct {
 }
 
 type MachineGroup struct {
-	client              *Client
 	Name                string          `json:"groupName,omitempty"`
 	Type                string          `json:"groupType,omitempty"`
 	MachineIdentifyType string          `json:"machineIdentifyType,omitempty"`
@@ -45,7 +44,7 @@ type MachineGroupList struct {
 	Total  int      `json:"total"`
 }
 
-func (proj *Project) MachineGroups(offset, size int) (*MachineGroupList, error) {
+func (proj *Project) ListMachineGroup(offset, size int) (*MachineGroupList, error) {
 	req := &request{
 		path:   "/machinegroups",
 		method: METHOD_GET,
@@ -75,41 +74,40 @@ func (proj *Project) MachineGroup(name string) (*MachineGroup, error) {
 	if err := proj.client.requestWithJsonResponse(req, group); err != nil {
 		return nil, err
 	}
-	group.client = proj.client
 
 	return group, nil
 }
 
-func (mg *MachineGroup) Delete() error {
+func (proj *Project) DeleteMachineGroup(name string) error {
 	req := &request{
 		method: METHOD_DELETE,
-		path:   "/machinegroups/" + mg.Name,
+		path:   "/machinegroups/" + name,
 	}
 
-	return mg.client.requestWithClose(req)
+	return proj.client.requestWithClose(req)
 }
 
-func (mg *MachineGroup) Update() error {
-	data, err := json.Marshal(mg)
+func (proj *Project) UpdateMachineGroup(machineGroup *MachineGroup) error {
+	data, err := json.Marshal(machineGroup)
 	if err != nil {
 		return err
 	}
 	req := &request{
 		method:      METHOD_PUT,
-		path:        "/machinegroups/" + mg.Name,
+		path:        "/machinegroups/" + machineGroup.Name,
 		payload:     data,
 		contentType: "application/json",
 	}
 
-	return mg.client.requestWithClose(req)
+	return proj.client.requestWithClose(req)
 }
 
-func (mg *MachineGroup) ApplyConfig(config string) error {
+func (proj *Project) ApplyConfigToMachineGroup(machineGroup string, config string) error {
 	req := &request{
 		method: METHOD_PUT,
-		path:   "/machinegroups/" + mg.Name + "/configs/" + config,
+		path:   "/machinegroups/" + machineGroup + "/configs/" + config,
 	}
-	return mg.client.requestWithClose(req)
+	return proj.client.requestWithClose(req)
 }
 
 type Machine struct {
@@ -124,10 +122,10 @@ type MachineList struct {
 	Machines []Machine `json:"machines,omitempty"`
 }
 
-func (mg *MachineGroup) ListMachines(offset, size int) (*MachineList, error) {
+func (proj *Project) ListMachines(machineGroup string, offset, size int) (*MachineList, error) {
 	req := &request{
 		method: METHOD_GET,
-		path:   "/machinegroups/" + mg.Name + "/machines",
+		path:   "/machinegroups/" + machineGroup + "/machines",
 		params: map[string]string{
 			"size":   strconv.Itoa(size),
 			"offset": strconv.Itoa(offset),
@@ -135,20 +133,22 @@ func (mg *MachineGroup) ListMachines(offset, size int) (*MachineList, error) {
 	}
 	//list := &MachineList{ machines:[]Machine{} }
 	list := &MachineList{}
-	if err := mg.client.requestWithJsonResponse(req, list); err != nil {
+	if err := proj.client.requestWithJsonResponse(req, list); err != nil {
 		return nil, err
 	}
 	return list, nil
 }
 
-func (mg *MachineGroup) AppliedConfigs() ([]string, error) {
+
+
+func (proj *Project) GetAppliedConfigs(machineGroup string) ([]string, error) {
 	req := &request{
 		method: METHOD_GET,
-		path:   "/machinegroups/" + mg.Name + "/configs",
+		path:   "/machinegroups/" + machineGroup + "/configs",
 	}
 
 	configs := make(map[string]interface{})
-	if err := mg.client.requestWithJsonResponse(req, configs); err != nil {
+	if err := proj.client.requestWithJsonResponse(req, configs); err != nil {
 		return nil, err
 	}
 

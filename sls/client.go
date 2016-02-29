@@ -60,20 +60,24 @@ func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret
 
 func (client *Client) Project(name string) (*Project, error) {
 
-	newClient := client.forProject(name)
-
-	req := &request{
-		method: METHOD_GET,
-		path: "/",
-	}
-
-	project := &Project{}
-
-	if err := newClient.requestWithJsonResponse(req, project); err != nil {
-		return nil, err
-	}
-	project.client = newClient
-	return project, nil
+//	newClient := client.forProject(name)
+//
+//	req := &request{
+//		method: METHOD_GET,
+//		path: "/",
+//	}
+//
+//	project := &Project{}
+//
+//	if err := newClient.requestWithJsonResponse(req, project); err != nil {
+//		return nil, err
+//	}
+//	project.client = newClient
+//	return project, nil
+	return &Project {
+		Name: name,
+		client: client.forProject(name),
+	}, nil
 }
 
 func (client *Client) forProject(name string) *Client {

@@ -232,3 +232,21 @@ func TestIoOptimized(t *testing.T) {
 		}
 	}
 }
+
+func TestJoinSecurityGroup(t *testing.T) {
+	client := NewTestClient()
+
+	err := client.JoinSecurityGroup(TestInstanceId, TestSecurityGroupId)
+	if err != nil {
+		t.Errorf("Failed to joinSecurityGroup: %v", err)
+	}
+}
+
+func TestLeaveSecurityGroup(t *testing.T) {
+	client := NewTestClient()
+
+	err := client.LeaveSecurityGroup(TestInstanceId, TestSecurityGroupId)
+	if err != nil {
+		t.Errorf("Failed to LeaveSecurityGroup: %v", err)
+	}
+}

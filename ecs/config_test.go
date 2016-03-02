@@ -6,6 +6,7 @@ const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	TestInstanceId      = "MY_TEST_INSTANCE_ID"
+	TestSecurityGroupId = "MY_TEST_SECURITY_GROUP_ID"
 	TestImageId         = "MY_TEST_IMAGE_ID"
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
 

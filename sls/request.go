@@ -3,13 +3,13 @@ package sls
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/denverdino/aliyungo/util"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
-	"fmt"
 )
 
 type request struct {

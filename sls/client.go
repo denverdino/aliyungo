@@ -1,11 +1,11 @@
 package sls
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/denverdino/aliyungo/common"
 	"net/http"
 	"time"
-	"encoding/json"
 )
 
 type Client struct {
@@ -38,11 +38,11 @@ type LogGroupItem struct {
 
 const (
 	SLSDefaultEndpoint = "sls.aliyuncs.com"
-	SLSAPIVersion = "0.6.0"
-	METHOD_GET = "GET"
-	METHOD_POST = "POST"
-	METHOD_PUT = "PUT"
-	METHOD_DELETE = "DELETE"
+	SLSAPIVersion      = "0.6.0"
+	METHOD_GET         = "GET"
+	METHOD_POST        = "POST"
+	METHOD_PUT         = "PUT"
+	METHOD_DELETE      = "DELETE"
 )
 
 // NewClient creates a new instance of ECS client
@@ -60,22 +60,22 @@ func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret
 
 func (client *Client) Project(name string) (*Project, error) {
 
-//	newClient := client.forProject(name)
-//
-//	req := &request{
-//		method: METHOD_GET,
-//		path: "/",
-//	}
-//
-//	project := &Project{}
-//
-//	if err := newClient.requestWithJsonResponse(req, project); err != nil {
-//		return nil, err
-//	}
-//	project.client = newClient
-//	return project, nil
-	return &Project {
-		Name: name,
+	//	newClient := client.forProject(name)
+	//
+	//	req := &request{
+	//		method: METHOD_GET,
+	//		path: "/",
+	//	}
+	//
+	//	project := &Project{}
+	//
+	//	if err := newClient.requestWithJsonResponse(req, project); err != nil {
+	//		return nil, err
+	//	}
+	//	project.client = newClient
+	//	return project, nil
+	return &Project{
+		Name:   name,
 		client: client.forProject(name),
 	}, nil
 }
@@ -94,7 +94,7 @@ func (client *Client) forProject(name string) *Client {
 func (client *Client) DeleteProject(name string) error {
 	req := &request{
 		method: METHOD_DELETE,
-		path: "/",
+		path:   "/",
 	}
 
 	newClient := client.forProject(name)
@@ -103,7 +103,7 @@ func (client *Client) DeleteProject(name string) error {
 
 func (client *Client) CreateProject(name string, description string) error {
 	project := &Project{
-		Name: name,
+		Name:        name,
 		Description: description,
 	}
 	data, err := json.Marshal(project)
@@ -112,8 +112,8 @@ func (client *Client) CreateProject(name string, description string) error {
 	}
 
 	req := &request{
-		method: METHOD_POST,
-		path: "/",
+		method:      METHOD_POST,
+		path:        "/",
 		payload:     data,
 		contentType: "application/json",
 	}

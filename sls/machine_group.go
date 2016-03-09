@@ -139,8 +139,6 @@ func (proj *Project) ListMachines(machineGroup string, offset, size int) (*Machi
 	return list, nil
 }
 
-
-
 func (proj *Project) GetAppliedConfigs(machineGroup string) ([]string, error) {
 	req := &request{
 		method: METHOD_GET,

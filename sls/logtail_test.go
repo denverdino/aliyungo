@@ -1,18 +1,15 @@
 package sls
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestLogtailConfigs(t *testing.T) {
 	p := DefaultProject(t)
-	list, err := p.ListConfig(0, 100)
+	_, err := p.ListConfig(0, 100)
 	if err != nil {
 		t.Fatalf("error list logtail configs: %v", err)
 	}
-	fmt.Println(list)
-	t.FailNow()
 }
 
 func TestDelete(t *testing.T) {

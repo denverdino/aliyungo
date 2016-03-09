@@ -23,4 +23,3 @@ func TestLogstores(t *testing.T) {
 	}
 	fmt.Println(list)
 }
-

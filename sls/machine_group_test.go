@@ -55,4 +55,3 @@ func TestCreateMachineGroup(t *testing.T) {
 		t.Fatalf("Delete machine error: %v", err)
 	}
 }
-

@@ -6,7 +6,7 @@ type IndexLineConfig struct {
 	TokenList     []string `json:"token,omitempty"`
 	CaseSensitive bool     `json:"caseSensitive"`
 	IncludeKeys   []string `json:"include_keys,omitempty"`
-	exclude_keys  []string `json:"exclude_keys,omitempty"`
+	Exclude_keys  []string `json:"exclude_keys,omitempty"`
 }
 
 type IndexKeyConfig struct {

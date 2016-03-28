@@ -61,7 +61,7 @@ type RamClientInterface interface {
 	CreatePolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)
 	GetPolicyVersion(policyReq PolicyRequest) (PolicyVersionResponse, error)
 	DeletePolicyVersion(policyReq PolicyRequest) (RamCommonResponse, error)
-	ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionResponse, error)
+	ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionsResponse, error)
 	AttachPolicyToUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error)
 	DetachPolicyFromUser(attachPolicyRequest AttachPolicyRequest) (RamCommonResponse, error)
 	ListEnitiesForPolicy()

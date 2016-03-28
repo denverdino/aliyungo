@@ -44,6 +44,19 @@ type PolicyVersionResponse struct {
 	PolicyDocument   string
 }
 
+type PolicyVersion struct {
+	VersionId        string
+	IsDefaultVersion bool
+	CreateDate       string
+}
+
+type PolicyVersionsResponse struct {
+	RamCommonResponse
+	PolicyVersions struct {
+		PolicyVersion []PolicyVersion
+	}
+}
+
 type AttachPolicyRequest struct {
 	RamBasedRequest
 	PolicyRequest
@@ -113,11 +126,11 @@ func (client *RamClient) DeletePolicyVersion(policyReq PolicyRequest) (RamCommon
 	return resp, nil
 }
 
-func (client *RamClient) ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionResponse, error) {
-	var resp PolicyVersionResponse
+func (client *RamClient) ListPolicyVersions(policyReq PolicyRequest) (PolicyVersionsResponse, error) {
+	var resp PolicyVersionsResponse
 	err := client.Invoke("ListPolicyVersions", policyReq, &resp)
 	if err != nil {
-		return PolicyVersionResponse{}, err
+		return PolicyVersionsResponse{}, err
 	}
 	return resp, nil
 }

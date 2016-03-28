@@ -436,3 +436,32 @@ func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId strin
 	}
 	return response.InstanceId, err
 }
+
+type SecurityGroupArgs struct {
+	InstanceId      string
+	SecurityGroupId string
+}
+
+type SecurityGroupResponse struct {
+	common.Response
+}
+
+//JoinSecurityGroup
+//
+//You can read doc at https://help.aliyun.com/document_detail/ecs/open-api/instance/joinsecuritygroup.html
+func (client *Client) JoinSecurityGroup(instanceId string, securityGroupId string) error {
+	args := SecurityGroupArgs{InstanceId: instanceId, SecurityGroupId: securityGroupId}
+	response := SecurityGroupResponse{}
+	err := client.Invoke("JoinSecurityGroup", &args, &response)
+	return err
+}
+
+//LeaveSecurityGroup
+//
+//You can read doc at https://help.aliyun.com/document_detail/ecs/open-api/instance/leavesecuritygroup.html
+func (client *Client) LeaveSecurityGroup(instanceId string, securityGroupId string) error {
+	args := SecurityGroupArgs{InstanceId: instanceId, SecurityGroupId: securityGroupId}
+	response := SecurityGroupResponse{}
+	err := client.Invoke("LeaveSecurityGroup", &args, &response)
+	return err
+}

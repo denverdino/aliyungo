@@ -24,7 +24,6 @@ type LogtailOutput struct {
 }
 
 type LogtailConfig struct {
-	client       *Client
 	Name         string        `json:"configName,omitempty"`
 	InputType    string        `json:"inputType,omitempty"`
 	InputDetail  LogtailInput  `json:"inputDetail,omitempty"`
@@ -33,7 +32,7 @@ type LogtailConfig struct {
 	OutputDetail LogtailOutput `json:"outputDetail,omitempty"`
 }
 
-func (proj *Project) CreateLogtailConfig(config *LogtailConfig) error {
+func (proj *Project) CreateConfig(config *LogtailConfig) error {
 	data, err := json.Marshal(config)
 	if err != nil {
 		return err
@@ -55,7 +54,7 @@ type LogtailConfigList struct {
 	Configs []string `json:"configs,omitempty"`
 }
 
-func (proj *Project) LogtailConfigs(offset, size int) (*LogtailConfigList, error) {
+func (proj *Project) ListConfig(offset, size int) (*LogtailConfigList, error) {
 	req := &request{
 		method: METHOD_GET,
 		path:   "/configs",
@@ -72,7 +71,7 @@ func (proj *Project) LogtailConfigs(offset, size int) (*LogtailConfigList, error
 	return list, nil
 }
 
-func (proj *Project) LogtailConfig(name string) (*LogtailConfig, error) {
+func (proj *Project) GetConfig(name string) (*LogtailConfig, error) {
 	req := &request{
 		method: METHOD_GET,
 		path:   "/configs/" + name,
@@ -83,51 +82,49 @@ func (proj *Project) LogtailConfig(name string) (*LogtailConfig, error) {
 		return nil, err
 	}
 
-	config.client = proj.client
 	return config, nil
-
 }
 
-func (lc *LogtailConfig) AppliedMachineGroups() ([]string, error) {
+func (proj *Project) GetAppliedMachineGroups(configName string) ([]string, error) {
 	type appliedMachineGroups struct {
 		Machinegroups []string `json:"machinegroups,omitempty"`
 	}
 
 	req := &request{
 		method: METHOD_GET,
-		path:   "/configs/" + lc.Name + "/machinegroups",
+		path:   "/configs/" + configName + "/machinegroups",
 	}
 
 	group := &appliedMachineGroups{}
 
-	if err := lc.client.requestWithJsonResponse(req, group); err != nil {
+	if err := proj.client.requestWithJsonResponse(req, group); err != nil {
 		return nil, err
 	}
 
 	return group.Machinegroups, nil
 }
 
-func (lc *LogtailConfig) Delete() error {
+func (proj *Project) DeleteConfig(configName string) error {
 	req := &request{
 		method: METHOD_DELETE,
-		path:   "/configs/" + lc.Name,
+		path:   "/configs/" + configName,
 	}
 
-	return lc.client.requestWithClose(req)
+	return proj.client.requestWithClose(req)
 }
 
-func (lc *LogtailConfig) Update() error {
-	data, err := json.Marshal(lc)
+func (proj *Project) UpdateConfig(config *LogtailConfig) error {
+	data, err := json.Marshal(config)
 	if err != nil {
 		return err
 	}
 
 	req := &request{
-		method:      METHOD_POST,
-		path:        "/configs/" + lc.Name,
+		method:      METHOD_PUT,
+		path:        "/configs/" + config.Name,
 		payload:     data,
 		contentType: "application/json",
 	}
 
-	return lc.client.requestWithClose(req)
+	return proj.client.requestWithClose(req)
 }

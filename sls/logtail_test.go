@@ -6,25 +6,26 @@ import (
 )
 
 func TestLogtailConfigs(t *testing.T) {
-	p := DefaultProject()
-	list, err := p.LogtailConfigs(0, 100)
+	p := DefaultProject(t)
+	list, err := p.ListConfig(0, 100)
 	if err != nil {
 		t.Fatalf("error list logtail configs: %v", err)
 	}
 	fmt.Println(list)
+	t.FailNow()
 }
 
 func TestDelete(t *testing.T) {
-	p := DefaultProject()
-	c, e := p.LogtailConfig("logtail-test")
+	p := DefaultProject(t)
+	_, e := p.GetConfig("logtail-test")
 	if e != nil {
 		t.Fatalf("error %v", e)
 	}
-	c.Delete()
+	p.DeleteConfig("logtail-test")
 }
 
 func TestCreateLogtailConfig(t *testing.T) {
-	p := DefaultProject()
+	p := DefaultProject(t)
 	logtailConfig := &LogtailConfig{
 		Name:      "logtail-test",
 		InputType: "file",
@@ -44,11 +45,11 @@ func TestCreateLogtailConfig(t *testing.T) {
 		OutputType: "LogService",
 		Sample:     "sample",
 		OutputDetail: LogtailOutput{
-			LogstoreName: "test-jjz",
+			LogstoreName: TestLogstoreName,
 		},
 	}
 
-	if err := p.CreateLogtailConfig(logtailConfig); err != nil {
+	if err := p.CreateConfig(logtailConfig); err != nil {
 		t.Fatalf("error create logtail config: %v", err)
 	}
 }

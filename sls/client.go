@@ -6,7 +6,7 @@ import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/golang/protobuf/proto"
 	"net/http"
-	"time"
+	//"time"
 	"strconv"
 )
 
@@ -27,21 +27,21 @@ type Project struct {
 	Description string `json:"description,omitempty"`
 }
 
-type LogContent struct {
-	Key   string
-	Value string
-}
-
-type LogItem struct {
-	Time     time.Time
-	Contents []*LogContent
-}
-
-type LogGroupItem struct {
-	Logs   []*LogItem
-	Topic  string
-	Source string
-}
+//type LogContent struct {
+//	Key   string
+//	Value string
+//}
+//
+//type LogItem struct {
+//	Time     time.Time
+//	Contents []*LogContent
+//}
+//
+//type LogGroupItem struct {
+//	Logs   []*LogItem
+//	Topic  string
+//	Source string
+//}
 
 type PutLogsRequest struct {
 	Project  string

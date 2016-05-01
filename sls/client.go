@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/denverdino/aliyungo/common"
+	"github.com/golang/protobuf/proto"
 	"net/http"
-	"time"
+	//"time"
+	"strconv"
 )
 
 type Client struct {
@@ -25,15 +27,27 @@ type Project struct {
 	Description string `json:"description,omitempty"`
 }
 
-type LogItem struct {
-	Time    time.Time
-	Content map[string]string
-}
+//type LogContent struct {
+//	Key   string
+//	Value string
+//}
+//
+//type LogItem struct {
+//	Time     time.Time
+//	Contents []*LogContent
+//}
+//
+//type LogGroupItem struct {
+//	Logs   []*LogItem
+//	Topic  string
+//	Source string
+//}
 
-type LogGroupItem struct {
-	Logs   []*LogItem
-	Topic  string
-	Source string
+type PutLogsRequest struct {
+	Project  string
+	LogStore string
+	LogItems LogGroup
+	HashKey  string
 }
 
 const (
@@ -157,3 +171,27 @@ func (client *Client) CreateProject(name string, description string) error {
 //		LogGroupList: logGroups,
 //	})
 //}
+
+func (client *Client) PutLogs(putLogRequest *PutLogsRequest) error {
+	if putLogRequest == nil {
+		return nil
+	}
+
+	data, err := proto.Marshal(&putLogRequest.LogItems)
+	if err != nil {
+		return err
+	}
+
+	req := &request{
+		method:      METHOD_POST,
+		path:        "/logstores/" + putLogRequest.LogStore + "/shards/lb",
+		payload:     data,
+		contentType: "application/x-protobuf",
+		headers: map[string]string{ "x-log-bodyrawsize" : strconv.Itoa( len(data) ), },
+	}
+
+
+	newClient := client.forProject(putLogRequest.Project )
+	return newClient.requestWithClose(req)
+
+}

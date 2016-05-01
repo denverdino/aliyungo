@@ -51,16 +51,16 @@ func TestClient_PutLogs(t *testing.T) {
 
 	client := NewClient(region, false, AccessKeyId, AccessKeySecret)
 
-	coontents := []*Log_Content{}
+	contents := []*Log_Content{}
 	key := "log1"
 	value := "value1"
-	coontents = append( coontents, &Log_Content{
+	contents = append( contents, &Log_Content{
 		Key: &key,
 		Value: &value,
 	})
 	key2 := "log2"
 	value2 := "value2"
-	coontents = append( coontents, &Log_Content{
+	contents = append( contents, &Log_Content{
 		Key: &key2,
 		Value: &value2,
 	})
@@ -68,7 +68,7 @@ func TestClient_PutLogs(t *testing.T) {
 	logs := []*Log{}
 	logs = append(logs, &Log{
 						Time: proto.Uint32(uint32(time.Now().Unix())),
-						Contents: coontents,
+						Contents: contents,
 					})
 	
 	

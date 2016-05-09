@@ -22,12 +22,15 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-type LockReason string
+type LockReason struct {
+	LockReason string
+}
 
-const (
-	LockReasonFinancial = LockReason("financial")
-	LockReasonSecurity  = LockReason("security")
-)
+//ECS API变了
+//const (
+//	LockReasonFinancial = LockReason("financial")
+//	LockReasonSecurity  = LockReason("security")
+//)
 
 type DescribeInstanceStatusArgs struct {
 	RegionId common.Region

@@ -248,7 +248,12 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 	for {
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return err
+			time.Sleep(DefaultWaitForInterval * time.Second)
+			timeout = timeout - DefaultWaitForInterval
+			if timeout <= 0 {
+				return common.GetClientErrorFromString("Timeout")
+			}
+			continue
 		}
 		if instance.Status == status {
 			//TODO

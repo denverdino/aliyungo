@@ -19,6 +19,8 @@ type CreateLoadBalancerArgs struct {
 	VSwitchId          string
 	InternetChargeType common.InternetChargeType
 	Bandwidth          int
+	MasterZoneId       string
+	SlaveZoneId        string
 	ClientToken        string
 }
 

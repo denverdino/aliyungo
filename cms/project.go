@@ -21,11 +21,18 @@ type Project struct {
 }
 
 type GalaxyConf struct {
+	InstanceNum int
+	Coefficient float64
+	WorkNum     int
+	SourceNum   int
+	HashNum     int
+	GroupNum    int
+	CrossNum    int
 }
 
 type CreateProjectResponse struct {
 	Response
-	Result string
+	Result int64
 }
 
 //创建project
@@ -124,6 +131,8 @@ type StatusProjectResponse struct {
 }
 
 type GalaxyStatus struct {
+	Status RunStatus
+	Msg    string
 }
 
 //查询project的运行状态

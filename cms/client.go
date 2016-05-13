@@ -18,5 +18,6 @@ type CmsClient struct {
 func NewClient(accessKeyId string, accessKeySecret string) CmsClientInterface {
 	client := &CmsClient{}
 	client.Init(CMSDefaultEndpoint, CMSAPIVersion, accessKeyId, accessKeySecret)
+	client.SetDebug(true)
 	return client
 }

@@ -1,5 +1,9 @@
 package cms
 
+import (
+	"time"
+)
+
 type CommonMetricStreamRequest struct {
 	ProjectName      string
 	MetricStreamName string
@@ -10,6 +14,34 @@ type CreateMetricStreamRequest struct {
 	MetricStream MetricStream
 }
 type MetricStream struct {
+	Id               int64
+	ProjectId        int64
+	ProjectName      string
+	MetricStreamName string
+	MetricStreamDesc string
+	MetricNameField  string
+	Exescript        string
+	LogHubConf       LogHubConf
+	Streams          []LogHubStream
+	GalaxyConf       GalaxyConf
+	GmtCreate        time.Time
+	GmtModified      time.Time
+	Status           int
+}
+
+type LogHubConf struct {
+	LogHubStream
+
+	LogHubEndpointPort int
+	LogHubShardCount   int
+}
+
+type LogHubStream struct {
+	LogHubEndpoint     string
+	LogHubProjectName  string
+	LogHubStreamName   string
+	LogHubAccessKey    string
+	LogHubAccessSecret string
 }
 
 type CreateMetricStreamResponse struct {

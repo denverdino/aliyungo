@@ -17,7 +17,7 @@ type QueryMetricDataRequest struct {
 type QueryMetricDataResponse struct {
 	Response
 	Period     string
-	Datapoints []MetricQuery
+	Datapoints []map[string]interface{} //List<JSONObject>
 }
 
 //查询MetricData数据
@@ -49,7 +49,7 @@ type QueryMetricLastResponse struct {
 	Cursor     string
 	Size       int
 	NextToken  int
-	Datapoints []MetricQuery
+	Datapoints []map[string]interface{} //List<JSONObject>
 }
 
 //查询Metric下各Dimension的最新一条数据
@@ -75,7 +75,7 @@ type QueryMetricTopRequest struct {
 
 type QueryMetricTopResponse struct {
 	Period     string
-	Datapoints []MetricQuery
+	Datapoints []map[string]interface{} //List<JSONObject>
 }
 
 //查询Metric下各Dimension按指定字段排序后顶部的数据
@@ -99,7 +99,7 @@ type DescribeMetricRequest struct {
 
 type DescribeMetricResponse struct {
 	Response
-	Datapoints []MetricQuery
+	Datapoints []map[string]interface{} //List<JSONObject>
 }
 
 //查询Metric下各Dimension的描述信息
@@ -127,7 +127,7 @@ type QueryMetricRequest struct {
 type QueryMetricResponse struct {
 	Response
 	NextToken  string
-	Datapoints interface{}
+	Datapoints []map[string]interface{} //List<JSONObject>
 	Datapoint  string
 }
 

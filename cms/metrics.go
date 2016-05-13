@@ -1,11 +1,49 @@
 package cms
 
+import (
+	"time"
+)
+
 type CommonMetricsRequest struct {
 	ProjectName string
 	IsPublic    int
 }
 
 type Metrics struct {
+	Id               int64
+	ProjectId        int64
+	ProjectName      string
+	MetricStreamId   int64
+	MetricStreamName string
+	MetricName       string
+	Fields           []Field
+	Aggregates       []Aggregate
+	Groupbys         []Groupby
+	Arithmetics      []Arithmetic
+	Tumblingwindows  []int
+	Timestamp        string
+	GmtCreate        time.Time
+	GmtModified      time.Time
+	IsPublic         int
+	Status           int
+}
+
+type Field struct {
+	FieldName string
+	Alias     string
+}
+
+type Aggregate struct {
+	FieldName string
+	Alias     string
+	Function  string
+}
+
+type Groupby struct {
+	FieldName string
+}
+
+type Arithmetic struct {
 }
 
 type CreateMetricsRequest struct {

@@ -22,12 +22,15 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-type LockReason string
+type LockReason struct {
+	LockReason string
+}
 
-const (
-	LockReasonFinancial = LockReason("financial")
-	LockReasonSecurity  = LockReason("security")
-)
+//ECS API变了
+//const (
+//	LockReasonFinancial = LockReason("financial")
+//	LockReasonSecurity  = LockReason("security")
+//)
 
 type DescribeInstanceStatusArgs struct {
 	RegionId common.Region
@@ -248,7 +251,12 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 	for {
 		instance, err := client.DescribeInstanceAttribute(instanceId)
 		if err != nil {
-			return err
+			time.Sleep(DefaultWaitForInterval * time.Second)
+			timeout = timeout - DefaultWaitForInterval
+			if timeout <= 0 {
+				return common.GetClientErrorFromString("Timeout")
+			}
+			continue
 		}
 		if instance.Status == status {
 			//TODO

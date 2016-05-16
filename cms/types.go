@@ -3,6 +3,6 @@ package cms
 type Response struct {
 	Message string
 	Code    string
-	Success string
+	Success bool
 	TraceId string
 }

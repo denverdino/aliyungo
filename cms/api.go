@@ -33,7 +33,7 @@ type CmsClientInterface interface {
 	UpdateDimTable(request UpdateDimTableRequest) (Response, error)
 	DeleteDimTable(request DeleteDimTableRequest) (Response, error)
 	GetDimTable(request GetDimTableRequest) (GetDimTableResponse, error)
-	ListDimTable(request GetDimTableRequest) (ListDimTableResponse, error)
+	ListDimTable(request ListDimTableRequest) (ListDimTableResponse, error)
 	PutDimTableData(request PutDimTableDataRequest) (Response, error)
 	BatchPutDimTableData(request BatchPutDimTableDataRequest) (Response, error)
 	QueryDimTableData(request QueryDimTableDataRequest) (QueryDimTableDataResponse, error)

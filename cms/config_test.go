@@ -1,8 +1,8 @@
 package cms
 
 const (
-	TestAccessKeyId     = "ACSbW2iBbyX0Pk9N"
-	TestAccessKeySecret = "TLSwMm5LQU"
+	TestAccessKeyId     = "<YOUR ACCESS_KEY_ID>"
+	TestAccessKeySecret = "<YOUR ACCESS_KEY_SECRET>"
 )
 
 var testClient CmsClientInterface

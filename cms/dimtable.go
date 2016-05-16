@@ -1,20 +1,17 @@
 package cms
 
-import (
-	"time"
-)
-
 type DimTable struct {
 	Id           int64
 	DimTableName string
 	Owner        string
 	ExtendInfo   map[string]interface{} //JSONOBJECT
-	GmtCreate    time.Time
-	GmtModified  time.Time
+	GmtCreate    int64
+	GmtModified  int64
 }
 
 type CreateDimTableRequest struct {
-	DimTable DimTable
+	DimTableName string
+	DimTable     DimTable
 }
 
 type CreateDimTableResponse struct {
@@ -89,11 +86,15 @@ type ListDimTableRequest struct {
 type ListDimTableResponse struct {
 	Response
 	NextToken  int
-	Datapoints []DimTable
+	Datapoints Datapoints
+}
+
+type Datapoints struct {
+	Datapoint []DimTable
 }
 
 //查询DimTable列表
-func (client *CmsClient) ListDimTable(request GetDimTableRequest) (ListDimTableResponse, error) {
+func (client *CmsClient) ListDimTable(request ListDimTableRequest) (ListDimTableResponse, error) {
 	var resp ListDimTableResponse
 	err := client.Invoke("ListDimTable", request, &resp)
 	if err != nil {
@@ -119,7 +120,7 @@ func (client *CmsClient) PutDimTableData(request PutDimTableDataRequest) (Respon
 
 type BatchPutDimTableDataRequest struct {
 	DimTableName string
-	Body         []map[string]interface{} //JSONArray
+	Body         string //JSONArray
 }
 
 //批量上传DimTable数据

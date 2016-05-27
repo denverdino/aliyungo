@@ -126,8 +126,6 @@ func (client *Client) WaitForSnapShotReady(regionId common.Region, snapshotId st
 			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
-
-		time.Sleep(5 * time.Second)
 	}
 	return nil
 }

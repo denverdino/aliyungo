@@ -5,6 +5,7 @@ import (
 	"github.com/denverdino/aliyungo/util"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 // ImageOwnerAlias represents image owner
@@ -19,12 +20,22 @@ const (
 	ImageOwnerDefault     = ImageOwnerAlias("") //Return the values for system, self, and others
 )
 
+type ImageStatus string
+
+const (
+	ImageStatusAvailable    = ImageStatus("Available")
+	ImageStatusUnAvailable  = ImageStatus("UnAvailable")
+	ImageStatusCreating     = ImageStatus("Creating")
+	ImageStatusCreateFailed = ImageStatus("CreateFailed")
+)
+
 // DescribeImagesArgs repsents arguements to describe images
 type DescribeImagesArgs struct {
 	RegionId        common.Region
 	ImageId         string
 	SnapshotId      string
 	ImageName       string
+	Status          ImageStatus
 	ImageOwnerAlias ImageOwnerAlias
 	common.Pagination
 }
@@ -47,15 +58,6 @@ type DiskDeviceMapping struct {
 	Size   string
 	Device string
 }
-
-type ImageStatus string
-
-const (
-	ImageStatusAvailable    = ImageStatus("Available")
-	ImageStatusUnAvailable  = ImageStatus("UnAvailable")
-	ImageStatusCreating     = ImageStatus("Creating")
-	ImageStatusCreateFailed = ImageStatus("CreateFailed")
-)
 
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&imagetype
@@ -185,4 +187,83 @@ func (client *Client) DescribeImageSharePermission(args *ModifyImageSharePermiss
 	response := ImageSharePermissionResponse{}
 	err := client.Invoke("DescribeImageSharePermission", args, &response)
 	return &response, err
+}
+
+type CopyImageArgs struct {
+	RegionId               common.Region
+	ImageId                string
+	DestinationRegionId    common.Region
+	DestinationImageName   string
+	DestinationDescription string
+	ClientToken            string
+}
+
+type CopyImageResponse struct {
+	common.Response
+	ImageId string
+}
+
+// You can read doc at https://help.aliyun.com/document_detail/25538.html
+func (client *Client) CopyImage(args *CopyImageArgs) (string, error) {
+	response := &CopyImageResponse{}
+	err := client.Invoke("CopyImage", args, &response)
+	if err != nil {
+		return "", err
+	}
+	return response.ImageId, nil
+}
+
+// Default timeout value for WaitForImageReady method
+const ImageDefaultTimeout = 120
+
+//Wait Image ready
+func (client *Client) WaitForImageReady(regionId common.Region, imageId string, timeout int) error {
+	if timeout <= 0 {
+		timeout = ImageDefaultTimeout
+	}
+	for {
+		args := DescribeImagesArgs{
+			RegionId: regionId,
+			ImageId:  imageId,
+			Status:   ImageStatusCreating,
+		}
+
+		images, _, err := client.DescribeImages(&args)
+		if err != nil {
+			return err
+		}
+		if images == nil || len(images) == 0 {
+			args.Status = ImageStatusAvailable
+			images, _, er := client.DescribeImages(&args)
+			if er == nil && len(images) == 1 {
+				break
+			} else {
+				return common.GetClientErrorFromString("Not found")
+			}
+		}
+		if images[0].Progress == "100%" {
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
+}
+
+type CancelCopyImageRequest struct {
+	regionId common.Region
+	ImageId  string
+}
+
+// You can read doc at https://help.aliyun.com/document_detail/25539.html
+func (client *Client) CancelCopyImage(regionId common.Region, imageId string) error {
+	response := &common.Response{}
+	err := client.Invoke("CancelCopyImage", &CancelCopyImageRequest{regionId, imageId}, &response)
+	if err != nil {
+		return err
+	}
+	return nil
 }

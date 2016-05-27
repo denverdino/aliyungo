@@ -69,3 +69,46 @@ func TestModifyImageSharePermission(t *testing.T) {
 	}
 	t.Logf("result:image: %++v", shareInfo)
 }
+
+func TestCopyImage(t *testing.T) {
+	client := NewTestClient()
+	req := CopyImageArgs{
+		RegionId:               common.Beijing,
+		ImageId:                TestImageId,
+		DestinationRegionId:    common.Hangzhou,
+		DestinationImageName:   "My_Test_Image_NAME_for_AliyunGo",
+		DestinationDescription: "My Test Image for AliyunGo description",
+		ClientToken:            client.GenerateClientToken(),
+	}
+
+	imageId, err := client.CopyImage(&req)
+	if err != nil {
+		t.Errorf("Failed to CopyImage: %v", err)
+	}
+	t.Logf("result:image: %++v", imageId)
+
+	if err := client.WaitForImageReady(common.Hangzhou, imageId, 600); err != nil {
+		t.Errorf("Failed to WaitImage: %v", err)
+		//return
+	}
+
+	describeReq := DescribeImagesArgs{
+		RegionId:        common.Hangzhou,
+		ImageId:         imageId,
+		Status:          ImageStatusAvailable,
+		ImageOwnerAlias: ImageOwnerSelf,
+	}
+
+	images, _, err := client.DescribeImages(&describeReq)
+	if err != nil {
+		t.Errorf("Failed to describeImage: %v", err)
+	}
+	t.Logf("result: images %++v", images)
+}
+
+func TestCancelCopyImage(t *testing.T) {
+	client := NewTestClient()
+	if err := client.CancelCopyImage(common.Hangzhou, TestImageId); err != nil {
+		t.Errorf("Failed to CancelCopyImage: %v", err)
+	}
+}

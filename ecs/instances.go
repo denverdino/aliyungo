@@ -171,18 +171,22 @@ type EipAddressAssociateType struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
-	InstanceId       string
-	InstanceName     string
-	Description      string
-	ImageId          string
-	RegionId         common.Region
-	ZoneId           string
-	ClusterId        string
-	InstanceType     string
-	HostName         string
-	Status           InstanceStatus
-	OperationLocks   OperationLocksType
-	SecurityGroupIds struct {
+	InstanceId         string
+	InstanceName       string
+	Description        string
+	ImageId            string
+	RegionId           common.Region
+	ZoneId             string
+	CPU                int
+	Memory             int
+	ClusterId          string
+	InstanceType       string
+	InstanceTypeFamily string
+	HostName           string
+	SerialNumber       string
+	Status             InstanceStatus
+	OperationLocks     OperationLocksType
+	SecurityGroupIds   struct {
 		SecurityGroupId []string
 	}
 	PublicIpAddress         IpAddressSetType
@@ -195,6 +199,8 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	IoOptimized             StringOrBool
+	InstanceChargeType      common.InternetChargeType
+	ExpiredTime             util.ISO6801Time
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -357,6 +363,7 @@ type DataDiskType struct {
 }
 
 type SystemDiskType struct {
+	Size        int
 	Category    DiskCategory //Enum cloud, ephemeral, ephemeral_ssd
 	DiskName    string
 	Description string
@@ -418,6 +425,8 @@ type CreateInstanceArgs struct {
 	VSwitchId               string
 	PrivateIpAddress        string
 	ClientToken             string
+	InstanceChargeType      common.InstanceChargeType
+	Period                  int
 }
 
 type CreateInstanceResponse struct {

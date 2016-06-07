@@ -22,12 +22,9 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-type LockReason string
-
-const (
-	LockReasonFinancial = LockReason("financial")
-	LockReasonSecurity  = LockReason("security")
-)
+type LockReason struct {
+	LockReason string
+}
 
 type DescribeInstanceStatusArgs struct {
 	RegionId common.Region

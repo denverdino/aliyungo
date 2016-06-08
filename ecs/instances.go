@@ -22,8 +22,15 @@ const (
 	Stopping = InstanceStatus("Stopping")
 )
 
-type LockReason struct {
-	LockReason string
+type LockReason string
+
+const (
+	LockReasonFinancial = LockReason("financial")
+	LockReasonSecurity  = LockReason("security")
+)
+
+type LockReasonType struct {
+	LockReason LockReason
 }
 
 type DescribeInstanceStatusArgs struct {
@@ -132,7 +139,7 @@ type DescribeInstanceAttributeArgs struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&operationlockstype
 type OperationLocksType struct {
-	LockReason []LockReason //enum for financial, security
+	LockReason []LockReasonType //enum for financial, security
 }
 
 //

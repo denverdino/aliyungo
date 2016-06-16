@@ -307,6 +307,7 @@ type DescribeInstancesArgs struct {
 	ZoneId              string
 	InstanceIds         string
 	InstanceNetworkType string
+	InstanceName        string
 	PrivateIpAddresses  string
 	InnerIpAddresses    string
 	PublicIpAddresses   string

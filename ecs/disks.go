@@ -41,6 +41,14 @@ const (
 	DiskStatusAll       = DiskStatus("All") //Default
 )
 
+// Charge type of disks
+type DiskChargeType string
+
+const (
+	PrePaid  = DiskChargeType("PrePaid")
+	PostPaid = DiskChargeType("PostPaid")
+)
+
 // A DescribeDisksArgs defines the arguments to describe disks
 type DescribeDisksArgs struct {
 	RegionId           common.Region
@@ -83,6 +91,7 @@ type DiskItemType struct {
 	CreationTime       util.ISO6801Time
 	AttachedTime       util.ISO6801Time
 	DetachedTime       util.ISO6801Time
+	DiskChargeType     DiskChargeType
 }
 
 type DescribeDisksResponse struct {

@@ -8,9 +8,10 @@ type DescribeInstanceTypesArgs struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instancetypeitemtype
 type InstanceTypeItemType struct {
-	InstanceTypeId string
-	CpuCoreCount   int
-	MemorySize     float64
+	InstanceTypeId     string
+	CpuCoreCount       int
+	MemorySize         float64
+	InstanceTypeFamily string
 }
 
 type DescribeInstanceTypesResponse struct {

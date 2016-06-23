@@ -29,6 +29,10 @@ const (
 	LockReasonSecurity  = LockReason("security")
 )
 
+type LockReasonType struct {
+	LockReason LockReason
+}
+
 type DescribeInstanceStatusArgs struct {
 	RegionId common.Region
 	ZoneId   string
@@ -135,7 +139,7 @@ type DescribeInstanceAttributeArgs struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&operationlockstype
 type OperationLocksType struct {
-	LockReason []LockReason //enum for financial, security
+	LockReason []LockReasonType //enum for financial, security
 }
 
 //
@@ -171,18 +175,22 @@ type EipAddressAssociateType struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
-	InstanceId       string
-	InstanceName     string
-	Description      string
-	ImageId          string
-	RegionId         common.Region
-	ZoneId           string
-	ClusterId        string
-	InstanceType     string
-	HostName         string
-	Status           InstanceStatus
-	OperationLocks   OperationLocksType
-	SecurityGroupIds struct {
+	InstanceId         string
+	InstanceName       string
+	Description        string
+	ImageId            string
+	RegionId           common.Region
+	ZoneId             string
+	CPU                int
+	Memory             int
+	ClusterId          string
+	InstanceType       string
+	InstanceTypeFamily string
+	HostName           string
+	SerialNumber       string
+	Status             InstanceStatus
+	OperationLocks     OperationLocksType
+	SecurityGroupIds   struct {
 		SecurityGroupId []string
 	}
 	PublicIpAddress         IpAddressSetType
@@ -195,6 +203,8 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	IoOptimized             StringOrBool
+	InstanceChargeType      common.InternetChargeType
+	ExpiredTime             util.ISO6801Time
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -297,6 +307,8 @@ type DescribeInstancesArgs struct {
 	ZoneId              string
 	InstanceIds         string
 	InstanceNetworkType string
+	InstanceName        string
+	Status              InstanceStatus
 	PrivateIpAddresses  string
 	InnerIpAddresses    string
 	PublicIpAddresses   string
@@ -357,6 +369,7 @@ type DataDiskType struct {
 }
 
 type SystemDiskType struct {
+	Size        int
 	Category    DiskCategory //Enum cloud, ephemeral, ephemeral_ssd
 	DiskName    string
 	Description string
@@ -418,6 +431,8 @@ type CreateInstanceArgs struct {
 	VSwitchId               string
 	PrivateIpAddress        string
 	ClientToken             string
+	InstanceChargeType      common.InstanceChargeType
+	Period                  int
 }
 
 type CreateInstanceResponse struct {

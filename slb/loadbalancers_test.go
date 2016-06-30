@@ -62,3 +62,37 @@ func TestLoadBlancer(t *testing.T) {
 	t.Logf("DeleteLoadBalancer successfully: %s", lbId)
 
 }
+
+//create slb
+func TestCreateLoadBalancer(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := CreateLoadBalancerArgs{
+		RegionId:         common.Beijing,
+		LoadBalancerName: "test-slb",
+		AddressType:      InternetAddressType,
+		ClientToken:      client.GenerateClientToken(),
+	}
+
+	response, err := client.CreateLoadBalancer(&args)
+	if err != nil {
+		t.Fatalf("Failed to CreateLoadBalancer: %v", err)
+	} else {
+		t.Logf("CreateLoadBalancer result: %v", *response)
+	}
+}
+
+func TestDescribeLoadBalancers(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := DescribeLoadBalancersArgs{
+		RegionId: common.Beijing,
+	}
+
+	lbs, err := client.DescribeLoadBalancers(&args)
+	if err != nil {
+		t.Fatalf("Failed to DescribeLoadBalancers: %v", err)
+	} else {
+		t.Logf("LoadBalancers %v is described successfully.", lbs)
+	}
+}

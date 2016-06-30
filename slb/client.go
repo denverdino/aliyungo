@@ -12,9 +12,15 @@ const (
 	SLBAPIVersion      = "2014-05-15"
 )
 
-// NewClient creates a new instance of ECS client
+// NewClient creates a new instance of SLB client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{}
 	client.Init(SLBDefaultEndpoint, SLBAPIVersion, accessKeyId, accessKeySecret)
+	return client
+}
+
+func NewClientWithOwnerID(accessKeyId, accessKeySecret string, ownerId string) *Client {
+	client := &Client{}
+	client.InitWithOwnerId(SLBDefaultEndpoint, SLBAPIVersion, accessKeyId, accessKeySecret, ownerId)
 	return client
 }

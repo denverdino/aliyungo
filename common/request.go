@@ -28,6 +28,7 @@ type Request struct {
 	SignatureNonce       string
 	ResourceOwnerAccount string
 	Action               string
+	OwnerId              string
 }
 
 func (request *Request) init(version string, action string, AccessKeyId string) {
@@ -39,6 +40,11 @@ func (request *Request) init(version string, action string, AccessKeyId string) 
 	request.SignatureNonce = util.CreateRandomString()
 	request.Action = action
 	request.AccessKeyId = AccessKeyId
+}
+
+func (request *Request) initWithOwnerId(version string, action string, AccessKeyId string, ownerId string) {
+	request.init(version, action, AccessKeyId)
+	request.OwnerId = ownerId
 }
 
 type Response struct {

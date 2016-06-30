@@ -3,11 +3,16 @@ package ecs
 //Modify with your Access Key Id and Access Key Secret
 
 const (
-	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
-	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
-	TestInstanceId      = "MY_TEST_INSTANCE_ID"
-	TestSecurityGroupId = "MY_TEST_SECURITY_GROUP_ID"
-	TestImageId         = "MY_TEST_IMAGE_ID"
+	// BID 小号
+	//	TestAccessKeyId     = "sczRHxPls3VC1O2S"
+	//	TestAccessKeySecret = "xg6t4cvsLiOtN7hutd5xhReppxei7x"
+	//BID 大账号
+	TestAccessKeyId     = "fbAqn6zWXp6Swr6G"
+	TestAccessKeySecret = "9CZw2W7vvaTx9LjSlTL5ZhJxO3sbnW"
+	TestInstanceId      = "i-25xna88dv"
+	TestSecurityGroupId = "sg-252okhmti"
+	TestImageId         = "suse12sp1_64_40G_cloudinit_20160520.vhd"
+	TestOwnerId         = "1542159133705458"
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
 
 	TestIAmRich = false
@@ -31,4 +36,15 @@ func NewTestClientForDebug() *Client {
 		testDebugClient.SetDebug(true)
 	}
 	return testDebugClient
+}
+
+var testBIDDebugClient *Client
+
+func NewTestBIDClientForDebug() *Client {
+	if testBIDDebugClient == nil {
+		testBIDDebugClient = NewClientWithOwnerID(TestAccessKeyId, TestAccessKeySecret, TestOwnerId)
+		testBIDDebugClient.SetDebug(true)
+	}
+
+	return testBIDDebugClient
 }

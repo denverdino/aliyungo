@@ -264,10 +264,10 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 }
 
 type ReplaceSystemDiskArgs struct {
-	InstanceId     string
-	ImageId        string
-	SystemDiskSize int
-	ClientToken    string
+	InstanceId  string
+	ImageId     string
+	SystemDisk  SystemDiskType
+	ClientToken string
 }
 
 type ReplaceSystemDiskResponse struct {

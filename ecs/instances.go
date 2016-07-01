@@ -366,6 +366,7 @@ type DataDiskType struct {
 
 type SystemDiskType struct {
 	Category    DiskCategory //Enum cloud, ephemeral, ephemeral_ssd
+	Size        int
 	DiskName    string
 	Description string
 }

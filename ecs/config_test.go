@@ -7,12 +7,12 @@ const (
 	//	TestAccessKeyId     = "sczRHxPls3VC1O2S"
 	//	TestAccessKeySecret = "xg6t4cvsLiOtN7hutd5xhReppxei7x"
 	//BID 大账号
-	TestAccessKeyId     = "fbAqn6zWXp6Swr6G"
-	TestAccessKeySecret = "9CZw2W7vvaTx9LjSlTL5ZhJxO3sbnW"
+	TestAccessKeyId     = "ACSbW2iBbyX0Pk9N"
+	TestAccessKeySecret = "TLSwMm5LQU"
 	TestInstanceId      = "i-25xna88dv"
 	TestSecurityGroupId = "sg-252okhmti"
 	TestImageId         = "suse12sp1_64_40G_cloudinit_20160520.vhd"
-	TestOwnerId         = "1542159133705458"
+	TestOwnerId         = ""                   //1542159133705458"
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
 
 	TestIAmRich = false

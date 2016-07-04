@@ -94,7 +94,7 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 	t.Logf("Delete disk %s successfully", diskId)
 }
 
-func TestReplaceSystemDisk222(t *testing.T) {
+func TestReplaceSystemDiskUsingSizeParam(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	args := ReplaceSystemDiskArgs{

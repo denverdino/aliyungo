@@ -133,6 +133,107 @@ func TestECSInstance(t *testing.T) {
 	t.Logf("Instance %s is running successfully.", TestInstanceId)
 }
 
+//create security group
+func TestCreateSecurityGroup(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := CreateSecurityGroupArgs{
+		RegionId:          common.Beijing,
+		SecurityGroupName: "bid-security-group-test",
+		Description:       "BID账号测试",
+		OwnerId:           TestOwnerId,
+		ClientToken:       client.GenerateClientToken(),
+	}
+
+	securityGroupId, err := client.CreateSecurityGroup(&args)
+	if err != nil {
+		t.Errorf("Failed to create security group :%v", err)
+	} else {
+		t.Logf("SecurityGroup %s is created successfully", securityGroupId)
+	}
+}
+
+//describe security groups
+func TestDescribeSecurityGroups(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := DescribeSecurityGroupsArgs{
+		RegionId: common.Beijing,
+		OwnerId:  TestOwnerId,
+	}
+
+	securityGroups, _, err := client.DescribeSecurityGroups(&args)
+	if err != nil {
+		t.Errorf("Failed to describe security groups  : %v", err)
+	} else {
+		t.Logf("Security Groups  %v is describe successfully.", securityGroups)
+	}
+}
+
+//createInstance
+func TestCreateInstance(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := CreateInstanceArgs{
+		RegionId:        common.Beijing,
+		ImageId:         TestImageId,
+		InstanceType:    "ecs.s2.large",
+		SecurityGroupId: TestSecurityGroupId,
+		ClientToken:     client.GenerateClientToken(),
+	}
+
+	instanceId, err := client.CreateInstance(&args)
+	if err != nil {
+		t.Errorf("Failed to create instance from Image : %v", err)
+	} else {
+		t.Logf("Instance %s is created successfully.", instanceId)
+	}
+}
+
+//describe instances
+func TestDescribeInstances(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := DescribeInstancesArgs{
+		RegionId: common.Beijing,
+	}
+
+	instances, _, err := client.DescribeInstances(&args)
+	if err != nil {
+		t.Errorf("Failed to create instance from Image : %v", err)
+	} else {
+		t.Logf("Instances %v is described successfully.", instances)
+	}
+}
+
+//delete instance
+func TestDeleteInstance(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	err := client.DeleteInstance(TestInstanceId)
+	if err != nil {
+		t.Errorf("Failed to delete instance  : %v", err)
+	} else {
+		t.Logf("Instance %s is deleted successfully", TestInstanceId)
+	}
+}
+
+//describe instance attribute
+func TestDescribeInstanceAtrribute(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	//	args := DescribeInstanceAttributeArgs{
+	//		InstanceId: TestInstanceId,
+	//	}
+
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
+	if err != nil {
+		t.Errorf("Failed to describe instance attribute : %v", err)
+	} else {
+		t.Logf("Instance %s is describe successfully. result = %v", TestInstanceId, instance)
+	}
+}
+
 func TestECSInstanceCreationAndDeletion(t *testing.T) {
 
 	if TestIAmRich == false { // Avoid payment

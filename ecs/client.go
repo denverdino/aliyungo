@@ -14,7 +14,7 @@ type Client struct {
 
 const (
 	// ECSDefaultEndpoint is the default API endpoint of ECS services
-	ECSDefaultEndpoint = "https://ecs.aliyuncs.com"
+	ECSDefaultEndpoint = "https://ecs-cn-hangzhou.aliyuncs.com"
 	ECSAPIVersion      = "2014-05-26"
 )
 
@@ -22,5 +22,11 @@ const (
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	client := &Client{}
 	client.Init(ECSDefaultEndpoint, ECSAPIVersion, accessKeyId, accessKeySecret)
+	return client
+}
+
+func NewClientWithOwnerID(accessKeyId, accessKeySecret string, ownerId string) *Client {
+	client := &Client{}
+	client.InitWithOwnerId(ECSDefaultEndpoint, ECSAPIVersion, accessKeyId, accessKeySecret, ownerId)
 	return client
 }

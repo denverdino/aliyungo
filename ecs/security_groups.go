@@ -75,6 +75,7 @@ type DescribeSecurityGroupsArgs struct {
 	RegionId common.Region
 	VpcId    string
 	common.Pagination
+	OwnerId string
 }
 
 //
@@ -118,6 +119,7 @@ type CreateSecurityGroupArgs struct {
 	SecurityGroupName string
 	Description       string
 	VpcId             string
+	OwnerId           string
 	ClientToken       string
 }
 

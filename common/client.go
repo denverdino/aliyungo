@@ -20,6 +20,7 @@ type Client struct {
 	httpClient      *http.Client
 	endpoint        string
 	version         string
+	OwnerId         string
 }
 
 // NewClient creates a new instance of ECS client
@@ -30,6 +31,17 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 	client.httpClient = &http.Client{}
 	client.endpoint = endpoint
 	client.version = version
+}
+
+//NewClient create a new instance of ECS client support ownerID
+func (client *Client) InitWithOwnerId(endpoint, version, accessKeyId, accessKeySecret string, ownerId string) {
+	client.Init(endpoint, version, accessKeyId, accessKeySecret)
+	client.OwnerId = ownerId
+}
+
+//set ownerId
+func (client *Client) SetOwnerId(ownerId string) {
+	client.OwnerId = ownerId
 }
 
 // SetEndpoint sets custom endpoint
@@ -61,7 +73,7 @@ func (client *Client) SetDebug(debug bool) {
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId)
+	request.initWithOwnerId(client.version, action, client.AccessKeyId, client.OwnerId)
 
 	query := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &query)

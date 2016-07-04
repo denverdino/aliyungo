@@ -1,8 +1,6 @@
 package ecs
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestDisks(t *testing.T) {
 
@@ -92,6 +90,25 @@ func TestDiskCreationAndDeletion(t *testing.T) {
 		t.Fatalf("Failed to delete disk %s: %v", diskId, err)
 	}
 	t.Logf("Delete disk %s successfully", diskId)
+}
+
+func TestReplaceSystemDisk222(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+	args := ReplaceSystemDiskArgs{
+		InstanceId: "i-25g676748",
+		ImageId:    "m-25r0f2zkj",
+		SystemDisk: SystemDiskType{
+			Size: 90,
+		},
+		ClientToken: client.GenerateClientToken(),
+	}
+
+	diskId, err := client.ReplaceSystemDisk(&args)
+	if err != nil {
+		t.Errorf("Failed to replace system disk %v", err)
+	} else {
+		t.Logf("DiskId is %s", diskId)
+	}
 }
 
 func TestReplaceSystemDisk(t *testing.T) {

@@ -4,15 +4,15 @@ package slb
 
 const (
 	// BID 小号
-	TestAccessKeyId     = "nGVRvjGjWLXdZG6l"
-	TestAccessKeySecret = "EgDZTbc76ZmHokVHq6v8i79guDWgTV"
-	//BID                 大账号
-	//	TestAccessKeyId     = "HxIXVavq6jgYVUbG"
-	//	TestAccessKeySecret = "c56YpAquYLAGNifXTjH7q5HPXY6ZoG"
-	TestInstanceId = "MY_INSTANCE_ID"
-	TestOwnerId    = ""
-	TestIAmRich    = false
-	TestQuick      = false
+	//	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
+	//	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
+	//BID 大账号
+	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
+	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
+	TestInstanceId      = "MY_INSTANCE_ID"
+	TestOwnerId         = ""
+	TestIAmRich         = false
+	TestQuick           = false
 )
 
 var testClient *Client

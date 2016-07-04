@@ -4,15 +4,15 @@ package ecs
 
 const (
 	// BID 小号
-	//	TestAccessKeyId     = "sczRHxPls3VC1O2S"
-	//	TestAccessKeySecret = "xg6t4cvsLiOtN7hutd5xhReppxei7x"
+	//	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
+	//	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	//BID 大账号
-	TestAccessKeyId     = "ACSbW2iBbyX0Pk9N"
-	TestAccessKeySecret = "TLSwMm5LQU"
-	TestInstanceId      = "i-25xna88dv"
-	TestSecurityGroupId = "sg-252okhmti"
-	TestImageId         = "suse12sp1_64_40G_cloudinit_20160520.vhd"
-	TestOwnerId         = ""                   //1542159133705458"
+	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
+	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
+	TestInstanceId      = "MY_ECS_INSTANCE_ID"
+	TestSecurityGroupId = "MY_SECURITYGROUP_ID"
+	TestImageId         = "ECS_IMAGE_ID"
+	TestOwnerId         = "ECS_OWNER_ID"
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
 
 	TestIAmRich = false

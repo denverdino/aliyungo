@@ -1,6 +1,9 @@
 package slb
 
-import "github.com/denverdino/aliyungo/common"
+import (
+	"github.com/denverdino/aliyungo/common"
+	"os"
+)
 
 type Client struct {
 	common.Client
@@ -14,8 +17,16 @@ const (
 
 // NewClient creates a new instance of SLB client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
+	endpoint := os.Getenv("SLB_ENDPOINT")
+	if endpoint == "" {
+		endpoint = SLBDefaultEndpoint
+	}
+	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
+}
+
+func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string) *Client {
 	client := &Client{}
-	client.Init(SLBDefaultEndpoint, SLBAPIVersion, accessKeyId, accessKeySecret)
+	client.Init(endpoint, SLBAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }
 

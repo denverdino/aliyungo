@@ -1,11 +1,12 @@
 package sls
 
 import (
-	"fmt"
-	"github.com/denverdino/aliyungo/common"
 	"net/http"
 	"time"
+	"fmt"
 	"encoding/json"
+
+	"os"
 )
 
 type Client struct {
@@ -15,7 +16,7 @@ type Client struct {
 	httpClient      *http.Client
 	version         string
 	internal        bool
-	region          common.Region
+	region          string
 	endpoint        string
 }
 
@@ -46,14 +47,22 @@ const (
 )
 
 // NewClient creates a new instance of ECS client
-func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
+func NewClient(region string, internal bool, accessKeyId, accessKeySecret string) *Client {
+	endpoint := os.Getenv("SLS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = SLSDefaultEndpoint
+	}
+	return NewClientWithEndpoint(endpoint, region, internal, accessKeyId, accessKeySecret)
+}
+
+func NewClientWithEndpoint(endpoint string, region string, internal bool, accessKeyId, accessKeySecret string) *Client {
 	return &Client{
 		accessKeyId:     accessKeyId,
 		accessKeySecret: accessKeySecret,
 		internal:        internal,
 		region:          region,
 		version:         SLSAPIVersion,
-		endpoint:        SLSDefaultEndpoint,
+		endpoint:        endpoint,
 		httpClient:      &http.Client{},
 	}
 }
@@ -87,7 +96,7 @@ func (client *Client) forProject(name string) *Client {
 	if client.internal {
 		region = fmt.Sprintf("%s-intranet", region)
 	}
-	newclient.endpoint = fmt.Sprintf("%s.%s.%s", name, region, SLSDefaultEndpoint)
+	newclient.endpoint = fmt.Sprintf("%s.%s.%s", name, region, client.endpoint)
 	return &newclient
 }
 
@@ -157,3 +166,5 @@ func (client *Client) CreateProject(name string, description string) error {
 //		LogGroupList: logGroups,
 //	})
 //}
+
+

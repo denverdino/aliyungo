@@ -2,6 +2,7 @@ package dns
 
 import (
 	"github.com/denverdino/aliyungo/common"
+	"os"
 )
 
 type Client struct {
@@ -16,13 +17,21 @@ const (
 
 // NewClient creates a new instance of DNS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	client := &Client{}
-	client.Init(DNSDefaultEndpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
-	return client
+	endpoint := os.Getenv("DNS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = DNSDefaultEndpoint
+	}
+	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
 }
 
 // NewCustomClient creates a new instance of ECS client with customized API endpoint
 func NewCustomClient(accessKeyId, accessKeySecret string, endpoint string) *Client {
+	client := &Client{}
+	client.Init(endpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
+	return client
+}
+
+func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string) *Client {
 	client := &Client{}
 	client.Init(endpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
 	return client

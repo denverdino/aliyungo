@@ -3,8 +3,10 @@ package sls
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang/protobuf/proto"
 	"net/http"
+
+	"github.com/denverdino/aliyungo/common"
+	"github.com/golang/protobuf/proto"
 	//"time"
 	"os"
 	"strconv"
@@ -17,7 +19,7 @@ type Client struct {
 	httpClient      *http.Client
 	version         string
 	internal        bool
-	region          string
+	region          common.Region
 	endpoint        string
 }
 
@@ -60,7 +62,7 @@ const (
 )
 
 // NewClient creates a new instance of ECS client
-func NewClient(region string, internal bool, accessKeyId, accessKeySecret string) *Client {
+func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
 	endpoint := os.Getenv("SLS_ENDPOINT")
 	if endpoint == "" {
 		endpoint = SLSDefaultEndpoint
@@ -68,7 +70,7 @@ func NewClient(region string, internal bool, accessKeyId, accessKeySecret string
 	return NewClientWithEndpoint(endpoint, region, internal, accessKeyId, accessKeySecret)
 }
 
-func NewClientWithEndpoint(endpoint string, region string, internal bool, accessKeyId, accessKeySecret string) *Client {
+func NewClientWithEndpoint(endpoint string, region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
 	return &Client{
 		accessKeyId:     accessKeyId,
 		accessKeySecret: accessKeySecret,

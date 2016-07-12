@@ -9,9 +9,9 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  oss: [Open Storage Service](https://help.aliyun.com/document_detail/oss/api-reference/abstract.html)
 *  slb: [Server Load Balancer](https://help.aliyun.com/document_detail/slb/api-reference/brief-introduction.html)
 *  dns: [DNS](https://help.aliyun.com/document_detail/dns/api-reference/summary.html)
-*  sls: [SLS](https://help.aliyun.com/document_detail/sls/api/overview.html)
-*  ram: [RAM](https://help.aliyun.com/document_detail/ram/ram-api-reference/intro/intro.html)
-*  rds: [RDS](https://help.aliyun.com/document_detail/26226.html)
+*  sls: [Logging Service](https://help.aliyun.com/document_detail/sls/api/overview.html)
+*  ram: [Resource Access Management](https://help.aliyun.com/document_detail/ram/ram-api-reference/intro/intro.html)
+*  rds: [Relational Database Service](https://help.aliyun.com/document_detail/26226.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -114,6 +114,10 @@ go test
   * Kent Wang (pragkent@gmail.com)
   * ringtail (zhongwei.lzw@alibaba-inc.com)
   * aiden0z (aiden0xz@gmail.com)
+  * jimmycmh
+  * menglingwei
+  * mingang.he (dustgle@gmail.com)
+
   
 ## License
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.

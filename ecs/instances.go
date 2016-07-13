@@ -247,6 +247,25 @@ func (client *Client) ModifyInstanceAttribute(args *ModifyInstanceAttributeArgs)
 	return err
 }
 
+type ModifyInstanceVpcAttributeArgs struct {
+	InstanceId       string
+	VSwitchId        string
+	PrivateIpAddress string
+}
+
+type ModifyInstanceVpcAttributeResponse struct {
+	common.Response
+}
+
+//ModifyInstanceVpcAttribute  modify instance VPC attrbute
+// Add by Cookie
+// 2016-07-13 15:47:22
+func (client *Client) ModifyInstanceVpcAttribute(args *ModifyInstanceVpcAttributeArgs) error {
+	response := ModifyInstanceVpcAttributeResponse{}
+	err := client.Invoke("ModifyInstanceVpcAttribute", args, &response)
+	return err
+}
+
 // Default timeout value for WaitForInstance method
 const InstanceDefaultTimeout = 120
 
@@ -306,15 +325,23 @@ type DescribeInstancesArgs struct {
 	VSwitchId           string
 	ZoneId              string
 	InstanceIds         string
+	InstanceType        string
+	InstanceTypeFamily  string
 	InstanceNetworkType string
-	InstanceName        string
-	Status              InstanceStatus
 	PrivateIpAddresses  string
 	InnerIpAddresses    string
 	PublicIpAddresses   string
 	SecurityGroupId     string
+	InstanceChargeType  string
+	InternetChargeType  string
+	InstanceName        string
+	ImageId             string
+	Status              InstanceStatus
+	DeviceAvailable     string
+	IoOptimized         string
+	Tag                 []TagItemType
 	common.Pagination
-}
+} //cookie add some new attr on 2016-07-13
 
 type DescribeInstancesResponse struct {
 	common.Response

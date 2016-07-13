@@ -1,8 +1,8 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
-	"github.com/denverdino/aliyungo/util"
+	"github.com/hdksky/aliyungo/common"
+	"github.com/hdksky/aliyungo/util"
 )
 
 type NicType string
@@ -33,6 +33,7 @@ type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
 	RegionId        common.Region
 	NicType         NicType //enum for internet (default) |intranet
+	Direction       string  //授权方向，取值：egress|ingress|all，默认值为all
 }
 
 //
@@ -74,6 +75,7 @@ func (client *Client) DescribeSecurityGroupAttribute(args *DescribeSecurityGroup
 type DescribeSecurityGroupsArgs struct {
 	RegionId common.Region
 	VpcId    string
+	Tag      []TagItemType
 	common.Pagination
 }
 
@@ -111,6 +113,32 @@ func (client *Client) DescribeSecurityGroups(args *DescribeSecurityGroupsArgs) (
 	}
 
 	return response.SecurityGroups.SecurityGroup, &response.PaginationResult, nil
+}
+
+type RevokeSecurityGroupArgs struct {
+	SecurityGroupId         string
+	RegionId                string
+	IpProtocol              string
+	PortRange               string
+	SourceGroupId           string
+	SourceGroupOwnerAccount string
+	SourceCidrIp            string
+	Policy                  string
+	Priority                string
+	NicType                 string
+}
+
+type RevokeSecurityGroupResponse struct {
+	common.Response
+}
+
+// RevokeSecurityGroup Revoke security groups rules
+// Add by Cookie
+// 2016-07-13 15:47:22
+func (client *Client) RevokeSecurityGroup(args *RevokeSecurityGroupArgs) error {
+	response := RevokeSecurityGroupResponse{}
+	err := client.Invoke("RevokeSecurityGroup", args, &response)
+	return err
 }
 
 type CreateSecurityGroupArgs struct {
@@ -204,5 +232,57 @@ type AuthorizeSecurityGroupResponse struct {
 func (client *Client) AuthorizeSecurityGroup(args *AuthorizeSecurityGroupArgs) error {
 	response := AuthorizeSecurityGroupResponse{}
 	err := client.Invoke("AuthorizeSecurityGroup", args, &response)
+	return err
+}
+
+type AuthorizeSecurityGroupEgressArgs struct {
+	SecurityGroupId       string
+	RegionId              string
+	IpProtocol            string
+	PortRange             string
+	DestGroupId           string
+	DestGroupOwnerAccount string
+	DestCidrIp            string
+	Policy                string
+	Priority              string
+	NicType               string
+}
+
+type AuthorizeSecurityGroupEgressResponse struct {
+	common.Response
+}
+
+// AuthorizeSecurityGroupEgress authorize out permissions to security group
+// Add by Cookie
+// 2016-07-13 15:47:22
+func (client *Client) AuthorizeSecurityGroupEgress(args *AuthorizeSecurityGroupEgressArgs) error {
+	response := AuthorizeSecurityGroupEgressResponse{}
+	err := client.Invoke("AuthorizeSecurityGroupEgress", args, &response)
+	return err
+}
+
+type RevokeSecurityGroupEgressArgs struct {
+	SecurityGroupId       string
+	RegionId              string
+	IpProtocol            string
+	PortRange             string
+	DestGroupId           string
+	DestGroupOwnerAccount string
+	DestCidrIp            string
+	Policy                string
+	Priority              string
+	NicType               string
+}
+
+type RevokeSecurityGroupEgressResponse struct {
+	common.Response
+}
+
+// RevokeSecurityGroupEgress revoke out permissions to security group
+// Add by Cookie
+// 2016-07-13 15:47:22
+func (client *Client) RevokeSecurityGroupEgress(args *RevokeSecurityGroupEgressArgs) error {
+	response := RevokeSecurityGroupEgressResponse{}
+	err := client.Invoke("RevokeSecurityGroupEgress", args, &response)
 	return err
 }

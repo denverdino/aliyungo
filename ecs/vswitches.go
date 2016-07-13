@@ -56,6 +56,7 @@ type DescribeVSwitchesArgs struct {
 	VpcId     string
 	VSwitchId string
 	ZoneId    string
+	IsDefault string
 	common.Pagination
 }
 

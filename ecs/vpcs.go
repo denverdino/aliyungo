@@ -10,6 +10,7 @@ import (
 type CreateVpcArgs struct {
 	RegionId    common.Region
 	CidrBlock   string //192.168.0.0/16 or 172.16.0.0/16 (default)
+	UserCidr    string //cookie add
 	VpcName     string
 	Description string
 	ClientToken string
@@ -61,8 +62,9 @@ const (
 )
 
 type DescribeVpcsArgs struct {
-	VpcId    string
-	RegionId common.Region
+	VpcId     string
+	RegionId  common.Region
+	IsDefault bool //cookie add
 	common.Pagination
 }
 
@@ -110,6 +112,7 @@ type ModifyVpcAttributeArgs struct {
 	VpcId       string
 	VpcName     string
 	Description string
+	UserCidr    string //cookie add
 }
 
 type ModifyVpcAttributeResponse struct {

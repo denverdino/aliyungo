@@ -24,7 +24,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/denverdino/aliyungo/ecs"
+	"github.com/hdksky/aliyungo/ecs"
 )
 
 const ACCESS_KEY_ID = "<YOUR_ID>"
@@ -39,10 +39,10 @@ func main() {
 
 ## Documentation
 
-  *  ECS: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
-  *  OSS: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
-  *  SLB: [https://godoc.org/github.com/denverdino/aliyungo/slb](https://godoc.org/github.com/denverdino/aliyungo/slb) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/slb?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/slb)
-  *  DNS: [https://godoc.org/github.com/denverdino/aliyungo/dns](https://godoc.org/github.com/denverdino/aliyungo/dns) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dns)
+  *  ECS: [https://godoc.org/github.com/hdksky/aliyungo/ecs](https://godoc.org/github.com/hdksky/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/hdksky/aliyungo/ecs?status.svg)](https://godoc.org/github.com/hdksky/aliyungo/ecs)
+  *  OSS: [https://godoc.org/github.com/hdksky/aliyungo/oss](https://godoc.org/github.com/hdksky/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/hdksky/aliyungo/oss?status.svg)](https://godoc.org/github.com/hdksky/aliyungo/oss)
+  *  SLB: [https://godoc.org/github.com/hdksky/aliyungo/slb](https://godoc.org/github.com/hdksky/aliyungo/slb) [![GoDoc](https://godoc.org/github.com/hdksky/aliyungo/slb?status.svg)](https://godoc.org/github.com/hdksky/aliyungo/slb)
+  *  DNS: [https://godoc.org/github.com/hdksky/aliyungo/dns](https://godoc.org/github.com/hdksky/aliyungo/dns) [![GoDoc](https://godoc.org/github.com/hdksky/aliyungo/dns?status.svg)](https://godoc.org/github.com/hdksky/aliyungo/dns)
 
 
 ## Build and Install
@@ -50,7 +50,7 @@ func main() {
 go get:
 
 ```sh
-go get github.com/denverdino/aliyungo
+go get github.com/hdksky/aliyungo
 ```
 
 
@@ -84,7 +84,7 @@ Modify "oss/config_test.go"
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_ID"
 	TestRegion          = oss.Beijing
-	TestBucket          = "denverdino"
+	TestBucket          = "hdksky"
 ```
 
 *  TestAccessKeyId: the Access Key Id
@@ -101,7 +101,7 @@ go test
 
 ## Contributors
 
-  * Li Yi (denverdino@gmail.com)
+  * Li Yi (hdksky@gmail.com)
   * tgic (farmer1992@gmail.com)
   * Yu Zhou (oscarrr110@gmail.com)
   * Yufei Zhang
@@ -110,7 +110,7 @@ go test
   * Jizhong Jiang (jiangjizhong@gmail.com)
 
 ## License
-This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
+This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/hdksky/aliyungo/blob/master/LICENSE.txt) for the full license text.
 
 
 ## Related projects

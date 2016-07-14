@@ -367,6 +367,22 @@ func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances 
 	return nil, nil, err
 }
 
+func (client *Client) DescribeInstancesAll(args *DescribeInstancesArgs) (instances []InstanceAttributesType, err error) {
+	for {
+		data, pager, err := client.DescribeInstances(args)
+		if err != nil {
+			return nil, err
+		}
+		instances = append(instances, data...)
+
+		newPager := pager.NextPage()
+		if newPager == nil {
+			return instances, nil
+		}
+		args.Pagination = *newPager
+	}
+}
+
 type DeleteInstanceArgs struct {
 	InstanceId string
 }

@@ -83,8 +83,9 @@ func (client *Client) AllocateEipAddress(args *AllocateEipAddressArgs) (EipAddre
 
 type AssociateEipAddressArgs struct {
 	AllocationId string
+	InstanceType string
 	InstanceId   string
-}
+} //cookie add attr InstanceType on 2016-07-14
 
 type AssociateEipAddressResponse struct {
 	common.Response
@@ -93,13 +94,20 @@ type AssociateEipAddressResponse struct {
 // AssociateEipAddress associates EIP address to VM instance
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/network&associateeipaddress
+/*
 func (client *Client) AssociateEipAddress(allocationId string, instanceId string) error {
 	args := AssociateEipAddressArgs{
 		AllocationId: allocationId,
 		InstanceId:   instanceId,
 	}
-	response := ModifyInstanceNetworkSpecResponse{}
+	response := AssociateEipAddressResponse{}
 	return client.Invoke("AssociateEipAddress", &args, &response)
+}
+*/
+//cookie update this func on 2016-07-14
+func (client *Client) AssociateEipAddress(args *AssociateEipAddressArgs) error {
+	response := AssociateEipAddressResponse{}
+	return client.Invoke("AssociateEipAddress", args, &response)
 }
 
 // Status of disks
@@ -113,10 +121,12 @@ const (
 )
 
 type DescribeEipAddressesArgs struct {
-	RegionId     common.Region
-	Status       EipStatus //enum Associating | Unassociating | InUse | Available
-	EipAddress   string
-	AllocationId string
+	RegionId               common.Region
+	Status                 EipStatus //enum Associating | Unassociating | InUse | Available
+	EipAddress             string
+	AllocationId           string
+	AssociatedInstanceType string
+	AssociatedInstanceId   string
 	common.Pagination
 }
 
@@ -181,6 +191,7 @@ func (client *Client) ModifyEipAddressAttribute(allocationId string, bandwidth i
 
 type UnallocateEipAddressArgs struct {
 	AllocationId string
+	InstanceType string
 	InstanceId   string
 }
 
@@ -191,6 +202,7 @@ type UnallocateEipAddressResponse struct {
 // UnassociateEipAddress unallocates Eip Address from instance
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/network&unassociateeipaddress
+/*
 func (client *Client) UnassociateEipAddress(allocationId string, instanceId string) error {
 	args := UnallocateEipAddressArgs{
 		AllocationId: allocationId,
@@ -198,6 +210,13 @@ func (client *Client) UnassociateEipAddress(allocationId string, instanceId stri
 	}
 	response := UnallocateEipAddressResponse{}
 	return client.Invoke("UnassociateEipAddress", &args, &response)
+}
+*/
+//cookie update this func on 2016-07-14
+func (client *Client) UnassociateEipAddress(args *UnallocateEipAddressArgs) error {
+
+	response := UnallocateEipAddressResponse{}
+	return client.Invoke("UnassociateEipAddress", args, &response)
 }
 
 type ReleaseEipAddressArgs struct {

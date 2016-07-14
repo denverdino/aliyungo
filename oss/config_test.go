@@ -1,7 +1,7 @@
 package oss_test
 
 import (
-	"github.com/denverdino/aliyungo/oss"
+	"github.com/hdksky/aliyungo/oss"
 )
 
 //Modify with your Access Key Id and Access Key Secret

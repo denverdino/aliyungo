@@ -1,6 +1,6 @@
 package ecs
 
-import "github.com/denverdino/aliyungo/common"
+import "github.com/hdksky/aliyungo/common"
 
 type DescribeInstanceTypesArgs struct {
 }

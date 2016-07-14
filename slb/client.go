@@ -1,7 +1,7 @@
 package slb
 
 import (
-	"github.com/denverdino/aliyungo/common"
+	"github.com/hdksky/aliyungo/common"
 	"os"
 )
 

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
+	"github.com/hdksky/aliyungo/util"
 	"io"
 	"io/ioutil"
 	"net/http"

@@ -1,7 +1,7 @@
 package sls
 
 import (
-	"github.com/denverdino/aliyungo/common"
+	"github.com/hdksky/aliyungo/common"
 	"testing"
 	"github.com/golang/protobuf/proto"
 	"time"

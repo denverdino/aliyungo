@@ -1,8 +1,8 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
-	"github.com/denverdino/aliyungo/util"
+	"github.com/hdksky/aliyungo/common"
+	"github.com/hdksky/aliyungo/util"
 	"net/url"
 	"strconv"
 	"time"

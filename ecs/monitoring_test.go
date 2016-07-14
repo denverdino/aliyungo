@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/denverdino/aliyungo/util"
+	"github.com/hdksky/aliyungo/util"
 )
 
 func TestMonitoring(t *testing.T) {

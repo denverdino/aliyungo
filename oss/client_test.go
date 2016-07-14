@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/denverdino/aliyungo/oss"
+	"github.com/hdksky/aliyungo/oss"
 )
 
 var (
@@ -67,7 +67,7 @@ func TestURL(t *testing.T) {
 	url := b.URL("name")
 
 	t.Log("URL: ", url)
-	//	/c.Assert(req.URL.Path, check.Equals, "/denverdino_test/name")
+	//	/c.Assert(req.URL.Path, check.Equals, "/hdksky_test/name")
 }
 
 func TestGetReader(t *testing.T) {

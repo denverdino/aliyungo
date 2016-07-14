@@ -3,8 +3,8 @@ package ecs
 import (
 	"time"
 
-	"github.com/denverdino/aliyungo/common"
-	"github.com/denverdino/aliyungo/util"
+	"github.com/hdksky/aliyungo/common"
+	"github.com/hdksky/aliyungo/util"
 )
 
 type CreateVpcArgs struct {

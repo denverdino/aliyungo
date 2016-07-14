@@ -3,7 +3,7 @@ package ecs
 import (
 	"testing"
 
-	"github.com/denverdino/aliyungo/common"
+	"github.com/hdksky/aliyungo/common"
 )
 
 func testRouteTable(t *testing.T, client *Client, regionId common.Region, vpcId string, vrouterId string, routeTableId string, instanceId string) {

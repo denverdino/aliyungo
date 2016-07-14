@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/denverdino/aliyungo/common"
+	"github.com/hdksky/aliyungo/common"
 )
 
 func ExampleClient_DescribeInstanceStatus() {

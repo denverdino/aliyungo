@@ -1,6 +1,6 @@
 package slb
 
-import "github.com/denverdino/aliyungo/common"
+import "github.com/hdksky/aliyungo/common"
 
 type UploadServerCertificateArgs struct {
 	RegionId              common.Region

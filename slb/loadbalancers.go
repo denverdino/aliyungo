@@ -20,17 +20,21 @@ type CreateLoadBalancerArgs struct {
 	InternetChargeType common.InternetChargeType
 	Bandwidth          int
 	ClientToken        string
-}
+	MasterZoneId       string
+	SlaveZoneId        string
+} // cookie add last two attr on 2016-07-15
 
 type CreateLoadBalancerResponse struct {
 	common.Response
 	LoadBalancerId   string
 	Address          string
-	NetworkType      string
 	VpcId            string
 	VSwitchId        string
+	MasterZoneId     string
+	SlaveZoneId      string
+	NetworkType      string //not found in aliyun api doc
 	LoadBalancerName string
-}
+} // cookie add attr MasterZoneId & SlaveZoneId on 2016-07-15
 
 // CreateLoadBalancer create loadbalancer
 //
@@ -158,6 +162,8 @@ type DescribeLoadBalancersArgs struct {
 	Address            string
 	InternetChargeType common.InternetChargeType
 	ServerId           string
+	MasterZoneId       string
+	SlaveZoneId        string
 }
 
 type ListenerPortAndProtocolType struct {
@@ -182,9 +188,11 @@ type LoadBalancerType struct {
 	VpcId              string
 	NetworkType        string
 	Bandwidth          int
-	InternetChargeType common.InternetChargeType
-	CreateTime         string //Why not ISO 6801
-	CreateTimeStamp    util.ISO6801Time
+	InternetChargeType common.InternetChargeType //not found in aliyun api doc
+	CreateTime         string                    //Why not ISO 6801
+	MasterZoneId       string
+	SlaveZoneId        string
+	CreateTimeStamp    util.ISO6801Time //not found in aliyun api doc
 	ListenerPorts      struct {
 		ListenerPort []int
 	}
@@ -218,6 +226,8 @@ func (client *Client) DescribeLoadBalancers(args *DescribeLoadBalancersArgs) (lo
 
 type DescribeLoadBalancerAttributeArgs struct {
 	LoadBalancerId string
+	MasterZoneId   string
+	SlaveZoneId    string
 }
 
 type DescribeLoadBalancerAttributeResponse struct {

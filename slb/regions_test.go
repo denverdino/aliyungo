@@ -14,4 +14,12 @@ func TestDescribeRegions(t *testing.T) {
 		t.Errorf("Failed to DescribeRegions: %v", err)
 	}
 
+	zones, err := client.DescribeZones("cn-beijing")
+
+	if err == nil {
+		t.Logf("zones: %v", zones)
+	} else {
+		t.Errorf("Failed to DescribeZones: %v", err)
+	}
+
 }

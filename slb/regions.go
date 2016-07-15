@@ -32,3 +32,45 @@ func (client *Client) DescribeRegions() (regions []RegionType, err error) {
 	}
 	return response.Regions.Region, nil
 }
+
+// cookie add func DescribeZones on 2016-07-15
+type DescribeZonesArgs struct {
+	RegionId common.Region
+}
+
+type SlaveZoneType struct {
+	ZoneId    string
+	LocalName string
+}
+
+type ZoneType struct {
+	ZoneId     string
+	LocalName  string
+	SlaveZones struct {
+		SlaveZone []SlaveZoneType
+	}
+}
+
+type DescribeZonesResponse struct {
+	common.Response
+	Zones struct {
+		Zone []ZoneType
+	}
+}
+
+// DescribeZones describes zones
+//
+func (client *Client) DescribeZones(regionId common.Region) (zones []ZoneType, err error) {
+	args := DescribeZonesArgs{
+		RegionId: regionId,
+	}
+	response := DescribeZonesResponse{}
+
+	err = client.Invoke("DescribeZones", &args, &response)
+
+	if err == nil {
+		return response.Zones.Zone, nil
+	}
+
+	return []ZoneType{}, err
+}

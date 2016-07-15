@@ -1,0 +1,5 @@
+# system
+*.[oa]
+*~
+
+config_test.go

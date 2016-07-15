@@ -1,6 +1,6 @@
 package slb
 
-//Modify with your Access Key Id and Access Key Secret
+//Modify with your Access Key Id and Access Key Secret.
 
 const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"

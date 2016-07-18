@@ -75,6 +75,13 @@ type HTTPListenerType struct {
 	HealthCheckHttpCode    HealthCheckHttpCodeType
 	VServerGroupId         string // cookie add this attr on 2016-07-15 16:21
 }
+
+type HTTPSListenerType struct {
+	HTTPListenerType
+	ServerCertificateId string
+	CACertificateId     string // cookie add this attr on 2016-07-15 16:21
+}
+
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 
 // CreateLoadBalancerHTTPListener create HTTP listener on loadbalancer
@@ -87,12 +94,6 @@ func (client *Client) CreateLoadBalancerHTTPListener(args *CreateLoadBalancerHTT
 		return err
 	}
 	return err
-}
-
-type HTTPSListenerType struct {
-	HTTPListenerType
-	ServerCertificateId string
-	CACertificateId     string // cookie add this attr on 2016-07-15 16:21
 }
 
 type CreateLoadBalancerHTTPSListenerArgs HTTPSListenerType
@@ -301,8 +302,8 @@ func (client *Client) RemoveListenerWhiteListItem(loadBalancerId string, port in
 }
 
 type SetLoadBalancerHTTPListenerAttributeArgs struct {
-	CreateLoadBalancerHTTPListenerArgs
-	VServerGroup string
+	HTTPListenerType
+	VServerGroup string // cookie add this attr on 2016-07-15 16:21
 }
 
 // SetLoadBalancerHTTPListenerAttribute Set HTTP listener attribute
@@ -318,7 +319,7 @@ func (client *Client) SetLoadBalancerHTTPListenerAttribute(args *SetLoadBalancer
 }
 
 type SetLoadBalancerHTTPSListenerAttributeArgs struct {
-	CreateLoadBalancerHTTPSListenerArgs
+	HTTPSListenerType
 	VServerGroup string
 }
 
@@ -335,7 +336,7 @@ func (client *Client) SetLoadBalancerHTTPSListenerAttribute(args *SetLoadBalance
 }
 
 type SetLoadBalancerTCPListenerAttributeArgs struct {
-	CreateLoadBalancerTCPListenerArgs
+	TCPListenerType
 	SynProxy                  string
 	HealthCheckConnectTimeout int
 	VServerGroup              string
@@ -354,7 +355,7 @@ func (client *Client) SetLoadBalancerTCPListenerAttribute(args *SetLoadBalancerT
 }
 
 type SetLoadBalancerUDPListenerAttributeArgs struct {
-	CreateLoadBalancerUDPListenerArgs
+	UDPListenerType
 	HealthCheckConnectTimeout int
 	VServerGroup              string
 }

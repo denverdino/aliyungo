@@ -15,7 +15,7 @@ import (
 type ResultModel struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
-	success bool   `json:"success"`
+	Success bool   `json:"success"`
 }
 
 //project的实体类，主要用于发送请求,更新或者添加Project
@@ -51,7 +51,7 @@ type GetProjectResult struct {
 //列表批量取得Project的请求参数
 type ListProjectRequestModel struct {
 	Page     string `json:"page"`
-	pageSize string `json:"pageSize"`
+	PageSize string `json:"pageSize"`
 }
 
 /**

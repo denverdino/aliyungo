@@ -98,7 +98,6 @@ func (c *Client) CreateAlert(projectName string, alertRequest AlertRequest) (res
 	return result, err
 }
 
-
 func (c *Client) CreateAlert4Json(projectName string, request string) (result ResultModel, err error) {
 
 	requestUrl := c.GetUrl(entity, projectName, "")
@@ -246,11 +245,11 @@ func (c *Client) CreateAlertDimension(projectName string, request DimensionReque
 }
 
 // has problem, need to check with CMS team.
-func (c *Client) GetDimensions( projectName string, alertName string )(result GetDimenstionResult, err error){
+func (c *Client) GetDimensions(projectName string, alertName string) (result GetDimenstionResult, err error) {
 	//  this.setUriPattern("/projects/[ProjectName]/alert/dimensions");
 
-	requestUrl := c.GetUrl("alerts", projectName, alertName+"/dimensions" )
-	requestPath := GetRequestPath("alert", projectName, alertName+"/dimensions" )
+	requestUrl := c.GetUrl("alerts", projectName, alertName+"/dimensions")
+	requestPath := GetRequestPath("alert", projectName, alertName+"/dimensions")
 
 	fmt.Printf("requestUrl: %s \n", requestUrl)
 	responseResult, err := c.GetResponseJson("GET", requestUrl, requestPath, "")

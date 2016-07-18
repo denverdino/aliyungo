@@ -26,15 +26,15 @@ const (
 )
 
 // NewClient creates a new instance of ECS client
-func NewClient( accessKeyId, accessKeySecret string) *Client {
+func NewClient(accessKeyId, accessKeySecret string) *Client {
 	return &Client{
 		accessKeyId:     accessKeyId,
 		accessKeySecret: accessKeySecret,
 		internal:        false,
 		//region:          region,
-		version:         APIVersion,
-		endpoint:        DefaultEndpoint,
-		httpClient:      &http.Client{},
+		version:    APIVersion,
+		endpoint:   DefaultEndpoint,
+		httpClient: &http.Client{},
 	}
 }
 

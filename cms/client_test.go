@@ -6,14 +6,13 @@ import (
 )
 
 const (
-	AccessKeyId      = ""
-	AccessKeySecret  = ""
-	Region           = common.Hangzhou
+	AccessKeyId     = ""
+	AccessKeySecret = ""
+	Region          = common.Hangzhou
 )
 
-func TestCresateAlert(t *testing.T)  {
-	client := NewClient( AccessKeyId, AccessKeySecret )
-
+func TestCresateAlert(t *testing.T) {
+	client := NewClient(AccessKeyId, AccessKeySecret)
 
 	req := `
 	{
@@ -77,11 +76,11 @@ func TestCresateAlert(t *testing.T)  {
 	t.Logf("CreateAlert result : %++v %v \n ", result, err)
 
 	dimension := DimensionRequest{
-		UserId      :"1047840662545713",
-		AlertName   :"test_alert2",
-		Dimensions  : "{\"userId\":\"1047840662545713\",\"clusterId\":\"cc2256150655c43d7bcd4054bfc256c45\",\"serviceId\":\"acsmonitoring_acs-monitoring-agent\"}",
+		UserId:     "1047840662545713",
+		AlertName:  "test_alert2",
+		Dimensions: "{\"userId\":\"1047840662545713\",\"clusterId\":\"cc2256150655c43d7bcd4054bfc256c45\",\"serviceId\":\"acsmonitoring_acs-monitoring-agent\"}",
 	}
-	result , err = client.CreateAlertDimension( "acs_custom_1047840662545713", dimension )
+	result, err = client.CreateAlertDimension("acs_custom_1047840662545713", dimension)
 	if err != nil {
 		t.Errorf("CreateAlertDimension encounter error: %v \n", err)
 	}
@@ -92,14 +91,13 @@ func TestCresateAlert(t *testing.T)  {
 		t.Errorf("GetAlertList encounter error: %v \n", err2)
 	}
 	t.Logf("GetAlert result : %++v %v \n ", result2, err2)
-    
-        
+
 }
 
 func TestDeleteAlert(t *testing.T) {
-    client := NewClient(AccessKeyId, AccessKeySecret)
-    
-    result, err := client.GetDimensions( "acs_custom_1047840662545713", "test_alert2" )
-    t.Logf("GetDimensionsRequest result : %++v %v \n ", result, err)
-    //client.DeleteAlert( "acs_custom_1047840662545713",  "test_alert2")
+	client := NewClient(AccessKeyId, AccessKeySecret)
+
+	result, err := client.GetDimensions("acs_custom_1047840662545713", "test_alert2")
+	t.Logf("GetDimensionsRequest result : %++v %v \n ", result, err)
+	//client.DeleteAlert( "acs_custom_1047840662545713",  "test_alert2")
 }

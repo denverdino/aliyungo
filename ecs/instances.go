@@ -202,6 +202,7 @@ type InstanceAttributesType struct {
 	CreationTime            util.ISO6801Time //time.Time
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
+	DeviceAvailable         string //True | False cookie add on 2016-07-18
 	IoOptimized             StringOrBool
 	InstanceChargeType      common.InternetChargeType
 	ExpiredTime             util.ISO6801Time

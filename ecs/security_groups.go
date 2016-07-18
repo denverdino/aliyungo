@@ -44,8 +44,13 @@ type PermissionType struct {
 	SourceCidrIp            string
 	SourceGroupId           string
 	SourceGroupOwnerAccount string
+	DestCidrIp              string //cookie add
+	DestGroupId             string //cookie add
+	DestGroupOwnerAccount   string //cookie add
 	Policy                  PermissionPolicy
 	NicType                 NicType
+	Direction               string //cookie add
+	Description             string //cookie add
 }
 
 type DescribeSecurityGroupAttributeResponse struct {

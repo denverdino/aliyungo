@@ -3,10 +3,8 @@ package rds
 import (
 	"github.com/denverdino/aliyungo/common"
 
+	"os"
 )
-
-
-
 
 type Client struct {
 	common.Client
@@ -20,11 +18,15 @@ const (
 
 // NewClient creates a new instance of RDS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	client := &Client{}
-	client.Init(RDSDefaultEndpoint, RDSAPIVersion, accessKeyId, accessKeySecret)
-	return client
+	endpoint := os.Getenv("RDS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = RDSDefaultEndpoint
+	}
+	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
 }
 
-
-
-
+func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string) *Client {
+	client := &Client{}
+	client.Init(endpoint, RDSAPIVersion, accessKeyId, accessKeySecret)
+	return client
+}

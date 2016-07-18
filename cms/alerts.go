@@ -8,8 +8,8 @@ import (
 
 //alert请求结构
 type AlertRequest struct {
-	name        string             `json:"name"`
-	status      int                `json:"status"`
+	Name        string             `json:"name"`
+	Status      int                `json:"status"`
 	Actions     ActionsModel       `json:"actions"`
 	Condition   ConditionModel     `json:"condition"`
 	Enable      bool               `json:"enable"`

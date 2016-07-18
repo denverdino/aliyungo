@@ -59,6 +59,14 @@ type DimensionRequest struct {
 	UserId     string `json:"userId"`
 }
 
+type GetDimenstionResult struct {
+	Code    string `json:"code"`
+	Success bool   `json:"success"`
+	Message string `json:"comessagede"`
+	TraceId string `json:"traceId"`
+	Result  string `json:"result"`
+}
+
 const (
 	entity = "alerts"
 )
@@ -90,26 +98,6 @@ func (c *Client) CreateAlert(projectName string, alertRequest AlertRequest) (res
 	return result, err
 }
 
-func (c *Client) CreateAlertDimension(projectName string, request DimensionRequest) (result ResultModel, err error) {
-	postObjContent, _ := json.Marshal(request)
-	postJson := string(postObjContent)
-
-	// ?alertName=test_alert_dimensions_2
-	requestUrl := c.GetUrl("alert", projectName, "dimensions?alertName="+request.AlertName)
-	requestPath := GetRequestPath("alert", projectName, "dimensions?alertName="+request.AlertName)
-
-	fmt.Printf("requestUrl: %s \n", requestUrl)
-	responseResult, err := c.GetResponseJson("POST", requestUrl, requestPath, postJson)
-
-	if err != nil {
-		return result, err
-	}
-
-	err = json.Unmarshal([]byte(responseResult), &result)
-
-	return result, err
-
-}
 
 func (c *Client) CreateAlert4Json(projectName string, request string) (result ResultModel, err error) {
 
@@ -219,8 +207,8 @@ func (c *Client) GetAlertList(page string, pageSize string, projectName string, 
 	params.Add("Page", page)
 	params.Add("PageSize", pageSize)
 
-	// requestUrl := GetUrl(entity, projectName, alertName)
-	requestUrl := "http://alert.aliyuncs.com/projects/acs_custom_1047840662545713/alerts?alertName=test_alert_dimensions"
+	requestUrl := c.GetUrl(entity, projectName, alertName)
+	//requestUrl := "http://alert.aliyuncs.com/projects/acs_custom_1047840662545713/alerts?alertName=test_alert_dimensions"
 	requestPath := GetRequestPath(entity, projectName, alertName)
 
 	paramsString := params.Encode()
@@ -231,6 +219,47 @@ func (c *Client) GetAlertList(page string, pageSize string, projectName string, 
 		return result, err
 	}
 
+	err = json.Unmarshal([]byte(responseResult), &result)
+
+	return result, err
+}
+
+func (c *Client) CreateAlertDimension(projectName string, request DimensionRequest) (result ResultModel, err error) {
+	postObjContent, _ := json.Marshal(request)
+	postJson := string(postObjContent)
+
+	// ?alertName=test_alert_dimensions_2
+	requestUrl := c.GetUrl("alert", projectName, "dimensions?alertName="+request.AlertName)
+	requestPath := GetRequestPath("alert", projectName, "dimensions?alertName="+request.AlertName)
+
+	fmt.Printf("requestUrl: %s \n", requestUrl)
+	responseResult, err := c.GetResponseJson("POST", requestUrl, requestPath, postJson)
+
+	if err != nil {
+		return result, err
+	}
+
+	err = json.Unmarshal([]byte(responseResult), &result)
+
+	return result, err
+
+}
+
+// has problem, need to check with CMS team.
+func (c *Client) GetDimensions( projectName string, alertName string )(result GetDimenstionResult, err error){
+	//  this.setUriPattern("/projects/[ProjectName]/alert/dimensions");
+
+	requestUrl := c.GetUrl("alerts", projectName, alertName+"/dimensions" )
+	requestPath := GetRequestPath("alert", projectName, alertName+"/dimensions" )
+
+	fmt.Printf("requestUrl: %s \n", requestUrl)
+	responseResult, err := c.GetResponseJson("GET", requestUrl, requestPath, "")
+
+	if err != nil {
+		return result, err
+	}
+
+	fmt.Printf("response: %s \n", string(responseResult))
 	err = json.Unmarshal([]byte(responseResult), &result)
 
 	return result, err

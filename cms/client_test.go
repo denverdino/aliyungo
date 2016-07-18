@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	AccessKeyId      = "BRHPoBgsWipA36z7"
-	AccessKeySecret  = "0bII4oBFW7pI2Cjtn7LUsNO6PFMddP"
+	AccessKeyId      = ""
+	AccessKeySecret  = ""
 	Region           = common.Hangzhou
 )
 
@@ -92,5 +92,14 @@ func TestCresateAlert(t *testing.T)  {
 		t.Errorf("GetAlertList encounter error: %v \n", err2)
 	}
 	t.Logf("GetAlert result : %++v %v \n ", result2, err2)
+    
+        
 }
 
+func TestDeleteAlert(t *testing.T) {
+    client := NewClient(AccessKeyId, AccessKeySecret)
+    
+    result, err := client.GetDimensions( "acs_custom_1047840662545713", "test_alert2" )
+    t.Logf("GetDimensionsRequest result : %++v %v \n ", result, err)
+    //client.DeleteAlert( "acs_custom_1047840662545713",  "test_alert2")
+}

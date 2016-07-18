@@ -54,10 +54,11 @@ type CommonLoadBalancerListenerResponse struct {
 }
 
 type HTTPListenerType struct {
-	LoadBalancerId         string
-	ListenerPort           int
-	BackendServerPort      int
-	Bandwidth              int
+	LoadBalancerId    string
+	ListenerPort      int
+	BackendServerPort int
+	Bandwidth         int
+	//XForwardedFor 考虑安全原因，本参数自2015年5月15日起会强制设置为on，考虑的接口兼容性，本接口入参还保留。
 	Scheduler              SchedulerType
 	StickySession          FlagType
 	StickySessionType      StickySessionType
@@ -72,6 +73,7 @@ type HTTPListenerType struct {
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
 	HealthCheckHttpCode    HealthCheckHttpCodeType
+	VServerGroupId         string // cookie add this attr on 2016-07-15 16:21
 }
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 
@@ -90,6 +92,7 @@ func (client *Client) CreateLoadBalancerHTTPListener(args *CreateLoadBalancerHTT
 type HTTPSListenerType struct {
 	HTTPListenerType
 	ServerCertificateId string
+	CACertificateId     string // cookie add this attr on 2016-07-15 16:21
 }
 
 type CreateLoadBalancerHTTPSListenerArgs HTTPSListenerType
@@ -129,6 +132,7 @@ type TCPListenerType struct {
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
 	HealthCheckHttpCode    HealthCheckHttpCodeType
+	VServerGroupId         string // cookie add this attr on 2016-07-15 16:21
 }
 
 type CreateLoadBalancerTCPListenerArgs TCPListenerType
@@ -157,6 +161,7 @@ type UDPListenerType struct {
 	UnhealthyThreshold     int
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
+	VServerGroupId         string // cookie add this attr on 2016-07-15 16:21
 }
 type CreateLoadBalancerUDPListenerArgs UDPListenerType
 
@@ -295,7 +300,10 @@ func (client *Client) RemoveListenerWhiteListItem(loadBalancerId string, port in
 	return err
 }
 
-type SetLoadBalancerHTTPListenerAttributeArgs CreateLoadBalancerHTTPListenerArgs
+type SetLoadBalancerHTTPListenerAttributeArgs struct {
+	CreateLoadBalancerHTTPListenerArgs
+	VServerGroup string
+}
 
 // SetLoadBalancerHTTPListenerAttribute Set HTTP listener attribute
 //
@@ -309,7 +317,10 @@ func (client *Client) SetLoadBalancerHTTPListenerAttribute(args *SetLoadBalancer
 	return err
 }
 
-type SetLoadBalancerHTTPSListenerAttributeArgs CreateLoadBalancerHTTPSListenerArgs
+type SetLoadBalancerHTTPSListenerAttributeArgs struct {
+	CreateLoadBalancerHTTPSListenerArgs
+	VServerGroup string
+}
 
 // SetLoadBalancerHTTPSListenerAttribute Set HTTPS listener attribute
 //
@@ -323,7 +334,12 @@ func (client *Client) SetLoadBalancerHTTPSListenerAttribute(args *SetLoadBalance
 	return err
 }
 
-type SetLoadBalancerTCPListenerAttributeArgs CreateLoadBalancerTCPListenerArgs
+type SetLoadBalancerTCPListenerAttributeArgs struct {
+	CreateLoadBalancerTCPListenerArgs
+	SynProxy                  string
+	HealthCheckConnectTimeout int
+	VServerGroup              string
+}
 
 // SetLoadBalancerTCPListenerAttribute Set TCP listener attribute
 //
@@ -337,7 +353,11 @@ func (client *Client) SetLoadBalancerTCPListenerAttribute(args *SetLoadBalancerT
 	return err
 }
 
-type SetLoadBalancerUDPListenerAttributeArgs CreateLoadBalancerUDPListenerArgs
+type SetLoadBalancerUDPListenerAttributeArgs struct {
+	CreateLoadBalancerUDPListenerArgs
+	HealthCheckConnectTimeout int
+	VServerGroup              string
+}
 
 // SetLoadBalancerUDPListenerAttribute Set UDP listener attribute
 //
@@ -401,6 +421,9 @@ func (client *Client) DescribeLoadBalancerHTTPSListenerAttribute(loadBalancerId 
 type DescribeLoadBalancerTCPListenerAttributeResponse struct {
 	DescribeLoadBalancerListenerAttributeResponse
 	TCPListenerType
+	SynProxy                  string
+	HealthCheck               string
+	HealthCheckConnectTimeout int
 }
 
 // DescribeLoadBalancerTCPListenerAttribute Describe TCP listener attribute
@@ -419,19 +442,24 @@ func (client *Client) DescribeLoadBalancerTCPListenerAttribute(loadBalancerId st
 	return response, err
 }
 
+type DescribeLoadBalancerUDPListenerAttributeArgs struct {
+	LoadBalancerId string
+	ListenerPort   int
+	VServerGroupId string
+}
+
 type DescribeLoadBalancerUDPListenerAttributeResponse struct {
 	DescribeLoadBalancerListenerAttributeResponse
 	UDPListenerType
+	StickySessionType         string
+	HealthCheck               string
+	HealthCheckConnectTimeout int
 }
 
 // DescribeLoadBalancerUDPListenerAttribute Describe UDP listener attribute
 //
 // You can read doc at https://docs.aliyun.com/#/pub/slb/api-reference/api-related-listener&DescribeLoadBalancerUDPListenerAttribute
-func (client *Client) DescribeLoadBalancerUDPListenerAttribute(loadBalancerId string, port int) (response *DescribeLoadBalancerUDPListenerAttributeResponse, err error) {
-	args := &CommonLoadBalancerListenerArgs{
-		LoadBalancerId: loadBalancerId,
-		ListenerPort:   port,
-	}
+func (client *Client) DescribeLoadBalancerUDPListenerAttribute(args *DescribeLoadBalancerUDPListenerAttributeArgs) (response *DescribeLoadBalancerUDPListenerAttributeResponse, err error) {
 	response = &DescribeLoadBalancerUDPListenerAttributeResponse{}
 	err = client.Invoke("DescribeLoadBalancerUDPListenerAttribute", args, response)
 	if err != nil {

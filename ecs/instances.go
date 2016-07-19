@@ -145,7 +145,7 @@ type OperationLocksType struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&securitygroupidsettype
 type SecurityGroupIdSetType struct {
-	SecurityGroupId string
+	SecurityGroupId []string
 }
 
 //
@@ -175,24 +175,22 @@ type EipAddressAssociateType struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
-	InstanceId         string
-	InstanceName       string
-	Description        string
-	ImageId            string
-	RegionId           common.Region
-	ZoneId             string
-	CPU                int
-	Memory             int
-	ClusterId          string
-	InstanceType       string
-	InstanceTypeFamily string
-	HostName           string
-	SerialNumber       string
-	Status             InstanceStatus
-	OperationLocks     OperationLocksType
-	SecurityGroupIds   struct {
-		SecurityGroupId []string
-	}
+	InstanceId              string
+	InstanceName            string
+	Description             string
+	ImageId                 string
+	RegionId                common.Region
+	ZoneId                  string
+	CPU                     int
+	Memory                  int
+	ClusterId               string
+	InstanceType            string
+	InstanceTypeFamily      string
+	HostName                string
+	SerialNumber            string
+	Status                  InstanceStatus
+	OperationLocks          OperationLocksType
+	SecurityGroupIds        SecurityGroupIdSetType
 	PublicIpAddress         IpAddressSetType
 	InnerIpAddress          IpAddressSetType
 	InstanceNetworkType     string //enum Classic | Vpc
@@ -202,8 +200,8 @@ type InstanceAttributesType struct {
 	CreationTime            util.ISO6801Time //time.Time
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
-	DeviceAvailable         string //True | False cookie add on 2016-07-18
-	IoOptimized             StringOrBool
+	DeviceAvailable         bool //True | False cookie add on 2016-07-18
+	IoOptimized             bool //StringOrBool 这里好坑，文档中要求string类型
 	InstanceChargeType      common.InternetChargeType
 	ExpiredTime             util.ISO6801Time
 }

@@ -11,6 +11,11 @@ type AddBackendServersArgs struct {
 	BackendServers string
 }
 
+type BackendServerType struct {
+	ServerId string
+	Weight   int
+} //cookie add this struct on 2016-07-19
+
 type AddBackendServersResponse struct {
 	common.Response
 	LoadBalancerId string

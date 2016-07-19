@@ -94,7 +94,8 @@ type DescribeServerCertificatesResponse struct {
 // DescribeServerCertificates Describe server certificates
 //
 // You can read doc at http://docs.aliyun.com/#pub/slb/api-reference/api-servercertificate&DescribeServerCertificates
-func (client *Client) DescribeServerCertificatesArgs(regionId common.Region, serverCertificateId string) (serverCertificates []ServerCertificateType, err error) {
+// cookie fix func name DescribeServerCertificatesArgs to DescribeServerCertificates on 2016-07-19
+func (client *Client) DescribeServerCertificates(regionId common.Region, serverCertificateId string) (serverCertificates []ServerCertificateType, err error) {
 	args := &DescribeServerCertificatesArgs{
 		RegionId:            regionId,
 		ServerCertificateId: serverCertificateId,

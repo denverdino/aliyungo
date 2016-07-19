@@ -107,3 +107,108 @@ func (client *Client) DescribeServerCertificates(regionId common.Region, serverC
 	}
 	return response.ServerCertificates.ServerCertificate, err
 }
+
+type UploadCACertificateArgs struct {
+	RegionId          common.Region
+	CACertificate     string
+	CACertificateName string
+}
+
+type UploadCACertificateResponse struct {
+	common.Response
+	CACertificateId   string
+	CACertificateName string
+	Fingerprint       string
+}
+
+// UploadCACertificate Upload CA certificate
+//
+// cookie add this func on 2016-07-19
+func (client *Client) UploadCACertificate(args *UploadCACertificateArgs) (response *UploadCACertificateResponse, err error) {
+	response = &UploadCACertificateResponse{}
+	err = client.Invoke("UploadCACertificate", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return response, err
+}
+
+type DeleteCACertificateArgs struct {
+	RegionId        common.Region
+	CACertificateId string
+}
+
+type DeleteCACertificateResponse struct {
+	common.Response
+}
+
+// DeleteCACertificate Delete CA certificate
+//
+// cookie add this func on 2016-07-19
+func (client *Client) DeleteCACertificate(regionId common.Region, CACertificateId string) (err error) {
+	args := &DeleteCACertificateArgs{
+		RegionId:        regionId,
+		CACertificateId: CACertificateId,
+	}
+	response := &DeleteCACertificateResponse{}
+	return client.Invoke("DeleteCACertificate", args, response)
+}
+
+type SetCACertificateNameArgs struct {
+	RegionId          common.Region
+	CACertificateId   string
+	CACertificateName string
+}
+
+type SetCACertificateNameResponse struct {
+	common.Response
+}
+
+// SetCACertificateName Set name of CA certificate
+//
+// cookie add this func on 2016-07-19
+func (client *Client) SetCACertificateName(regionId common.Region, CACertificateId string, name string) (err error) {
+	args := &SetCACertificateNameArgs{
+		RegionId:          regionId,
+		CACertificateId:   CACertificateId,
+		CACertificateName: name,
+	}
+	response := &SetCACertificateNameResponse{}
+	return client.Invoke("SetCACertificateName", args, response)
+}
+
+type DescribeCACertificatesArgs struct {
+	RegionId        common.Region
+	CACertificateId string
+}
+
+type CACertificateType struct {
+	RegionId          common.Region
+	CACertificateId   string
+	CACertificateName string
+	Fingerprint       string
+}
+
+type DescribeCACertificatesResponse struct {
+	common.Response
+	CACertificates struct {
+		CACertificate []CACertificateType
+	}
+}
+
+// DescribeCACertificates Describe CA certificates
+//
+// You can read doc at http://docs.aliyun.com/#pub/slb/api-reference/api-CAcertificate&DescribeCACertificates
+// cookie fix func name DescribeCACertificatesArgs to DescribeCACertificates on 2016-07-19
+func (client *Client) DescribeCACertificates(regionId common.Region, CACertificateId string) (CACertificates []CACertificateType, err error) {
+	args := &DescribeCACertificatesArgs{
+		RegionId:        regionId,
+		CACertificateId: CACertificateId,
+	}
+	response := &DescribeCACertificatesResponse{}
+	err = client.Invoke("DescribeCACertificates", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return response.CACertificates.CACertificate, err
+}

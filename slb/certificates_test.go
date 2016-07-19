@@ -34,53 +34,84 @@ cQzfhiiG7ASjiPakw5wXoycHt5GCvLG5htp2TKVzgv9QTliA3gtfv6oV4zRZx7X1
 Ofi6hVgErtHaXJheuPVeW6eAW8mHBoEfvDAfU3y9waYrtUevSl07643bzKL6v+Qd
 DUBTxOAvSYfXTtI90EAxEG/bJJyOm5LqoiA=
 -----END CERTIFICATE-----`
+	/*
+			PK := `-----BEGIN RSA PRIVATE KEY-----
+		MIICXAIBAAKBgQDO0kt3vfjY9BygLEbiAzUrEt1Cum/utmEG9rroSq6dRzKzsetV
+		kg0dqpAJwXKBtNFM9/BBPvQy2DVFUASu2koCz+TNQJOMK+BqhsgoI3o884dw7IVM
+		ywgstq6KJCjskU5T1/kOZe6xNX3Ejc4HqXGnuYtrBNV118y0SAyL0MXLKQIDAQAB
+		AoGAfe3NxbsGKhN42o4bGsKZPQDfeCHMxayGp5bTd10BtQIE/ST4BcJH+ihAS7Bd
+		6FwQlKzivNd4GP1MckemklCXfsVckdL94e8ZbJl23GdWul3v8V+KndJHqv5zVJmP
+		hwWoKimwIBTb2s0ctVryr2f18N4hhyFw1yGp0VxclGHkjgECQQD9CvllsnOwHpP4
+		MdrDHbdb29QrobKyKW8pPcDd+sth+kP6Y8MnCVuAKXCKj5FeIsgVtfluPOsZjPzz
+		71QQWS1dAkEA0T0KXO8gaBQwJhIoo/w6hy5JGZnrNSpOPp5xvJuMAafs2eyvmhJm
+		Ev9SN/Pf2VYa1z6FEnBaLOVD6hf6YQIsPQJAX/CZPoW6dzwgvimo1/GcY6eleiWE
+		qygqjWhsh71e/3bz7yuEAnj5yE3t7Zshcp+dXR3xxGo0eSuLfLFxHgGxwQJAAxf8
+		9DzQ5NkPkTCJi0sqbl8/03IUKTgT6hcbpWdDXa7m8J3wRr3o5nUB+TPQ5nzAbthM
+		zWX931YQeACcwhxvHQJBAN5mTzzJD4w4Ma6YTaNHyXakdYfyAWrOkPIWZxfhMfXe
+		DrlNdiysTI4Dd1dLeErVpjsckAaOW/JDG5PCSwkaMxk=
+		-----END RSA PRIVATE KEY-----`
 
-	PK := `-----BEGIN RSA PRIVATE KEY-----
-MIICXAIBAAKBgQDO0kt3vfjY9BygLEbiAzUrEt1Cum/utmEG9rroSq6dRzKzsetV
-kg0dqpAJwXKBtNFM9/BBPvQy2DVFUASu2koCz+TNQJOMK+BqhsgoI3o884dw7IVM
-ywgstq6KJCjskU5T1/kOZe6xNX3Ejc4HqXGnuYtrBNV118y0SAyL0MXLKQIDAQAB
-AoGAfe3NxbsGKhN42o4bGsKZPQDfeCHMxayGp5bTd10BtQIE/ST4BcJH+ihAS7Bd
-6FwQlKzivNd4GP1MckemklCXfsVckdL94e8ZbJl23GdWul3v8V+KndJHqv5zVJmP
-hwWoKimwIBTb2s0ctVryr2f18N4hhyFw1yGp0VxclGHkjgECQQD9CvllsnOwHpP4
-MdrDHbdb29QrobKyKW8pPcDd+sth+kP6Y8MnCVuAKXCKj5FeIsgVtfluPOsZjPzz
-71QQWS1dAkEA0T0KXO8gaBQwJhIoo/w6hy5JGZnrNSpOPp5xvJuMAafs2eyvmhJm
-Ev9SN/Pf2VYa1z6FEnBaLOVD6hf6YQIsPQJAX/CZPoW6dzwgvimo1/GcY6eleiWE
-qygqjWhsh71e/3bz7yuEAnj5yE3t7Zshcp+dXR3xxGo0eSuLfLFxHgGxwQJAAxf8
-9DzQ5NkPkTCJi0sqbl8/03IUKTgT6hcbpWdDXa7m8J3wRr3o5nUB+TPQ5nzAbthM
-zWX931YQeACcwhxvHQJBAN5mTzzJD4w4Ma6YTaNHyXakdYfyAWrOkPIWZxfhMfXe
-DrlNdiysTI4Dd1dLeErVpjsckAaOW/JDG5PCSwkaMxk=
------END RSA PRIVATE KEY-----`
+		uploadServerCertificate := UploadServerCertificateArgs{
+			RegionId:              common.Beijing,
+			ServerCertificate:     SC,
+			ServerCertificateName: "UploadServerCertificate",
+			PrivateKey:            PK,
+		}
 
-	uploadServerCertificate := UploadServerCertificateArgs{
-		RegionId:              common.Beijing,
-		ServerCertificate:     SC,
-		ServerCertificateName: "UploadServerCertificate",
-		PrivateKey:            PK,
+		//UploadServerCertificate
+		uploadServerCertificateResponse, uploadServerCertificateErr := client.UploadServerCertificate(&uploadServerCertificate)
+		if uploadServerCertificateErr != nil {
+			t.Errorf("Failed to UploadServerCertificate: %v", uploadServerCertificateErr)
+		}
+		t.Logf("Listener: %++v", *uploadServerCertificateResponse)
+
+		//DescribeServerCertificates
+		_, describeServerCertificatesErr := client.DescribeServerCertificates(common.Beijing, uploadServerCertificateResponse.ServerCertificateId)
+		if describeServerCertificatesErr != nil {
+			t.Errorf("Failed to DescribeServerCertificates   %v", describeServerCertificatesErr)
+		}
+
+		//SetServerCertificateName
+		setServerCertificateNameErr := client.SetServerCertificateName(common.Beijing, uploadServerCertificateResponse.ServerCertificateId, "SetServerCertificateName")
+		if setServerCertificateNameErr != nil {
+			t.Errorf("Failed to SetServerCertificateName: %v", setServerCertificateNameErr)
+		}
+
+		//DeleteServerCertificate
+		deleteServerCertificateErr := client.DeleteServerCertificate(common.Beijing, uploadServerCertificateResponse.ServerCertificateId)
+		if deleteServerCertificateErr != nil {
+			t.Errorf("Failed to DeleteServerCertificate: %v", deleteServerCertificateErr)
+		}
+	*/
+	uploadCACertificate := UploadCACertificateArgs{
+		RegionId:          common.Beijing,
+		CACertificate:     SC,
+		CACertificateName: "UploadCACertificate",
 	}
 
-	//UploadServerCertificate
-	uploadServerCertificateResponse, uploadServerCertificateErr := client.UploadServerCertificate(&uploadServerCertificate)
-	if uploadServerCertificateErr != nil {
-		t.Errorf("Failed to UploadServerCertificate: %v", uploadServerCertificateErr)
+	//UploadCACertificate
+	uploadCACertificateResponse, uploadCACertificateErr := client.UploadCACertificate(&uploadCACertificate)
+	if uploadCACertificateErr != nil {
+		t.Errorf("Failed to UploadCACertificate: %v", uploadCACertificateErr)
 	}
-	t.Logf("Listener: %++v", *uploadServerCertificateResponse)
+	t.Logf("Listener: %++v", *uploadCACertificateResponse)
 
-	//DescribeServerCertificates
-	_, describeServerCertificatesErr := client.DescribeServerCertificates(common.Beijing, uploadServerCertificateResponse.ServerCertificateId)
-	if describeServerCertificatesErr != nil {
-		t.Errorf("Failed to DescribeServerCertificates   %v", describeServerCertificatesErr)
-	}
-
-	//SetServerCertificateName
-	setServerCertificateNameErr := client.SetServerCertificateName(common.Beijing, uploadServerCertificateResponse.ServerCertificateId, "SetServerCertificateName")
-	if setServerCertificateNameErr != nil {
-		t.Errorf("Failed to SetServerCertificateName: %v", setServerCertificateNameErr)
+	//DescribeCACertificates
+	_, describeCACertificatesErr := client.DescribeCACertificates(common.Beijing, uploadCACertificateResponse.CACertificateId)
+	if describeCACertificatesErr != nil {
+		t.Errorf("Failed to DescribeCACertificates   %v", describeCACertificatesErr)
 	}
 
-	//DeleteServerCertificate
-	deleteServerCertificateErr := client.DeleteServerCertificate(common.Beijing, uploadServerCertificateResponse.ServerCertificateId)
-	if deleteServerCertificateErr != nil {
-		t.Errorf("Failed to DeleteServerCertificate: %v", deleteServerCertificateErr)
+	//SetCACertificateName
+	setCACertificateNameErr := client.SetCACertificateName(common.Beijing, uploadCACertificateResponse.CACertificateId, "SetCACertificateName")
+	if setCACertificateNameErr != nil {
+		t.Errorf("Failed to SetCACertificateName: %v", setCACertificateNameErr)
+	}
+
+	//DeleteCACertificate
+	deleteCACertificateErr := client.DeleteCACertificate(common.Beijing, uploadCACertificateResponse.CACertificateId)
+	if deleteCACertificateErr != nil {
+		t.Errorf("Failed to DeleteCACertificate: %v", deleteCACertificateErr)
 	}
 
 }

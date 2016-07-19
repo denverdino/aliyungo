@@ -86,6 +86,7 @@ type VpcSetType struct {
 	UserCidrs    struct {
 		UserCidr []string
 	} //cookie add
+
 }
 
 type DescribeVpcsResponse struct {

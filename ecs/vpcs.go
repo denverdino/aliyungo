@@ -82,8 +82,10 @@ type VpcSetType struct {
 	VRouterId    string
 	Description  string
 	CreationTime util.ISO6801Time
-	IsDefault    bool   //cookie add
-	UserCidrs    string //cookie add
+	IsDefault    bool //cookie add
+	UserCidrs    struct {
+		UserCidr []string
+	} //cookie add
 }
 
 type DescribeVpcsResponse struct {

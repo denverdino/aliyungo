@@ -173,6 +173,40 @@ type EipAddressAssociateType struct {
 }
 
 //
+// compatible with old api DescribeInstanceAttribute
+type DescribeInstanceAttributesType struct {
+	InstanceId              string
+	InstanceName            string
+	Description             string
+	ImageId                 string
+	RegionId                common.Region
+	ZoneId                  string
+	CPU                     int
+	Memory                  int
+	ClusterId               string
+	InstanceType            string
+	InstanceTypeFamily      string
+	HostName                string
+	SerialNumber            string
+	Status                  InstanceStatus
+	OperationLocks          OperationLocksType
+	SecurityGroupIds        SecurityGroupIdSetType
+	PublicIpAddress         IpAddressSetType
+	InnerIpAddress          IpAddressSetType
+	InstanceNetworkType     string //enum Classic | Vpc
+	InternetMaxBandwidthIn  int
+	InternetMaxBandwidthOut int
+	InternetChargeType      common.InternetChargeType
+	CreationTime            util.ISO6801Time //time.Time
+	VpcAttributes           VpcAttributesType
+	EipAddress              EipAddressAssociateType
+	DeviceAvailable         string //True | False cookie add on 2016-07-18
+	IoOptimized             string //StringOrBool 这里好坑，文档中要求string类型
+	InstanceChargeType      common.InternetChargeType
+	ExpiredTime             util.ISO6801Time
+}
+
+//
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
 	InstanceId              string
@@ -208,13 +242,13 @@ type InstanceAttributesType struct {
 
 type DescribeInstanceAttributeResponse struct {
 	common.Response
-	InstanceAttributesType
+	DescribeInstanceAttributesType
 }
 
 // DescribeInstanceAttribute describes instance attribute
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstanceattribute
-func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *InstanceAttributesType, err error) {
+func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *DescribeInstanceAttributesType, err error) {
 	args := DescribeInstanceAttributeArgs{InstanceId: instanceId}
 
 	response := DescribeInstanceAttributeResponse{}
@@ -222,7 +256,7 @@ func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *In
 	if err != nil {
 		return nil, err
 	}
-	return &response.InstanceAttributesType, err
+	return &response.DescribeInstanceAttributesType, err
 }
 
 type ModifyInstanceAttributeArgs struct {

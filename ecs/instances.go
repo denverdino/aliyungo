@@ -201,7 +201,7 @@ type DescribeInstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	DeviceAvailable         string //True | False cookie add on 2016-07-18
-	IoOptimized             string //StringOrBool 这里好坑，文档中要求string类型
+	IoOptimized             string //文档中string实为旧接口DescribeInstanceAttributesType的要求
 	InstanceChargeType      common.InternetChargeType
 	ExpiredTime             util.ISO6801Time
 }
@@ -235,7 +235,7 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	DeviceAvailable         bool //True | False cookie add on 2016-07-18
-	IoOptimized             bool //StringOrBool 这里好坑，文档中要求string类型
+	IoOptimized             bool //文档未更新要求string，新接口InstanceAttribute要求bool
 	InstanceChargeType      common.InternetChargeType
 	ExpiredTime             util.ISO6801Time
 }

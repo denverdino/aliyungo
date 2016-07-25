@@ -246,7 +246,7 @@ type DescribeInstanceAttributeResponse struct {
 }
 
 // DescribeInstanceAttribute describes instance attribute
-//
+// 旧版本api，不推荐使用
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstanceattribute
 func (client *Client) DescribeInstanceAttribute(instanceId string) (instance *DescribeInstanceAttributesType, err error) {
 	args := DescribeInstanceAttributeArgs{InstanceId: instanceId}

@@ -1,3 +1,4 @@
+//go test -v config_info_test.go client.go tags.go disks.go instances_test.go instances.go
 package ecs
 
 import (

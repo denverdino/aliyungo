@@ -1,3 +1,4 @@
+//go test -v config_info_test.go client.go networks.go networks_test.go instances.go tags.go disks.go
 package ecs
 
 import (
@@ -42,7 +43,12 @@ func testEipAddress(t *testing.T, client *Client, regionId common.Region, instan
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
 
-	err = client.AssociateEipAddress(allocationId, instanceId)
+	info := AssociateEipAddressArgs{
+		AllocationId: allocationId,
+		InstanceId:   instanceId,
+		InstanceType: "EcsInstance",
+	}
+	err = client.AssociateEipAddress(&info)
 	if err != nil {
 		t.Errorf("Failed to associate EIP address: %v", err)
 	}
@@ -50,7 +56,13 @@ func testEipAddress(t *testing.T, client *Client, regionId common.Region, instan
 	if err != nil {
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
-	err = client.UnassociateEipAddress(allocationId, instanceId)
+
+	data := UnallocateEipAddressArgs{
+		AllocationId: allocationId,
+		InstanceId:   instanceId,
+		InstanceType: "EcsInstance",
+	}
+	err = client.UnassociateEipAddress(&data)
 	if err != nil {
 		t.Errorf("Failed to unassociate EIP address: %v", err)
 	}

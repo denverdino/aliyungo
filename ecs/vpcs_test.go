@@ -1,3 +1,4 @@
+//go test -v config_info_test.go client.go tags.go disks.go instances.go instance_types.go security_groups.go vpcs_test.go vpcs.go vrouters.go vswitches.go vrouters_test.go vswitches_test.go security_groups_test.go networks.go route_tables_test.go route_tables.go networks_test.go regions.go
 package ecs
 
 import (

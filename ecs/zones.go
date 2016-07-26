@@ -27,13 +27,55 @@ type AvailableDiskCategoriesType struct {
 	DiskCategories []DiskCategory //enum for cloud, ephemeral, ephemeral_ssd
 }
 
+type InstanceType InstanceTypeItemType
+
+type SystemDiskCategory string
+
+const (
+	SystemDiskCategoryEphemeralSSD    = SystemDiskCategory("ephemeral_ssd")
+	SystemDiskCategoryCloudEfficiency = SystemDiskCategory("cloud_efficiency")
+	SystemDiskCategoryCloudSSD        = SystemDiskCategory("cloud_ssd")
+)
+
+type AvailableResourcesType struct {
+	IoOptimized  bool
+	NetworkTypes struct {
+		SupportedNetworkCategory []string
+	}
+	InstanceGenerations struct {
+		SupportedInstanceGeneration []string
+	}
+	InstanceTypeFamilies struct {
+		SupportedInstanceTypeFamily []string
+	}
+	SystemDiskCategories struct {
+		SupportedSystemDiskCategory []string
+	}
+	DataDiskCategories struct {
+		SupportedDataDiskCategory []string
+	}
+	InstanceTypes struct {
+		SupportedInstanceType []string
+	}
+}
+
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&zonetype
 type ZoneType struct {
-	ZoneId                    string
-	LocalName                 string
-	AvailableResourceCreation AvailableResourceCreationType
-	AvailableDiskCategories   AvailableDiskCategoriesType
+	ZoneId             string
+	LocalName          string
+	AvailableResources struct {
+		ResourcesInfo []AvailableResourcesType
+	}
+	AvailableInstanceTypes struct {
+		InstanceTypes []string
+	}
+	AvailableResourceCreation struct {
+		ResourceTypes []ResourceType
+	}
+	AvailableDiskCategories struct {
+		DiskCategories []DiskCategory
+	}
 }
 
 type DescribeZonesResponse struct {

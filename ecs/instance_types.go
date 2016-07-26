@@ -3,6 +3,7 @@ package ecs
 import "github.com/hdksky/aliyungo/common"
 
 type DescribeInstanceTypesArgs struct {
+	InstanceTypeFamily string
 }
 
 //
@@ -24,10 +25,10 @@ type DescribeInstanceTypesResponse struct {
 // DescribeInstanceTypes describes all instance types
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/other&describeinstancetypes
-func (client *Client) DescribeInstanceTypes() (instanceTypes []InstanceTypeItemType, err error) {
+func (client *Client) DescribeInstanceTypes(args *DescribeInstanceTypesArgs) (instanceTypes []InstanceTypeItemType, err error) {
 	response := DescribeInstanceTypesResponse{}
 
-	err = client.Invoke("DescribeInstanceTypes", &DescribeInstanceTypesArgs{}, &response)
+	err = client.Invoke("DescribeInstanceTypes", args, &response)
 
 	if err != nil {
 		return []InstanceTypeItemType{}, err

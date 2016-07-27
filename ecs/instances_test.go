@@ -121,7 +121,7 @@ func TestECSInstance(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to stop instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TestInstanceId, Stopped, 0)
+	err = client.WaitForInstance(common.Beijing, TestInstanceId, Stopped, 0)
 	if err != nil {
 		t.Errorf("Instance %s is failed to stop: %v", TestInstanceId, err)
 	}
@@ -130,7 +130,7 @@ func TestECSInstance(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TestInstanceId, Running, 0)
+	err = client.WaitForInstance(common.Beijing, TestInstanceId, Running, 0)
 	if err != nil {
 		t.Errorf("Instance %s is failed to start: %v", TestInstanceId, err)
 	}
@@ -163,25 +163,25 @@ func TestECSInstanceCreationAndDeletion(t *testing.T) {
 	instance, err = client.DescribeInstanceAttribute(instanceId)
 	t.Logf("Instance: %++v  %v", instance, err)
 
-	err = client.WaitForInstance(instanceId, Stopped, 60)
+	err = client.WaitForInstance(common.Beijing, instanceId, Stopped, 60)
 
 	err = client.StartInstance(instanceId)
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", instanceId, err)
 	}
-	err = client.WaitForInstance(instanceId, Running, 0)
+	err = client.WaitForInstance(common.Beijing, instanceId, Running, 0)
 
 	err = client.RebootInstance(instanceId, true)
 	if err != nil {
 		t.Errorf("Failed to reboot instance %s: %v", instanceId, err)
 	}
-	err = client.WaitForInstance(instanceId, Running, 0)
+	err = client.WaitForInstance(common.Beijing, instanceId, Running, 0)
 
 	err = client.StopInstance(instanceId, true)
 	if err != nil {
 		t.Errorf("Failed to stop instance %s: %v", instanceId, err)
 	}
-	err = client.WaitForInstance(instanceId, Stopped, 0)
+	err = client.WaitForInstance(common.Beijing, instanceId, Stopped, 0)
 	if err != nil {
 		t.Errorf("Instance %s is failed to stop: %v", instanceId, err)
 	}
@@ -212,7 +212,7 @@ func TestModifyInstanceAttribute(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to stop instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TestInstanceId, Stopped, 0)
+	err = client.WaitForInstance(common.Beijing, TestInstanceId, Stopped, 0)
 
 	info := ModifyInstanceVpcAttributeArgs{}
 	info.InstanceId = TestInstanceId
@@ -226,7 +226,7 @@ func TestModifyInstanceAttribute(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to start instance %s: %v", TestInstanceId, err)
 	}
-	err = client.WaitForInstance(TestInstanceId, Running, 0)
+	err = client.WaitForInstance(common.Beijing, TestInstanceId, Running, 0)
 
 	t.Logf("Modify instance attribute successfully")
 }

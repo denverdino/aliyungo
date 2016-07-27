@@ -303,7 +303,8 @@ func (client *Client) ModifyInstanceVpcAttribute(args *ModifyInstanceVpcAttribut
 const InstanceDefaultTimeout = 120
 
 // WaitForInstance waits for instance to given status
-func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, timeout int) error {
+// old WaitForInstance api
+func (client *Client) WaitForInstanceByDescribeInstanceAttribute(instanceId string, status InstanceStatus, timeout int) error {
 	if timeout <= 0 {
 		timeout = InstanceDefaultTimeout
 	}
@@ -313,6 +314,39 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 			return err
 		}
 		if instance.Status == status {
+			//TODO
+			//Sleep one more time for timing issues
+			time.Sleep(DefaultWaitForInterval * time.Second)
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+
+	}
+	return nil
+}
+
+// WaitForInstanceByRegionId waits for instance to given status
+func (client *Client) WaitForInstance(regionId common.Region, instanceId string, status InstanceStatus, timeout int) error {
+	if timeout <= 0 {
+		timeout = InstanceDefaultTimeout
+	}
+
+	args := DescribeInstancesArgs{
+		RegionId:    regionId,
+		InstanceIds: "[\"" + instanceId + "\"]",
+	}
+
+	for {
+		instance, _, err := client.DescribeInstances(&args)
+		if err != nil {
+			return err
+		}
+
+		if instance[0].Status == status {
 			//TODO
 			//Sleep one more time for timing issues
 			time.Sleep(DefaultWaitForInterval * time.Second)

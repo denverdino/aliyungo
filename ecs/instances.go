@@ -337,7 +337,7 @@ func (client *Client) WaitForInstance(regionId common.Region, instanceId string,
 
 	args := DescribeInstancesArgs{
 		RegionId:    regionId,
-		InstanceIds: "[\"" + instanceId + "\"]",
+		InstanceIds: `["` + instanceId + `"]`,
 	}
 
 	for {
@@ -357,7 +357,6 @@ func (client *Client) WaitForInstance(regionId common.Region, instanceId string,
 			return common.GetClientErrorFromString("Timeout")
 		}
 		time.Sleep(DefaultWaitForInterval * time.Second)
-
 	}
 	return nil
 }

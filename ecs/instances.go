@@ -552,28 +552,24 @@ type CreateInstancesArgs struct {
 	Number                  int
 }
 
-type InstanceIdType struct {
-	InstanceId string
-	common.Response
-}
 type CreateInstancesResponse struct {
-	Instances []InstanceIdType
+	InstanceIds []string
 }
 
 // CreateInstance creates instance
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&createinstance
-func (client *Client) CreateInstances(args *CreateInstancesArgs) (*CreateInstancesResponse, error) {
+func (client *Client) CreateInstances(args *CreateInstancesArgs) ([]string, error) {
 	var response CreateInstanceResponse
 	var ret CreateInstancesResponse
 	for i := 0; i < args.Number; i++ {
 		if err := client.Invoke("CreateInstance", args, &response); err != nil {
 			return nil, err
 		} else {
-			ret.Instances = append(ret.Instances, response.InstanceId)
+			ret.InstanceIds = append(ret.InstanceIds, response.InstanceId)
 		}
 	}
-	return &ret, nil
+	return ret.InstanceIds, nil
 }
 
 type SecurityGroupArgs struct {

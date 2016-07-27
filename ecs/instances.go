@@ -528,6 +528,61 @@ func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId strin
 	return response.InstanceId, err
 }
 
+type CreateInstancesArgs struct {
+	RegionId                common.Region
+	ZoneId                  string
+	ImageId                 string
+	InstanceType            string
+	SecurityGroupId         string
+	InstanceName            string
+	Description             string
+	InternetChargeType      common.InternetChargeType
+	InternetMaxBandwidthIn  int
+	InternetMaxBandwidthOut int
+	HostName                string
+	Password                string
+	IoOptimized             IoOptimized
+	SystemDisk              SystemDiskType
+	DataDisk                []DataDiskType
+	VSwitchId               string
+	PrivateIpAddress        string
+	ClientToken             string
+	InstanceChargeType      common.InstanceChargeType
+	Period                  int
+	Number                  int
+}
+
+type InstanceIdType struct {
+	InstanceId string
+	common.Response
+}
+type CreateInstancesResponse struct {
+	Number    int
+	Instances []InstanceIdType
+}
+
+// CreateInstance creates instance
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&createinstance
+func (client *Client) CreateInstances(args *CreateInstancesArgs) (responses *CreateInstancesResponse, err error) {
+	Instance := InstanceIdType{}
+	response := CreateInstanceResponse{}
+	res := &CreateInstancesResponse{
+		Number: args.Number,
+	}
+	for i := 0; i < args.Number; i++ {
+		err = client.Invoke("CreateInstance", args, &response)
+		if err != nil {
+			Instance.InstanceId = "nil"
+		} else {
+			Instance.InstanceId = response.InstanceId
+		}
+		Instance.Response = response.Response
+		res.Instances = append(res.Instances, Instance)
+	}
+	return res, err
+}
+
 type SecurityGroupArgs struct {
 	InstanceId      string
 	SecurityGroupId string

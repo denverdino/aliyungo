@@ -1,11 +1,12 @@
 package ecs
 
 import (
-	"github.com/hdksky/aliyungo/common"
-	"github.com/hdksky/aliyungo/util"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/hdksky/aliyungo/common"
+	"github.com/hdksky/aliyungo/util"
 )
 
 // ImageOwnerAlias represents image owner
@@ -53,10 +54,12 @@ type DescribeImagesResponse struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&diskdevicemapping
 type DiskDeviceMapping struct {
-	SnapshotId string
-	//Why Size Field is string-type.
-	Size   string
-	Device string
+	SnapshotId      string
+	Size            string
+	Device          string
+	Format          string
+	ImportOSSBucket string
+	ImportOSSObject string
 }
 
 //
@@ -64,6 +67,8 @@ type DiskDeviceMapping struct {
 type ImageType struct {
 	ImageId            string
 	ImageVersion       string
+	OSType             string
+	Platform           string
 	Architecture       string
 	ImageName          string
 	Description        string
@@ -78,6 +83,8 @@ type ImageType struct {
 	Progress     string
 	Status       ImageStatus
 	CreationTime util.ISO6801Time
+	Usage        string
+	IsCopied     bool
 }
 
 // DescribeImages describes images

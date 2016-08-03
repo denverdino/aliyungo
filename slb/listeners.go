@@ -72,6 +72,7 @@ type HTTPListenerType struct {
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
 	HealthCheckHttpCode    HealthCheckHttpCodeType
+	VServerGroupId         string
 }
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 
@@ -129,6 +130,7 @@ type TCPListenerType struct {
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
 	HealthCheckHttpCode    HealthCheckHttpCodeType
+	VServerGroupId         string
 }
 
 type CreateLoadBalancerTCPListenerArgs TCPListenerType
@@ -157,6 +159,7 @@ type UDPListenerType struct {
 	UnhealthyThreshold     int
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
+	VServerGroupId         string
 }
 type CreateLoadBalancerUDPListenerArgs UDPListenerType
 

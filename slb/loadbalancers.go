@@ -61,9 +61,6 @@ func (client *Client) DeleteLoadBalancer(loadBalancerId string) (err error) {
 	}
 	response := &DeleteLoadBalancerResponse{}
 	err = client.Invoke("DeleteLoadBalancer", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -84,9 +81,6 @@ type ModifyLoadBalancerInternetSpecResponse struct {
 func (client *Client) ModifyLoadBalancerInternetSpec(args *ModifyLoadBalancerInternetSpecArgs) (err error) {
 	response := &ModifyLoadBalancerInternetSpecResponse{}
 	err = client.Invoke("ModifyLoadBalancerInternetSpec", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -116,9 +110,6 @@ func (client *Client) SetLoadBalancerStatus(loadBalancerId string, status Status
 	}
 	response := &SetLoadBalancerStatusResponse{}
 	err = client.Invoke("SetLoadBalancerStatus", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -142,9 +133,6 @@ func (client *Client) SetLoadBalancerName(loadBalancerId string, name string) (e
 	}
 	response := &SetLoadBalancerNameResponse{}
 	err = client.Invoke("SetLoadBalancerName", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 

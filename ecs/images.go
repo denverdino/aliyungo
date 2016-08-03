@@ -1,11 +1,12 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
-	"github.com/denverdino/aliyungo/util"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/denverdino/aliyungo/common"
+	"github.com/denverdino/aliyungo/util"
 )
 
 // ImageOwnerAlias represents image owner
@@ -262,8 +263,5 @@ type CancelCopyImageRequest struct {
 func (client *Client) CancelCopyImage(regionId common.Region, imageId string) error {
 	response := &common.Response{}
 	err := client.Invoke("CancelCopyImage", &CancelCopyImageRequest{regionId, imageId}, &response)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

@@ -57,7 +57,7 @@ func (client *RamClient) ListAccessKeys(userQuery UserQueryRequest) (AccessKeyLi
 	var accessKeyListResp AccessKeyListResponse
 	err := client.Invoke("ListAccessKeys", userQuery, &accessKeyListResp)
 	if err != nil {
-		return AccessKeyListResponse{}, nil
+		return AccessKeyListResponse{}, err
 	}
 	return accessKeyListResp, nil
 }

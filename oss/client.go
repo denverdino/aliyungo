@@ -844,7 +844,7 @@ func (b *Bucket) UploadSignedURL(name, method, contentType string, expires time.
 	mac := hmac.New(sha1.New, []byte(secretKey))
 	mac.Write([]byte(stringToSign))
 	macsum := mac.Sum(nil)
-	signature := base64.StdEncoding.EncodeToString([]byte(macsum))
+	signature := base64.StdEncoding.EncodeToString(macsum)
 	signature = strings.TrimSpace(signature)
 
 	signedurl, err := url.Parse(b.Region.GetEndpoint(b.Internal, b.Name, b.Secure))

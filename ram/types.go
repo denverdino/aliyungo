@@ -81,6 +81,17 @@ type PolicyItem struct {
 	Resource string
 }
 
+type AssumeRolePolicyDocument struct {
+	Statement []AssumeRolePolicyItem
+	Version   string
+}
+
+type AssumeRolePolicyItem struct {
+	Action    string
+	Effect    string
+	Principal string
+}
+
 /*
 	"PasswordPolicy": {
         "MinimumPasswordLength": 12,

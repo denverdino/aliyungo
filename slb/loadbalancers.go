@@ -5,17 +5,15 @@ import (
 	"github.com/hdksky/aliyungo/util"
 )
 
-type AddressType string
-
 const (
-	InternetAddressType = AddressType("internet")
-	IntranetAddressType = AddressType("intranet")
+	InternetAddressType = "internet"
+	IntranetAddressType = "intranet"
 )
 
 type CreateLoadBalancerArgs struct {
 	RegionId           common.Region
 	LoadBalancerName   string
-	AddressType        AddressType
+	AddressType        string
 	VSwitchId          string
 	InternetChargeType common.InternetChargeType
 	Bandwidth          int
@@ -155,7 +153,7 @@ func (client *Client) SetLoadBalancerName(loadBalancerId string, name string) (e
 type DescribeLoadBalancersArgs struct {
 	RegionId           common.Region
 	LoadBalancerId     string
-	AddressType        AddressType
+	AddressType        string
 	NetworkType        string
 	VpcId              string
 	VSwitchId          string
@@ -183,7 +181,7 @@ type LoadBalancerType struct {
 	Address            string
 	RegionId           common.Region
 	RegionIdAlias      string
-	AddressType        AddressType
+	AddressType        string
 	VSwitchId          string
 	VpcId              string
 	NetworkType        string

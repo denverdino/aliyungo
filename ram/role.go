@@ -6,16 +6,6 @@ type RoleRequest struct {
 	Description              string
 }
 
-type Role struct {
-	RoleId                   string
-	RoleName                 string
-	Arn                      string
-	Description              string
-	AssumeRolePolicyDocument AssumeRolePolicyDocument
-	CreateDate               string
-	UpdateDate               string
-}
-
 type RoleResponse struct {
 	RamCommonResponse
 	Role Role
@@ -46,16 +36,16 @@ func (client *RamClient) CreateRole(role RoleRequest) (RoleResponse, error) {
 	return roleResponse, nil
 }
 
-func (client *RamClient) GetRole(roleQuery RoleQueryRequest) {
+func (client *RamClient) GetRole(roleQuery RoleQueryRequest) (RoleResponse, error) {
 	var roleResponse RoleResponse
-	err := client.Invoke("GetRole", userQuery, &roleResponse)
+	err := client.Invoke("GetRole", roleQuery, &roleResponse)
 	if err != nil {
 		return RoleResponse{}, nil
 	}
 	return roleResponse, nil
 }
 
-func (client *RamClient) UpdateRole(newRole UpdateRoleRequest) {
+func (client *RamClient) UpdateRole(newRole UpdateRoleRequest) (RoleResponse, error) {
 	var roleResponse RoleResponse
 	err := client.Invoke("UpdateRole", newRole, &roleResponse)
 	if err != nil {
@@ -64,16 +54,16 @@ func (client *RamClient) UpdateRole(newRole UpdateRoleRequest) {
 	return roleResponse, nil
 }
 
-func (client *RamClient) ListRoles() {
+func (client *RamClient) ListRoles() (ListRoleResponse, error) {
 	var roleList ListRoleResponse
-	err := client.Invoke("ListRoles", nil, &roleList)
+	err := client.Invoke("ListRoles", struct{}{}, &roleList)
 	if err != nil {
 		return ListRoleResponse{}, err
 	}
 	return roleList, nil
 }
 
-func (client *RamClient) DeleteRole(roleQuery RoleQueryRequest) {
+func (client *RamClient) DeleteRole(roleQuery RoleQueryRequest) (RamCommonResponse, error) {
 	var commonResp RamCommonResponse
 	err := client.Invoke("DeleteRole", roleQuery, &commonResp)
 	if err != nil {

@@ -99,7 +99,7 @@ func canonicalizeHeader(headers http.Header) (newHeaders http.Header, result str
 	var canonicalizedHeader string
 
 	for _, k := range canonicalizedHeaders {
-		canonicalizedHeader += k + ":" + headers[k][0] + "\n"
+		canonicalizedHeader += k + ":" + headers.Get(k) + "\n"
 	}
 
 	return newHeaders, canonicalizedHeader

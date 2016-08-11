@@ -996,7 +996,7 @@ func (client *Client) prepare(req *request) error {
 	// Copy so they can be mutated without affecting on retries.
 	headers := copyHeader(req.headers)
 	if len(client.SecurityToken) != 0 {
-		headers["x-oss-security-token"] = []string{client.SecurityToken}
+		headers.Set("x-oss-security-token", client.SecurityToken)
 	}
 
 	params := make(url.Values)

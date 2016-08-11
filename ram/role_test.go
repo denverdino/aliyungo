@@ -1,4 +1,4 @@
-package ram
+package ram_test
 
 import (
 	"encoding/json"
@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/denverdino/aliyungo/ram"
 )
 
 /*
@@ -16,32 +18,32 @@ var (
 	accountId = os.Getenv("AccountId")
 	roleName  = strconv.FormatInt(time.Now().Unix(), 10)
 
-	princpal = AssumeRolePolicyPrincpal{RAM: []string{"acs:ram::" + accountId + ":root"}}
+	princpal = ram.AssumeRolePolicyPrincpal{RAM: []string{"acs:ram::" + accountId + ":root"}}
 
-	policyDocument = AssumeRolePolicyDocument{
-		Statement: []AssumeRolePolicyItem{
-			AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Allow", Principal: princpal},
+	policyDocument = ram.AssumeRolePolicyDocument{
+		Statement: []ram.AssumeRolePolicyItem{
+			ram.AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Allow", Principal: princpal},
 		},
 		Version: "1"}
 
-	newPolicyDocument = AssumeRolePolicyDocument{
-		Statement: []AssumeRolePolicyItem{
-			AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Deny", Principal: princpal},
+	newPolicyDocument = ram.AssumeRolePolicyDocument{
+		Statement: []ram.AssumeRolePolicyItem{
+			ram.AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Deny", Principal: princpal},
 		},
 		Version: "1"}
 
-	role = RoleRequest{
+	RoleReq = ram.RoleRequest{
 		RoleName:                 roleName,
 		AssumeRolePolicyDocument: getAssumeRolePolicyDocumentStr(),
 		Description:              "this is a role for unit test purpose",
 	}
 
-	updateRoleRequest = UpdateRoleRequest{
+	updateRoleRequest = ram.UpdateRoleRequest{
 		RoleName:                    roleName,
 		NewAssumeRolePolicyDocument: getNewAssumeRolePolicyDocumentStr(),
 	}
 
-	roleQuery = RoleQueryRequest{RoleName: roleName}
+	roleQuery = ram.RoleQueryRequest{RoleName: roleName}
 )
 
 func getAssumeRolePolicyDocumentStr() string {
@@ -55,8 +57,8 @@ func getNewAssumeRolePolicyDocumentStr() string {
 }
 
 func TestCreateRole(t *testing.T) {
-	client := NewTestClient()
-	resp, err := client.CreateRole(role)
+	client := ram.NewTestClient()
+	resp, err := client.CreateRole(RoleReq)
 	if err != nil {
 		t.Errorf("Failed to CreateRole %v", err)
 	}
@@ -64,7 +66,7 @@ func TestCreateRole(t *testing.T) {
 }
 
 func TestGetRole(t *testing.T) {
-	client := NewTestClient()
+	client := ram.NewTestClient()
 	resp, err := client.GetRole(roleQuery)
 	if err != nil {
 		t.Errorf("Failed to GetRole %v", err)
@@ -73,7 +75,7 @@ func TestGetRole(t *testing.T) {
 }
 
 func TestUpdateRole(t *testing.T) {
-	client := NewTestClient()
+	client := ram.NewTestClient()
 	resp, err := client.UpdateRole(updateRoleRequest)
 	if err != nil {
 		t.Errorf("Failed to UpdateRole %v", err)
@@ -82,7 +84,7 @@ func TestUpdateRole(t *testing.T) {
 }
 
 func TestListRoles(t *testing.T) {
-	client := NewTestClient()
+	client := ram.NewTestClient()
 	resp, err := client.ListRoles()
 	if err != nil {
 		t.Errorf("Failed to ListRoles %v", err)
@@ -91,8 +93,8 @@ func TestListRoles(t *testing.T) {
 }
 
 func TestDeleteRole(t *testing.T) {
-	client := NewTestClient()
-	resp, err := client.DeleteRole(RoleQueryRequest{RoleName: roleName})
+	client := ram.NewTestClient()
+	resp, err := client.DeleteRole(ram.RoleQueryRequest{RoleName: roleName})
 	if err != nil {
 		t.Errorf("Failed to DeleteRole %v", err)
 	}

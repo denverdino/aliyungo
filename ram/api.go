@@ -66,7 +66,9 @@ type RamClientInterface interface {
 	ListEnitiesForPolicy()
 	SetDefaultPolicyVersion()
 	ListPoliciesForGroup()
-	ListPoliciesForRole()
+	AttachPolicyToRole(attachPolicyRequest AttachPolicyToRoleRequest) (RamCommonResponse, error)
+	DetachPolicyFromRole(attachPolicyRequest AttachPolicyToRoleRequest) (RamCommonResponse, error)
+	ListPoliciesForRole(roleQuery RoleQueryRequest) (PolicyListResponse, error)
 
 	//TODO security apis
 	SetAccountAlias(accountAlias AccountAlias) (RamCommonResponse, error)

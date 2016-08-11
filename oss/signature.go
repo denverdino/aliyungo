@@ -101,5 +101,6 @@ func canonicalizeHeader(headers http.Header) (newHeaders http.Header, result str
 	for _, k := range canonicalizedHeaders {
 		canonicalizedHeader += k + ":" + headers.Get(k) + "\n"
 	}
+
 	return newHeaders, canonicalizedHeader
 }

@@ -58,6 +58,13 @@ type Group struct {
 }
 
 type Role struct {
+	RoleId                   string
+	RoleName                 string
+	Arn                      string
+	Description              string
+	AssumeRolePolicyDocument string
+	CreateDate               string
+	UpdateDate               string
 }
 
 type Policy struct {
@@ -79,6 +86,21 @@ type PolicyItem struct {
 	Action   string
 	Effect   string
 	Resource string
+}
+
+type AssumeRolePolicyDocument struct {
+	Statement []AssumeRolePolicyItem
+	Version   string
+}
+
+type AssumeRolePolicyItem struct {
+	Action    string
+	Effect    string
+	Principal AssumeRolePolicyPrincpal
+}
+
+type AssumeRolePolicyPrincpal struct {
+	RAM []string
 }
 
 /*

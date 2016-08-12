@@ -16,25 +16,23 @@ import (
 	"github.com/denverdino/aliyungo/oss"
 )
 
-const (
-	TestRegion = oss.Hangzhou
+var (
+	client     *oss.Client //= oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
+	TestBucket = strconv.FormatInt(time.Now().Unix(), 10)
 )
 
-/*
-	Set your AccessKeyId and AccessKeySecret in env
-	simply use the command below
-	AccessKeyId=YourAccessKeyId AccessKeySecret=YourAccessKeySecret go test
-*/
-var (
-	//If you test on ECS, you can set the internal param to true
-	AccessKeyId     = os.Getenv("AccessKeyId")
-	AccessKeySecret = os.Getenv("AccessKeySecret")
-	client          = oss.NewOSSClient(TestRegion, false, AccessKeyId, AccessKeySecret, false)
-	TestBucket      = strconv.FormatInt(time.Now().Unix(), 10)
-)
+func init() {
+	AccessKeyId := os.Getenv("AccessKeyId")
+	AccessKeySecret := os.Getenv("AccessKeySecret")
+	if len(AccessKeyId) != 0 && len(AccessKeySecret) != 0 {
+		client = oss.NewOSSClient(TestRegion, false, AccessKeyId, AccessKeySecret, false)
+	} else {
+		client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
+	}
+
+}
 
 func TestCreateBucket(t *testing.T) {
-
 	b := client.Bucket(TestBucket)
 	err := b.PutBucket(oss.Private)
 	if err != nil {

@@ -32,6 +32,7 @@ var ossParamsToSign = map[string]bool{
 	"response-cache-control":       true,
 	"response-content-disposition": true,
 	"response-content-encoding":    true,
+	"bucketInfo":                   true,
 }
 
 func (client *Client) signRequest(request *request) {

@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	client     *oss.Client //= oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
+	client     *oss.Client
 	TestBucket = strconv.FormatInt(time.Now().Unix(), 10)
 )
 

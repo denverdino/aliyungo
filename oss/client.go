@@ -32,6 +32,7 @@ const DefaultContentType = "application/octet-stream"
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
+	SecurityToken   string
 	Region          Region
 	Internal        bool
 	Secure          bool
@@ -87,6 +88,18 @@ var attempts = util.AttemptStrategy{
 
 // NewOSSClient creates a new OSS.
 
+func NewOSSClientForAssumeRole(region Region, internal bool, accessKeyId string, accessKeySecret string, securityToken string, secure bool) *Client {
+	return &Client{
+		AccessKeyId:     accessKeyId,
+		AccessKeySecret: accessKeySecret,
+		SecurityToken:   securityToken,
+		Region:          region,
+		Internal:        internal,
+		debug:           false,
+		Secure:          secure,
+	}
+}
+
 func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string, secure bool) *Client {
 	return &Client{
 		AccessKeyId:     accessKeyId,
@@ -113,13 +126,21 @@ func (client *Client) Bucket(name string) *Bucket {
 }
 
 type BucketInfo struct {
-	Name         string
-	CreationDate string
+	Name             string
+	CreationDate     string
+	ExtranetEndpoint string
+	IntranetEndpoint string
+	Location         string
+	Grant            string `xml:"AccessControlList>Grant"`
 }
 
 type GetServiceResp struct {
 	Owner   Owner
 	Buckets []BucketInfo `xml:">Bucket"`
+}
+
+type GetBucketInfoResp struct {
+	Bucket BucketInfo
 }
 
 // GetService gets a list of all buckets owned by an account.
@@ -166,6 +187,27 @@ func (client *Client) locationConstraint() io.Reader {
 func (client *Client) SetEndpoint(endpoint string) {
 	// TODO check endpoint
 	client.endpoint = endpoint
+}
+
+// Info query basic information about the bucket
+//
+// You can read doc at https://help.aliyun.com/document_detail/31968.html
+func (b *Bucket) Info() (BucketInfo, error) {
+	params := make(url.Values)
+	params.Set("bucketInfo", "")
+	r, err := b.GetWithParams("/", params)
+
+	if err != nil {
+		return BucketInfo{}, err
+	}
+
+	// Parse the XML response.
+	var resp GetBucketInfoResp
+	if err = xml.Unmarshal(r, &resp); err != nil {
+		return BucketInfo{}, err
+	}
+
+	return resp.Bucket, nil
 }
 
 // PutBucket creates a new bucket.
@@ -982,6 +1024,10 @@ func partiallyEscapedPath(path string) string {
 func (client *Client) prepare(req *request) error {
 	// Copy so they can be mutated without affecting on retries.
 	headers := copyHeader(req.headers)
+	if len(client.SecurityToken) != 0 {
+		headers.Set("x-oss-security-token", client.SecurityToken)
+	}
+
 	params := make(url.Values)
 
 	for k, v := range req.params {

@@ -17,7 +17,7 @@ type Client struct {
 
 const (
 	// ECSDefaultEndpoint is the default API endpoint of ECS services
-	ECSDefaultEndpoint = "https://ecs.aliyuncs.com"
+	ECSDefaultEndpoint = "https://ecs-cn-hangzhou.aliyuncs.com"
 	ECSAPIVersion      = "2014-05-26"
 )
 

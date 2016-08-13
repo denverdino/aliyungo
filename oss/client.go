@@ -81,8 +81,9 @@ type CopyObjectResult struct {
 }
 
 var attempts = util.AttemptStrategy{
-	Min:   5,
-	Total: 5 * time.Second,
+	Min:   2,
+	Max:   3,
+	Total: 3 * time.Second,
 	Delay: 200 * time.Millisecond,
 }
 

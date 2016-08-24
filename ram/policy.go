@@ -47,6 +47,11 @@ type AttachPolicyRequest struct {
 	UserName string
 }
 
+type AttachPolicyToRoleRequest struct {
+	PolicyRequest
+	RoleName string
+}
+
 func (client *RamClient) CreatePolicy(policyReq PolicyRequest) (PolicyResponse, error) {
 	var resp PolicyResponse
 	err := client.Invoke("CreatePolicy", policyReq, &resp)
@@ -152,8 +157,39 @@ func (client *RamClient) ListPoliciesForUser(userQuery UserQueryRequest) (Policy
 	return resp, nil
 }
 
-//TODO
-func (client *RamClient) ListPoliciesForGroup() {}
+//
+//Role related
+//
+func (client *RamClient) AttachPolicyToRole(attachPolicyRequest AttachPolicyToRoleRequest) (RamCommonResponse, error) {
+	var resp RamCommonResponse
+	err := client.Invoke("AttachPolicyToRole", attachPolicyRequest, &resp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return resp, nil
+}
 
+func (client *RamClient) DetachPolicyFromRole(attachPolicyRequest AttachPolicyToRoleRequest) (RamCommonResponse, error) {
+	var resp RamCommonResponse
+	err := client.Invoke("DetachPolicyFromRole", attachPolicyRequest, &resp)
+	if err != nil {
+		return RamCommonResponse{}, err
+	}
+	return resp, nil
+}
+
+func (client *RamClient) ListPoliciesForRole(roleQuery RoleQueryRequest) (PolicyListResponse, error) {
+	var resp PolicyListResponse
+	err := client.Invoke("ListPoliciesForRole", roleQuery, &resp)
+	if err != nil {
+		return PolicyListResponse{}, err
+	}
+	return resp, nil
+}
+
+//
+//Group related
+//
 //TODO
-func (client *RamClient) ListPoliciesForRole() {}
+//
+func (client *RamClient) ListPoliciesForGroup() {}

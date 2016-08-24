@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net/http"
+	"os"
 	"strconv"
 	"sync"
 	//"net/http"
@@ -16,12 +17,22 @@ import (
 )
 
 var (
-	//If you test on ECS, you can set the internal param to true
-	client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
+	client     *oss.Client
+	TestBucket = strconv.FormatInt(time.Now().Unix(), 10)
 )
 
-func TestCreateBucket(t *testing.T) {
+func init() {
+	AccessKeyId := os.Getenv("AccessKeyId")
+	AccessKeySecret := os.Getenv("AccessKeySecret")
+	if len(AccessKeyId) != 0 && len(AccessKeySecret) != 0 {
+		client = oss.NewOSSClient(TestRegion, false, AccessKeyId, AccessKeySecret, false)
+	} else {
+		client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
+	}
 
+}
+
+func TestCreateBucket(t *testing.T) {
 	b := client.Bucket(TestBucket)
 	err := b.PutBucket(oss.Private)
 	if err != nil {
@@ -333,6 +344,16 @@ func TestGetService(t *testing.T) {
 		t.Errorf("Unable to get service: %v", err)
 	} else {
 		t.Logf("GetService: %++v", bucketList)
+	}
+}
+
+func TestGetBucketInfo(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	resp, err := b.Info()
+	if err != nil {
+		t.Errorf("Failed for Info: %v", err)
+	} else {
+		t.Logf("Bucket Info: %v", resp)
 	}
 }
 

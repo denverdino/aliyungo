@@ -2,17 +2,24 @@ package cms
 
 import (
 	"github.com/denverdino/aliyungo/common"
+	"os"
 	"testing"
 )
 
 const (
-	AccessKeyId     = ""
-	AccessKeySecret = ""
-	Region          = common.Hangzhou
+	Region = common.Hangzhou
+)
+
+var (
+	UT_ACCESSKEYID     = os.Getenv("AccessKeyId")
+	UT_ACCESSKEYSECRET = os.Getenv("AccessKeySecret")
 )
 
 func TestCresateAlert(t *testing.T) {
-	client := NewClient(AccessKeyId, AccessKeySecret)
+	if UT_ACCESSKEYID == "" {
+		t.SkipNow()
+	}
+	client := NewClient(UT_ACCESSKEYID, UT_ACCESSKEYSECRET)
 
 	req := `
 	{
@@ -23,7 +30,7 @@ func TestCresateAlert(t *testing.T) {
                 "httpNotifyParam":{
                     "type":"http",
                     "method":"GET",
-                    "url":"https://cs.console.aliyun.com/hook/trigger?triggerUrl=YzcwMWYyZGE1MWVmZDRjNzg4MWRiMWEwZjIyMmZmZGMxfHdvcmRwcmVzcy1kZWZhdWx0fHNjYWxpbmd8MThucHU3dWo4Nml1Znx7InNlcnZpY2VfaWQiOiJ3b3JkcHJlc3MtZGVmYXVsdF93ZWIifQ==&secret=535651705256494f56325a386f5878466e218fdaa8a86e880b22f9003e801567&type=scale_out&step=1"
+                    "url":"https://cs.console.aliyun.com/hook/trigger?triggerUrl===&secret=]&type=scale_out&step=1"
                 },
                 "level":4,
 
@@ -69,24 +76,24 @@ func TestCresateAlert(t *testing.T) {
 }
 	`
 
-	result, err := client.CreateAlert4Json("acs_custom_1047840662545713", req)
+	result, err := client.CreateAlert4Json("acs_custom_xxxx", req)
 	if err != nil {
 		t.Errorf("CreateAlert encounter error: %v \n", err)
 	}
 	t.Logf("CreateAlert result : %++v %v \n ", result, err)
 
 	dimension := DimensionRequest{
-		UserId:     "1047840662545713",
+		UserId:     "xxxx",
 		AlertName:  "test_alert2",
-		Dimensions: "{\"userId\":\"1047840662545713\",\"clusterId\":\"cc2256150655c43d7bcd4054bfc256c45\",\"serviceId\":\"acsmonitoring_acs-monitoring-agent\"}",
+		Dimensions: "{\"userId\":\"xxxx\",\"clusterId\":\"xxxxx\",\"serviceId\":\"acsmonitoring_acs-monitoring-agent\"}",
 	}
-	result, err = client.CreateAlertDimension("acs_custom_1047840662545713", dimension)
+	result, err = client.CreateAlertDimension("acs_custom_xxxx", dimension)
 	if err != nil {
 		t.Errorf("CreateAlertDimension encounter error: %v \n", err)
 	}
 	t.Logf("CreateAlertDimension result : %++v  \n ", result)
 
-	result2, err2 := client.GetAlert("acs_custom_1047840662545713", "test_alert2")
+	result2, err2 := client.GetAlert("acs_custom_xxxx", "test_alert2")
 	if err2 != nil {
 		t.Errorf("GetAlertList encounter error: %v \n", err2)
 	}
@@ -94,10 +101,12 @@ func TestCresateAlert(t *testing.T) {
 
 }
 
-func TestDeleteAlert(t *testing.T) {
-	client := NewClient(AccessKeyId, AccessKeySecret)
+func TestGetAlertDimension(t *testing.T) {
+	if UT_ACCESSKEYID == "" {
+		t.SkipNow()
+	}
+	client := NewClient(UT_ACCESSKEYID, UT_ACCESSKEYSECRET)
 
-	result, err := client.GetDimensions("acs_custom_1047840662545713", "test_alert2")
-	t.Logf("GetDimensionsRequest result : %++v %v \n ", result, err)
-	//client.DeleteAlert( "acs_custom_1047840662545713",  "test_alert2")
+	result, err := client.GetDimensions("acs_custom_xxxx", "xxxx")
+	t.Logf("GetDimensionsRequest result : %++v %++v %v \n ", result, result.DataPoints[0], err)
 }

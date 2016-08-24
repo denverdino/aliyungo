@@ -85,7 +85,11 @@ func GetRequestPath(entity string, project string, id string) string {
 	}
 
 	if id != "" {
-		urlPath = urlPath + "/" + id
+		if strings.HasPrefix(id, "?") {
+			urlPath = urlPath + id
+		} else {
+			urlPath = urlPath + "/" + id
+		}
 	}
 
 	return urlPath

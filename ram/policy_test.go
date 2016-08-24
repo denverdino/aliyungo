@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	policy_username string
-	policy_name     string
-	policy_document = PolicyDocument{
+	policy_username  string
+	policy_role_name string
+	policy_name      string
+	policy_document  = PolicyDocument{
 		Statement: []PolicyItem{
 			PolicyItem{
 				Action:   "*",
@@ -110,6 +111,59 @@ func TestDetachPolicyFromUser(t *testing.T) {
 		return
 	}
 	t.Logf("pass DetachPolicyFromUser %++v", resp)
+}
+
+func TestAttachPolicyToRole(t *testing.T) {
+	client := NewTestClient()
+	resp, err := client.ListRoles()
+	if err != nil {
+		t.Errorf("Failed to ListRole %v", err)
+		return
+	}
+	policy_role_name = resp.Roles.Role[0].RoleName
+	attachPolicyRequest := AttachPolicyToRoleRequest{
+		PolicyRequest: PolicyRequest{
+			PolicyType: "Custom",
+			PolicyName: policy_name,
+		},
+		RoleName: policy_role_name,
+	}
+	attachResp, err := client.AttachPolicyToRole(attachPolicyRequest)
+	if err != nil {
+		t.Errorf("Failed to AttachPolicyToRole %v", err)
+		return
+	}
+	t.Logf("pass AttachPolicyToRole %++v", attachResp)
+}
+
+func TestListPoliciesForRole(t *testing.T) {
+	client := NewTestClient()
+	roleQuery := RoleQueryRequest{
+		RoleName: policy_role_name,
+	}
+	resp, err := client.ListPoliciesForRole(roleQuery)
+	if err != nil {
+		t.Errorf("Failed to ListPoliciesForRole %v", err)
+		return
+	}
+	t.Logf("pass ListPoliciesForRole %++v", resp)
+}
+
+func TestDetachPolicyFromRole(t *testing.T) {
+	client := NewTestClient()
+	detachPolicyRequest := AttachPolicyToRoleRequest{
+		PolicyRequest: PolicyRequest{
+			PolicyType: "Custom",
+			PolicyName: policy_name,
+		},
+		RoleName: policy_role_name,
+	}
+	resp, err := client.DetachPolicyFromRole(detachPolicyRequest)
+	if err != nil {
+		t.Errorf("Failed to DetachPolicyFromRole %++v", err)
+		return
+	}
+	t.Logf("pass DetachPolicyFromRole %++v", resp)
 }
 
 func TestDeletePolicy(t *testing.T) {

@@ -12,19 +12,11 @@ func TestLogtailConfigs(t *testing.T) {
 	}
 }
 
-func TestDelete(t *testing.T) {
-	p := DefaultProject(t)
-	_, e := p.GetConfig("logtail-test")
-	if e != nil {
-		t.Fatalf("error %v", e)
-	}
-	p.DeleteConfig("logtail-test")
-}
-
 func TestCreateLogtailConfig(t *testing.T) {
 	p := DefaultProject(t)
+	name := "logtail-test"
 	logtailConfig := &LogtailConfig{
-		Name:      "logtail-test",
+		Name:      name,
 		InputType: "file",
 		InputDetail: LogtailInput{
 			LogType:       "common_reg_log",
@@ -46,7 +38,18 @@ func TestCreateLogtailConfig(t *testing.T) {
 		},
 	}
 
-	if err := p.CreateConfig(logtailConfig); err != nil {
-		t.Fatalf("error create logtail config: %v", err)
+	_, err := p.GetConfig(logtailConfig.Name)
+	if err != nil {
+		if e, ok := err.(*Error); ok && e.Code == "ConfigNotExist" {
+			if err := p.CreateConfig(logtailConfig); err != nil {
+				t.Fatalf("error create logtail config: %v", err)
+			}
+		} else {
+			t.Fatalf("Get config error: %v", err)
+		}
+	}
+
+	if err := p.DeleteConfig(name); err != nil {
+		t.Fatalf("error delete logtail config: %v", err)
 	}
 }

@@ -266,7 +266,7 @@ func (c *Client) GetDimensions(projectName string, alertName string) (result Get
 		return result, err
 	}
 
-	fmt.Printf("response: %s \n", string(responseResult))
+	fmt.Printf("response: %s \n", responseResult)
 	err = json.Unmarshal([]byte(responseResult), &result)
 
 	return result, err

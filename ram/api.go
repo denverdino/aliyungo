@@ -43,12 +43,11 @@ type RamClientInterface interface {
 	ListGroupsForUser()
 	ListUsersForGroup()
 
-	//TODO role
-	CreateRole()
-	GetRole()
-	UpdateRole()
-	ListRoles()
-	DeleteRole()
+	CreateRole(role RoleRequest) (RoleResponse, error)
+	GetRole(roleQuery RoleQueryRequest) (RoleResponse, error)
+	UpdateRole(newRole UpdateRoleRequest) (RoleResponse, error)
+	ListRoles() (ListRoleResponse, error)
+	DeleteRole(roleQuery RoleQueryRequest) (RamCommonResponse, error)
 
 	//DONE policy
 	CreatePolicy(policyReq PolicyRequest) (PolicyResponse, error)
@@ -67,7 +66,9 @@ type RamClientInterface interface {
 	ListEnitiesForPolicy()
 	SetDefaultPolicyVersion()
 	ListPoliciesForGroup()
-	ListPoliciesForRole()
+	AttachPolicyToRole(attachPolicyRequest AttachPolicyToRoleRequest) (RamCommonResponse, error)
+	DetachPolicyFromRole(attachPolicyRequest AttachPolicyToRoleRequest) (RamCommonResponse, error)
+	ListPoliciesForRole(roleQuery RoleQueryRequest) (PolicyListResponse, error)
 
 	//TODO security apis
 	SetAccountAlias(accountAlias AccountAlias) (RamCommonResponse, error)

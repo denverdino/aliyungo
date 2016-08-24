@@ -3,6 +3,7 @@ package cms
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 )
 
@@ -59,12 +60,20 @@ type DimensionRequest struct {
 	UserId     string `json:"userId"`
 }
 
+type DimensionDataPoint struct {
+	Id         string `json:"id"`
+	Project    string `json:"project,omitempty"`
+	AlertUuid  string `json:"alertUuid,omitempty"`
+	Status     int    `json:"status,omitempty"`
+	Dimensions string `json:"dimensions,omitempty"`
+	AlertName  string `json:"alertName,omitempty"`
+}
 type GetDimenstionResult struct {
-	Code    string `json:"code"`
-	Success bool   `json:"success"`
-	Message string `json:"comessagede"`
-	TraceId string `json:"traceId"`
-	Result  string `json:"result"`
+	Code       string                `json:"code"`
+	Success    bool                  `json:"success"`
+	Message    string                `json:"comessagede,omitempty"`
+	TraceId    string                `json:"traceId"`
+	DataPoints []*DimensionDataPoint `json:"datapoints,omitempty"`
 }
 
 const (
@@ -159,8 +168,8 @@ func (c *Client) UpdateAlert(projectName string, alertName string, alertRequest 
  */
 func (c *Client) DeleteAlert(projectName string, alertName string) (result ResultModel, err error) {
 
-	requestUrl := c.GetUrl(entity, projectName, alertName)
-	requestPath := GetRequestPath(entity, projectName, alertName)
+	requestUrl := c.GetUrl("alert", projectName, "?alertName="+alertName)
+	requestPath := GetRequestPath("alert", projectName, "?alertName="+alertName)
 
 	responseResult, err := c.GetResponseJson("DELETE", requestUrl, requestPath, "")
 
@@ -244,15 +253,14 @@ func (c *Client) CreateAlertDimension(projectName string, request DimensionReque
 
 }
 
-// has problem, need to check with CMS team.
 func (c *Client) GetDimensions(projectName string, alertName string) (result GetDimenstionResult, err error) {
 	//  this.setUriPattern("/projects/[ProjectName]/alert/dimensions");
 
-	requestUrl := c.GetUrl("alerts", projectName, alertName+"/dimensions")
-	requestPath := GetRequestPath("alert", projectName, alertName+"/dimensions")
+	requestUrl := c.GetUrl("alert", projectName, "dimensions?alertName="+alertName)
+	requestPath := GetRequestPath("alert", projectName, "dimensions?alertName="+alertName)
 
 	fmt.Printf("requestUrl: %s \n", requestUrl)
-	responseResult, err := c.GetResponseJson("GET", requestUrl, requestPath, "")
+	responseResult, err := c.GetResponseJson(http.MethodGet, requestUrl, requestPath, "")
 
 	if err != nil {
 		return result, err
@@ -262,4 +270,22 @@ func (c *Client) GetDimensions(projectName string, alertName string) (result Get
 	err = json.Unmarshal([]byte(responseResult), &result)
 
 	return result, err
+}
+
+func (c *Client) DeleteAlertDimension(projectName string, alertName string, dimensionId string) (result ResultModel, err error) {
+
+	requestUrl := c.GetUrl("alert", projectName, "dimensions/"+dimensionId+"?alertName="+alertName)
+	requestPath := GetRequestPath("alert", projectName, "dimensions/"+dimensionId+"?alertName="+alertName)
+
+	fmt.Printf("the requesturl %s", requestUrl)
+	responseResult, err := c.GetResponseJson(http.MethodDelete, requestUrl, requestPath, "")
+
+	if err != nil {
+		return result, err
+	}
+
+	err = json.Unmarshal([]byte(responseResult), &result)
+
+	return result, err
+
 }

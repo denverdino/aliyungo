@@ -3,8 +3,9 @@ package crm
 import "github.com/denverdino/aliyungo/common"
 
 const (
-	FINANCE_SERIES = "aliyun.act_game"
-	FINANCE_LABEL  = "act_finance_author" //金融云用户
+	FINANCE_SERIES  = "aliyun.act_game"
+	FINANCE_LABEL   = "act_finance_author"   //金融云用户
+	ECOMMERCE_LABEL = "act_ecommerce_author" //微金融用户
 )
 
 type LabelSeriesArgs struct {
@@ -41,7 +42,7 @@ func (client *Client) IsFinanceUser() bool {
 	labels, err := client.QueryCustomerLabel(FINANCE_SERIES)
 	if err == nil {
 		for _, label := range labels.CustomerLabel {
-			if label.Label == FINANCE_LABEL {
+			if label.Label == FINANCE_LABEL || label.Label == ECOMMERCE_LABEL {
 				return true
 			}
 		}

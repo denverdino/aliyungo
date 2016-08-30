@@ -11,6 +11,8 @@ type AddBackendServersArgs struct {
 	BackendServers string
 }
 
+type SetBackendServersArgs AddBackendServersArgs
+
 type AddBackendServersResponse struct {
 	common.Response
 	LoadBalancerId string
@@ -18,6 +20,28 @@ type AddBackendServersResponse struct {
 		BackendServer []BackendServerType
 	}
 }
+
+type SetBackendServersResponse AddBackendServersResponse
+
+
+// SetBackendServers set weight of backend servers
+
+func (client *Client) SetBackendServers(loadBalancerId string, backendServers []BackendServerType) (result []BackendServerType, err error) {
+	bytes, _ := json.Marshal(backendServers)
+
+	args := &SetBackendServersArgs{
+		LoadBalancerId: loadBalancerId,
+		BackendServers: string(bytes),
+	}
+	response := &SetBackendServersResponse{}
+
+	err = client.Invoke("SetBackendServers", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return response.BackendServers.BackendServer, err
+}
+
 
 // AddBackendServers Add backend servers
 //

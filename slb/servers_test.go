@@ -19,6 +19,16 @@ func testBackendServers(t *testing.T, client *Client, loadBalancerId string) {
 
 	t.Logf("Backend servers: %++v", servers)
 
+	backendServers[0].Weight = 80
+
+	servers, err = client.SetBackendServers(loadBalancerId, backendServers)
+
+	if err != nil {
+		t.Errorf("Failed to SetBackendServers: %v", err)
+	}
+
+	t.Logf("Backend servers: %++v", servers)
+
 	servers, err = client.RemoveBackendServers(loadBalancerId, []string{TestInstanceId})
 	if err != nil {
 		t.Errorf("Failed to RemoveBackendServers: %v", err)

@@ -11,9 +11,12 @@ type Client struct {
 }
 
 const (
-	// SLBDefaultEndpoint is the default API endpoint of SLB services
+	// VPCDefaultEndpoint is the default API endpoint of VPC services
 	VPCDefaultEndpoint = "https://vpc.aliyuncs.com"
 	VPCAPIVersion      = "2016-04-28"
+
+	DefaultTimeout         = 60
+	DefaultWaitForInterval = 5
 )
 
 // NewClient creates a new instance of ECS client

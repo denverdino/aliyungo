@@ -2,9 +2,6 @@ package vpc
 
 import "github.com/hdksky/aliyungo/common"
 
-type ResourceType string
-type DiskCategory string
-
 type DescribeRegionsArgs struct {
 }
 
@@ -45,10 +42,10 @@ type ZoneType struct {
 	ZoneId                    string
 	LocalName                 string
 	AvailableResourceCreation struct {
-		ResourceTypes []ResourceType
+		ResourceTypes []string
 	}
 	AvailableDiskCategories struct {
-		DiskCategories []DiskCategory
+		DiskCategories []string
 	}
 }
 

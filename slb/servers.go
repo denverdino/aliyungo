@@ -8,7 +8,7 @@ import (
 
 type AddBackendServersArgs struct {
 	LoadBalancerId string
-	BackendServers string
+	BackendServers []BackendServerType
 }
 
 type AddBackendServersResponse struct {

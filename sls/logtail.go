@@ -11,6 +11,7 @@ type LogtailInput struct {
 	FilePattern   string   `json:"filePattern,omitempty"`
 	LocalStorage  bool     `json:"localStorage"`
 	TimeFormat    string   `json:"timeFormat"`
+	EnableTag     bool     `json:"enable_tag,omitempty"`
 	TimeKey       string   `json:"timeKey"`
 	LogBeginRegex string   `json:"logBeginRegex,omitempty"`
 	Regex         string   `json:"regex,omitempty"`

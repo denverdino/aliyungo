@@ -3,8 +3,6 @@ package sls
 import (
 	"github.com/denverdino/aliyungo/common"
 	"testing"
-	"github.com/golang/protobuf/proto"
-	"time"
 )
 
 const (
@@ -44,44 +42,3 @@ func DefaultProject(t *testing.T) *Project {
 	return p
 }
 
-func TestClient_PutLogs(t *testing.T) {
-	region           := common.Beijing
-	project  := "testych"
-	logStore := "test1"
-
-	client := NewClient(region, false, AccessKeyId, AccessKeySecret)
-
-	contents := []*Log_Content{}
-	key := "log1"
-	value := "value1"
-	contents = append( contents, &Log_Content{
-		Key: &key,
-		Value: &value,
-	})
-	key2 := "log2"
-	value2 := "value2"
-	contents = append( contents, &Log_Content{
-		Key: &key2,
-		Value: &value2,
-	})
-	
-	logs := []*Log{}
-	logs = append(logs, &Log{
-						Time: proto.Uint32(uint32(time.Now().Unix())),
-						Contents: contents,
-					})
-	
-	
-	request := &PutLogsRequest{
-		Project : project,
-		LogStore: logStore,
-		LogItems : LogGroup{
-			Logs: logs,
-		},
-	}
-	
-	err:=client.PutLogs( request )
-	if err!= nil {
-		t.Errorf( "get the error %v", err )
-	}
-}

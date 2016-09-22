@@ -1,8 +1,9 @@
 package slb
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type Client struct {
@@ -32,6 +33,10 @@ func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string)
 
 func NewClientWithOwnerID(accessKeyId, accessKeySecret string, ownerId string) *Client {
 	client := &Client{}
-	client.InitWithOwnerId(SLBDefaultEndpoint, SLBAPIVersion, accessKeyId, accessKeySecret, ownerId)
+	endpoint := os.Getenv("SLB_ENDPOINT")
+	if endpoint == "" {
+		endpoint = SLBDefaultEndpoint
+	}
+	client.InitWithOwnerId(endpoint, SLBAPIVersion, accessKeyId, accessKeySecret, ownerId)
 	return client
 }

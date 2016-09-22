@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 // Interval for checking status in WaitForXXX method
@@ -38,6 +39,10 @@ func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string)
 
 func NewClientWithOwnerID(accessKeyId, accessKeySecret string, ownerId string) *Client {
 	client := &Client{}
-	client.InitWithOwnerId(ECSDefaultEndpoint, ECSAPIVersion, accessKeyId, accessKeySecret, ownerId)
+	endpoint := os.Getenv("ECS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = ECSDefaultEndpoint
+	}
+	client.InitWithOwnerId(endpoint, ECSAPIVersion, accessKeyId, accessKeySecret, ownerId)
 	return client
 }

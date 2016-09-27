@@ -1,7 +1,10 @@
 package dm
 
 import (
-	"github.com/denverdino/aliyungo/common"
+	"fmt"
+	"math/rand"
+	"net/url"
+	"time"
 )
 
 const (
@@ -23,5 +26,18 @@ type Client struct {
 
 // NewClient creates a new instance of dm client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	return NewClientWithEndpoint(accessKeyId, accessKeySecret)
+	return &Client{accessKeyId, accessKeySecret}
+}
+
+func (this Client) newParamMap() *url.Values {
+	ret := &url.Values{}
+	ret.Add("AccessKeyId", this.accessKeyId)
+	ret.Add("Format", AcceptJson)
+	ret.Add("Version", APIVersion)
+	ret.Add("SignatureMethod", SignatureMethod)
+	ret.Add("SignatureVersion", SignatureVersion)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	ret.Add("SignatureNonce", fmt.Sprintf("%d", r.Int63()))
+	ret.Add("Timestamp", time.Now().UTC().Format(time.RFC3339))
+	return ret
 }

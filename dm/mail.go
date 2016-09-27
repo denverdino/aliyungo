@@ -2,7 +2,7 @@ package dm
 
 import (
 	"errors"
-	"github.com/johnzeng/aliyungo/util"
+	"github.com/denverdino/aliyungo/util"
 	"io/ioutil"
 	"net/http"
 )

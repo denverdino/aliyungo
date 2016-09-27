@@ -3,7 +3,7 @@ package dm
 import (
 	"encoding/json"
 	"errors"
-	"github.com/johnzeng/aliyungo/util"
+	"github.com/denverdino/aliyungo/util"
 	"io/ioutil"
 	"net/http"
 	//	"net/url"

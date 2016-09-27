@@ -14,6 +14,8 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  rds: [Relational Database Service](https://help.aliyun.com/document_detail/26226.html)
 *  cms: [Cloud Monitor Service](https://help.aliyun.com/document_detail/28615.html)
 *  sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
+*  dm: [Direct Mail]
+(https://help.aliyun.com/document_detail/29414.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -51,7 +53,8 @@ func main() {
   *  RDS: [https://godoc.org/github.com/denverdino/aliyungo/rds](https://godoc.org/github.com/denverdino/aliyungo/rds) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/rds?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/rds)
   *  CMS: [https://godoc.org/github.com/denverdino/aliyungo/cms](https://godoc.org/github.com/denverdino/aliyungo/cms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cms)
   *  STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
-  
+  *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
+    
 ## Build and Install
 
 go get:
@@ -122,7 +125,8 @@ go test
   * menglingwei
   * mingang.he (dustgle@gmail.com)
   * chainone (chainone@gmail.com)
-  
+  * johnzeng
+
 ## License
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
 

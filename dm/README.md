@@ -3,7 +3,7 @@
 这个服务支持通过阿里云发送短信以及邮件。
 使用接口前需要在控制台设置相关的模版和签名，具体参考DM服务的说明文档:
 
-[Direct Mail](https://help.aliyun.com/document_detail/29414.html?spm=5176.doc29444.6.102.PAO5pt)
+[Direct Mail](https://help.aliyun.com/document_detail/29414.html)
 
 调用方法如测试文件中的一样
 

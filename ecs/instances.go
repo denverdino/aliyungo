@@ -427,6 +427,7 @@ type CreateInstanceArgs struct {
 	VSwitchId               string
 	PrivateIpAddress        string
 	ClientToken             string
+	UserData                string
 }
 
 type CreateInstanceResponse struct {

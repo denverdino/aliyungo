@@ -204,7 +204,7 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	IoOptimized             StringOrBool
-	InstanceChargeType      common.InternetChargeType
+	InstanceChargeType      common.InstanceChargeType
 	ExpiredTime             util.ISO6801Time
 }
 

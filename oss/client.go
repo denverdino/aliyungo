@@ -1311,8 +1311,16 @@ func (b *Bucket) GetContentLength(sourcePath string) (int64, error) {
 	return currentLength, err
 }
 
-// Copy large file in the same bucket
 func (b *Bucket) CopyLargeFile(sourcePath string, destPath string, contentType string, perm ACL, options Options) error {
+	return b.CopyLargeFileInParallel(sourcePath, destPath, contentType, perm, options, 1)
+}
+
+// Copy large file in the same bucket
+func (b *Bucket) CopyLargeFileInParallel(sourcePath string, destPath string, contentType string, perm ACL, options Options, maxConcurrency int) error {
+
+	if maxConcurrency < 1 {
+		maxConcurrency = 1
+	}
 
 	log.Printf("Copy large file from %s to %s\n", sourcePath, destPath)
 
@@ -1327,20 +1335,11 @@ func (b *Bucket) CopyLargeFile(sourcePath string, destPath string, contentType s
 		return err
 	}
 
-	parts := []Part{}
+	numParts := (currentLength + defaultChunkSize - 1) / defaultChunkSize
+	completedParts := make([]Part, numParts)
 
-	defer func() {
-		if len(parts) > 0 {
-			if multi == nil {
-				// Parts should be empty if the multi is not initialized
-				panic("Unreachable")
-			} else {
-				if multi.Complete(parts) != nil {
-					multi.Abort()
-				}
-			}
-		}
-	}()
+	errChan := make(chan error, numParts)
+	limiter := make(chan struct{}, maxConcurrency)
 
 	var start int64 = 0
 	var to int64 = 0
@@ -1355,15 +1354,33 @@ func (b *Bucket) CopyLargeFile(sourcePath string, destPath string, contentType s
 		partNumber++
 
 		rangeStr := fmt.Sprintf("bytes=%d-%d", start, to-1)
+		limiter <- struct{}{}
+		go func(partNumber int, rangeStr string) {
+			_, part, err := multi.PutPartCopyWithContentLength(partNumber,
+				CopyOptions{CopySourceOptions: rangeStr},
+				sourcePathForCopy, currentLength)
+			if err == nil {
+				completedParts[partNumber-1] = part
+			} else {
+				log.Printf("Unable in PutPartCopy of part %d for %s: %v\n", partNumber, sourcePathForCopy, err)
+			}
+			errChan <- err
+			<-limiter
+		}(partNumber, rangeStr)
+	}
 
-		_, part, err := multi.PutPartCopy(partNumber,
-			CopyOptions{CopySourceOptions: rangeStr},
-			sourcePathForCopy)
-
+	fullyCompleted := true
+	for range completedParts {
+		err := <-errChan
 		if err != nil {
-			return err
+			fullyCompleted = false
 		}
-		parts = append(parts, part)
+	}
+
+	if fullyCompleted {
+		err = multi.Complete(completedParts)
+	} else {
+		err = multi.Abort()
 	}
 
 	return err

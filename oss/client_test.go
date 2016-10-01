@@ -33,13 +33,13 @@ func init() {
 }
 
 func TestCreateBucket(t *testing.T) {
+	time.Sleep(20 * time.Second)
 	b := client.Bucket(TestBucket)
 	err := b.PutBucket(oss.Private)
 	if err != nil {
 		t.Errorf("Failed for PutBucket: %v", err)
 	}
 	t.Log("Wait a while for bucket creation ...")
-	time.Sleep(10 * time.Second)
 }
 
 func TestHead(t *testing.T) {
@@ -157,7 +157,7 @@ func TestPutReader(t *testing.T) {
 	TestGetReader(t)
 }
 
-var _fileSize int64 = 25 * 1024 * 1024
+var _fileSize int64 = 50 * 1024 * 1024
 var _offset int64 = 10 * 1024 * 1024
 
 func TestPutLargeFile(t *testing.T) {
@@ -274,6 +274,42 @@ func TestCopyLargeFile(t *testing.T) {
 	}
 }
 
+func TestCopyLargeFileInParallel(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	err := b.CopyLargeFileInParallel("largefile", "largefile3", "application/octet-stream", oss.Private, oss.Options{}, 10)
+	if err != nil {
+		t.Errorf("Failed for copy large file: %v", err)
+	}
+	t.Log("Large file copy successfully.")
+	len1, err := b.GetContentLength("largefile")
+
+	if err != nil {
+		t.Fatalf("Failed for Head file: %v", err)
+	}
+	len2, err := b.GetContentLength("largefile3")
+
+	if err != nil {
+		t.Fatalf("Failed for Head file: %v", err)
+	}
+
+	if len1 != len2 || len1 != _fileSize {
+		t.Fatalf("Content-Length should be equal %d != %d", len1, len2)
+	}
+
+	bytes1, err := b.Get("largefile")
+	if err != nil {
+		t.Fatalf("Failed for Get file: %v", err)
+	}
+	bytes2, err := b.Get("largefile3")
+	if err != nil {
+		t.Fatalf("Failed for Get file: %v", err)
+	}
+
+	if bytes.Compare(bytes1, bytes2) != 0 {
+		t.Fatal("The result should be equal")
+	}
+}
+
 func TestDelLargeObject(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
@@ -282,6 +318,10 @@ func TestDelLargeObject(t *testing.T) {
 		t.Errorf("Failed for Del largefile: %v", err)
 	}
 	err = b.Del("largefile2")
+	if err != nil {
+		t.Errorf("Failed for Del largefile2: %v", err)
+	}
+	err = b.Del("largefile3")
 	if err != nil {
 		t.Errorf("Failed for Del largefile2: %v", err)
 	}

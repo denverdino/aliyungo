@@ -1297,9 +1297,6 @@ func (b *Bucket) ACL() (result *AccessControlPolicy, err error) {
 	return &resp, nil
 }
 
-const minChunkSize = 5 << 20
-const defaultChunkSize = 2 * minChunkSize
-
 func (b *Bucket) GetContentLength(sourcePath string) (int64, error) {
 	resp, err := b.Head(sourcePath, nil)
 	if err != nil {
@@ -1315,6 +1312,9 @@ func (b *Bucket) CopyLargeFile(sourcePath string, destPath string, contentType s
 	return b.CopyLargeFileInParallel(sourcePath, destPath, contentType, perm, options, 1)
 }
 
+const defaultChunkSize = int64(128 * 1024 * 1024) //128MB
+const maxCopytSize = int64(1024 * 1024 * 1024)    //1G
+
 // Copy large file in the same bucket
 func (b *Bucket) CopyLargeFileInParallel(sourcePath string, destPath string, contentType string, perm ACL, options Options, maxConcurrency int) error {
 
@@ -1327,6 +1327,13 @@ func (b *Bucket) CopyLargeFileInParallel(sourcePath string, destPath string, con
 	currentLength, err := b.GetContentLength(sourcePath)
 
 	if err != nil {
+		return err
+	}
+
+	if currentLength < maxCopytSize {
+		_, err := b.PutCopy(destPath, perm,
+			CopyOptions{},
+			b.Path(sourcePath))
 		return err
 	}
 

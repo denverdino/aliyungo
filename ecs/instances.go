@@ -304,12 +304,26 @@ type DescribeInstancesArgs struct {
 	VSwitchId           string
 	ZoneId              string
 	InstanceIds         string
+	InstanceType        string
+	InstanceTypeFamily  string
 	InstanceNetworkType string
 	PrivateIpAddresses  string
 	InnerIpAddresses    string
 	PublicIpAddresses   string
 	SecurityGroupId     string
+	InstanceChargeType  common.InstanceChargeType
+	InstanceName        string
+	ImageId             string
+	Status              InstanceStatus
+	DeviceAvailable     string
+	IoOptimized         string
+	Tag                 []TagType
 	common.Pagination
+}
+
+type TagType struct {
+	Key   string
+	Value string
 }
 
 type DescribeInstancesResponse struct {

@@ -193,15 +193,28 @@ func TestCreateInstance(t *testing.T) {
 //describe instances
 func TestDescribeInstances(t *testing.T) {
 	client := NewTestBIDClientForDebug()
-
-	args := DescribeInstancesArgs{
-		RegionId: common.Beijing,
+	pagination := common.Pagination{
+		PageSize:   2,
+		PageNumber: 1,
 	}
 
-	instances, _, err := client.DescribeInstances(&args)
+	tags := make([]TagType, 0)
+	tags = append(tags, TagType{
+		Key:   "acsclustername",
+		Value: "vxlanport-5789",
+	})
+	args := DescribeInstancesArgs{
+		RegionId:   common.Beijing,
+		Pagination: pagination,
+		Tag:        tags,
+	}
+
+	instances, page, err := client.DescribeInstances(&args)
 	if err != nil {
-		t.Errorf("Failed to create instance from Image : %v", err)
+		t.Errorf("Failed to describe instance  : %v", err)
 	} else {
+		t.Logf("Page.NextPage() %++v", page.NextPage())
+		t.Logf("Page %++v", page)
 		t.Logf("Instances %v is described successfully.", instances)
 	}
 }

@@ -53,7 +53,7 @@ type PutLogsRequest struct {
 }
 
 const (
-	SLSDefaultEndpoint = "sls.aliyuncs.com"
+	SLSDefaultEndpoint = "log.aliyuncs.com"
 	SLSAPIVersion      = "0.6.0"
 	METHOD_GET         = "GET"
 	METHOD_POST        = "POST"

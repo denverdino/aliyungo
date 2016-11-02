@@ -63,6 +63,9 @@ type DescribeDisksArgs struct {
 	Portable           *bool //optional
 	DeleteWithInstance *bool //optional
 	DeleteAutoSnapshot *bool //optional
+	EnableAutoSnapshot *bool //optional
+	DiskChargeType     DiskChargeType
+	Tag                map[string]string
 	common.Pagination
 }
 

@@ -206,6 +206,9 @@ type InstanceAttributesType struct {
 	IoOptimized             StringOrBool
 	InstanceChargeType      common.InstanceChargeType
 	ExpiredTime             util.ISO6801Time
+	Tags                    struct {
+		Tag []TagItemType
+	}
 }
 
 type DescribeInstanceAttributeResponse struct {

@@ -314,6 +314,7 @@ type DescribeInstancesArgs struct {
 	InnerIpAddresses    string
 	PublicIpAddresses   string
 	SecurityGroupId     string
+	Tag                 map[string]string
 	common.Pagination
 }
 

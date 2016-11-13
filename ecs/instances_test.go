@@ -190,6 +190,32 @@ func TestCreateInstance(t *testing.T) {
 	}
 }
 
+//Create Prepaid Instance
+func TestCreatePrepaidInstance(t *testing.T) {
+	client := NewTestBIDClientForDebug()
+
+	args := CreateInstanceArgs{
+		InstanceName:            "包年包月测试",
+		RegionId:                common.Beijing,
+		ImageId:                 TestImageId,
+		InstanceType:            "ecs.s2.large",
+		SecurityGroupId:         TestSecurityGroupId,
+		InternetMaxBandwidthIn:  100,
+		InternetMaxBandwidthOut: 100,
+		InstanceChargeType:      common.PrePaid,
+		Period:                  1,
+		AutoRenew:               common.DisableAutoRenew,
+		ClientToken:             client.GenerateClientToken(),
+	}
+
+	instanceId, err := client.CreateInstance(&args)
+	if err != nil {
+		t.Errorf("Failed to create instance from Image : %v", err)
+	} else {
+		t.Logf("Instance %s is created successfully.", instanceId)
+	}
+}
+
 //describe instances
 func TestDescribeInstances(t *testing.T) {
 	client := NewTestBIDClientForDebug()

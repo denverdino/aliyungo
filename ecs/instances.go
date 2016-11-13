@@ -440,8 +440,13 @@ type CreateInstanceArgs struct {
 	DataDisk                []DataDiskType
 	VSwitchId               string
 	PrivateIpAddress        string
-	ClientToken             string
-	UserData                string
+	//包年包月支持
+	InstanceChargeType common.InstanceChargeType
+	Period             int              //取值范围 1-9，12，24，36
+	AutoRenew          common.AutoRenew //取值 True ,False 默认为False
+	AutoRenewPeriod    int              //取值范围  1，2，3，6，12
+	ClientToken        string
+	UserData           string
 }
 
 type CreateInstanceResponse struct {

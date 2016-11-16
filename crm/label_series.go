@@ -6,7 +6,7 @@ const (
 	FINANCE_SERIES      = "aliyun.act_game"
 	FINANCE_LABEL       = "act_finance_author"   //金融云用户
 	MICRO_FINANCE_LABEL = "micro_finance_author" //微金融用户
-	ECOMMERCE_LABEL     = "act_ecommerce_author" //微金融用户
+	ECOMMERCE_LABEL     = "act_ecommerce_author" //电商云用户
 )
 
 type LabelSeriesArgs struct {
@@ -43,7 +43,7 @@ func (client *Client) IsFinanceUser() bool {
 	labels, err := client.QueryCustomerLabel(FINANCE_SERIES)
 	if err == nil {
 		for _, label := range labels.CustomerLabel {
-			if label.Label == FINANCE_LABEL || label.Label == ECOMMERCE_LABEL || label.Label == MICRO_FINANCE_LABEL {
+			if label.Label == FINANCE_LABEL || label.Label == MICRO_FINANCE_LABEL {
 				return true
 			}
 		}

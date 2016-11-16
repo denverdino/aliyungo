@@ -5,14 +5,15 @@ type Region string
 
 // Constants of region definition
 const (
-	Hangzhou     = Region("cn-hangzhou")
-	Qingdao      = Region("cn-qingdao")
-	Beijing      = Region("cn-beijing")
-	Hongkong     = Region("cn-hongkong")
-	Shenzhen     = Region("cn-shenzhen")
-	USWest1      = Region("us-west-1")
-	APSouthEast1 = Region("ap-southeast-1")
-	Shanghai     = Region("cn-shanghai")
+	Hangzhou        = Region("cn-hangzhou")
+	Qingdao         = Region("cn-qingdao")
+	Beijing         = Region("cn-beijing")
+	Hongkong        = Region("cn-hongkong")
+	Shenzhen        = Region("cn-shenzhen")
+	USWest1         = Region("us-west-1")
+	APSouthEast1    = Region("ap-southeast-1")
+	Shanghai        = Region("cn-shanghai")
+	ShenZhenFinance = Region("cn-shenzhen-finance-1")
 )
 
-var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, USWest1, APSouthEast1}
+var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, USWest1, APSouthEast1, ShenZhenFinance}

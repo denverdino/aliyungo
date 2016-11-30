@@ -14,6 +14,10 @@ const (
 	USEast1      = Region("us-east-1")
 	APSouthEast1 = Region("ap-southeast-1")
 	Shanghai     = Region("cn-shanghai")
+	MEEast1      = Region("me-east-1")
+	APNorthEast1 = Region("ap-northeast-1")
+	APSouthEast2 = Region("ap-southeast-2")
+	EUCentral1   = Region("eu-central-1")
 )
 
 var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, USWest1, USEast1, APSouthEast1}

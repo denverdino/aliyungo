@@ -20,4 +20,10 @@ const (
 	EUCentral1   = Region("eu-central-1")
 )
 
-var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, USWest1, USEast1, APSouthEast1}
+var ValidRegions = []Region{
+	Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai,
+	USWest1, USEast1,
+	APNorthEast1, APSouthEast1, APSouthEast2,
+	MEEast1,
+	EUCentral1,
+}

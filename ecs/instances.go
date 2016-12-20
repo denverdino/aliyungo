@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"strconv"
 	"time"
@@ -203,8 +204,11 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	IoOptimized             StringOrBool
-	InstanceChargeType      common.InternetChargeType
+	InstanceChargeType      common.InstanceChargeType
 	ExpiredTime             util.ISO6801Time
+	Tags                    struct {
+		Tag []TagItemType
+	}
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -313,6 +317,7 @@ type DescribeInstancesArgs struct {
 	InnerIpAddresses    string
 	PublicIpAddresses   string
 	SecurityGroupId     string
+	Tag                 map[string]string
 	common.Pagination
 }
 
@@ -433,6 +438,7 @@ type CreateInstanceArgs struct {
 	ClientToken             string
 	InstanceChargeType      common.InstanceChargeType
 	Period                  int
+	UserData                string
 }
 
 type CreateInstanceResponse struct {
@@ -444,6 +450,10 @@ type CreateInstanceResponse struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&createinstance
 func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId string, err error) {
+	if args.UserData != "" {
+		// Encode to base64 string
+		args.UserData = base64.StdEncoding.EncodeToString([]byte(args.UserData))
+	}
 	response := CreateInstanceResponse{}
 	err = client.Invoke("CreateInstance", args, &response)
 	if err != nil {

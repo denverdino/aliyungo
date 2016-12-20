@@ -82,9 +82,6 @@ type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 func (client *Client) CreateLoadBalancerHTTPListener(args *CreateLoadBalancerHTTPListenerArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("CreateLoadBalancerHTTPListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -101,9 +98,6 @@ type CreateLoadBalancerHTTPSListenerArgs HTTPSListenerType
 func (client *Client) CreateLoadBalancerHTTPSListener(args *CreateLoadBalancerHTTPSListenerArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("CreateLoadBalancerHTTPSListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -141,9 +135,6 @@ type CreateLoadBalancerTCPListenerArgs TCPListenerType
 func (client *Client) CreateLoadBalancerTCPListener(args *CreateLoadBalancerTCPListenerArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("CreateLoadBalancerTCPListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -169,9 +160,6 @@ type CreateLoadBalancerUDPListenerArgs UDPListenerType
 func (client *Client) CreateLoadBalancerUDPListener(args *CreateLoadBalancerUDPListenerArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("CreateLoadBalancerUDPListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -190,9 +178,6 @@ func (client *Client) DeleteLoadBalancerListener(loadBalancerId string, port int
 	}
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("DeleteLoadBalancerListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -206,9 +191,6 @@ func (client *Client) StartLoadBalancerListener(loadBalancerId string, port int)
 	}
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("StartLoadBalancerListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -222,9 +204,6 @@ func (client *Client) StopLoadBalancerListener(loadBalancerId string, port int) 
 	}
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("StopLoadBalancerListener", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -252,9 +231,6 @@ func (client *Client) SetListenerAccessControlStatus(loadBalancerId string, port
 	}
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("SetListenerAccessControlStatus", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -275,9 +251,6 @@ func (client *Client) AddListenerWhiteListItem(loadBalancerId string, port int, 
 	}
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("AddListenerWhiteListItem", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -292,9 +265,6 @@ func (client *Client) RemoveListenerWhiteListItem(loadBalancerId string, port in
 	}
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("RemoveListenerWhiteListItem", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -306,9 +276,6 @@ type SetLoadBalancerHTTPListenerAttributeArgs CreateLoadBalancerHTTPListenerArgs
 func (client *Client) SetLoadBalancerHTTPListenerAttribute(args *SetLoadBalancerHTTPListenerAttributeArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("SetLoadBalancerHTTPListenerAttribute", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -320,9 +287,6 @@ type SetLoadBalancerHTTPSListenerAttributeArgs CreateLoadBalancerHTTPSListenerAr
 func (client *Client) SetLoadBalancerHTTPSListenerAttribute(args *SetLoadBalancerHTTPSListenerAttributeArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("SetLoadBalancerHTTPSListenerAttribute", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -334,9 +298,6 @@ type SetLoadBalancerTCPListenerAttributeArgs CreateLoadBalancerTCPListenerArgs
 func (client *Client) SetLoadBalancerTCPListenerAttribute(args *SetLoadBalancerTCPListenerAttributeArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("SetLoadBalancerTCPListenerAttribute", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -348,9 +309,6 @@ type SetLoadBalancerUDPListenerAttributeArgs CreateLoadBalancerUDPListenerArgs
 func (client *Client) SetLoadBalancerUDPListenerAttribute(args *SetLoadBalancerUDPListenerAttributeArgs) (err error) {
 	response := &CommonLoadBalancerListenerResponse{}
 	err = client.Invoke("SetLoadBalancerUDPListenerAttribute", args, response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 

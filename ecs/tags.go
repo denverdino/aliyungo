@@ -28,9 +28,6 @@ type AddTagsResponse struct {
 func (client *Client) AddTags(args *AddTagsArgs) error {
 	response := AddTagsResponse{}
 	err := client.Invoke("AddTags", args, &response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 
@@ -51,9 +48,6 @@ type RemoveTagsResponse struct {
 func (client *Client) RemoveTags(args *RemoveTagsArgs) error {
 	response := RemoveTagsResponse{}
 	err := client.Invoke("RemoveTags", args, &response)
-	if err != nil {
-		return err
-	}
 	return err
 }
 

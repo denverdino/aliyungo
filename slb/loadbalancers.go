@@ -1,6 +1,8 @@
 package slb
 
 import (
+	"strings"
+
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 )
@@ -37,7 +39,10 @@ type CreateLoadBalancerResponse struct {
 // You can read doc at http://docs.aliyun.com/#/pub/slb/api-reference/api-related-loadbalancer&CreateLoadBalancer
 func (client *Client) CreateLoadBalancer(args *CreateLoadBalancerArgs) (response *CreateLoadBalancerResponse, err error) {
 	response = &CreateLoadBalancerResponse{}
-	err = client.Invoke("CreateLoadBalancer", args, response)
+	newArgs := *args
+	// Hack: convert InternetChargeType to lowercase
+	newArgs.InternetChargeType = common.InternetChargeType(strings.ToLower(string(newArgs.InternetChargeType)))
+	err = client.Invoke("CreateLoadBalancer", &newArgs, response)
 	if err != nil {
 		return nil, err
 	}

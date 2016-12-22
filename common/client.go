@@ -74,12 +74,12 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 
 	httpReq, err := http.NewRequest(ECSRequestMethod, requestURL, nil)
 
-	// TODO move to util and add build val flag
-	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version)
-
 	if err != nil {
 		return GetClientError(err)
 	}
+
+	// TODO move to util and add build val flag
+	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)

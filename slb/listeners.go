@@ -2,6 +2,7 @@ package slb
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/denverdino/aliyungo/common"
@@ -49,6 +50,33 @@ const (
 	HTTP_5XX = HealthCheckHttpCodeType("http_5xx")
 )
 
+func EncodeHealthCheckHttpCodeType(healthCheckHttpCodes []HealthCheckHttpCodeType) (HealthCheckHttpCodeType, error) {
+	code := ""
+
+	if nil == healthCheckHttpCodes || len(healthCheckHttpCodes) < 1 {
+		return "", fmt.Errorf("Invalid size of healthCheckHttpCodes")
+	}
+
+	for _, healthCheckHttpCode := range healthCheckHttpCodes {
+		if strings.EqualFold(string(HTTP_2XX), string(healthCheckHttpCode)) ||
+			strings.EqualFold(string(HTTP_3XX), string(healthCheckHttpCode)) ||
+			strings.EqualFold(string(HTTP_4XX), string(healthCheckHttpCode)) ||
+			strings.EqualFold(string(HTTP_5XX), string(healthCheckHttpCode)) {
+			if "" == code {
+				code = string(healthCheckHttpCode)
+			} else {
+				if strings.Contains(code, string(healthCheckHttpCode)) {
+					return "", fmt.Errorf("Duplicates healthCheckHttpCode(%v in %v)", healthCheckHttpCode, healthCheckHttpCodes)
+				}
+				code += code + "," + string(healthCheckHttpCode)
+			}
+		} else {
+			return "", fmt.Errorf("Invalid healthCheckHttpCode(%v in %v)", healthCheckHttpCode, healthCheckHttpCodes)
+		}
+	}
+	return HealthCheckHttpCodeType(code), nil
+}
+
 type CommonLoadBalancerListenerResponse struct {
 	common.Response
 }
@@ -73,6 +101,7 @@ type HTTPListenerType struct {
 	HealthCheckInterval    int
 	HealthCheckHttpCode    HealthCheckHttpCodeType
 	VServerGroupId         string
+	Gzip                   FlagType
 }
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 

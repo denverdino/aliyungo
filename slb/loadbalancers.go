@@ -12,12 +12,19 @@ const (
 	IntranetAddressType = AddressType("intranet")
 )
 
+type InternetChargeType string
+
+const (
+	PayByBandwidth = InternetChargeType("paybybandwidth")
+	PayByTraffic   = InternetChargeType("paybytraffic")
+)
+
 type CreateLoadBalancerArgs struct {
 	RegionId           common.Region
 	LoadBalancerName   string
 	AddressType        AddressType
 	VSwitchId          string
-	InternetChargeType common.InternetChargeType
+	InternetChargeType InternetChargeType
 	Bandwidth          int
 	ClientToken        string
 }
@@ -66,7 +73,7 @@ func (client *Client) DeleteLoadBalancer(loadBalancerId string) (err error) {
 
 type ModifyLoadBalancerInternetSpecArgs struct {
 	LoadBalancerId     string
-	InternetChargeType common.InternetChargeType
+	InternetChargeType InternetChargeType
 	Bandwidth          int
 }
 
@@ -144,7 +151,7 @@ type DescribeLoadBalancersArgs struct {
 	VpcId              string
 	VSwitchId          string
 	Address            string
-	InternetChargeType common.InternetChargeType
+	InternetChargeType InternetChargeType
 	ServerId           string
 }
 
@@ -170,7 +177,7 @@ type LoadBalancerType struct {
 	VpcId              string
 	NetworkType        string
 	Bandwidth          int
-	InternetChargeType common.InternetChargeType
+	InternetChargeType InternetChargeType
 	CreateTime         string //Why not ISO 6801
 	CreateTimeStamp    util.ISO6801Time
 	ListenerPorts      struct {

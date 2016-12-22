@@ -54,7 +54,8 @@ func main() {
   *  CMS: [https://godoc.org/github.com/denverdino/aliyungo/cms](https://godoc.org/github.com/denverdino/aliyungo/cms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cms)
   *  STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
   *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
-    
+  *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq) 
+   
 ## Build and Install
 
 go get:
@@ -124,8 +125,14 @@ go test
   * jimmycmh
   * menglingwei
   * mingang.he (dustgle@gmail.com)
-  * chainone (chainone@gmail.com)
+  * Young Chen (chainone@gmail.com)
   * johnzeng
+  * spacexnice (445436286@qq.com)
+  * xiaoheihero
+  * hmgle (dustgle@gmail.com)
+  * jzwlqx (jiangjizhong@gmail.com)
+  * Linhua Tan (toolchainX@gmail.com)
+
 
 ## License
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.

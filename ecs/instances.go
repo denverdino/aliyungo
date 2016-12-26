@@ -173,6 +173,15 @@ type EipAddressAssociateType struct {
 	InternetChargeType common.InternetChargeType
 }
 
+// Experimental feature
+type SpotStrategyType string
+
+// Constants of SpotStrategyType
+const (
+	NoSpot             = SpotStrategyType("NoSpot")
+	SpotWithPriceLimit = SpotStrategyType("SpotWithPriceLimit")
+)
+
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
@@ -209,6 +218,7 @@ type InstanceAttributesType struct {
 	Tags                    struct {
 		Tag []TagItemType
 	}
+	SpotStrategy SpotStrategyType
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -318,6 +328,8 @@ type DescribeInstancesArgs struct {
 	PublicIpAddresses   string
 	SecurityGroupId     string
 	Tag                 map[string]string
+	InstanceType        string
+	SpotStrategy        SpotStrategyType
 	common.Pagination
 }
 
@@ -439,6 +451,9 @@ type CreateInstanceArgs struct {
 	InstanceChargeType      common.InstanceChargeType
 	Period                  int
 	UserData                string
+	AutoRenew               bool
+	AutoRenewPeriod         int
+	SpotStrategy            SpotStrategyType
 }
 
 type CreateInstanceResponse struct {

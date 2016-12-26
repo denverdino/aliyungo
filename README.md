@@ -16,6 +16,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
 *  dm: [Direct Mail]
 (https://help.aliyun.com/document_detail/29414.html)
+*  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 

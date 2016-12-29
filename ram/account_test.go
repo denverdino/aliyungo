@@ -49,12 +49,15 @@ var (
 )
 
 func TestCreateUser(t *testing.T) {
-	client := NewTestClient()
-	resp, err := client.CreateUser(user)
-	if err != nil {
-		t.Errorf("Failed to CreateUser %v", err)
+	for i := 200; i < 300; i++ {
+		client := NewTestClient()
+		user.UserName = "cs1213" + strconv.FormatInt(int64(i), 10)
+		resp, err := client.CreateUser(user)
+		if err != nil {
+			t.Errorf("Failed to CreateUser %v", err)
+		}
+		t.Logf("pass CreateUser %v", resp)
 	}
-	t.Logf("pass CreateUser %v", resp)
 }
 
 func TestGetUser(t *testing.T) {
@@ -85,11 +88,13 @@ func TestListUser(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	client := NewTestClient()
-	userQuery.UserName = newUserName
-	resp, err := client.DeleteUser(userQuery)
-	if err != nil {
-		t.Errorf("Failed to DeletUser %v", err)
+	for i := 200; i < 300; i++ {
+		client := NewTestClient()
+		userQuery.UserName = "cs1213" + strconv.FormatInt(int64(i), 10)
+		resp, err := client.DeleteUser(userQuery)
+		if err != nil {
+			t.Errorf("Failed to DeletUser %v", err)
+		}
+		t.Logf("pass DeletUser %v", resp)
 	}
-	t.Logf("pass DeletUser %v", resp)
 }

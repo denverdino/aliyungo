@@ -259,7 +259,7 @@ func TestDeleteInstance(t *testing.T) {
 
 //describe instance attribute
 func TestDescribeInstanceAtrribute(t *testing.T) {
-	client := NewTestBIDClientForDebug()
+	client := NewTestClientForDebug()
 
 	//	args := DescribeInstanceAttributeArgs{
 	//		InstanceId: TestInstanceId,
@@ -269,6 +269,9 @@ func TestDescribeInstanceAtrribute(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to describe instance attribute : %v", err)
 	} else {
+		if len(instance.PublicIpAddress.IpAddress) > 0 {
+			t.Logf("ip = %s", instance.PublicIpAddress.IpAddress[0])
+		}
 		t.Logf("Instance %s is describe successfully. result = %v", TestInstanceId, instance)
 	}
 }

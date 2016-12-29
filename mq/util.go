@@ -1,7 +1,7 @@
 package mq
 
-
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
@@ -12,7 +12,6 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"bytes"
 
 	"time"
 )
@@ -35,9 +34,9 @@ func Sha1(data string) string {
 }
 
 // 对数据进行md5计算
-func Md5(str string) string {
+func Md5(byteMessage []byte) string {
 	h := md5.New()
-	h.Write([]byte(str))
+	h.Write(byteMessage)
 	return hex.EncodeToString(h.Sum(nil))
 }
 

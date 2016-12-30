@@ -55,7 +55,7 @@ func (client *Client) ModifyInstanceNetworkSpec(args *ModifyInstanceNetworkSpec)
 
 type AllocateEipAddressArgs struct {
 	RegionId           common.Region
-	Bandwidth          int
+	Bandwidth          string
 	InternetChargeType common.InternetChargeType
 	ClientToken        string
 }
@@ -70,8 +70,8 @@ type AllocateEipAddressResponse struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/network&allocateeipaddress
 func (client *Client) AllocateEipAddress(args *AllocateEipAddressArgs) (EipAddress string, AllocationId string, err error) {
-	if args.Bandwidth == 0 {
-		args.Bandwidth = 5
+	if args.Bandwidth == "0" || args.Bandwidth == "" {
+		args.Bandwidth = "5"
 	}
 	response := AllocateEipAddressResponse{}
 	err = client.Invoke("AllocateEipAddress", args, &response)
@@ -138,7 +138,7 @@ type EipAddressSetType struct {
 	AllocationId       string
 	Status             EipStatus
 	InstanceId         string
-	Bandwidth          int
+	Bandwidth          string
 	InternetChargeType common.InternetChargeType
 	OperationLocks     OperationLocksType
 	AllocationTime     util.ISO6801Time
@@ -170,7 +170,7 @@ func (client *Client) DescribeEipAddresses(args *DescribeEipAddressesArgs) (eipA
 
 type ModifyEipAddressAttributeArgs struct {
 	AllocationId string
-	Bandwidth    int
+	Bandwidth    string
 }
 
 type ModifyEipAddressAttributeResponse struct {
@@ -180,7 +180,7 @@ type ModifyEipAddressAttributeResponse struct {
 // ModifyEipAddressAttribute Modifies EIP attribute
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/network&modifyeipaddressattribute
-func (client *Client) ModifyEipAddressAttribute(allocationId string, bandwidth int) error {
+func (client *Client) ModifyEipAddressAttribute(allocationId, bandwidth string) error {
 	args := ModifyEipAddressAttributeArgs{
 		AllocationId: allocationId,
 		Bandwidth:    bandwidth,

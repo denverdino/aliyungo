@@ -346,6 +346,10 @@ func (client *Client) WaitForInstance(regionId common.Region, instanceId string,
 			return err
 		}
 
+		if len(instance) == 0 {
+			break
+		}
+
 		if instance[0].Status == status {
 			//TODO
 			//Sleep one more time for timing issues

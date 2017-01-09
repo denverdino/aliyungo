@@ -393,3 +393,25 @@ func TestLeaveSecurityGroup(t *testing.T) {
 		t.Errorf("Failed to LeaveSecurityGroup: %v", err)
 	}
 }
+
+//createInstance
+func TestJPCreateInstance(t *testing.T) {
+	client := NewTestECSClientForDebug()
+
+	args := CreateInstanceArgs{
+		RegionId:        common.APNorthEast1,
+		ImageId:         TestImageId,
+		InstanceType:    TestInstanceType,
+		VSwitchId:       "vsw-6we2lzlkxlpvmvac9qfpr",
+		SecurityGroupId: TestSecurityGroupId,
+		IoOptimized:     IoOptimized("optimized"),
+		ClientToken:     client.GenerateClientToken(),
+	}
+
+	instanceId, err := client.CreateInstance(&args)
+	if err != nil {
+		t.Errorf("Failed to create instance from Image : %v", err)
+	} else {
+		t.Logf("Instance %s is created successfully.", instanceId)
+	}
+}

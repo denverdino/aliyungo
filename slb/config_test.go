@@ -1,5 +1,7 @@
 package slb
 
+import "github.com/denverdino/aliyungo/common"
+
 //Modify with your Access Key Id and Access Key Secret
 
 const (
@@ -10,6 +12,8 @@ const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	TestInstanceId      = "MY_INSTANCE_ID"
+	TestLoadBalancerID  = "MY_LOADBALANCERID"
+	TestRegionId        = common.APNorthEast1
 	TestOwnerId         = ""
 	TestIAmRich         = false
 	TestQuick           = false
@@ -42,4 +46,14 @@ func NewTestBIDClientForDebug() *Client {
 		testBIDDebugClient.SetDebug(true)
 	}
 	return testBIDDebugClient
+}
+
+var testDebugSLBClient *Client
+
+func NewTestSLBClientForDebug() *Client {
+	if testDebugSLBClient == nil {
+		testDebugSLBClient = NewSLBClient(TestAccessKeyId, TestAccessKeySecret, TestOwnerId, TestRegionId)
+		testDebugSLBClient.SetDebug(true)
+	}
+	return testDebugSLBClient
 }

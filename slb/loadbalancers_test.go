@@ -82,6 +82,24 @@ func TestCreateLoadBalancer(t *testing.T) {
 	}
 }
 
+func TestJPCreateLoadBalancer(t *testing.T) {
+	client := NewTestSLBClientForDebug()
+
+	args := CreateLoadBalancerArgs{
+		RegionId:         common.APNorthEast1,
+		LoadBalancerName: "test-jp-slb",
+		AddressType:      InternetAddressType,
+		ClientToken:      client.GenerateClientToken(),
+	}
+
+	response, err := client.CreateLoadBalancer(&args)
+	if err != nil {
+		t.Fatalf("Failed to CreateLoadBalancer: %v", err)
+	} else {
+		t.Logf("CreateLoadBalancer result: %v", *response)
+	}
+}
+
 func TestDescribeLoadBalancers(t *testing.T) {
 	client := NewTestBIDClientForDebug()
 

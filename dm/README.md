@@ -37,3 +37,7 @@ func TestSms(t *testing.T) {
 ```
 
 maintainer: johnzeng
+
+#2016.12.20
+将短信API从邮件中分离了出来，并且让DM服务使用Common Client，采用struct形式的参数，与其他服务统一。具体使用方法参见mail_test。
+yarous224

@@ -1,4 +1,4 @@
-package dm
+package sms
 
 import (
 	"os"
@@ -12,7 +12,8 @@ func TestSms(t *testing.T) {
 	TEMPCODE := os.Getenv("ALI_DM_SMS_TEMPLATE_CODE")
 	NUM := os.Getenv("ALI_DM_SMS_TEST_PHONE")
 	client := NewClient(ID, SECRET)
-	client.SendSms(SIGNAME, TEMPCODE, NUM, map[string]string{
-		"number": "123456",
-	})
+	client.SendSms(SendSmsArgs{SignName: SIGNAME,
+		TemplateCode: TEMPCODE,
+		RecNum: NUM,
+		ParamString :`{"number": "123"}`})
 }

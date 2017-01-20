@@ -15,6 +15,7 @@ type InstanceStatus string
 
 // Constants of InstanceStatus
 const (
+	Creating = InstanceStatus("Creating") // For backward compatability
 	Pending  = InstanceStatus("Pending")
 	Running  = InstanceStatus("Running")
 	Starting = InstanceStatus("Starting")

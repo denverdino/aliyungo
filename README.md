@@ -18,6 +18,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
 *  dm: [Direct Mail]
 (https://help.aliyun.com/document_detail/29414.html)
+*  sms: [Short Message Service](https://help.aliyun.com/product/44282.html)
 *  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
@@ -57,6 +58,7 @@ func main() {
   *  CMS: [https://godoc.org/github.com/denverdino/aliyungo/cms](https://godoc.org/github.com/denverdino/aliyungo/cms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cms)
   *  STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
   *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
+  *  SMS: [https://godoc.org/github.com/denverdino/aliyungo/sms](https://godoc.org/github.com/denverdino/aliyungo/sms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sms)
   *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq) 
    
 ## Build and Install
@@ -135,6 +137,9 @@ go test
   * hmgle (dustgle@gmail.com)
   * jzwlqx (jiangjizhong@gmail.com)
   * Linhua Tan (toolchainX@gmail.com)
+  * Plutonist (p@vecsight.com)
+  * Bin Liu
+  * wangyue
 
 
 ## License

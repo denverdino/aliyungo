@@ -15,12 +15,14 @@ type InstanceStatus string
 
 // Constants of InstanceStatus
 const (
-	Creating = InstanceStatus("Creating")
+	Creating = InstanceStatus("Creating") // For backward compatability
+	Pending  = InstanceStatus("Pending")
 	Running  = InstanceStatus("Running")
 	Starting = InstanceStatus("Starting")
 
 	Stopped  = InstanceStatus("Stopped")
 	Stopping = InstanceStatus("Stopping")
+	Deleted  = InstanceStatus("Deleted")
 )
 
 type LockReason string
@@ -32,6 +34,39 @@ const (
 
 type LockReasonType struct {
 	LockReason LockReason
+}
+
+type DescribeUserdataArgs struct {
+	RegionId   common.Region
+	InstanceId string
+}
+
+//
+// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instancestatusitemtype
+type DescribeUserdataItemType struct {
+	UserData   string
+	InstanceId string
+	RegionId   string
+}
+
+type DescribeUserdataResponse struct {
+	common.Response
+	DescribeUserdataItemType
+}
+
+// DescribeInstanceStatus describes instance status
+//
+// You can read doc at https://intl.aliyun.com/help/doc-detail/49227.htm
+func (client *Client) DescribeUserdata(args *DescribeUserdataArgs) (userData *DescribeUserdataItemType, err error) {
+	response := DescribeUserdataResponse{}
+
+	err = client.Invoke("DescribeUserdata", args, &response)
+
+	if err == nil {
+		return &response.DescribeUserdataItemType, nil
+	}
+
+	return nil, err
 }
 
 type DescribeInstanceStatusArgs struct {
@@ -246,6 +281,7 @@ type ModifyInstanceAttributeArgs struct {
 	Description  string
 	Password     string
 	HostName     string
+	UserData     string
 }
 
 type ModifyInstanceAttributeResponse struct {

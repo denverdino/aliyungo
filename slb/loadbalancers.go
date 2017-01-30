@@ -146,6 +146,7 @@ func (client *Client) SetLoadBalancerName(loadBalancerId string, name string) (e
 type DescribeLoadBalancersArgs struct {
 	RegionId           common.Region
 	LoadBalancerId     string
+	LoadBalancerName   string
 	AddressType        AddressType
 	NetworkType        string
 	VpcId              string

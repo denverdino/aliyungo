@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/denverdino/aliyungo/util"
-	"fmt"
 )
 
 // A Client represents a client of ECS services
@@ -149,10 +148,10 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	)
 	if method == http.MethodGet {
 		requestURL := client.endpoint + path + "?" + data.Encode()
-		fmt.Println(requestURL)
+		//fmt.Println(requestURL)
 		httpReq, err = http.NewRequest(method, requestURL, nil)
 	} else {
-		fmt.Println(client.endpoint + path)
+		//fmt.Println(client.endpoint + path)
 		httpReq, err = http.NewRequest(method, client.endpoint + path, strings.NewReader(data.Encode()))
 		httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	}

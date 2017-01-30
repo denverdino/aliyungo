@@ -82,5 +82,5 @@ type PushArgs struct {
 }
 
 func (this *Client) Push(args *PushArgs) error {
-	return this.InvokeByAnyMethod(http.MethodPost, Push, args, &common.Response{})
+	return this.InvokeByAnyMethod(http.MethodPost, Push, "", args, &common.Response{})
 }

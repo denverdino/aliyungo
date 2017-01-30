@@ -16,7 +16,7 @@ type Client struct {
 }
 
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	client := &Client{}
+	client := new(Client)
 	client.Init(EmailEndPoint, EmailAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }

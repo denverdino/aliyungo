@@ -5,7 +5,7 @@ import "github.com/denverdino/aliyungo/common"
 const (
 	PushEndPoint = "https://cloudpush.aliyuncs.com/"
 	Push = "Push"
-	PushAPIVersion = "2015-08-27"
+	PushAPIVersion = "2016-08-01"
 )
 
 type Client struct {

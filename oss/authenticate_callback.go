@@ -51,6 +51,7 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 	fmt.Println("准备证书")
 	//内存中没有证书，下载
 	if certificate == nil {
+		authentication.lock.Lock()
 		res, err := http.Get(url)
 		if err != nil {
 			return err
@@ -70,7 +71,6 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 			return err
 		}
 		certificate = pubKey.(*rsa.PublicKey)
-		authentication.lock.Lock()
 		authentication.certificate[filename] = certificate
 		authentication.lock.Unlock()
 	}

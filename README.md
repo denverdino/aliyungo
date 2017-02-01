@@ -16,9 +16,10 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  rds: [Relational Database Service](https://help.aliyun.com/document_detail/26226.html)
 *  cms: [Cloud Monitor Service](https://help.aliyun.com/document_detail/28615.html)
 *  sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
-*  dm: [Direct Mail]
-(https://help.aliyun.com/document_detail/29414.html)
+*  dm: [Direct Mail](https://help.aliyun.com/document_detail/29414.html)
 *  sms: [Short Message Service](https://help.aliyun.com/product/44282.html)
+*  push: [Cloud Mobile Push](https://help.aliyun.com/document_detail/30049.html)
+*  opensearch: [OpenSearch](https://help.aliyun.com/document_detail/29118.html)
 *  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers

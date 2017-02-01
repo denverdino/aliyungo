@@ -9,67 +9,78 @@ import (
 //高级推送参数
 type PushArgs struct {
 	/*----基础参数----*/
-	//操作接口名称
-	Account                 string
 	//AppKey信息
-	AppKey                  int64
+	AppKey                         int64
 	/*----推送目标----*/
-	//推送目标类型
-	Target                  string
+	//推送目标
+	Target                         string
 	//根据Target来设定，多个值使用逗号分隔，最多支持100个。
-	TargetValue             string
+	TargetValue                    string
 	//设备类型
-	DeviceType              string
+	DeviceType                     string
 	/*----推送配置----*/
-	Type                    string
+	PushType                       string
 	//Android消息标题,Android通知标题,iOS消息标题
-	Title                   string
+	Title                          string
 	//Android消息内容,Android通知内容,iOS消息内容
-	Body                    string
+	Body                           string
 	//[iOS通知内容]
-	Summary                 string
+	Summary                        string
 	/*----下述配置仅作用于iOS通知任务----*/
 	//[iOS通知声音]
-	IOSMusic                string
+	IOSMusic                       string `ArgName:"iOSMusic"`
 	//[iOS应用图标右上角角标]
-	IOSBadge                string
+	IOSBadge                       string `ArgName:"iOSBadge"`
 	//[iOS通知标题（iOS 10+通知显示标题]
-	IOSTitle                string
+	IOSTitle                       string `ArgName:"iOSTitle"`
+	//[开启iOS静默通知]
+	IOSSilentNotification          string `ArgName:"iOSSilentNotification"`
 	//[iOS通知副标题（iOS 10+）]
-	IOSSubtitle             string
-	//[是否使能iOS通知扩展处理（iOS 10+）]
-	IOSMutableContent       string
+	IOSSubtitle                    string `ArgName:"iOSSubtitle"`
 	//[设定iOS通知Category（iOS 10+）]
-	IOSNotificationCategory string
+	IOSNotificationCategory        string `ArgName:"iOSNotificationCategory"`
+	//[是否使能iOS通知扩展处理（iOS 10+）]
+	IOSMutableContent              string `ArgName:"iOSMutableContent"`
 	//[iOS通知的扩展属性]
-	IOSExtParameters        string
+	IOSExtParameters               string `ArgName:"iOSExtParameters"`
 	//[环境信息]
-	ApnsEnv                 string
-	/*----下述配置仅作用于iOS消息----*/
+	IOSApnsEnv                     string `ArgName:"iOSApnsEnv"`
 	//[推送时设备不在线则这条推送会做为通知]
-	Remind                  string
+	IOSRemind                      string `ArgName:"iOSRemind"`
+	//[iOS消息转通知时使用的iOS通知内容]
+	IOSRemindBody                  string `ArgName:"iOSRemindBody"`
 	/*----下述配置仅作用于Android通知任务----*/
 	//[Android通知声音]
-	AndroidMusic            string
+	AndroidMusic                   string
 	//[点击通知后动作]
-	AndroidOpenType         string
-	//[设定通知打开的activity]
-	AndroidActivity         string
+	AndroidOpenType                string
+	//通知的提醒方式
+	AndroidNotifyType              string
 	//[设置该参数后启动小米托管弹窗功能]
-	XiaomiActivity          string
+	AndroidXiaoMiActivity          string
+	//[小米托管弹窗模式下Title内容]
+	AndroidXiaoMiNotifyTitle       string
+	//[小米托管弹窗模式下Body内容]
+	AndroidXiaoMiNotifyBody        string
+	//[设定通知打开的activity]
+	AndroidActivity                string
 	//[Android收到推送后打开对应的url]
-	AndroidOpenUrl          string
+	AndroidOpenUrl                 string
+	//[Android自定义通知栏样式]
+	AndroidNotificationBarType     int
+	//[Android通知在通知栏展示时排列位置的优先级]
+	AndroidNotificationBarPriority int
 	//[设定通知的扩展属性]
-	AndroidExtParameters    string
+	AndroidExtParameters           string
 	/*----推送控制----*/
 	//[用于定时发送]
-	PushTime                string
+	PushTime                       string
 	//[离线消息/通知是否保存]
-	StoreOffline            string
+	StoreOffline                   string
 	//[离线消息/通知的过期时间]
-	ExpireTime              string
+	ExpireTime                     string
 }
 
 func (this *Client) Push(args *PushArgs) error {
-	return this.InvokeByAnyMethod(http.MethodPost, Push, args, &common.Response{})
+	return this.InvokeByAnyMethod(http.MethodPost, Push, "", args, &common.Response{})
 }

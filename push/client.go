@@ -5,7 +5,7 @@ import "github.com/denverdino/aliyungo/common"
 const (
 	PushEndPoint = "https://cloudpush.aliyuncs.com/"
 	Push = "Push"
-	PushAPIVersion = "2015-08-27"
+	PushAPIVersion = "2016-08-01"
 )
 
 type Client struct {
@@ -13,7 +13,7 @@ type Client struct {
 }
 
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	client := &Client{}
+	client := new(Client)
 	client.Init(PushEndPoint, PushAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }

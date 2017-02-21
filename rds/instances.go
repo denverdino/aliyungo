@@ -14,7 +14,8 @@ type ModifySecurityIpsArgs struct {
 }
 
 type DescribeDBInstanceIPArrayListArgs struct {
-	DBInstanceId string
+	DBInstanceId          string
+	DBInstanceIPArrayName string
 }
 
 type DBInstanceIPs struct {
@@ -40,7 +41,8 @@ func (client *Client) ModifySecurityIps(args *ModifySecurityIpsArgs) (resp *comm
 	}
 	//Query security ips and add new ips
 	request := &DescribeDBInstanceIPArrayListArgs{
-		DBInstanceId: args.DBInstanceId,
+		DBInstanceId:          args.DBInstanceId,
+		DBInstanceIPArrayName: args.DBInstanceIPArrayName,
 	}
 	descResponse, err := client.DescribeDBInstanceIPArrayList(request)
 	if err != nil {
@@ -49,7 +51,7 @@ func (client *Client) ModifySecurityIps(args *ModifySecurityIpsArgs) (resp *comm
 	fmt.Printf(" the result is %++v", descResponse)
 	if err == nil && descResponse.Items != nil {
 		for _, item := range descResponse.Items.DBInstanceIPArray {
-			if item.SecurityIPList != "" {
+			if item.DBInstanceIPArrayName == args.DBInstanceIPArrayName && item.SecurityIPList != "" {
 				args.SecurityIps = args.SecurityIps + "," + item.SecurityIPList
 			}
 		}

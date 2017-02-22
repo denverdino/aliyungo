@@ -31,7 +31,7 @@ func (this *Client) SendBatchMail(args *SendBatchMailArgs) error {
 
 type SendSingleMailArgs struct {
 	SendEmailArgs
-	ReplyToAddress string
+	ReplyToAddress bool
 	ToAddress      string
 	FromAlias      string
 	Subject        string

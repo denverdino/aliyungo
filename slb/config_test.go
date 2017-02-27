@@ -5,6 +5,9 @@ package slb
 const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
+	TestLoadBlancerID   = "MY_LOADBALANCEID"
+	TestVServerGroupID  = "MY_VSERVER_GROUPID"
+	TestListenerPort    = 9000
 	TestInstanceId      = "MY_INSTANCE_ID"
 	TestIAmRich         = false
 	TestQuick           = false

@@ -171,7 +171,7 @@ func TestGetZonesByRegionId(t *testing.T) {
 			zoneIds = append(zoneIds, r.ZoneId)
 		}
 	}
-	t.Logf("all zones %++v of current region.", zoneIds, RegionId)
+	t.Logf("all zones %++v of current region.", zoneIds)
 }
 
 func TestDatabaseCreationAndDeletion(t *testing.T) {

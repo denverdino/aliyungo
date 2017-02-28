@@ -27,10 +27,16 @@ type DescribeDBInstanceIPsArgs struct {
 	DBInstanceId string
 }
 
+type DBInstanceIPList struct {
+	DBInstanceIPArrayName      string
+	DBInstanceIPArrayAttribute string
+	SecurityIPList             string
+}
+
 type DescribeDBInstanceIPsResponse struct {
 	common.Response
 	Items struct {
-		DBInstanceIPArray []DBInstanceIPArray
+		DBInstanceIPArray []DBInstanceIPList
 	}
 }
 

@@ -21,6 +21,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  push: [Cloud Mobile Push](https://help.aliyun.com/document_detail/30049.html)
 *  opensearch: [OpenSearch](https://help.aliyun.com/document_detail/29118.html)
 *  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
+*  nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -61,7 +62,10 @@ func main() {
   *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
   *  SMS: [https://godoc.org/github.com/denverdino/aliyungo/sms](https://godoc.org/github.com/denverdino/aliyungo/sms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sms)
   *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq) 
-   
+  *  NAS: [https://godoc.org/github.com/denverdino/aliyungo/nas](https://godoc.org/github.com/denverdino/aliyungo/nas) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/nas?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/nas) 
+  *  OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch) 
+  *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push) 
+
 ## Build and Install
 
 go get:
@@ -119,7 +123,7 @@ go test
 ## Contributors
 
   * Li Yi (denverdino@gmail.com)
-  * tgic (farmer1992@gmail.com)
+  * Boshi Lian (farmer1992@gmail.com)
   * Yu Zhou (oscarrr110@gmail.com)
   * Yufei Zhang
   * linuxlikerqq
@@ -141,6 +145,17 @@ go test
   * Plutonist (p@vecsight.com)
   * Bin Liu
   * wangyue
+  * demonwy
+  * yarous224
+  * yufeizyf (xazyf9111@sina.cn)
+  * keontang (ikeontang@gmail.com)
+  * Cholerae Hu (me@cholerae.com)
+  * Zach Bergh (berghzach@gmail.com)
+  * Bingshen Wang
+  * xiaozhu36
+  * Russell (yufeiwu@gmail.com)
+  * zhuzhih2017
+  * cheyang
 
 
 ## License

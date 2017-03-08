@@ -105,6 +105,7 @@ type Client struct {
 	version         string
 	serviceCode     string
 	regionID        Region
+	businessInfo	string
 }
 
 // NewClient creates a new instance of ECS client
@@ -167,6 +168,15 @@ func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
 
+// SetBusinessInfo sets business info to log the request/response message
+func (client *Client) SetBusinessInfo(businessInfo string) {
+	if strings.HasPrefix(businessInfo,"/"){
+		client.businessInfo = businessInfo
+	}else if businessInfo != "" {
+		client.businessInfo = "/"+businessInfo
+	}
+}
+
 // Invoke sends the raw HTTP request for ECS services
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 
@@ -189,7 +199,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 
 	// TODO move to util and add build val flag
-	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version)
+	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)
@@ -270,7 +280,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	}
 
 	// TODO move to util and add build val flag
-	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version)
+	httpReq.Header.Set("X-SDK-Client", `AliyunGO/` + Version + client.businessInfo)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)

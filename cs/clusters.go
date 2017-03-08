@@ -65,6 +65,11 @@ func (client *Client) DescribeClusters(nameFilter string) (clusters []ClusterTyp
 	return
 }
 
+func (client *Client) DescribeCluster(id string) (cluster ClusterType, err error) {
+	err = client.Invoke("", http.MethodGet, "/clusters/"+id, nil, nil, &cluster)
+	return
+}
+
 type ClusterCreationArgs struct {
 	Name             string           `json:"name"`
 	Size             int64            `json:"size"`
@@ -92,4 +97,15 @@ func (client *Client) CreateCluster(region common.Region, args *ClusterCreationA
 
 func (client *Client) DeleteCluster(clusterID string) error {
 	return client.Invoke("", http.MethodDelete, "/clusters/"+clusterID, nil, nil, nil)
+}
+
+type ClusterCerts struct {
+	CA   string `json:"ca,omitempty"`
+	Key  string `json:"key,omitempty"`
+	Cert string `json:"cert,omitempty"`
+}
+
+func (client *Client) GetClusterCerts(id string) (certs ClusterCerts, err error) {
+	err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/certs", nil, nil, &certs)
+	return
 }

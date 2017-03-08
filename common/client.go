@@ -3,15 +3,97 @@ package common
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
-	"time"
+	"os"
 	"strings"
+	"time"
 
 	"github.com/denverdino/aliyungo/util"
 )
+
+const (
+	// LocationDefaultEndpoint is the default API endpoint of Location services
+	locationDefaultEndpoint = "https://location.aliyuncs.com"
+	locationAPIVersion      = "2015-06-12"
+	HTTP_PROTOCOL           = "http"
+	HTTPS_PROTOCOL          = "https"
+)
+
+var (
+	endpoints = make(map[Region]map[string]string)
+)
+
+func NewLocationClient(accessKeyId, accessKeySecret string) *Client {
+	endpoint := os.Getenv("LOCATION_ENDPOINT")
+	if endpoint == "" {
+		endpoint = locationDefaultEndpoint
+	}
+
+	client := &Client{}
+	client.Init(endpoint, locationAPIVersion, accessKeyId, accessKeySecret)
+	return client
+}
+
+func (client *Client) DescribeEndpoint(args *DescribeEndpointArgs) (*DescribeEndpointResponse, error) {
+	response := &DescribeEndpointResponse{}
+	err := client.Invoke("DescribeEndpoint", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return response, err
+}
+
+func getProductRegionEndpoint(region Region, serviceCode string) string {
+	fmt.Printf("endpoints =  %++v", endpoints)
+	if sp, ok := endpoints[region]; ok {
+		if endpoint, ok := sp[serviceCode]; ok {
+			return endpoint
+		}
+	}
+
+	return ""
+}
+
+func setProductRegionEndpoint(region Region, serviceCode string, endpoint string) {
+	endpoints[region] = map[string]string{
+		serviceCode: endpoint,
+	}
+}
+
+func (client *Client) DescribeOpenAPIEndpoint(region Region, serviceCode string) string {
+	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
+		return endpoint
+	}
+
+	defaultProtocols := HTTP_PROTOCOL
+
+	args := &DescribeEndpointArgs{
+		Id:          region,
+		ServiceCode: serviceCode,
+		Type:        "openAPI",
+	}
+
+	endpoint, err := client.DescribeEndpoint(args)
+	if err != nil {
+		return ""
+	}
+
+	for _, protocol := range endpoint.Protocols.Protocols {
+		if strings.ToLower(protocol) == HTTPS_PROTOCOL {
+			defaultProtocols = HTTPS_PROTOCOL
+			break
+		}
+	}
+
+	ep := fmt.Sprintf("%s://%s", defaultProtocols, endpoint.Endpoint)
+
+	setProductRegionEndpoint(region, serviceCode, ep)
+	return ep
+}
 
 // A Client represents a client of ECS services
 type Client struct {
@@ -21,6 +103,8 @@ type Client struct {
 	httpClient      *http.Client
 	endpoint        string
 	version         string
+	serviceCode     string
+	regionID        Region
 	businessInfo	string
 }
 
@@ -34,6 +118,22 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 	client.version = version
 }
 
+func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, serviceCode string, regionID Region) {
+	client.Init(endpoint, version, accessKeyId, accessKeySecret)
+	client.serviceCode = serviceCode
+	client.regionID = regionID
+	client.setEndpointByLocation(regionID, serviceCode, accessKeyId, accessKeySecret)
+}
+
+//NewClient using location service
+func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKeyId, accessKeySecret string) {
+	locationClient := NewLocationClient(accessKeyId, accessKeySecret)
+	ep := locationClient.DescribeOpenAPIEndpoint(region, serviceCode)
+	if ep != "" {
+		client.endpoint = ep
+	}
+}
+
 // SetEndpoint sets custom endpoint
 func (client *Client) SetEndpoint(endpoint string) {
 	client.endpoint = endpoint
@@ -42,6 +142,15 @@ func (client *Client) SetEndpoint(endpoint string) {
 // SetEndpoint sets custom version
 func (client *Client) SetVersion(version string) {
 	client.version = version
+}
+
+func (client *Client) SetRegionID(regionID Region) {
+	client.regionID = regionID
+}
+
+//SetServiceCode sets serviceCode
+func (client *Client) SetServiceCode(serviceCode string) {
+	client.serviceCode = serviceCode
 }
 
 // SetAccessKeyId sets new AccessKeyId
@@ -154,7 +263,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	// Generate the request URL
 	var (
 		httpReq *http.Request
-		err error
+		err     error
 	)
 	if method == http.MethodGet {
 		requestURL := client.endpoint + path + "?" + data.Encode()
@@ -162,7 +271,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 		httpReq, err = http.NewRequest(method, requestURL, nil)
 	} else {
 		//fmt.Println(client.endpoint + path)
-		httpReq, err = http.NewRequest(method, client.endpoint + path, strings.NewReader(data.Encode()))
+		httpReq, err = http.NewRequest(method, client.endpoint+path, strings.NewReader(data.Encode()))
 		httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 

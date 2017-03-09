@@ -3,96 +3,15 @@ package common
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 
 	"github.com/denverdino/aliyungo/util"
 )
-
-const (
-	// LocationDefaultEndpoint is the default API endpoint of Location services
-	locationDefaultEndpoint = "https://location.aliyuncs.com"
-	locationAPIVersion      = "2015-06-12"
-	HTTP_PROTOCOL           = "http"
-	HTTPS_PROTOCOL          = "https"
-)
-
-var (
-	endpoints = make(map[Region]map[string]string)
-)
-
-func NewLocationClient(accessKeyId, accessKeySecret string) *Client {
-	endpoint := os.Getenv("LOCATION_ENDPOINT")
-	if endpoint == "" {
-		endpoint = locationDefaultEndpoint
-	}
-
-	client := &Client{}
-	client.Init(endpoint, locationAPIVersion, accessKeyId, accessKeySecret)
-	return client
-}
-
-func (client *Client) DescribeEndpoint(args *DescribeEndpointArgs) (*DescribeEndpointResponse, error) {
-	response := &DescribeEndpointResponse{}
-	err := client.Invoke("DescribeEndpoint", args, response)
-	if err != nil {
-		return nil, err
-	}
-	return response, err
-}
-
-func getProductRegionEndpoint(region Region, serviceCode string) string {
-	if sp, ok := endpoints[region]; ok {
-		if endpoint, ok := sp[serviceCode]; ok {
-			return endpoint
-		}
-	}
-
-	return ""
-}
-
-func setProductRegionEndpoint(region Region, serviceCode string, endpoint string) {
-	endpoints[region] = map[string]string{
-		serviceCode: endpoint,
-	}
-}
-
-func (client *Client) DescribeOpenAPIEndpoint(region Region, serviceCode string) string {
-	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
-		return endpoint
-	}
-
-	defaultProtocols := HTTP_PROTOCOL
-
-	args := &DescribeEndpointArgs{
-		Id:          region,
-		ServiceCode: serviceCode,
-		Type:        "openAPI",
-	}
-
-	endpoint, err := client.DescribeEndpoint(args)
-	if err != nil {
-		return ""
-	}
-
-	for _, protocol := range endpoint.Protocols.Protocols {
-		if strings.ToLower(protocol) == HTTPS_PROTOCOL {
-			defaultProtocols = HTTPS_PROTOCOL
-			break
-		}
-	}
-
-	ep := fmt.Sprintf("%s://%s", defaultProtocols, endpoint.Endpoint)
-
-	setProductRegionEndpoint(region, serviceCode, ep)
-	return ep
-}
 
 // A Client represents a client of ECS services
 type Client struct {
@@ -128,6 +47,10 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKeyId, accessKeySecret string) {
 	locationClient := NewLocationClient(accessKeyId, accessKeySecret)
 	ep := locationClient.DescribeOpenAPIEndpoint(region, serviceCode)
+	if ep == "" {
+		ep = loadEndpointFromFile(region, serviceCode)
+	}
+
 	if ep != "" {
 		client.endpoint = ep
 	}

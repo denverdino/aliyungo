@@ -27,6 +27,11 @@ var (
 	endpoints = make(map[Region]map[string]string)
 )
 
+//init endpoints from file
+func init() {
+
+}
+
 func NewLocationClient(accessKeyId, accessKeySecret string) *Client {
 	endpoint := os.Getenv("LOCATION_ENDPOINT")
 	if endpoint == "" {

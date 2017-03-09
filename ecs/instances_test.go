@@ -250,3 +250,40 @@ func TestLeaveSecurityGroup(t *testing.T) {
 		t.Errorf("Failed to LeaveSecurityGroup: %v", err)
 	}
 }
+
+func TestLocationECSClient(t *testing.T) {
+	client := NetTestLocationClientForDebug()
+
+	//CreateInstance
+	args := CreateInstanceArgs{
+		RegionId:           TestRegionID,
+		ImageId:            TestImageId,
+		InstanceType:       TestInstanceType,
+		SecurityGroupId:    TestSecurityGroupId,
+		VSwitchId:          TestVSwitchID,
+		InstanceChargeType: common.PrePaid,
+		Period:             1,
+	}
+
+	instanceId, err := client.CreateInstance(&args)
+	if err != nil {
+		t.Fatalf("Failed to create instance from Image %s: %++v", TestImageId, err)
+	}
+	t.Logf("Instance %s is created successfully.", instanceId)
+
+	//DescribeInstance Attribute
+	attr, err := client.DescribeInstanceAttribute(instanceId)
+	if err != nil {
+		t.Fatalf("Failed to DescribeInstanceAttribute %++v", err)
+	}
+
+	t.Logf("InstanceAttribute is %++v", attr)
+
+	//DeleteInstance
+	err = client.DeleteInstance(instanceId)
+	if err != nil {
+		t.Fatalf("Failed to delete instance %++v", err)
+	}
+
+	t.Logf("Instance %s is deleted successfully", instanceId)
+}

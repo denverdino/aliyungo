@@ -48,7 +48,6 @@ func (client *Client) DescribeEndpoint(args *DescribeEndpointArgs) (*DescribeEnd
 }
 
 func getProductRegionEndpoint(region Region, serviceCode string) string {
-	fmt.Printf("endpoints =  %++v", endpoints)
 	if sp, ok := endpoints[region]; ok {
 		if endpoint, ok := sp[serviceCode]; ok {
 			return endpoint
@@ -105,7 +104,7 @@ type Client struct {
 	version         string
 	serviceCode     string
 	regionID        Region
-	businessInfo	string
+	businessInfo    string
 }
 
 // NewClient creates a new instance of ECS client
@@ -170,10 +169,10 @@ func (client *Client) SetDebug(debug bool) {
 
 // SetBusinessInfo sets business info to log the request/response message
 func (client *Client) SetBusinessInfo(businessInfo string) {
-	if strings.HasPrefix(businessInfo,"/"){
+	if strings.HasPrefix(businessInfo, "/") {
 		client.businessInfo = businessInfo
-	}else if businessInfo != "" {
-		client.businessInfo = "/"+businessInfo
+	} else if businessInfo != "" {
+		client.businessInfo = "/" + businessInfo
 	}
 }
 
@@ -280,7 +279,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	}
 
 	// TODO move to util and add build val flag
-	httpReq.Header.Set("X-SDK-Client", `AliyunGO/` + Version + client.businessInfo)
+	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)

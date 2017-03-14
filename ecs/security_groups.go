@@ -54,7 +54,7 @@ type PermissionType struct {
 	DestGroupOwnerAccount   string
 	Policy                  PermissionPolicy
 	NicType                 NicType
-	Priority                string
+	Priority                int
 	Direction               Direction
 	Description             string
 }

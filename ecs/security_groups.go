@@ -220,3 +220,60 @@ func (client *Client) AuthorizeSecurityGroup(args *AuthorizeSecurityGroupArgs) e
 	err := client.Invoke("AuthorizeSecurityGroup", args, &response)
 	return err
 }
+
+type RevokeSecurityGroupArgs struct {
+	AuthorizeSecurityGroupArgs
+}
+
+type RevokeSecurityGroupResponse struct {
+	common.Response
+}
+
+// You can read doc at https://help.aliyun.com/document_detail/25557.html?spm=5176.doc25554.6.755.O6Tjz0
+func (client *Client) RevokeSecurityGroup(args *RevokeSecurityGroupArgs) error {
+	response := RevokeSecurityGroupResponse{}
+	err := client.Invoke("RevokeSecurityGroup", args, &response)
+	return err
+}
+
+type AuthorizeSecurityGroupEgressArgs struct {
+	SecurityGroupId       string
+	RegionId              common.Region
+	IpProtocol            IpProtocol
+	PortRange             string
+	DestGroupId           string
+	DestGroupOwnerAccount string
+	DestGroupOwnerId      string
+	DestCidrIp            string           // IPv4 only, default 0.0.0.0/0
+	Policy                PermissionPolicy // enum of accept (default) | drop
+	Priority              int              // 1 - 100, default 1
+	NicType               NicType          // enum of internet | intranet (default)
+}
+
+type AuthorizeSecurityGroupEgressResponse struct {
+	common.Response
+}
+
+// AuthorizeSecurityGroup authorize permissions to security group
+//
+// You can read doc at https://help.aliyun.com/document_detail/25560.html
+func (client *Client) AuthorizeSecurityGroupEgress(args *AuthorizeSecurityGroupEgressArgs) error {
+	response := AuthorizeSecurityGroupEgressResponse{}
+	err := client.Invoke("AuthorizeSecurityGroupEgress", args, &response)
+	return err
+}
+
+type RevokeSecurityGroupEgressArgs struct {
+	AuthorizeSecurityGroupEgressArgs
+}
+
+type RevokeSecurityGroupEgressResponse struct {
+	common.Response
+}
+
+// You can read doc at https://help.aliyun.com/document_detail/25561.html?spm=5176.doc25557.6.759.qcR4Az
+func (client *Client) RevokeSecurityGroupEgress(args *RevokeSecurityGroupEgressArgs) error {
+	response := RevokeSecurityGroupEgressResponse{}
+	err := client.Invoke("RevokeSecurityGroupEgress", args, &response)
+	return err
+}

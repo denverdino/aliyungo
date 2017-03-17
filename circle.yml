@@ -7,7 +7,7 @@ machine:
 dependencies:
   override:
     - go get -t -d -v ./...
-    - chmod +x build.sh
+
 test:
   override:
-    - ./build.sh
+    - go test ./...

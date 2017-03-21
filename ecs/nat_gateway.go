@@ -24,6 +24,10 @@ type ForwardTableIdType struct {
 	ForwardTableId []string
 }
 
+type SnatTableIdType struct {
+	SnatTableId []string
+}
+
 type BandwidthPackageIdType struct {
 	BandwidthPackageId []string
 }
@@ -52,6 +56,7 @@ type NatGatewaySetType struct {
 	Description         string
 	BandwidthPackageIds BandwidthPackageIdType
 	ForwardTableIds     ForwardTableIdType
+	SnatTableIds        SnatTableIdType
 	InstanceChargeType  string
 	Name                string
 	NatGatewayId        string
@@ -65,8 +70,8 @@ type DescribeNatGatewayResponse struct {
 	common.Response
 	common.PaginationResult
 	NatGateways struct {
-		NatGateway []NatGatewaySetType
-	}
+			    NatGateway []NatGatewaySetType
+		    }
 }
 
 type DescribeNatGatewaysArgs struct {
@@ -77,7 +82,7 @@ type DescribeNatGatewaysArgs struct {
 }
 
 func (client *Client) DescribeNatGateways(args *DescribeNatGatewaysArgs) (natGateways []NatGatewaySetType,
-	pagination *common.PaginationResult, err error) {
+pagination *common.PaginationResult, err error) {
 
 	args.Validate()
 	response := DescribeNatGatewayResponse{}
@@ -139,25 +144,38 @@ type DescribeBandwidthPackagesArgs struct {
 	NatGatewayId       string
 }
 
+type PublicIpAddresseType struct {
+	AllocationId string
+	IpAddress string
+}
+
 type DescribeBandwidthPackageType struct {
 	Bandwidth          string
 	BandwidthPackageId string
 	IpCount            string
+	PublicIpAddresses struct{
+				  PublicIpAddresse []PublicIpAddresseType
+			   }
+
+	ZoneId 	string
 }
 
 type DescribeBandwidthPackagesResponse struct {
 	common.Response
 	BandwidthPackages struct {
-		BandwidthPackage []DescribeBandwidthPackageType
-	}
+				  BandwidthPackage []DescribeBandwidthPackageType
+			  }
 }
 
 func (client *Client) DescribeBandwidthPackages(args *DescribeBandwidthPackagesArgs) ([]DescribeBandwidthPackageType, error) {
 	response := &DescribeBandwidthPackagesResponse{}
+
 	err := client.Invoke("DescribeBandwidthPackages", args, response)
 	if err != nil {
 		return nil, err
 	}
+
+	println("DescribeBandwidthPackages response: %#v", response.BandwidthPackages.BandwidthPackage)
 	return response.BandwidthPackages.BandwidthPackage, err
 }
 
@@ -174,14 +192,6 @@ func (client *Client) DeleteBandwidthPackage(args *DeleteBandwidthPackageArgs) e
 	response := DeleteBandwidthPackageResponse{}
 	err := client.Invoke("DeleteBandwidthPackage", args, &response)
 	return err
-}
-
-type DescribeSnatTableEntriesArgs struct {
-	RegionId common.Region
-}
-
-func (client *Client) DescribeSnatTableEntries(args *DescribeSnatTableEntriesArgs) {
-
 }
 
 type NatGatewaySpec string

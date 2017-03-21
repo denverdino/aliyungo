@@ -80,9 +80,7 @@ func (client *Client) DescribeSnatTableEntries(args *DescribeSnatTableEntriesArg
 		return nil, nil, err
 	}
 
-	println("DescribeSnatTableEntriesResponse: %#v", response.SnatTableEntries.SnatEntry)
-
-	return response.SnatTableEntries.SnatEntry, &response.PaginationResult, nil
+	return response.SnatTableEntries.SnatTableEntry, &response.PaginationResult, nil
 }
 
 func (client *Client) ModifySnatEntry(args *ModifySnatEntryArgs) error {

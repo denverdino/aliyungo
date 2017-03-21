@@ -175,7 +175,6 @@ func (client *Client) DescribeBandwidthPackages(args *DescribeBandwidthPackagesA
 		return nil, err
 	}
 
-	println("DescribeBandwidthPackages response: %#v", response.BandwidthPackages.BandwidthPackage)
 	return response.BandwidthPackages.BandwidthPackage, err
 }
 

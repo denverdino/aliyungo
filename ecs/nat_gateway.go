@@ -70,8 +70,8 @@ type DescribeNatGatewayResponse struct {
 	common.Response
 	common.PaginationResult
 	NatGateways struct {
-			    NatGateway []NatGatewaySetType
-		    }
+		NatGateway []NatGatewaySetType
+	}
 }
 
 type DescribeNatGatewaysArgs struct {
@@ -82,7 +82,7 @@ type DescribeNatGatewaysArgs struct {
 }
 
 func (client *Client) DescribeNatGateways(args *DescribeNatGatewaysArgs) (natGateways []NatGatewaySetType,
-pagination *common.PaginationResult, err error) {
+	pagination *common.PaginationResult, err error) {
 
 	args.Validate()
 	response := DescribeNatGatewayResponse{}
@@ -146,25 +146,25 @@ type DescribeBandwidthPackagesArgs struct {
 
 type PublicIpAddresseType struct {
 	AllocationId string
-	IpAddress string
+	IpAddress    string
 }
 
 type DescribeBandwidthPackageType struct {
 	Bandwidth          string
 	BandwidthPackageId string
 	IpCount            string
-	PublicIpAddresses struct{
-				  PublicIpAddresse []PublicIpAddresseType
-			   }
+	PublicIpAddresses  struct {
+		PublicIpAddresse []PublicIpAddresseType
+	}
 
-	ZoneId 	string
+	ZoneId string
 }
 
 type DescribeBandwidthPackagesResponse struct {
 	common.Response
 	BandwidthPackages struct {
-				  BandwidthPackage []DescribeBandwidthPackageType
-			  }
+		BandwidthPackage []DescribeBandwidthPackageType
+	}
 }
 
 func (client *Client) DescribeBandwidthPackages(args *DescribeBandwidthPackagesArgs) ([]DescribeBandwidthPackageType, error) {

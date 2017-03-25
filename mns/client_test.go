@@ -60,7 +60,7 @@ func TestReceiveClient(t *testing.T) {
 		select {
 		case resp := <-respChan:
 			{
-				t.Logf("receive message: %s", resp)
+				t.Logf("receive message: %v", resp)
 				receiptHandle = resp.ReceiptHandle
 				end <- 1
 			}

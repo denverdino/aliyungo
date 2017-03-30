@@ -38,7 +38,7 @@ type Client struct {
 func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret string) {
 	client.AccessKeyId = accessKeyId
 	client.AccessKeySecret = accessKeySecret + "&"
-	client.debug = true
+	client.debug = false
 	client.httpClient = &http.Client{}
 	client.endpoint = endpoint
 	client.version = version
@@ -114,7 +114,6 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	request.init(client.version, action, client.AccessKeyId)
 
 	query := util.ConvertToQueryValues(request)
-
 	util.SetQueryValues(args, &query)
 
 	// Sign request

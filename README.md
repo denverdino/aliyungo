@@ -129,10 +129,10 @@ go test
   * Yu Zhou (oscarrr110@gmail.com)
   * Yufei Zhang
   * linuxlikerqq
-  * Changhai Yan (changhai.ych@alibaba-inc.com)
+  * Changhai Yan
   * Jizhong Jiang (jiangjizhong@gmail.com)
   * Kent Wang (pragkent@gmail.com)
-  * ringtail (zhongwei.lzw@alibaba-inc.com)
+  * ringtail
   * aiden0z (aiden0xz@gmail.com)
   * jimmycmh
   * menglingwei
@@ -158,6 +158,8 @@ go test
   * Russell (yufeiwu@gmail.com)
   * zhuzhih2017
   * cheyang
+  * Hobo Chen
+  * Shuwei Yin 
 
 
 ## License

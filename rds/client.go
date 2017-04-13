@@ -22,6 +22,7 @@ var (
 		common.EUCentral1:   "https://rds.eu-central-1.aliyuncs.com",   //德国
 		common.MEEast1:      "https://rds.me-east-1.aliyuncs.com",      //迪拜
 		common.APSouthEast2: "https://rds.ap-southeast-2.aliyuncs.com", //澳洲
+		common.ZhangJiaKou:  "https://rds.cn-zhangjiakou.aliyuncs.com", //张家口
 	}
 )
 

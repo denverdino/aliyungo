@@ -28,6 +28,7 @@ var (
 		common.EUCentral1:   "https://ecs.eu-central-1.aliyuncs.com",   //德国
 		common.MEEast1:      "https://ecs.me-east-1.aliyuncs.com",      //迪拜
 		common.APSouthEast2: "https://ecs.ap-southeast-2.aliyuncs.com", //澳洲
+		common.ZhangJiaKou:  "https://ecs.cn-zhangjiakou.aliyuncs.com", //华北三
 	}
 )
 

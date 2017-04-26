@@ -10,9 +10,9 @@ func TestClient_CreateAlarm(t *testing.T) {
 
 	c := []map[string]string{
 		{
-			"port":       "9000",
-			"userId":     "128257",
-			"instanceId": "lb-2zego9hnvvnfjtnphv73x",
+			"port":       "SLB_PORT",
+			"userId":     "USER_ID",
+			"instanceId": "SLB_ID",
 		},
 	}
 

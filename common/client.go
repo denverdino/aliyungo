@@ -13,6 +13,8 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
+const DefaultTLSHandshakeTimeout  = 20
+
 // RemovalPolicy.N add index to array item
 // RemovalPolicy=["a", "b"] => RemovalPolicy.1="a" RemovalPolicy.2="b"
 type FlattenArray []string
@@ -32,6 +34,7 @@ type Client struct {
 	serviceCode     string
 	regionID        Region
 	businessInfo    string
+	TLSHandshakeTimeout int
 }
 
 // NewClient creates a new instance of ECS client
@@ -39,7 +42,13 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 	client.AccessKeyId = accessKeyId
 	client.AccessKeySecret = accessKeySecret + "&"
 	client.debug = false
-	client.httpClient = &http.Client{}
+	if client.TLSHandshakeTimeout == 0 {
+		client.TLSHandshakeTimeout = DefaultTLSHandshakeTimeout
+	}
+	t := &http.Transport{
+		TLSHandshakeTimeout: client.TLSHandshakeTimeout * time.Second,
+	}
+	client.httpClient = &http.Client{Transport: t,}
 	client.endpoint = endpoint
 	client.version = version
 }

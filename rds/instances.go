@@ -1,8 +1,9 @@
 package rds
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"time"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type DBInstanceIPArray struct {
@@ -58,7 +59,7 @@ type InstanceStatus string
 
 // Constants of InstanceStatus
 const (
-	Creating  = InstanceStatus("Creating") // For backward compatability
+	Creating  = InstanceStatus("Creating") // For backward compatibility
 	Running   = InstanceStatus("Running")
 	Deleting  = InstanceStatus("Deleting")
 	Rebooting = InstanceStatus("Rebooting")

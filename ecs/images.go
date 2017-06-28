@@ -112,7 +112,7 @@ func (client *Client) DescribeImages(args *DescribeImagesArgs) (images []ImageTy
 	return response.Images.Image, &response.PaginationResult, nil
 }
 
-// CreateImageArgs repsents arguements to create image
+// CreateImageArgs repsents arguments to create image
 type CreateImageArgs struct {
 	RegionId     common.Region
 	SnapshotId   string
@@ -163,7 +163,7 @@ func (client *Client) DeleteImage(regionId common.Region, imageId string) error 
 	return client.Invoke("DeleteImage", &args, &response)
 }
 
-// ModifyImageSharePermission repsents arguements to share image
+// ModifyImageSharePermission repsents arguments to share image
 type ModifyImageSharePermissionArgs struct {
 	RegionId      common.Region
 	ImageId       string
@@ -232,7 +232,7 @@ func (client *Client) CopyImage(args *CopyImageArgs) (string, error) {
 	return response.ImageId, nil
 }
 
-// ImportImageArgs repsents arguements to import image from oss
+// ImportImageArgs repsents arguments to import image from oss
 type ImportImageArgs struct {
 	RegionId           common.Region
 	ImageName          string

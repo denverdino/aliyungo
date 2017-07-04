@@ -84,7 +84,7 @@ type PolicyDocument struct {
 type PolicyItem struct {
 	Action   string
 	Effect   string
-	Resource string
+	Resource []string
 }
 
 /*

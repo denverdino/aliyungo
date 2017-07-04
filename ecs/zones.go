@@ -50,16 +50,25 @@ type DescribeZonesResponse struct {
 
 // DescribeZones describes zones
 func (client *Client) DescribeZones(regionId common.Region) (zones []ZoneType, err error) {
-	args := DescribeZonesArgs{
-		RegionId: regionId,
-	}
-	response := DescribeZonesResponse{}
-
-	err = client.Invoke("DescribeZones", &args, &response)
-
+	response, err := client.DescribeZonesWithRaw(regionId)
 	if err == nil {
 		return response.Zones.Zone, nil
 	}
 
 	return []ZoneType{}, err
+}
+
+func (client *Client) DescribeZonesWithRaw(regionId common.Region) (response *DescribeZonesResponse, err error) {
+	args := DescribeZonesArgs{
+		RegionId: regionId,
+	}
+	response = &DescribeZonesResponse{}
+
+	err = client.Invoke("DescribeZones", &args, response)
+
+	if err == nil {
+		return response, nil
+	}
+
+	return nil, err
 }

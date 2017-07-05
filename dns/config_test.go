@@ -5,6 +5,8 @@ const (
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	TestDomainName      = "aisafe.win"
+	TestDomainGroupName = "fish"
+	TestChanegGroupName = "newfish"
 )
 
 var testClient *Client

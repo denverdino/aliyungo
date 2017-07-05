@@ -7,6 +7,7 @@ import (
 )
 
 type DescribeDomainsArgs struct {
+	// optional
 	PageNumber int32
 	PageSize   int32
 	KeyWord    string
@@ -19,21 +20,22 @@ type DescribeDomainsResponse struct {
 	PageNumber int32
 	PageSize   int32
 	Domains struct {
-		DomainType []DomainType
+		Domain []DomainType
 	}
 }
 
 // DescribeDomains
 //
-// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/.....
-func (client *Client) DescribeDomains(args *DescribeDomainsArgs) (response *DescribeDomainsResponse, err error) {
+// You can read doc at https://help.aliyun.com/document_detail/29751.html?spm=5176.doc29750.6.594.dvyRJV
+func (client *Client) DescribeDomains(args *DescribeDomainsArgs) (domains []DomainType, err error) {
 	action := "DescribeDomains"
-	response = &DescribeDomainsResponse{}
+	response := &DescribeDomainsResponse{}
 	err = client.Invoke(action, args, response)
-	if err == nil {
-		return response, nil
-	} else {
+
+	if err != nil {
 		log.Printf("%s error, %v", action, err)
-		return response, err
+		return nil, err
 	}
+
+	return response.Domains.Domain, err
 }

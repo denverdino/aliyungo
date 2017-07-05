@@ -18,7 +18,7 @@ type AddDomainGroupResponse struct {
 
 // AddDomainGroup
 //
-// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/.......
+// You can read doc at https://help.aliyun.com/document_detail/29762.html?spm=5176.doc29749.6.604.PJtwG1
 func (client *Client) AddDomainGroup(args *AddDomainGroupArgs) (response *AddDomainGroupResponse, err error) {
 	action := "AddDomainGroup"
 	response = &AddDomainGroupResponse{}

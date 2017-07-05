@@ -20,8 +20,8 @@ type RecordType struct {
 	RR         string
 	Type       string
 	Value      string
-	TTL        int32
-	Priority   int32
+	TTL        string
+	Priority   string
 	Line       string
 	Status     string
 	Locked     bool

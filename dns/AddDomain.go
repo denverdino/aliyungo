@@ -21,13 +21,13 @@ type AddDomainResponse struct {
 	GroupName  string
 	PunyCode   string
 	DnsServers struct {
-		DnsServerType []DnsServerType
+		DnsServer []string
 	}
 }
 
 // AddDomain
 //
-// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/.....
+// You can read doc at https://help.aliyun.com/document_detail/29749.html?spm=5176.doc29805.6.592.6LMqlG
 func (client *Client) AddDomain(args *AddDomainArgs) (response *AddDomainResponse, err error) {
 	action := "AddDomain"
 	response = &AddDomainResponse{}

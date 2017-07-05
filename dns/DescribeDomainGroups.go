@@ -6,7 +6,13 @@ import (
 	"github.com/denverdino/aliyungo/common"
 )
 
+type DomainGroupType struct {
+	GroupId   string
+	GroupName string
+}
+
 type DescribeDomainGroupsArgs struct {
+	//optional
 	PageNumber int32
 	PageSize   int32
 	KeyWord    string
@@ -18,21 +24,22 @@ type DescribeDomainGroupsResponse struct {
 	PageNumber int32
 	PageSize   int32
 	DomainGroups struct {
-		DomainGroupType []DomainGroupType
+		DomainGroup []DomainGroupType
 	}
 }
 
 // DescribeDomainGroups
 //
-// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/.....
-func (client *Client) DescribeDomainGroups(args *DescribeDomainGroupsArgs) (response *DescribeDomainGroupsResponse, err error) {
+// You can read doc at https://help.aliyun.com/document_detail/29766.html?spm=5176.doc29765.6.608.qcQr2R
+func (client *Client) DescribeDomainGroups(args *DescribeDomainGroupsArgs) (groups []DomainGroupType, err error) {
 	action := "DescribeDomainGroups"
-	response = &DescribeDomainGroupsResponse{}
+	response := &DescribeDomainGroupsResponse{}
 	err = client.Invoke(action, args, response)
-	if err == nil {
-		return response, nil
-	} else {
+
+	if err != nil {
 		log.Printf("%s error, %v", action, err)
-		return response, err
+		return nil, err
 	}
+
+	return response.DomainGroups.DomainGroup, nil
 }

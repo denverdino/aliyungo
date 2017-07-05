@@ -19,7 +19,7 @@ type UpdateDomainGroupResponse struct {
 
 // UpdateDomainGroup
 //
-// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/.....
+// You can read doc at https://help.aliyun.com/document_detail/29763.html?spm=5176.doc29762.6.605.iFRKjn
 func (client *Client) UpdateDomainGroup(args *UpdateDomainGroupArgs) (response *UpdateDomainGroupResponse, err error) {
 	action := "UpdateDomainGroup"
 	response = &UpdateDomainGroupResponse{}

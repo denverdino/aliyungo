@@ -17,7 +17,7 @@ type DeleteDomainGroupResponse struct {
 
 // DeleteDomainGroup
 //
-// You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/.....
+// You can read doc at https://help.aliyun.com/document_detail/29764.html?spm=5176.doc29763.6.606.Vm3FyC
 func (client *Client) DeleteDomainGroup(args *DeleteDomainGroupArgs) (response *DeleteDomainGroupResponse, err error) {
 	action := "DeleteDomainGroup"
 	response = &DeleteDomainGroupResponse{}

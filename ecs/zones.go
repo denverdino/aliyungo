@@ -11,6 +11,34 @@ const (
 	ResourceTypeIOOptimizedInstance = ResourceType("IoOptimized")
 )
 
+// The sub-item of the type AvailableResourcesType
+type SupportedResourceType string
+
+const (
+	SupportedInstanceType            = SupportedResourceType("supportedInstanceType")
+	SupportedInstanceTypeFamily      = SupportedResourceType("supportedInstanceTypeFamily")
+	SupportedInstanceGeneration      = SupportedResourceType("supportedInstanceGeneration")
+	SupportedSystemDiskCategory      = SupportedResourceType("supportedSystemDiskCategory")
+	SupportedDataDiskCategory        = SupportedResourceType("supportedDataDiskCategory")
+	SupportedNetworkCategory         = SupportedResourceType("supportedNetworkCategory")
+
+)
+//
+// You can read doc at https://help.aliyun.com/document_detail/25670.html?spm=5176.doc25640.2.1.J24zQt
+type ResourcesInfoType struct {
+	ResourcesInfo []AvailableResourcesType
+}
+// Because the sub-item of AvailableResourcesType starts with supported and golang struct cann't refer them, this uses map to parse ResourcesInfo
+type AvailableResourcesType struct {
+	IoOptimized          bool
+	NetworkTypes         map[string][]string
+	InstanceGenerations  map[string][]string
+	InstanceTypeFamilies map[string][]string
+	InstanceTypes        map[string][]string
+	SystemDiskCategories map[string][]DiskCategory
+	DataDiskCategories   map[string][]DiskCategory
+}
+
 type DescribeZonesArgs struct {
 	RegionId common.Region
 }
@@ -36,6 +64,7 @@ type AvailableInstanceTypesType struct {
 type ZoneType struct {
 	ZoneId                    string
 	LocalName                 string
+	AvailableResources 	  ResourcesInfoType
 	AvailableInstanceTypes    AvailableInstanceTypesType
 	AvailableResourceCreation AvailableResourceCreationType
 	AvailableDiskCategories   AvailableDiskCategoriesType

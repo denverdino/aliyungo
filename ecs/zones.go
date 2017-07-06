@@ -31,12 +31,12 @@ type ResourcesInfoType struct {
 // Because the sub-item of AvailableResourcesType starts with supported and golang struct cann't refer them, this uses map to parse ResourcesInfo
 type AvailableResourcesType struct {
 	IoOptimized          bool
-	NetworkTypes         map[string][]string
-	InstanceGenerations  map[string][]string
-	InstanceTypeFamilies map[string][]string
-	InstanceTypes        map[string][]string
-	SystemDiskCategories map[string][]DiskCategory
-	DataDiskCategories   map[string][]DiskCategory
+	NetworkTypes         map[SupportedResourceType][]string
+	InstanceGenerations  map[SupportedResourceType][]string
+	InstanceTypeFamilies map[SupportedResourceType][]string
+	InstanceTypes        map[SupportedResourceType][]string
+	SystemDiskCategories map[SupportedResourceType][]DiskCategory
+	DataDiskCategories   map[SupportedResourceType][]DiskCategory
 }
 
 type DescribeZonesArgs struct {

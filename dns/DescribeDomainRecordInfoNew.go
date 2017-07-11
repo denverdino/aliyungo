@@ -3,7 +3,7 @@ package dns
 import "github.com/denverdino/aliyungo/common"
 
 // endpoint change to 'http://alidns.aliyuncs.com' then record ttl and priority change to string
-type RecordTypeN struct {
+type RecordTypeNew struct {
 	DomainName string
 	RecordId   string
 	RR         string
@@ -16,21 +16,21 @@ type RecordTypeN struct {
 	Locked     bool
 }
 
-type DescribeDomainRecordInfoNArgs struct {
+type DescribeDomainRecordInfoNewArgs struct {
 	RecordId string
 }
 
-type DescribeDomainRecordInfoNResponse struct {
+type DescribeDomainRecordInfoNewResponse struct {
 	common.Response
-	RecordTypeN
+	RecordTypeNew
 }
 
 // DescribeDomainRecordInformation
 //
 // You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&DescribeDomainRecordInfo
-func (client *Client) DescribeDomainRecordInfoN(args *DescribeDomainRecordInfoNArgs) (response *DescribeDomainRecordInfoNResponse, err error) {
+func (client *Client) DescribeDomainRecordInfoNew(args *DescribeDomainRecordInfoNewArgs) (response *DescribeDomainRecordInfoNewResponse, err error) {
 	action := "DescribeDomainRecordInfo"
-	response = &DescribeDomainRecordInfoNResponse{}
+	response = &DescribeDomainRecordInfoNewResponse{}
 	err = client.Invoke(action, args, response)
 	if err == nil {
 		return response, nil

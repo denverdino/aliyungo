@@ -4,21 +4,21 @@ import (
 	"testing"
 )
 
-func TestDescribeDomainRecordInfoN(t *testing.T) {
+func TestDescribeDomainRecordInfoNew(t *testing.T) {
 	//prepare
 	client := NewTestClientNew()
-	describeArgs := DescribeDomainRecordsNArgs{
+	describeArgs := DescribeDomainRecordsNewArgs{
 		DomainName: TestDomainName,
 	}
 	describeArgs.PageSize = 100
 
-	describeResponse, err := client.DescribeDomainRecordsN(&describeArgs)
+	describeResponse, err := client.DescribeDomainRecordsNew(&describeArgs)
 	if err == nil {
 		record := describeResponse.DomainRecords.Record[0]
-		arg := DescribeDomainRecordInfoNArgs{
+		arg := DescribeDomainRecordInfoNewArgs{
 			RecordId: record.RecordId,
 		}
-		response, err := client.DescribeDomainRecordInfoN(&arg)
+		response, err := client.DescribeDomainRecordInfoNew(&arg)
 		if err == nil {
 			t.Logf("DescribeDomainRecordInfo success: %v", response)
 		} else {

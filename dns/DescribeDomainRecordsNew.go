@@ -2,7 +2,7 @@ package dns
 
 import "github.com/denverdino/aliyungo/common"
 
-type DescribeDomainRecordsNArgs struct {
+type DescribeDomainRecordsNewArgs struct {
 	DomainName string
 
 	//optional
@@ -12,21 +12,21 @@ type DescribeDomainRecordsNArgs struct {
 	ValueKeyWord string
 }
 
-type DescribeDomainRecordsNResponse struct {
+type DescribeDomainRecordsNewResponse struct {
 	common.Response
 	common.PaginationResult
 	InstanceId    string
 	DomainRecords struct {
-		Record []RecordTypeN
+		Record []RecordTypeNew
 	}
 }
 
 // DescribeDomainRecordsNew
 //
 // You can read doc at https://docs.aliyun.com/#/pub/dns/api-reference/record-related&DescribeDomainRecords
-func (client *Client) DescribeDomainRecordsN(args *DescribeDomainRecordsNArgs) (response *DescribeDomainRecordsNResponse, err error) {
+func (client *Client) DescribeDomainRecordsNew(args *DescribeDomainRecordsNewArgs) (response *DescribeDomainRecordsNewResponse, err error) {
 	action := "DescribeDomainRecords"
-	response = &DescribeDomainRecordsNResponse{}
+	response = &DescribeDomainRecordsNewResponse{}
 	err = client.Invoke(action, args, response)
 	if err == nil {
 		return response, nil

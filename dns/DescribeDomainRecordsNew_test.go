@@ -4,15 +4,15 @@ import (
 	"testing"
 )
 
-func TestDescribeDomainRecordsN(t *testing.T) {
+func TestDescribeDomainRecordsNew(t *testing.T) {
 	//prepare
 	client := NewTestClientNew()
-	describeArgs := DescribeDomainRecordsNArgs{
+	describeArgs := DescribeDomainRecordsNewArgs{
 		DomainName: TestDomainName,
 	}
 	describeArgs.PageSize = 100
 
-	describeResponse, err := client.DescribeDomainRecordsN(&describeArgs)
+	describeResponse, err := client.DescribeDomainRecordsNew(&describeArgs)
 	if err == nil {
 		t.Logf("DescribeDomainRecords success: TotalCount:%d ", describeResponse.TotalCount)
 	} else {

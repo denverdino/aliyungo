@@ -36,4 +36,8 @@ func TestUpdateDomainRecord(t *testing.T) {
 		RecordId: addResponse.RecordId,
 	}
 	_, err = client.DeleteDomainRecord(&deleteDomainRecordArgs)
+	if err != nil {
+		t.Errorf("Failed to DeleteDomainRecord: %s", deleteDomainRecordArgs.RecordId)
+	}
+
 }

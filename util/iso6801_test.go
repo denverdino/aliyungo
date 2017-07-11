@@ -70,7 +70,7 @@ func TestISO8601TimeWithoutSeconds(t *testing.T) {
 	}
 
 	if date != date2 {
-		t.Error("The two dates shoudl be equal.")
+		t.Error("The two dates should be equal.")
 	}
 
 }

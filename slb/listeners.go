@@ -100,6 +100,7 @@ type HTTPListenerType struct {
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
 	HealthCheckHttpCode    HealthCheckHttpCodeType
+	VServerGroup           FlagType
 	VServerGroupId         string
 	Gzip                   FlagType
 }
@@ -153,6 +154,7 @@ type TCPListenerType struct {
 	HealthCheckConnectTimeout int
 	HealthCheckInterval       int
 	HealthCheckHttpCode       HealthCheckHttpCodeType
+	VServerGroup              FlagType
 	VServerGroupId            string
 }
 
@@ -179,6 +181,7 @@ type UDPListenerType struct {
 	UnhealthyThreshold        int
 	HealthCheckConnectTimeout int
 	HealthCheckInterval       int
+	VServerGroup              FlagType
 	VServerGroupId            string
 }
 type CreateLoadBalancerUDPListenerArgs UDPListenerType

@@ -3,7 +3,8 @@ package ims
 import "testing"
 
 var (
-	client = NewTestClientForDebug()
+	client   = NewTestClientForDebug()
+	rmClient = NewTestRMClientForDebug()
 )
 
 func TestImsClient_CheckDirectoryEnabled(t *testing.T) {
@@ -32,7 +33,7 @@ func TestImsClient_GetDirectory(t *testing.T) {
 	args := &GetDirectoryRequest{}
 	response, err := client.GetDirectory(args)
 	if err != nil {
-		t.Fatalf("Failed to GetDirectory %++v",err )
+		t.Fatalf("Failed to GetDirectory %++v", err)
 	} else {
 		t.Logf("Response is %++v", response)
 	}

@@ -25,3 +25,22 @@ func NewTestClientForDebug() *ImsClient {
 	testClient.SetDebug(true)
 	return testClient
 }
+
+var testRMClient *ResourceManagerClient
+
+func NewTestRMClient() *ResourceManagerClient {
+	if testRMClient == nil {
+		testRMClient = NewRMClient(TestAccessKeyId, TestAccessKeySecret)
+	}
+	return testRMClient
+}
+
+var testRMClientForDebug *ResourceManagerClient
+
+func NewTestRMClientForDebug() *ResourceManagerClient {
+	if testRMClientForDebug == nil {
+		testRMClientForDebug = NewRMClient(TestAccessKeyId, TestAccessKeySecret)
+	}
+	testClient.SetDebug(true)
+	return testRMClientForDebug
+}

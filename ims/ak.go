@@ -72,3 +72,24 @@ func (client *ImsClient) ListAccessKeys(args *ListAccessKeysRequest) (*ListAcces
 
 	return response, nil
 }
+
+type UpdateAccessKeyRequest struct {
+	UserPrincipalName string
+	UserAccessKeyId   string
+	Status            string
+}
+
+type UpdateAccessKeyResponse struct {
+	common.Response
+}
+
+func (client *ImsClient) UpdateAccessKey(args *UpdateAccessKeyRequest) (*UpdateAccessKeyResponse, error) {
+	response := &UpdateAccessKeyResponse{}
+
+	err := client.Invoke("UpdateAccessKey", args, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}

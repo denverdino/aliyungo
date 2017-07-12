@@ -53,3 +53,18 @@ func TestImsClient_ListAccessKeys(t *testing.T) {
 		}
 	}
 }
+
+func TestImsClient_UpdateAccessKey(t *testing.T) {
+	args := &UpdateAccessKeyRequest{
+		UserPrincipalName: "user-1499677896@1312623533146984.onaliyun.com",
+		UserAccessKeyId:   "LTAIrZw0EpolY1k8",
+		Status:            "Active",
+	}
+
+	response, err := client.UpdateAccessKey(args)
+	if err != nil {
+		t.Fatalf("Failed to UpdateAccessKey %++v", err)
+	} else {
+		t.Logf("Response = %++v", response)
+	}
+}

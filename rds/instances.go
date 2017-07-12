@@ -188,6 +188,8 @@ type DBInstanceAttribute struct {
 	TempDBInstanceId            string
 	ReadOnlyDBInstanceIds       ReadOnlyDBInstanceIds
 	SecurityIPList              string
+	VSwitchId                   string
+	VpcId                       string
 }
 
 type ReadOnlyDBInstanceIds struct {

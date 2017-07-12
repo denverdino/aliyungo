@@ -145,6 +145,7 @@ type TCPListenerType struct {
 	Bandwidth                 int
 	Scheduler                 SchedulerType
 	PersistenceTimeout        int
+	HealthCheck               FlagType
 	HealthCheckType           HealthCheckType
 	HealthCheckDomain         string
 	HealthCheckURI            string
@@ -176,6 +177,7 @@ type UDPListenerType struct {
 	Bandwidth                 int
 	Scheduler                 SchedulerType
 	PersistenceTimeout        int
+	HealthCheck               FlagType
 	HealthCheckConnectPort    int
 	HealthyThreshold          int
 	UnhealthyThreshold        int

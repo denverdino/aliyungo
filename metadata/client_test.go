@@ -108,6 +108,10 @@ func (m *MockMetaDataClient) Go() ([]string, error) {
 		return []string{"ntp1.server.com", "ntp2.server.com"}, nil
 	}
 
+	if strings.Contains(uri, ZONE) {
+		return []string{"zone-test"}, nil
+	}
+
 	return nil, errors.New("unknow resource error.")
 }
 
@@ -303,5 +307,16 @@ func TestDNSServers(t *testing.T) {
 	}
 	if host[0] != "8.8.8.8" || host[1] != "8.8.4.4" {
 		t.Error("dns servers not equal 8.8.8.8/8.8.4.4")
+	}
+}
+
+func TestZone(t *testing.T) {
+	meta := NewMockMetaData(nil)
+	host, err := meta.Zone()
+	if err != nil {
+		t.Errorf("zone err: %s", err.Error())
+	}
+	if host != "zone-test" {
+		t.Error("zone not equal zone-test")
 	}
 }

@@ -7,10 +7,10 @@ import (
 )
 
 func TestImsClient_CreateUser(t *testing.T) {
-	name := fmt.Sprintf("user-%d", time.Now().Unix())
+	name := fmt.Sprintf("user_%d", time.Now().Unix())
 	args := &CreateUserRequest{
 		UserPrincipalName: fmt.Sprintf("%s@1312623533146984.onaliyun.com", name),
-		DisplayName:       name,
+		DisplayName:       "acs_ram_account",
 		Enabled:           true,
 	}
 

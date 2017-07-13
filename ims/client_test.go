@@ -41,6 +41,6 @@ func NewTestRMClientForDebug() *ResourceManagerClient {
 	if testRMClientForDebug == nil {
 		testRMClientForDebug = NewRMClient(TestAccessKeyId, TestAccessKeySecret)
 	}
-	testClient.SetDebug(true)
+	testRMClientForDebug.SetDebug(true)
 	return testRMClientForDebug
 }

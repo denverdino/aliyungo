@@ -53,6 +53,7 @@ func (client *Client) DeleteVSwitch(VSwitchId string) error {
 }
 
 type DescribeVSwitchesArgs struct {
+	RegionId  common.Region
 	VpcId     string
 	VSwitchId string
 	ZoneId    string

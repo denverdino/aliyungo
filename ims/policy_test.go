@@ -9,7 +9,9 @@ import (
 func TestResourceManagerClient_CreatePolicy(t *testing.T) {
 	policy := "{\"Statement\": [{\"Action\": \"cs:*\",\"Effect\": \"Allow\",\"Resource\": [\"acs:cs:*:*:cluster/c64e1330717b647d891a389464bca4584\"]}],\"Version\": \"1\"}"
 	args := &CreatePolicyRequest{
-		PolicyName:     fmt.Sprintf("%s_%d", "AliyunACSResourcesAccess_user", time.Now().Unix()),
+		//AccountId:      "acs-ram-account-c64e1330717b647d891a389464bca4584@1312623533146984.onaliyun.com",
+		//PolicyName:     fmt.Sprintf("%s_%d", "AliyunACSResourcesAccess_user", time.Now().Unix()),
+		PolicyName:     "AliyunACSDefaultAccess",
 		Description:    "aliyun container service use this policy to allocate resources for child accounts",
 		PolicyDocument: policy,
 	}
@@ -65,7 +67,7 @@ func TestResourceManagerClient_AttachPolicy(t *testing.T) {
 		BasePolicyRequest: BasePolicyRequest{
 			ResourceGroupId: "1312623533146984",
 			PolicyType:      "Custom",
-			PolicyName:      "AliyunACSDefaultAccess",
+			PolicyName:      "AliyunACSResourcesAccess_user_1499916220",
 			PrincipalType:   "IMSUser",
 			PrincipalName:   "user-1499677896@1312623533146984.onaliyun.com",
 		},

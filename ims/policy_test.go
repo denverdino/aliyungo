@@ -67,7 +67,7 @@ func TestResourceManagerClient_AttachPolicy(t *testing.T) {
 		BasePolicyRequest: BasePolicyRequest{
 			ResourceGroupId: "1312623533146984",
 			PolicyType:      "Custom",
-			PolicyName:      "AliyunACSResourcesAccess_user_1499916220",
+			PolicyName:      "AliyunACSDefaultAccess",
 			PrincipalType:   "IMSUser",
 			PrincipalName:   "user-1499677896@1312623533146984.onaliyun.com",
 		},

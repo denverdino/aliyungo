@@ -11,6 +11,7 @@ type Policy struct {
 }
 
 type CreatePolicyRequest struct {
+	BaseRequest
 	AccountId      string
 	PolicyName     string
 	Description    string
@@ -33,6 +34,7 @@ func (client *ResourceManagerClient) CreatePolicy(args *CreatePolicyRequest) (*C
 }
 
 type DeletePolicyRequest struct {
+	BaseRequest
 	AccountId  string
 	PolicyName string
 }
@@ -62,6 +64,7 @@ type PolicyItem struct {
 }
 
 type ListPoliciesRequest struct {
+	BaseRequest
 	AccountId        string
 	PolicyType       string
 	ResourceGroupId  string
@@ -91,6 +94,7 @@ func (client *ResourceManagerClient) ListPolicies(args *ListPoliciesRequest) (*L
 }
 
 type GetPolicyRequest struct {
+	BaseRequest
 	AccountId  string
 	PolicyType string
 	PolicyName string
@@ -118,6 +122,7 @@ type PolicyVersion struct {
 }
 
 type CreatePolicyVersionRequest struct {
+	BaseRequest
 	AccountId      string
 	PolicyName     string
 	PolicyDocument string
@@ -140,6 +145,7 @@ func (client *ResourceManagerClient) CreatePolicyVersion(args *CreatePolicyVersi
 }
 
 type DeletePolicyVersionRequest struct {
+	BaseRequest
 	AccountId  string
 	PolicyName string
 	VersionId  string
@@ -160,6 +166,7 @@ func (client *ResourceManagerClient) DeletePolicyVersion(args *DeletePolicyVersi
 }
 
 type ListPolicyVersionsRequest struct {
+	BaseRequest
 	AccountId  string
 	PolicyType string
 	PolicyName string
@@ -187,6 +194,7 @@ type PolicyVersionItem struct {
 }
 
 type GetPolicyVersionRequest struct {
+	BaseRequest
 	AccountId  string
 	PolicyType string
 	PolicyName string
@@ -209,6 +217,7 @@ func (client *ResourceManagerClient) GetPolicyVersion(args *GetPolicyVersionRequ
 }
 
 type SetDefaultPolicyVersionRequest struct {
+	BaseRequest
 	AccountId  string
 	PolicyName string
 	VersionId  string
@@ -230,6 +239,7 @@ func (client *ResourceManagerClient) SetDefaultPolicyVersion(args *SetDefaultPol
 }
 
 type BasePolicyRequest struct {
+	BaseRequest
 	AccountId       string
 	ResourceGroupId string //
 	PolicyType      string //

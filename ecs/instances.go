@@ -263,6 +263,7 @@ type InstanceAttributesType struct {
 		Tag []TagItemType
 	}
 	SpotStrategy SpotStrategyType
+	KeyPairName  string
 }
 
 type DescribeInstanceAttributeResponse struct {

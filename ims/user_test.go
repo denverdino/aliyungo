@@ -62,7 +62,8 @@ func TestImsClient_DeleteUser(t *testing.T) {
 	} else {
 		fmt.Printf("userId = %s", createResponse.User.UserId)
 		args := &DeleteUserRequest{
-			UserId: createResponse.User.UserId,
+			//UserId: createResponse.User.UserId,
+			UserPrincipalName: createResponse.User.UserPrincipalName,
 		}
 
 		time.Sleep(5 * time.Second)

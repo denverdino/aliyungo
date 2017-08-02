@@ -361,7 +361,7 @@ func (client *Client) WaitForInstanceAsyn(instanceId string, status InstanceStat
 		resp, err := client.DescribeDBInstanceAttribute(&args)
 		if err != nil {
 			e, _ := err.(*common.Error)
-			if e.Code != "InvalidInstanceId.NotFound" && e.Code != "Forbidden.InstanceNotFound" {
+			if e.Code != "InvalidDBInstanceId.NotFound" && e.Code != "Forbidden.InstanceNotFound" {
 				return err
 			}
 		}
@@ -662,6 +662,31 @@ type CreateAccountArgs struct {
 func (client *Client) CreateAccount(args *CreateAccountArgs) (resp *CreateAccountResponse, err error) {
 	response := CreateAccountResponse{}
 	err = client.Invoke("CreateAccount", args, &response)
+
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}
+
+type ResetAccountPasswordArgs struct {
+	DBInstanceId string
+	AccountName  string
+	AccountPassword string
+}
+
+// ResetAccountPassword reset account password
+//
+// You can read doc at https://help.aliyun.com/document_detail/26269.html?spm=5176.doc26268.6.842.hFnVQU
+func (client *Client) ResetAccountPassword(instanceId, accountName, accountPassword string) (resp *common.Response, err error) {
+	args := ResetAccountPasswordArgs{
+		DBInstanceId: instanceId,
+		AccountName:  accountName,
+		AccountPassword: accountPassword,
+	}
+
+	response := common.Response{}
+	err = client.Invoke("ResetAccountPassword", &args, &response)
 
 	if err != nil {
 		return nil, err

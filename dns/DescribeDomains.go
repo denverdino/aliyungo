@@ -8,17 +8,14 @@ import (
 
 type DescribeDomainsArgs struct {
 	// optional
-	PageNumber int32
-	PageSize   int32
+	common.Pagination
 	KeyWord    string
 	GroupId    string
 }
 
 type DescribeDomainsResponse struct {
 	response   common.Response
-	TotalCount int32
-	PageNumber int32
-	PageSize   int32
+	common.PaginationResult
 	Domains struct {
 		Domain []DomainType
 	}

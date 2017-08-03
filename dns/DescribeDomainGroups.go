@@ -13,16 +13,13 @@ type DomainGroupType struct {
 
 type DescribeDomainGroupsArgs struct {
 	//optional
-	PageNumber int32
-	PageSize   int32
+	common.Pagination
 	KeyWord    string
 }
 
 type DescribeDomainGroupsResponse struct {
 	response   common.Response
-	TotalCount int32
-	PageNumber int32
-	PageSize   int32
+	common.PaginationResult
 	DomainGroups struct {
 		DomainGroup []DomainGroupType
 	}

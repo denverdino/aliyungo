@@ -7,19 +7,22 @@ import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/denverdino/aliyungo/util"
+	"math"
+	"time"
 )
 
 type ClusterState string
 
 const (
-	Initial      = ClusterState("Initial")
-	Running      = ClusterState("Running")
-	Updating     = ClusterState("Updating")
-	Scaling      = ClusterState("Scaling")
-	Failed       = ClusterState("Failed")
-	Deleting     = ClusterState("Deleting")
-	DeleteFailed = ClusterState("DeleteFailed")
-	Deleted      = ClusterState("Deleted")
+	Initial      = ClusterState("initial")
+	Running      = ClusterState("running")
+	Updating     = ClusterState("updating")
+	Scaling      = ClusterState("scaling")
+	Failed       = ClusterState("failed")
+	Deleting     = ClusterState("deleting")
+	DeleteFailed = ClusterState("deleteFailed")
+	Deleted      = ClusterState("deleted")
+	InActive     = ClusterState("inactive")
 )
 
 type NodeStatus struct {
@@ -50,7 +53,7 @@ type ClusterType struct {
 	Updated                util.ISO6801Time `json:"updated"`
 	VPCID                  string           `json:"vpc_id"`
 	VSwitchID              string           `json:"vswitch_id"`
-	NodeStatus             NodeStatus       `json:"node_status"`
+	NodeStatus             string           `json:"node_status"`
 	DockerVersion          string           `json:"docker_version"`
 }
 
@@ -95,6 +98,20 @@ func (client *Client) CreateCluster(region common.Region, args *ClusterCreationA
 	return
 }
 
+type ClusterResizeArgs struct {
+	Size             int64            `json:"size"`
+	InstanceType     string           `json:"instance_type"`
+	Password         string           `json:"password"`
+	DataDiskSize     int64            `json:"data_disk_size"`
+	DataDiskCategory ecs.DiskCategory `json:"data_disk_category"`
+	ECSImageID       string           `json:"ecs_image_id,omitempty"`
+	IOOptimized      ecs.IoOptimized  `json:"io_optimized"`
+}
+
+func (client *Client) ResizeCluster(clusterID string, args *ClusterResizeArgs) error {
+	return client.Invoke("", http.MethodPut, "/clusters/"+clusterID, nil, args, nil)
+}
+
 func (client *Client) DeleteCluster(clusterID string) error {
 	return client.Invoke("", http.MethodDelete, "/clusters/"+clusterID, nil, nil, nil)
 }
@@ -108,4 +125,42 @@ type ClusterCerts struct {
 func (client *Client) GetClusterCerts(id string) (certs ClusterCerts, err error) {
 	err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/certs", nil, nil, &certs)
 	return
+}
+
+const ClusterDefaultTimeout = 300
+const DefaultWaitForInterval = 10
+const DefaultPreSleepTime = 240
+
+// WaitForCluster waits for instance to given status
+// when instance.NotFound wait until timeout
+func (client *Client) WaitForClusterAsyn(clusterId string, status ClusterState, timeout int) error {
+	if timeout <= 0 {
+		timeout = ClusterDefaultTimeout
+	}
+	cluster, err := client.DescribeCluster(clusterId)
+	if err != nil {
+		return err
+	} else if cluster.State == status {
+		//TODO
+		return nil
+	}
+	// Create or Reset cluster usually cost at least 4 min, so there will sleep a long time before polling
+	sleep := math.Min(float64(timeout), float64(DefaultPreSleepTime))
+	time.Sleep(time.Duration(sleep) * time.Second)
+
+	for {
+		cluster, err := client.DescribeCluster(clusterId)
+		if err != nil {
+			return err
+		} else if cluster.State == status {
+			//TODO
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

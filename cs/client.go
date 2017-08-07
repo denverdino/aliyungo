@@ -29,6 +29,7 @@ type Client struct {
 	endpoint        string
 	Version         string
 	debug           bool
+	userAgent       string
 	httpClient      *http.Client
 }
 
@@ -50,6 +51,11 @@ func NewClient(accessKeyId, accessKeySecret string) *Client {
 // SetDebug sets debug mode to log the request/response message
 func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
+}
+
+// SetUserAgent sets user agent to log the request/response message
+func (client *Client) SetUserAgent(userAgent string) {
+	client.userAgent = userAgent
 }
 
 type Request struct {
@@ -113,6 +119,10 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	httpReq.Header.Set("x-acs-signature-version", "1.0")
 	httpReq.Header.Set("x-acs-signature-nonce", util.CreateRandomString())
 	httpReq.Header.Set("x-acs-signature-method", "HMAC-SHA1")
+
+	if client.userAgent != "" {
+		httpReq.Header.Set("User-Agent", client.userAgent)
+	}
 
 	client.signRequest(httpReq)
 

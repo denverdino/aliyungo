@@ -211,7 +211,7 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	IoOptimized             StringOrBool
-	InstanceChargeType      string // common.InstanceChargeType
+	InstanceChargeType      common.InstanceChargeType
 	ExpiredTime             util.ISO6801Time
 	Tags                    struct {
 		Tag []TagItemType

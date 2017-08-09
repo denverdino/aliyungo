@@ -415,3 +415,14 @@ func TestJPCreateInstance(t *testing.T) {
 		t.Logf("Instance %s is created successfully.", instanceId)
 	}
 }
+
+func TestClient_DescribeInstanceAttribute(t *testing.T) {
+	client := NewTestECSClientForDebug()
+
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
+	if err != nil {
+		t.Fatal("Failed to DescribeInstanceAttribute %++v", err)
+	} else {
+		t.Logf("Response = %++v", instance)
+	}
+}

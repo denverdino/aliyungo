@@ -171,21 +171,34 @@ type EipAddressAssociateType struct {
 	InternetChargeType common.InternetChargeType
 }
 
+// Experimental feature
+type SpotStrategyType string
+
+// Constants of SpotStrategyType
+const (
+	NoSpot             = SpotStrategyType("NoSpot")
+	SpotWithPriceLimit = SpotStrategyType("SpotWithPriceLimit")
+)
+
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&instanceattributestype
 type InstanceAttributesType struct {
-	InstanceId       string
-	InstanceName     string
-	Description      string
-	ImageId          string
-	RegionId         common.Region
-	ZoneId           string
-	ClusterId        string
-	InstanceType     string
-	HostName         string
-	Status           InstanceStatus
-	OperationLocks   OperationLocksType
-	SecurityGroupIds struct {
+	InstanceId         string
+	InstanceName       string
+	Description        string
+	ImageId            string
+	RegionId           common.Region
+	ZoneId             string
+	CPU                int
+	Memory             int
+	ClusterId          string
+	InstanceType       string
+	InstanceTypeFamily string
+	HostName           string
+	SerialNumber       string
+	Status             InstanceStatus
+	OperationLocks     OperationLocksType
+	SecurityGroupIds   struct {
 		SecurityGroupId []string
 	}
 	PublicIpAddress         IpAddressSetType
@@ -198,6 +211,13 @@ type InstanceAttributesType struct {
 	VpcAttributes           VpcAttributesType
 	EipAddress              EipAddressAssociateType
 	IoOptimized             StringOrBool
+	InstanceChargeType      string // common.InstanceChargeType
+	ExpiredTime             util.ISO6801Time
+	Tags                    struct {
+		Tag []TagItemType
+	}
+	SpotStrategy SpotStrategyType
+	KeyPairName  string
 }
 
 type DescribeInstanceAttributeResponse struct {

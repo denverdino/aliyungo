@@ -19,3 +19,17 @@ func TestDescribeDomainRecords(t *testing.T) {
 		t.Errorf("Failed to DescribeDomainRecords: %s", describeArgs.DomainName)
 	}
 }
+
+func TestClient_DescribeDomainRecordInfo(t *testing.T) {
+	client := NewTestClientForDebug()
+	args := &DescribeDomainRecordInfoArgs{
+		RecordId: "3497955088865280",
+	}
+
+	response, err := client.DescribeDomainRecordInfo(args)
+	if err != nil {
+		t.Fatalf("Failed to DescribeDomainRecordInfo %++v", err)
+	} else {
+		t.Logf("Response = %++v", response)
+	}
+}

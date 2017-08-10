@@ -1,10 +1,12 @@
 package dns
 
+import "os"
+
 //Modify with your Access Key Id and Access Key Secret
-const (
-	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
-	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
-	TestDomainName      = "aisafe.win"
+var (
+	TestAccessKeyId     = os.Getenv("MY_ACCESS_KEY_ID")
+	TestAccessKeySecret = os.Getenv("MY_ACCESS_KEY_SECRET")
+	TestDomainName      = os.Getenv("MY_TEST_TOP_DOMAIN")
 )
 
 var testClient *Client

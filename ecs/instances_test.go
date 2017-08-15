@@ -287,3 +287,39 @@ func TestLocationECSClient(t *testing.T) {
 
 	t.Logf("Instance %s is deleted successfully", instanceId)
 }
+
+func TestAttachInstanceRamRole(t *testing.T) {
+	client := NewTestClient()
+
+	//AttachInstanceRamRole
+	InstanceIds := []string{"i-6wegya1zr8ysx8adyrt3", "i-6wee4x5wzct8x8pr6sar", "i-6we3c5f1nqem3t9bxgot"}
+	b, _ := json.Marshal(InstanceIds)
+	args := &AttachInstancesArgs{
+		RegionId:    TestRegionID,
+		InstanceIds: string(b),
+		RamRoleName: "roletest",
+	}
+
+	// AttachInstanceRamRole
+	err := client.AttachInstanceRamRole(args)
+	if err != nil {
+		t.Fatalf("Failed to attach instances to ram role %s: %++v", args.RamRoleName, err)
+	}
+	t.Logf("Attach successfully.")
+
+	// DescribeInstanceRamRole
+	resp, err := client.DescribeInstanceRamRole(&AttachInstancesArgs{RegionId:TestRegionID,InstanceIds:args.InstanceIds})
+	if err != nil {
+		t.Fatalf("Failed to DescribeInstanceRamRole %++v", err)
+	}
+
+	t.Logf("Attach is %++v", resp.InstanceRamRoleSets.InstanceRamRoleSet)
+
+	// DetachInstanceRamRole
+	err = client.DetachInstanceRamRole(args)
+	if err != nil {
+		t.Fatalf("Failed to DetachInstanceRamRole %++v", err)
+	}
+
+	t.Logf("Detach successfully")
+}

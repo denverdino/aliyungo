@@ -1,8 +1,15 @@
 package ram
 
+type Type string
+
+const (
+	Custom Type = "Custom"
+	System Type = "System"
+)
+
 type PolicyRequest struct {
 	PolicyName     string
-	PolicyType     string
+	PolicyType     Type
 	Description    string
 	PolicyDocument string
 	SetAsDefault   string
@@ -21,7 +28,7 @@ type PolicyResponse struct {
 }
 
 type PolicyQueryRequest struct {
-	PolicyType string
+	PolicyType Type
 	Marker     string
 	MaxItems   int8
 }
@@ -30,7 +37,7 @@ type PolicyQueryResponse struct {
 	RamCommonResponse
 	IsTruncated bool
 	Marker      string
-	Policies    struct {
+	Policies struct {
 		Policy []Policy
 	}
 }

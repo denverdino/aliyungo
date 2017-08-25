@@ -240,3 +240,39 @@ func (client *Client) DeleteScalingGroup(args *DeleteScalingGroupArgs) (resp *De
 	}
 	return &response, nil
 }
+
+type AttachInstancesArgs struct {
+	ScalingGroupId string
+	InstanceId     common.FlattenArray
+}
+
+type AttachInstancesResponse struct {
+	common.Response
+	ScalingActivityId string
+}
+
+// AttachInstances attach instances to scaling group
+//
+// You can read doc at https://help.aliyun.com/document_detail/25954.html?spm=5176.product25855.6.633.y5gmzX
+func (client *Client) AttachInstances(args *AttachInstancesArgs) (resp *AttachInstancesResponse, err error) {
+	response := AttachInstancesResponse{}
+	err = client.InvokeByFlattenMethod("AttachInstances", args, &response)
+
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}
+
+// RemoveInstances detach instances from scaling group
+//
+// You can read doc at https://help.aliyun.com/document_detail/25955.html?spm=5176.doc25954.6.634.GtpzuJ
+func (client *Client) RemoveInstances(args *AttachInstancesArgs) (resp *AttachInstancesResponse, err error) {
+	response := AttachInstancesResponse{}
+	err = client.InvokeByFlattenMethod("RemoveInstances", args, &response)
+
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}

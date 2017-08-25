@@ -125,3 +125,23 @@ func (client *Client) DeleteScalingConfiguration(args *DeleteScalingConfiguratio
 	}
 	return &response, nil
 }
+
+type DeactivateScalingConfigurationArgs struct {
+	ScalingConfigurationId string
+}
+
+type DeactivateScalingConfigurationResponse struct {
+	common.Response
+}
+
+// DeactivateScalingConfiguration deactivate scaling configuration
+//
+func (client *Client) DeactivateScalingConfiguration(args *DeactivateScalingConfigurationArgs) (resp *DeactivateScalingConfigurationResponse, err error) {
+	response := DeactivateScalingConfigurationResponse{}
+	err = client.InvokeByFlattenMethod("DeactivateScalingConfiguration", args, &response)
+
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}

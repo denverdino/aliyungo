@@ -11,7 +11,6 @@ import (
 	"crypto/x509"
 	"crypto/rsa"
 	"crypto"
-	"fmt"
 	"encoding/pem"
 	"crypto/md5"
 )

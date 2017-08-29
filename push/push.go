@@ -6,6 +6,24 @@ import (
 	"github.com/denverdino/aliyungo/common"
 )
 
+const (
+	PushTargetDevice  = "DEVICE"
+	PushTargetAccount = "ACCOUNT"
+	PushTargetAlias = "ALIAS"
+	PushTargetTag = "TAG"
+	PushTargetAll = "ALL"
+
+	PushDeviceTypeIOS = "iOS"
+	PushDeviceTypeAndroid = "ANDROID"
+	PushDeviceTypeAll = "ALL"
+
+	PushTypeMessage = "MESSAGE"
+	PushTypeNotice = "NOTICE"
+
+	PushIOSAPNENVProduct = "PRODUCT"
+	PushIOSAPNENVDevelopment = "DEV"
+)
+
 //高级推送参数
 type PushArgs struct {
 	/*----基础参数----*/
@@ -30,7 +48,7 @@ type PushArgs struct {
 	//[iOS通知声音]
 	IOSMusic                       string `ArgName:"iOSMusic"`
 	//[iOS应用图标右上角角标]
-	IOSBadge                       string `ArgName:"iOSBadge"`
+	IOSBadge                       int `ArgName:"iOSBadge"`
 	//[iOS通知标题（iOS 10+通知显示标题]
 	IOSTitle                       string `ArgName:"iOSTitle"`
 	//[开启iOS静默通知]
@@ -46,7 +64,7 @@ type PushArgs struct {
 	//[环境信息]
 	IOSApnsEnv                     string `ArgName:"iOSApnsEnv"`
 	//[推送时设备不在线则这条推送会做为通知]
-	IOSRemind                      string `ArgName:"iOSRemind"`
+	IOSRemind                      bool `ArgName:"iOSRemind"`
 	//[iOS消息转通知时使用的iOS通知内容]
 	IOSRemindBody                  string `ArgName:"iOSRemindBody"`
 	/*----下述配置仅作用于Android通知任务----*/
@@ -56,12 +74,6 @@ type PushArgs struct {
 	AndroidOpenType                string
 	//通知的提醒方式
 	AndroidNotifyType              string
-	//[设置该参数后启动小米托管弹窗功能]
-	AndroidXiaoMiActivity          string
-	//[小米托管弹窗模式下Title内容]
-	AndroidXiaoMiNotifyTitle       string
-	//[小米托管弹窗模式下Body内容]
-	AndroidXiaoMiNotifyBody        string
 	//[设定通知打开的activity]
 	AndroidActivity                string
 	//[Android收到推送后打开对应的url]
@@ -72,6 +84,15 @@ type PushArgs struct {
 	AndroidNotificationBarPriority int
 	//[设定通知的扩展属性]
 	AndroidExtParameters           string
+	/*----下述配置仅作用于Android辅助弹窗功能----*/
+	//[推送类型为消息时设备不在线，则这条推送会使用辅助弹窗功能]
+	AndroidRemind 				   bool
+	//[此处指定通知点击后跳转的Activity]
+	AndroidPopupActivity 		   string
+	//[辅助弹窗模式下Title内容,长度限制:<16字符（中英文都以一个字符计算）]
+	AndroidPopupTitle 			   string
+	//[辅助弹窗模式下Body内容,长度限制:<128字符（中英文都以一个字符计算）]
+	AndroidPopupBody 			   string
 	/*----推送控制----*/
 	//[用于定时发送]
 	PushTime                       string
@@ -79,8 +100,25 @@ type PushArgs struct {
 	StoreOffline                   string
 	//[离线消息/通知的过期时间]
 	ExpireTime                     string
+	/*----短信融合----*/
+	//补发短信的模板名
+	SmsTemplateName 			   string
+	//补发短信的签名
+	SmsSignName 			   	   string
+	//短信模板的变量名值对
+	SmsParams 					   string
+	//触发短信的延迟时间，秒
+	SmsDelaySecs 				   int
+	//触发短信的条件
+	SmsSendPolicy 				   int
 }
 
-func (this *Client) Push(args *PushArgs) error {
-	return this.InvokeByAnyMethod(http.MethodPost, Push, "", args, &common.Response{})
+type PushResponse struct {
+	common.Response
+	MessageId string
+}
+
+func (this *Client) Push(args *PushArgs) (*PushResponse, error) {
+	resp := PushResponse{}
+	return &resp, this.InvokeByAnyMethod(http.MethodPost, Push, "", args, &resp)
 }

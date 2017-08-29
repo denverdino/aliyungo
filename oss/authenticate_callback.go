@@ -40,7 +40,7 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 	url := string(keyURL)
 	//判断证书是否来自于阿里云
 	if !urlReg.Match(keyURL) {
-		return errors.New("证书地址有误。")
+		return errors.New("certificate address error")
 	}
 	//获取文件名
 	rs := []rune(url)
@@ -48,7 +48,6 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 	authentication.lock.RLock()
 	certificate := authentication.certificate[filename]
 	authentication.lock.RUnlock()
-	fmt.Println("准备证书")
 	//内存中没有证书，下载
 	if certificate == nil {
 		authentication.lock.Lock()
@@ -61,10 +60,9 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(body))
 		block, _ := pem.Decode(body)
 		if block == nil {
-			return errors.New("证书有误。")
+			return errors.New("certificate error")
 		}
 		pubKey, err := x509.ParsePKIXPublicKey(block.Bytes)
 		if err != nil {
@@ -75,7 +73,6 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 		authentication.lock.Unlock()
 	}
 	//证书准备完毕，开始验证
-	fmt.Println("准备开始验证")
 	//解析签名
 	signature, err := base64.StdEncoding.DecodeString(authorization)
 	if err != nil {
@@ -83,7 +80,6 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 	}
 	hashed := md5.New()
 	hashed.Write([]byte(reqUrl + "\n" + reqBody))
-	fmt.Println(reqUrl + "\n" + reqBody)
 	if err := rsa.VerifyPKCS1v15(certificate, crypto.MD5, hashed.Sum(nil), signature); err != nil {
 		return err
 	}

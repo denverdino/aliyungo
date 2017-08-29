@@ -15,7 +15,7 @@ type InstanceStatus string
 
 // Constants of InstanceStatus
 const (
-	Creating = InstanceStatus("Creating") // For backward compatability
+	Creating = InstanceStatus("Creating") // For backward compatibility
 	Pending  = InstanceStatus("Pending")
 	Running  = InstanceStatus("Running")
 	Starting = InstanceStatus("Starting")
@@ -94,16 +94,25 @@ type DescribeInstanceStatusResponse struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstancestatus
 func (client *Client) DescribeInstanceStatus(args *DescribeInstanceStatusArgs) (instanceStatuses []InstanceStatusItemType, pagination *common.PaginationResult, err error) {
-	args.Validate()
-	response := DescribeInstanceStatusResponse{}
-
-	err = client.Invoke("DescribeInstanceStatus", args, &response)
+	response, err := client.DescribeInstanceStatusWithRaw(args)
 
 	if err == nil {
 		return response.InstanceStatuses.InstanceStatus, &response.PaginationResult, nil
 	}
 
 	return nil, nil, err
+}
+
+func (client *Client) DescribeInstanceStatusWithRaw(args *DescribeInstanceStatusArgs) (response *DescribeInstanceStatusResponse, err error) {
+	args.Validate()
+	response = &DescribeInstanceStatusResponse{}
+
+	err = client.Invoke("DescribeInstanceStatus", args, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 type StopInstanceArgs struct {
@@ -235,7 +244,7 @@ type InstanceAttributesType struct {
 	SerialNumber       string
 	Status             InstanceStatus
 	OperationLocks     OperationLocksType
-	SecurityGroupIds   struct {
+	SecurityGroupIds struct {
 		SecurityGroupId []string
 	}
 	PublicIpAddress         IpAddressSetType
@@ -250,10 +259,11 @@ type InstanceAttributesType struct {
 	IoOptimized             StringOrBool
 	InstanceChargeType      common.InstanceChargeType
 	ExpiredTime             util.ISO6801Time
-	Tags                    struct {
+	Tags struct {
 		Tag []TagItemType
 	}
 	SpotStrategy SpotStrategyType
+	KeyPairName  string
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -326,6 +336,33 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 	return nil
 }
 
+// WaitForInstance waits for instance to given status
+// when instance.NotFound wait until timeout
+func (client *Client) WaitForInstanceAsyn(instanceId string, status InstanceStatus, timeout int) error {
+	if timeout <= 0 {
+		timeout = InstanceDefaultTimeout
+	}
+	for {
+		instance, err := client.DescribeInstanceAttribute(instanceId)
+		if err != nil {
+			e, _ := err.(*common.Error)
+			if e.Code != "InvalidInstanceId.NotFound" && e.Code != "Forbidden.InstanceNotFound" {
+				return err
+			}
+		} else if instance != nil && instance.Status == status {
+			//TODO
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+
+	}
+	return nil
+}
+
 type DescribeInstanceVncUrlArgs struct {
 	RegionId   common.Region
 	InstanceId string
@@ -381,16 +418,24 @@ type DescribeInstancesResponse struct {
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/instance&describeinstances
 func (client *Client) DescribeInstances(args *DescribeInstancesArgs) (instances []InstanceAttributesType, pagination *common.PaginationResult, err error) {
-	args.Validate()
-	response := DescribeInstancesResponse{}
-
-	err = client.Invoke("DescribeInstances", args, &response)
-
-	if err == nil {
-		return response.Instances.Instance, &response.PaginationResult, nil
+	response, err := client.DescribeInstancesWithRaw(args)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	return nil, nil, err
+	return response.Instances.Instance, &response.PaginationResult, nil
+}
+
+func (client *Client) DescribeInstancesWithRaw(args *DescribeInstancesArgs) (response *DescribeInstancesResponse, err error) {
+	args.Validate()
+	response = &DescribeInstancesResponse{}
+
+	err = client.Invoke("DescribeInstances", args, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 type DeleteInstanceArgs struct {
@@ -490,6 +535,7 @@ type CreateInstanceArgs struct {
 	AutoRenew               bool
 	AutoRenewPeriod         int
 	SpotStrategy            SpotStrategyType
+	KeyPairName             string
 }
 
 type CreateInstanceResponse struct {
@@ -511,6 +557,43 @@ func (client *Client) CreateInstance(args *CreateInstanceArgs) (instanceId strin
 		return "", err
 	}
 	return response.InstanceId, err
+}
+
+type RunInstanceArgs struct {
+	CreateInstanceArgs
+	MinAmount       int
+	MaxAmount       int
+	AutoReleaseTime string
+	NetworkType     string
+	InnerIpAddress  string
+	BusinessInfo    string
+}
+
+type RunInstanceResponse struct {
+	common.Response
+	InstanceIdSets InstanceIdSets
+}
+
+type InstanceIdSets struct {
+	InstanceIdSet []string
+}
+
+type BusinessInfo struct {
+	Pack       string `json:"pack,omitempty"`
+	ActivityId string `json:"activityId,omitempty"`
+}
+
+func (client *Client) RunInstances(args *RunInstanceArgs) (instanceIdSet []string, err error) {
+	if args.UserData != "" {
+		// Encode to base64 string
+		args.UserData = base64.StdEncoding.EncodeToString([]byte(args.UserData))
+	}
+	response := RunInstanceResponse{}
+	err = client.Invoke("RunInstances", args, &response)
+	if err != nil {
+		return nil, err
+	}
+	return response.InstanceIdSets.InstanceIdSet, err
 }
 
 type SecurityGroupArgs struct {
@@ -540,4 +623,58 @@ func (client *Client) LeaveSecurityGroup(instanceId string, securityGroupId stri
 	response := SecurityGroupResponse{}
 	err := client.Invoke("LeaveSecurityGroup", &args, &response)
 	return err
+}
+
+type AttachInstancesArgs struct {
+	RegionId    common.Region
+	RamRoleName string
+	InstanceIds string
+}
+
+// AttachInstanceRamRole attach instances to ram role
+//
+// You can read doc at https://help.aliyun.com/document_detail/54244.html?spm=5176.doc54245.6.811.zEJcS5
+func (client *Client) AttachInstanceRamRole(args *AttachInstancesArgs) (err error) {
+	response := common.Response{}
+	err = client.Invoke("AttachInstanceRamRole", args, &response)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DetachInstanceRamRole detach instances from ram role
+//
+// You can read doc at https://help.aliyun.com/document_detail/54245.html?spm=5176.doc54243.6.813.bt8RB3
+func (client *Client) DetachInstanceRamRole(args *AttachInstancesArgs) (err error) {
+	response := common.Response{}
+	err = client.Invoke("DetachInstanceRamRole", args, &response)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type DescribeInstanceRamRoleResponse struct {
+	common.Response
+	InstanceRamRoleSets struct{
+		InstanceRamRoleSet []InstanceRamRoleSetType
+	}
+}
+
+type InstanceRamRoleSetType struct {
+	InstanceId  string
+	RamRoleName string
+}
+
+// DescribeInstanceRamRole
+//
+// You can read doc at https://help.aliyun.com/document_detail/54243.html?spm=5176.doc54245.6.812.RgNCoi
+func (client *Client) DescribeInstanceRamRole(args *AttachInstancesArgs) (resp *DescribeInstanceRamRoleResponse, err error) {
+	response := &DescribeInstanceRamRoleResponse{}
+	err = client.Invoke("DescribeInstanceRamRole", args, response)
+	if err != nil {
+		return response, err
+	}
+	return response, nil
 }

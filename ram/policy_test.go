@@ -25,6 +25,7 @@ var (
 		Description: "nothing",
 		PolicyType:  "Custom",
 	}
+	policy_group_name string
 )
 
 /*
@@ -164,6 +165,73 @@ func TestDetachPolicyFromRole(t *testing.T) {
 		return
 	}
 	t.Logf("pass DetachPolicyFromRole %++v", resp)
+}
+
+func TestAttachPolicyToGroup(t *testing.T) {
+	client := NewTestClient()
+	resp, err := client.ListGroup(GroupListRequest{})
+	if err != nil {
+		t.Errorf("Failed to ListGroup %v", err)
+		return
+	}
+	policy_group_name = resp.Groups.Group[0].GroupName
+	attachPolicyRequest := AttachPolicyToGroupRequest{
+		PolicyRequest: PolicyRequest{
+			PolicyType: "Custom",
+			PolicyName: policy_name,
+		},
+		GroupName: policy_group_name,
+	}
+	attachResp, err := client.AttachPolicyToGroup(attachPolicyRequest)
+	if err != nil {
+		t.Errorf("Failed to AttachPolicyToGroup %v", err)
+		return
+	}
+	t.Logf("pass AttachPolicyToGroup %++v", attachResp)
+}
+
+func TestListPoliciesForGroup(t *testing.T) {
+	client := NewTestClient()
+	groupQuery := GroupQueryRequest{
+		GroupName: policy_group_name,
+	}
+	resp, err := client.ListPoliciesForGroup(groupQuery)
+	if err != nil {
+		t.Errorf("Failed to ListPoliciesForGroup %v", err)
+		return
+	}
+	t.Logf("pass ListPoliciesForGroup %++v", resp)
+}
+
+func TEstListEntitiesForPolicy(t *testing.T) {
+	client := NewTestClient()
+	policyReq := PolicyRequest{
+		PolicyType: "Custom",
+		PolicyName: policy_name,
+	}
+	resp, err := client.ListEntitiesForPolicy(policyReq)
+	if err != nil {
+		t.Errorf("Failed to ListEntitiesForPolicy %++v", err)
+		return
+	}
+	t.Logf("pass ListEntitiesForPolicy %++v", resp)
+}
+
+func TestDetachPolicyFromGroup(t *testing.T) {
+	client := NewTestClient()
+	detachPolicyRequest := AttachPolicyToGroupRequest{
+		PolicyRequest: PolicyRequest{
+			PolicyType: "Custom",
+			PolicyName: policy_name,
+		},
+		GroupName: policy_group_name,
+	}
+	resp, err := client.DetachPolicyFromGroup(detachPolicyRequest)
+	if err != nil {
+		t.Errorf("Failed to DetachPolicyFromGroup %++v", err)
+		return
+	}
+	t.Logf("pass DetachPolicyFromGroup %++v", resp)
 }
 
 func TestDeletePolicy(t *testing.T) {

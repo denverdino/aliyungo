@@ -1,6 +1,6 @@
 # AliyunGo: Go SDK for Aliyun Services 
 
-[![Build Status](https://travis-ci.org/denverdino/aliyungo.svg?branch=master)](https://travis-ci.org/denverdino/aliyungo)
+[![Build Status](https://travis-ci.org/denverdino/aliyungo.svg?branch=master)](https://travis-ci.org/denverdino/aliyungo) [![CircleCI](https://circleci.com/gh/denverdino/aliyungo.svg?style=svg)](https://circleci.com/gh/denverdino/aliyungo) [![Go Report Card](https://goreportcard.com/badge/github.com/denverdino/aliyungo)](https://goreportcard.com/report/github.com/denverdino/aliyungo)
 
 This is an unofficial Go SDK for Aliyun Services. You are welcome for contribution.
 
@@ -15,12 +15,14 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  ram: [Resource Access Management](https://help.aliyun.com/document_detail/ram/ram-api-reference/intro/intro.html)
 *  rds: [Relational Database Service](https://help.aliyun.com/document_detail/26226.html)
 *  cms: [Cloud Monitor Service](https://help.aliyun.com/document_detail/28615.html)
+*  cs: [Container Service](https://help.aliyun.com/product/25972.html)
 *  sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
 *  dm: [Direct Mail](https://help.aliyun.com/document_detail/29414.html)
 *  sms: [Short Message Service](https://help.aliyun.com/product/44282.html)
 *  push: [Cloud Mobile Push](https://help.aliyun.com/document_detail/30049.html)
 *  opensearch: [OpenSearch](https://help.aliyun.com/document_detail/29118.html)
 *  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
+*  nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -57,11 +59,15 @@ func main() {
   *  RAM: [https://godoc.org/github.com/denverdino/aliyungo/ram](https://godoc.org/github.com/denverdino/aliyungo/ram) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ram?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ram)
   *  RDS: [https://godoc.org/github.com/denverdino/aliyungo/rds](https://godoc.org/github.com/denverdino/aliyungo/rds) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/rds?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/rds)
   *  CMS: [https://godoc.org/github.com/denverdino/aliyungo/cms](https://godoc.org/github.com/denverdino/aliyungo/cms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cms)
+  *  CS: [https://godoc.org/github.com/denverdino/aliyungo/cs](https://godoc.org/github.com/denverdino/aliyungo/cs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cs)
   *  STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
   *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
   *  SMS: [https://godoc.org/github.com/denverdino/aliyungo/sms](https://godoc.org/github.com/denverdino/aliyungo/sms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sms)
   *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq) 
-   
+  *  NAS: [https://godoc.org/github.com/denverdino/aliyungo/nas](https://godoc.org/github.com/denverdino/aliyungo/nas) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/nas?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/nas) 
+  *  OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch) 
+  *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push) 
+
 ## Build and Install
 
 go get:
@@ -119,14 +125,14 @@ go test
 ## Contributors
 
   * Li Yi (denverdino@gmail.com)
-  * tgic (farmer1992@gmail.com)
+  * Boshi Lian (farmer1992@gmail.com)
   * Yu Zhou (oscarrr110@gmail.com)
   * Yufei Zhang
   * linuxlikerqq
-  * Changhai Yan (changhai.ych@alibaba-inc.com)
+  * Changhai Yan
   * Jizhong Jiang (jiangjizhong@gmail.com)
   * Kent Wang (pragkent@gmail.com)
-  * ringtail (zhongwei.lzw@alibaba-inc.com)
+  * ringtail
   * aiden0z (aiden0xz@gmail.com)
   * jimmycmh
   * menglingwei
@@ -141,6 +147,19 @@ go test
   * Plutonist (p@vecsight.com)
   * Bin Liu
   * wangyue
+  * demonwy
+  * yarous224
+  * yufeizyf (xazyf9111@sina.cn)
+  * keontang (ikeontang@gmail.com)
+  * Cholerae Hu (me@cholerae.com)
+  * Zach Bergh (berghzach@gmail.com)
+  * Bingshen Wang
+  * xiaozhu36
+  * Russell (yufeiwu@gmail.com)
+  * zhuzhih2017
+  * cheyang
+  * Hobo Chen
+  * Shuwei Yin 
 
 
 ## License

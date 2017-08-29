@@ -6,14 +6,14 @@ import (
 	"github.com/denverdino/aliyungo/common"
 )
 
-type SendSmsArgs struct {
+//邮件推送产品短信功能
+type SingleSendSmsArgs struct {
 	SignName string
 	TemplateCode  string
 	RecNum        string
 	ParamString   string
 }
 
-//please set the signature and template in the console of Aliyun before you call this API
-func (this *Client) SendSms(args *SendSmsArgs) error {
+func (this *Client) SingleSendSms(args *SingleSendSmsArgs) error {
 	return this.InvokeByAnyMethod(http.MethodPost, SingleSendSms, "", args, &common.Response{})
 }

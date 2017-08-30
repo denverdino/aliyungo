@@ -1,8 +1,10 @@
 package ess
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
+	"github.com/denverdino/aliyungo/util"
 )
 
 func TestEssScalingRuleCreationAndDeletion(t *testing.T) {
@@ -39,6 +41,16 @@ func TestEssScalingRuleCreationAndDeletion(t *testing.T) {
 		t.Errorf("Failed to modify scaling rule %v", err)
 	}
 	t.Logf("Rule %s is modify successfully.", ruleId)
+
+	eArgs := ExecuteScalingRuleArgs{
+		ScalingRuleAri: csc.ScalingRuleAri,
+		ClientToken:    util.CreateRandomString(),
+	}
+	_, err = client.ExecuteScalingRule(&eArgs)
+	if err != nil {
+		t.Errorf("Failed to execute scaling rule: %v", err)
+	}
+	t.Logf("Rule %s is execute successfully.", ruleId)
 
 	sArgs := DescribeScalingRulesArgs{
 		RegionId:       common.Region(RegionId),

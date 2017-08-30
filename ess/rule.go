@@ -128,3 +128,25 @@ func (client *Client) DeleteScalingRule(args *DeleteScalingRuleArgs) (resp *Dele
 	}
 	return &response, nil
 }
+
+type ExecuteScalingRuleArgs struct {
+	ScalingRuleAri string
+	ClientToken    string
+}
+
+type ExecuteScalingRuleResponse struct {
+	common.Response
+	ScalingActivityId string
+}
+
+// ExecuteScalingRule execute scaling rule
+//
+// You can read doc at https://help.aliyun.com/document_detail/25953.html?spm=5176.doc25961.6.632.7sXDx6
+func (client *Client) ExecuteScalingRule(args *ExecuteScalingRuleArgs) (*ExecuteScalingRuleResponse, error) {
+	resp := ExecuteScalingRuleResponse{}
+	err := client.InvokeByFlattenMethod("ExecuteScalingRule", args, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}

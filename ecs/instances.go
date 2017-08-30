@@ -536,6 +536,7 @@ type CreateInstanceArgs struct {
 	AutoRenewPeriod         int
 	SpotStrategy            SpotStrategyType
 	KeyPairName             string
+	RamRoleName             string
 }
 
 type CreateInstanceResponse struct {

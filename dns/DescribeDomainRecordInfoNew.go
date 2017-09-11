@@ -9,7 +9,7 @@ type RecordTypeNew struct {
 	RR         string
 	Type       string
 	Value      string
-	TTL        string
+	TTL        float64
 	Priority   string
 	Line       string
 	Status     string

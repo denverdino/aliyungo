@@ -105,6 +105,11 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 		httpReq.Header.Set("x-acs-region-id", string(region))
 	}
 
+	//httpReq.Header.Set("x-acs-caller-type", "customer")
+	//httpReq.Header.Set("x-acs-parent-id", "26842")
+	//httpReq.Header.Set("x-acs-caller-bid", "26842")
+	//httpReq.Header.Set("x-acs-caller-uid", "128257")
+
 	if contentType != "" {
 		httpReq.Header.Set("Content-Type", contentType)
 	}

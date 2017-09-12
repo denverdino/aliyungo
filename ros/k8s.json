@@ -1,0 +1,1181 @@
+{
+  "ROSTemplateFormatVersion": "2015-09-01",
+  "Description": "1. 需要开通RAM服务",
+  "Parameters": {
+    "VpcId": {
+      "Type": "String",
+      "Description": "使用已有的VPC创建K8S集群。如果不指定，则创建新的VPC",
+      "Label": "指定已有的VPC ID",
+      "Default": "None"
+    },
+    "VSwitchId": {
+      "Type": "String",
+      "Description": "使用已有的VSwitch创建K8S集群。如果不指定，则创建新的VSwitch，IP段为：192.168.0。0、16",
+      "Label": "指定已有的虚拟交换机 ID",
+      "Default": "None"
+    },
+    "NatGateway": {
+      "Type": "Boolean",
+      "Description": "是否为K8S集群创建Nat Gateway，如果不创建，请确网络可以访问公网，否则K8s会部署失败",
+      "Label": "创建Nat Gateway",
+      "Default": true
+    },
+    "K8SExportAddress": {
+      "Type": "String",
+      "Description": "如果使用已有的Nat Gateway创建K8S集群，指定K8S集群对公网提供服务的IP地址",
+      "Label": "K8S 公网服务IP地址",
+      "Default": "None"
+    },
+    "ImageId": {
+      "Type": "String",
+      "Description": "用于初始化ECS的系统镜像",
+      "Label": "ECS系统镜像",
+      "Default": "centos_7"
+    },
+    "MasterInstanceType": {
+      "Type": "String",
+      "Description": "用于为Kubernetes的Master节点创建指定规格的ECS实例",
+      "AllowedValues": [
+        "ecs.n1.medium",
+        "ecs.n1.large",
+        "ecs.n2.medium",
+        "ecs.n2.large",
+        "ecs.n4.large",
+        "ecs.n4.xlarge",
+        "ecs.mn4.large",
+        "ecs.mn4.xlarge",
+        "ecs.e4.large",
+        "ecs.cm4.xlarge",
+        "ecs.ce4.xlarge",
+        "ecs.c4.xlarge"
+      ],
+      "Label": "Master节点ECS实例规格",
+      "Default": "ecs.n4.large"
+    },
+    "WorkerInstanceType": {
+      "Type": "String",
+      "Description": "用于为Kubernetes的Worker节点创建指定规格的ECS实例",
+      "AllowedValues": [
+        "ecs.n1.medium",
+        "ecs.n1.large",
+        "ecs.n2.medium",
+        "ecs.n2.large",
+        "ecs.n4.large",
+        "ecs.n4.xlarge",
+        "ecs.mn4.large",
+        "ecs.mn4.xlarge",
+        "ecs.e4.large",
+        "ecs.cm4.xlarge",
+        "ecs.ce4.xlarge",
+        "ecs.c4.xlarge"
+      ],
+      "Label": "Worker节点ECS实例规格",
+      "Default": "ecs.n4.large"
+    },
+    "NumOfNodes": {
+      "Type": "Number",
+      "Description": "指定创建Kubernetes的Worker节点数量",
+      "Label": "Worker节点数",
+      "Default": "2"
+    },
+    "LoginPassword": {
+      "NoEcho": true,
+      "Type": "String",
+      "Description": "ECS登陆密码",
+      "AllowedPattern": "[a-zA-Z0-9-\\(\\)\\`\\~\\!@\\#\\$%\\^&\\*-+=\\|\\{\\}\\[\\]\\:\\;\\‘\\,\\.\\?\\/]*",
+      "Label": "ECS登陆密码",
+      "MinLength": 8,
+      "MaxLength": 41
+    }
+  },
+  "Conditions": {
+    "create_nat_gateway": {
+      "Fn::Equals": [
+        true,
+        {
+          "Ref": "NatGateway"
+        }
+      ]
+    },
+    "not_create_nat_gateway": {
+      "Fn::Equals": [
+        false,
+        {
+          "Ref": "NatGateway"
+        }
+      ]
+    },
+    "create_new_vpc": {
+      "Fn::Equals": [
+        "None",
+        {
+          "Ref": "VpcId"
+        }
+      ]
+    },
+    "create_new_vswitch": {
+      "Fn::Equals": [
+        "None",
+        {
+          "Ref": "VSwitchId"
+        }
+      ]
+    }
+  },
+  "Resources": {
+    "k8s_ram_user_policy": {
+      "Type": "ALIYUN::RAM::ManagedPolicy",
+      "Properties": {
+        "PolicyName": {
+          "Fn::Join": [
+            "",
+            [
+              "k8sRAMUserPolicy",
+              {
+                "Ref": "ALIYUN::StackId"
+              }
+            ]
+          ]
+        },
+        "PolicyDocument": {
+          "Version": "1",
+          "Statement": [
+            {
+              "Action": [
+                "*"
+              ],
+              "Resource": [
+                "*"
+              ],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Users": [
+          {
+            "Fn::GetAtt": [
+              "k8s_ram_user",
+              "UserName"
+            ]
+          }
+        ]
+      }
+    },
+    "k8s_NAT_Gateway": {
+      "Condition": "create_nat_gateway",
+      "Type": "ALIYUN::ECS::NatGateway",
+      "Properties": {
+        "BandwidthPackage": [
+          {
+            "IpCount": 2,
+            "Bandwidth": 5
+          }
+        ],
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        }
+      }
+    },
+    "k8s_vswitch": {
+      "Condition": "create_new_vswitch",
+      "Type": "ALIYUN::ECS::VSwitch",
+      "Properties": {
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "ZoneId": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": {
+                "Ref": "ALIYUN::Region"
+              }
+            }
+          ]
+        },
+        "CidrBlock": "192.168.0.0/16"
+      }
+    },
+    "k8s_node_cloudinit_wait_cond_handle": {
+      "Type": "ALIYUN::ROS::WaitConditionHandle"
+    },
+    "k8s_master_slb": {
+      "Type": "ALIYUN::SLB::LoadBalancer",
+      "Properties": {
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "AddressType": "intranet"
+      }
+    },
+    "k8s_master1_cloudinit_wait_cond": {
+      "Type": "ALIYUN::ROS::WaitCondition",
+      "Properties": {
+        "Timeout": 600,
+        "Count": 1,
+        "Handle": {
+          "Ref": "k8s_master1_cloudinit_wait_cond_handle"
+        }
+      }
+    },
+    "k8s_master2_cloudinit_wait_cond": {
+      "Type": "ALIYUN::ROS::WaitCondition",
+      "DependsOn": [
+        "k8s_master1_cloudinit_wait_cond"
+      ],
+      "Properties": {
+        "Timeout": 600,
+        "Count": 1,
+        "Handle": {
+          "Ref": "k8s_master2_cloudinit_wait_cond_handle"
+        }
+      }
+    },
+    "k8s_NAT_Gateway_API_Server_ForwardEntry": {
+      "Condition": "create_nat_gateway",
+      "Type": "ALIYUN::ECS::ForwardEntry",
+      "Properties": {
+        "ExternalPort": "6443",
+        "ExternalIp": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAtt": [
+                "k8s_NAT_Gateway",
+                "BandwidthPackageIps"
+              ]
+            }
+          ]
+        },
+        "IpProtocol": "TCP",
+        "InternalPort": "6443",
+        "InternalIp": {
+          "Fn::GetAtt": [
+            "k8s_master_slb",
+            "IpAddress"
+          ]
+        },
+        "ForwardTableId": {
+          "Fn::GetAtt": [
+            "k8s_NAT_Gateway",
+            "ForwardTableId"
+          ]
+        }
+      }
+    },
+    "k8s_master_2": {
+      "Type": "ALIYUN::ECS::Instance",
+      "DependsOn": [
+        "k8s_master1_cloudinit_wait_cond"
+      ],
+      "Properties": {
+        "IoOptimized": "optimized",
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "UserData": {
+          "Fn::Replace": [
+            {
+              "ros-notify": {
+                "Fn::GetAtt": [
+                  "k8s_master2_cloudinit_wait_cond_handle",
+                  "CurlCli"
+                ]
+              }
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/sh\n",
+                  "master_1_ip=",
+                  {
+                    "Fn::If": [
+                      "create_nat_gateway",
+                      {
+                        "Fn::GetAtt": [
+                          "k8s_master_1",
+                          "PrivateIp"
+                        ]
+                      },
+                      {
+                        "Fn::GetAtt": [
+                          "k8s_master_1_ext",
+                          "PrivateIp"
+                        ]
+                      }
+                    ]
+                  },
+                  "\n",
+                  "ssh-keygen -t rsa -P '' -f '/root/.ssh/id_rsa' \n",
+                  "yum -y install expect\n",
+                  "touch /root/scp_key.sh\n",
+                  "echo '#!/usr/bin/expect' >> /root/scp_key.sh\n",
+                  "echo \"spawn scp root@$master_1_ip:/root/.ssh/* /root/.ssh/\" >> /root/scp_key.sh\n",
+                  "echo 'set timeout 30' >> /root/scp_key.sh\n",
+                  "echo 'expect \"*yes*\"' >> /root/scp_key.sh\n",
+                  "echo 'send \"yes\\r\"' >> /root/scp_key.sh\n",
+                  "echo 'expect \"*password:\"' >> /root/scp_key.sh\n",
+                  "echo 'send \"",
+                  {
+                    "Ref": "LoginPassword"
+                  },
+                  "\\r\"' >> /root/scp_key.sh\n",
+                  "echo 'expect EOF' >> /root/scp_key.sh\n",
+                  "expect /root/scp_key.sh\n",
+                  "rm -rf /root/scp_key.sh\n",
+                  "ros-notify\n"
+                ]
+              ]
+            }
+          ]
+        },
+        "SecurityGroupId": {
+          "Ref": "k8s_sg"
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "AllocatePublicIP": false,
+        "InstanceType": {
+          "Ref": "MasterInstanceType"
+        },
+        "SystemDiskCategory": "cloud_ssd",
+        "Password": {
+          "Ref": "LoginPassword"
+        }
+      }
+    },
+    "k8s_master_slb_listener": {
+      "Type": "ALIYUN::SLB::Listener",
+      "Properties": {
+        "ListenerPort": 6443,
+        "Bandwidth": 100,
+        "LoadBalancerId": {
+          "Ref": "k8s_master_slb"
+        },
+        "Protocol": "tcp",
+        "BackendServerPort": 6443
+      }
+    },
+    "k8s_master_3": {
+      "Type": "ALIYUN::ECS::Instance",
+      "DependsOn": [
+        "k8s_master1_cloudinit_wait_cond",
+        "k8s_master2_cloudinit_wait_cond"
+      ],
+      "Properties": {
+        "IoOptimized": "optimized",
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "UserData": {
+          "Fn::Replace": [
+            {
+              "ros-notify": {
+                "Fn::GetAtt": [
+                  "k8s_master_cloudinit_wait_cond_handle",
+                  "CurlCli"
+                ]
+              }
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/sh\n",
+                  "master_1_ip=",
+                  {
+                    "Fn::If": [
+                      "create_nat_gateway",
+                      {
+                        "Fn::GetAtt": [
+                          "k8s_master_1",
+                          "PrivateIp"
+                        ]
+                      },
+                      {
+                        "Fn::GetAtt": [
+                          "k8s_master_1_ext",
+                          "PrivateIp"
+                        ]
+                      }
+                    ]
+                  },
+                  "\n",
+                  "master_2_ip=",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_master_2",
+                      "PrivateIp"
+                    ]
+                  },
+                  "\n",
+                  "master_3_ip=`ifconfig eth0 | awk '/inet /{print $2}'` \n",
+                  "ssh-keygen -t rsa -P '' -f '/root/.ssh/id_rsa' \n",
+                  "yum -y install expect\n",
+                  "touch /root/scp_key.sh\n",
+                  "echo '#!/usr/bin/expect' >> /root/scp_key.sh\n",
+                  "echo \"spawn scp root@$master_1_ip:/root/.ssh/* /root/.ssh/\" >> /root/scp_key.sh\n",
+                  "echo 'set timeout 30' >> /root/scp_key.sh\n",
+                  "echo 'expect \"*yes*\"' >> /root/scp_key.sh\n",
+                  "echo 'send \"yes\\r\"' >> /root/scp_key.sh\n",
+                  "echo 'expect \"*password:\"' >> /root/scp_key.sh\n",
+                  "echo 'send \"",
+                  {
+                    "Ref": "LoginPassword"
+                  },
+                  "\\r\"' >> /root/scp_key.sh\n",
+                  "echo 'expect EOF' >> /root/scp_key.sh\n",
+                  "expect /root/scp_key.sh\n",
+                  "rm -rf /root/scp_key.sh\n",
+                  "curl http://aliacs-k8s.oss-cn-hangzhou.aliyuncs.com/installer/kubemgr-1.7.2-ha.sh >admin.sh ;chmod +x admin.sh\n",
+                  "./admin.sh --node-type etcd --host1 $master_1_ip --host2 $master_2_ip --host3 $master_3_ip\n",
+                  "./admin.sh --node-type master --key-id ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_ram_user_ak",
+                      "AccessKeyId"
+                    ]
+                  },
+                  " --key-secret ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_ram_user_ak",
+                      "AccessKeySecret"
+                    ]
+                  },
+                  " --host1 $master_1_ip --host2 $master_2_ip --host3 $master_3_ip --api-server-slb ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_master_slb",
+                      "IpAddress"
+                    ]
+                  },
+                  " --extra-sans ",
+                  {
+                    "Fn::If": [
+                      "create_nat_gateway",
+                      {
+                        "Fn::Select": [
+                          "0",
+                          {
+                            "Fn::GetAtt": [
+                              "k8s_NAT_Gateway",
+                              "BandwidthPackageIps"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Ref": "K8SExportAddress"
+                      }
+                    ]
+                  },
+                  "\n",
+                  "TOKEN=`kubeadm token list | grep token |awk '{print $1}'`\n",
+                  "./admin.sh --node-type master_dispatch --host1 $master_1_ip --host2 $master_2_ip --host3 $master_3_ip --token $TOKEN --key-id ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_ram_user_ak",
+                      "AccessKeyId"
+                    ]
+                  },
+                  " --key-secret ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_ram_user_ak",
+                      "AccessKeySecret"
+                    ]
+                  },
+                  " --api-server-slb ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_master_slb",
+                      "IpAddress"
+                    ]
+                  },
+                  " --extra-sans ",
+                  {
+                    "Fn::If": [
+                      "create_nat_gateway",
+                      {
+                        "Fn::Select": [
+                          "0",
+                          {
+                            "Fn::GetAtt": [
+                              "k8s_NAT_Gateway",
+                              "BandwidthPackageIps"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Ref": "K8SExportAddress"
+                      }
+                    ]
+                  },
+                  "\n",
+                  "echo 'Sleep 20s to wait Master be ready.'; sleep 30\n",
+                  "echo 'Send notify to ROS notify server, TOKEN='$TOKEN\n",
+                  "ros-notify -d \"{\\\"data\\\": \\\"$TOKEN\\\"}\" \n"
+                ]
+              ]
+            }
+          ]
+        },
+        "SecurityGroupId": {
+          "Ref": "k8s_sg"
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "AllocatePublicIP": false,
+        "InstanceType": {
+          "Ref": "MasterInstanceType"
+        },
+        "SystemDiskCategory": "cloud_ssd",
+        "Password": {
+          "Ref": "LoginPassword"
+        }
+      }
+    },
+    "k8s_master1_cloudinit_wait_cond_handle": {
+      "Type": "ALIYUN::ROS::WaitConditionHandle"
+    },
+    "k8s_master_1": {
+      "Type": "ALIYUN::ECS::Instance",
+      "Condition": "create_nat_gateway",
+      "DependsOn": [
+        "k8s_NAT_Gateway_SNATEntry"
+      ],
+      "Properties": {
+        "IoOptimized": "optimized",
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "UserData": {
+          "Fn::Replace": [
+            {
+              "ros-notify": {
+                "Fn::GetAtt": [
+                  "k8s_master1_cloudinit_wait_cond_handle",
+                  "CurlCli"
+                ]
+              }
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/sh\n",
+                  "ssh-keygen -t rsa -P '' -f '/root/.ssh/id_rsa' \n",
+                  "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys\n",
+                  "echo 'StrictHostKeyChecking no' > /root/.ssh/config\n",
+                  "ros-notify\n"
+                ]
+              ]
+            }
+          ]
+        },
+        "SecurityGroupId": {
+          "Ref": "k8s_sg"
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "AllocatePublicIP": false,
+        "InstanceType": {
+          "Ref": "MasterInstanceType"
+        },
+        "SystemDiskCategory": "cloud_ssd",
+        "Password": {
+          "Ref": "LoginPassword"
+        }
+      }
+    },
+    "k8s_master_1_ext": {
+      "Condition": "not_create_nat_gateway",
+      "Type": "ALIYUN::ECS::Instance",
+      "Properties": {
+        "IoOptimized": "optimized",
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "UserData": {
+          "Fn::Replace": [
+            {
+              "ros-notify": {
+                "Fn::GetAtt": [
+                  "k8s_master1_cloudinit_wait_cond_handle",
+                  "CurlCli"
+                ]
+              }
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/sh\n",
+                  "ssh-keygen -t rsa -P '' -f '/root/.ssh/id_rsa' \n",
+                  "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys\n",
+                  "echo 'StrictHostKeyChecking no' > /root/.ssh/config\n",
+                  "ros-notify\n"
+                ]
+              ]
+            }
+          ]
+        },
+        "SecurityGroupId": {
+          "Ref": "k8s_sg"
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "AllocatePublicIP": false,
+        "InstanceType": {
+          "Ref": "MasterInstanceType"
+        },
+        "SystemDiskCategory": "cloud_ssd",
+        "Password": {
+          "Ref": "LoginPassword"
+        }
+      }
+    },
+    "k8s_ram_user": {
+      "Type": "ALIYUN::RAM::User",
+      "Properties": {
+        "UserName": {
+          "Fn::Join": [
+            "",
+            [
+              "k8s_ram_user_",
+              {
+                "Ref": "ALIYUN::StackId"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "k8s_NAT_Gateway_SSH_ForwardEntry": {
+      "Condition": "create_nat_gateway",
+      "Type": "ALIYUN::ECS::ForwardEntry",
+      "Properties": {
+        "ExternalPort": "22",
+        "ExternalIp": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAtt": [
+                "k8s_NAT_Gateway",
+                "BandwidthPackageIps"
+              ]
+            }
+          ]
+        },
+        "IpProtocol": "TCP",
+        "InternalPort": "22",
+        "InternalIp": {
+          "Fn::GetAtt": [
+            "k8s_master_3",
+            "PrivateIp"
+          ]
+        },
+        "ForwardTableId": {
+          "Fn::GetAtt": [
+            "k8s_NAT_Gateway",
+            "ForwardTableId"
+          ]
+        }
+      }
+    },
+    "k8s_vpc": {
+      "Condition": "create_new_vpc",
+      "Type": "ALIYUN::ECS::VPC",
+      "Properties": {
+        "CidrBlock": "192.168.0.0/16",
+        "VpcName": "k8s_vpc"
+      }
+    },
+    "k8s_master_slb_attachements": {
+      "Type": "ALIYUN::SLB::BackendServerAttachment",
+      "Properties": {
+        "BackendServerList": [
+          {
+            "Fn::If": [
+              "create_nat_gateway",
+              {
+                "Ref": "k8s_master_1"
+              },
+              {
+                "Ref": "k8s_master_1_ext"
+              }
+            ]
+          },
+          {
+            "Ref": "k8s_master_2"
+          },
+          {
+            "Ref": "k8s_master_3"
+          }
+        ],
+        "LoadBalancerId": {
+          "Ref": "k8s_master_slb"
+        }
+      }
+    },
+    "k8s_master_cloudinit_wait_cond_handle": {
+      "Type": "ALIYUN::ROS::WaitConditionHandle"
+    },
+    "k8s_master2_cloudinit_wait_cond_handle": {
+      "Type": "ALIYUN::ROS::WaitConditionHandle"
+    },
+    "k8s_sg": {
+      "Type": "ALIYUN::ECS::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "SecurityGroupName": "k8s_sg",
+        "SecurityGroupIngress": [
+          {
+            "PortRange": "-1/-1",
+            "Priority": 1,
+            "SourceCidrIp": "0.0.0.0/0",
+            "IpProtocol": "all",
+            "NicType": "intranet"
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "PortRange": "-1/-1",
+            "Priority": 1,
+            "IpProtocol": "all",
+            "DestCidrIp": "0.0.0.0/0",
+            "NicType": "intranet"
+          }
+        ]
+      }
+    },
+    "k8s_node_cloudinit_wait_cond": {
+      "Type": "ALIYUN::ROS::WaitCondition",
+      "DependsOn": [
+        "k8s_master_cloudinit_wait_cond",
+        "k8s_master_slb_attachements"
+      ],
+      "Properties": {
+        "Timeout": 1800,
+        "Count": {
+          "Ref": "NumOfNodes"
+        },
+        "Handle": {
+          "Ref": "k8s_node_cloudinit_wait_cond_handle"
+        }
+      }
+    },
+    "k8s_NAT_Gateway_SNATEntry": {
+      "Condition": "create_nat_gateway",
+      "Type": "ALIYUN::ECS::SNatEntry",
+      "Properties": {
+        "SourceVSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "SNatTableId": {
+          "Fn::GetAtt": [
+            "k8s_NAT_Gateway",
+            "SNatTableId"
+          ]
+        },
+        "SNatIp": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAtt": [
+                "k8s_NAT_Gateway",
+                "BandwidthPackageIps"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "k8s_master_cloudinit_wait_cond": {
+      "Type": "ALIYUN::ROS::WaitCondition",
+      "DependsOn": [
+        "k8s_master1_cloudinit_wait_cond",
+        "k8s_master2_cloudinit_wait_cond"
+      ],
+      "Properties": {
+        "Timeout": 1800,
+        "Count": 1,
+        "Handle": {
+          "Ref": "k8s_master_cloudinit_wait_cond_handle"
+        }
+      }
+    },
+    "k8s_ram_user_ak": {
+      "Type": "ALIYUN::RAM::AccessKey",
+      "Properties": {
+        "UserName": {
+          "Fn::GetAtt": [
+            "k8s_ram_user",
+            "UserName"
+          ]
+        }
+      }
+    },
+    "k8s_nodes": {
+      "Type": "ALIYUN::ECS::InstanceGroup",
+      "DependsOn": [
+        "k8s_master_cloudinit_wait_cond",
+        "k8s_master_slb_attachements"
+      ],
+      "Properties": {
+        "IoOptimized": "optimized",
+        "VpcId": {
+          "Fn::If": [
+            "create_new_vpc",
+            {
+              "Ref": "k8s_vpc"
+            },
+            {
+              "Ref": "VpcId"
+            }
+          ]
+        },
+        "UserData": {
+          "Fn::Replace": [
+            {
+              "ros-notify": {
+                "Fn::GetAtt": [
+                  "k8s_node_cloudinit_wait_cond_handle",
+                  "CurlCli"
+                ]
+              }
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/sh\n",
+                  "master_1_ip=",
+                  {
+                    "Fn::If": [
+                      "create_nat_gateway",
+                      {
+                        "Fn::GetAtt": [
+                          "k8s_master_1",
+                          "PrivateIp"
+                        ]
+                      },
+                      {
+                        "Fn::GetAtt": [
+                          "k8s_master_1_ext",
+                          "PrivateIp"
+                        ]
+                      }
+                    ]
+                  },
+                  "\n",
+                  "master_3_ip=",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_master_3",
+                      "PrivateIp"
+                    ]
+                  },
+                  "\n",
+                  "ssh-keygen -t rsa -P '' -f '/root/.ssh/id_rsa' \n",
+                  "yum -y install expect\n",
+                  "touch /root/scp_key.sh\n",
+                  "echo '#!/usr/bin/expect' >> /root/scp_key.sh\n",
+                  "echo \"spawn scp root@$master_1_ip:/root/.ssh/* /root/.ssh/\" >> /root/scp_key.sh\n",
+                  "echo 'set timeout 30' >> /root/scp_key.sh\n",
+                  "echo 'expect \"*yes*\"' >> /root/scp_key.sh\n",
+                  "echo 'send \"yes\\r\"' >> /root/scp_key.sh\n",
+                  "echo 'expect \"*password:\"' >> /root/scp_key.sh\n",
+                  "echo 'send \"",
+                  {
+                    "Ref": "LoginPassword"
+                  },
+                  "\\r\"' >> /root/scp_key.sh\n",
+                  "echo 'expect EOF' >> /root/scp_key.sh\n",
+                  "expect /root/scp_key.sh\n",
+                  "rm -rf /root/scp_key.sh\n",
+                  "echo 'Deploy K8S nodes...'\n",
+                  "scp root@$master_3_ip:/etc/kubernetes/cloud-config ./cloud-config\n",
+                  "export ACCESS_KEY_SECRET=`cat ./cloud-config|grep accessKeySecret|awk -F '\"' '{print $4}'`\n",
+                  "rm -rf ./cloud-config\n",
+                  "export TOKEN=`echo '",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_master_cloudinit_wait_cond",
+                      "Data"
+                    ]
+                  },
+                  "' | awk -F '\"' '{print $4}'`\n",
+                  "echo 'TOKEN='$TOKEN\n",
+                  "curl http://aliacs-k8s.oss-cn-hangzhou.aliyuncs.com/installer/kubemgr-1.7.2-ha.sh >admin.sh ;chmod +x admin.sh\n",
+                  "./admin.sh --node-type node --key-id ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_ram_user_ak",
+                      "AccessKeyId"
+                    ]
+                  },
+                  " --key-secret $ACCESS_KEY_SECRET",
+                  " --token $TOKEN --endpoint ",
+                  {
+                    "Fn::GetAtt": [
+                      "k8s_master_slb",
+                      "IpAddress"
+                    ]
+                  },
+                  ":6443\n",
+                  "echo 'Send notify to ROS notify server.'\n",
+                  "ros-notify\n"
+                ]
+              ]
+            }
+          ]
+        },
+        "MinAmount": {
+          "Ref": "NumOfNodes"
+        },
+        "SecurityGroupId": {
+          "Ref": "k8s_sg"
+        },
+        "VSwitchId": {
+          "Fn::If": [
+            "create_new_vswitch",
+            {
+              "Ref": "k8s_vswitch"
+            },
+            {
+              "Ref": "VSwitchId"
+            }
+          ]
+        },
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "AllocatePublicIP": false,
+        "InstanceType": {
+          "Ref": "WorkerInstanceType"
+        },
+        "MaxAmount": {
+          "Ref": "NumOfNodes"
+        },
+        "SystemDiskCategory": "cloud_ssd",
+        "Password": {
+          "Ref": "LoginPassword"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "APIServer_Intranet": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            {
+              "Fn::GetAtt": [
+                "k8s_master_slb",
+                "IpAddress"
+              ]
+            },
+            ":6443"
+          ]
+        ]
+      },
+      "Description": "kubernetes API Server内网地址"
+    },
+    "APIServer_Internet": {
+      "Condition": "create_nat_gateway",
+      "Description": "kubernetes API Server公网地址",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            {
+              "Fn::Select": [
+                "0",
+                {
+                  "Fn::GetAtt": [
+                    "k8s_NAT_Gateway",
+                    "BandwidthPackageIps"
+                  ]
+                }
+              ]
+            },
+            ":6443"
+          ]
+        ]
+      }
+    },
+    "AdminGateway": {
+      "Condition": "create_nat_gateway",
+      "Description": "可通过此IP直接SSH登录到Master节点",
+      "Value": {
+        "Fn::Select": [
+          "0",
+          {
+            "Fn::GetAtt": [
+              "k8s_NAT_Gateway",
+              "BandwidthPackageIps"
+            ]
+          }
+        ]
+      }
+    },
+    "Master_IP": {
+      "Value": {
+        "Fn::GetAtt": [
+          "k8s_master_3",
+          "PrivateIp"
+        ]
+      },
+      "Description": "Master 节点的私网 IP"
+    }
+  }
+}

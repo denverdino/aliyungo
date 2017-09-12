@@ -22,11 +22,11 @@ const (
 	STACK_STATUS_ROLLBACK_IN_PROGRESS = "ROLLBACK_IN_PROGRESS"
 )
 
-//
+//https://help.aliyun.com/document_detail/28910.html?spm=5176.doc50083.6.580.b5wkQr
 type CreateStackRequest struct {
 	Name            string
 	Template        string
-	Parameters      string
+	Parameters      interface{}
 	DisableRollback bool
 	TimeoutMins     int
 }
@@ -46,7 +46,7 @@ func (client *Client) CreateStack(regionId common.Region, args *CreateStackReque
 	return stack, nil
 }
 
-//
+//https://help.aliyun.com/document_detail/28911.html?spm=5176.doc28910.6.581.etoi2Z
 type DeleteStackRequest struct {
 	RegionId common.Region
 }
@@ -70,7 +70,7 @@ func (client *Client) DeleteStack(regionId common.Region, stackId string, stackN
 	return response, nil
 }
 
-//
+//https://help.aliyun.com/document_detail/28912.html?spm=5176.doc28911.6.582.X0FKwG
 type AbandonStackRequest struct {
 	RegionId common.Region
 }
@@ -101,7 +101,7 @@ func (client *Client) AbandonStack(regionId common.Region, stackId string, stack
 	return response, nil
 }
 
-//
+//https://help.aliyun.com/document_detail/28913.html?spm=5176.doc28912.6.583.vrfk38
 type DescribeStacksRequest struct {
 	RegionId   common.Region
 	StackId    string
@@ -179,7 +179,7 @@ func (client *Client) DescribeStack(regionId common.Region, stackId string, stac
 	return response, nil
 }
 
-//
+//https://help.aliyun.com/document_detail/50083.html?spm=5176.doc28914.6.585.QnbbaF
 type PreviewStackRequest struct {
 	Name            string
 	Template        string

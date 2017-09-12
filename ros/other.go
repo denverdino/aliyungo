@@ -60,7 +60,7 @@ type DescribeRegionsResponse struct {
 
 func (client *Client) DescribeRegions() (*DescribeRegionsResponse, error) {
 	response := &DescribeRegionsResponse{}
-	err := client.Invoke("", http.MethodGet, "/stacks/regions", nil, nil, response)
+	err := client.Invoke("", http.MethodGet, "/regions", nil, nil, response)
 	if err != nil {
 		return nil, err
 	}

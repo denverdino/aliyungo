@@ -47,8 +47,8 @@ func TestClient_CreateStack(t *testing.T) {
 	p := map[string]interface{}{
 		"VpcId":              "vpc-uf63x7z49v37kcazrbmca",
 		"VSwitchId":          "vsw-uf66bi1fvhf1kyv8v4kvl",
-		"NatGateway":         true,
-		"K8SExportAddress":   "",
+		"NatGateway":         false,
+		"K8SExportAddress":   "139.224.136.43",
 		"ImageId":            "centos_7",
 		"MasterInstanceType": "ecs.n4.large",
 		"WorkerInstanceType": "ecs.n4.large",

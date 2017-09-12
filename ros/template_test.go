@@ -16,3 +16,16 @@ func TestClient_DescribeTemplate(t *testing.T) {
 		t.Logf("Resource = %++v", response)
 	}
 }
+
+func TestClient_ValidateTemplate(t *testing.T) {
+	tpl, _ := loadK8s()
+	args := &ValidateTemplateRequest{
+		Template: tpl,
+	}
+	response, err := debugClientForTestCase.ValidateTemplate(args)
+	if err != nil {
+		t.Fatalf("Failed to ValidateTemplate %++v", err)
+	} else {
+		t.Logf("Result = %++v", response)
+	}
+}

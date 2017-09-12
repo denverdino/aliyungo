@@ -28,3 +28,22 @@ func (client *Client) DescribeTemplate(stackId, stackName string) (*DescribeTemp
 }
 
 //https://help.aliyun.com/document_detail/28923.html?spm=5176.doc28922.6.595.uhWWET
+type ValidateTemplateRequest struct {
+	Template string
+}
+
+type ValidateTemplateResponse struct {
+	common.Response
+	Parameters  interface{}
+	Description interface{}
+}
+
+func (client *Client) ValidateTemplate(args *ValidateTemplateRequest) (*ValidateTemplateResponse, error) {
+	response := &ValidateTemplateResponse{}
+	err := client.Invoke("", http.MethodPost, "/validate", nil, args, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}

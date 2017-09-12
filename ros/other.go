@@ -46,3 +46,24 @@ func (client *Client) DescribeEvents(stackId, stackName string, args *DescribeEv
 
 	return response, nil
 }
+
+//https://help.aliyun.com/document_detail/50086.html?spm=5176.doc28910.6.598.ngYYj6
+type Region struct {
+	LocalName string
+	RegionId  string
+}
+
+type DescribeRegionsResponse struct {
+	common.Response
+	Regions []Region
+}
+
+func (client *Client) DescribeRegions() (*DescribeRegionsResponse, error) {
+	response := &DescribeRegionsResponse{}
+	err := client.Invoke("", http.MethodGet, "/stacks/regions", nil, nil, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}

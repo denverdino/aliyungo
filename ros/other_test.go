@@ -16,3 +16,12 @@ func TestClient_DescribeEvents(t *testing.T) {
 		t.Logf("Resource = %++v", response)
 	}
 }
+
+func TestClient_DescribeRegions(t *testing.T) {
+	response, err := debugClientForTestCase.DescribeRegions()
+	if err != nil {
+		t.Fatalf("Failed to DescribeRegions %++v", err)
+	} else {
+		t.Logf("Regions = %++v", response)
+	}
+}

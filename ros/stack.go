@@ -9,19 +9,6 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
-type StackStatus string
-
-const (
-	STACK_STATUS_CREATE_COMPLETE      = "CREATE_COMPLETE"
-	STACK_STATUS_CREATE_FAILED        = "CREATE_FAILED"
-	STACK_STATUS_CREATE_IN_PROGRESS   = "CREATE_IN_PROGRESS"
-	STACK_STATUS_DELETE_FAILED        = "DELETE_FAILED"
-	STACK_STATUS_DELETE_IN_PROGRESS   = "DELETE_IN_PROGRESS"
-	STACK_STATUS_ROLLBACK_COMPLETE    = "ROLLBACK_COMPLETE"
-	STACK_STATUS_ROLLBACK_FAILED      = "ROLLBACK_FAILED"
-	STACK_STATUS_ROLLBACK_IN_PROGRESS = "ROLLBACK_IN_PROGRESS"
-)
-
 //https://help.aliyun.com/document_detail/28910.html?spm=5176.doc50083.6.580.b5wkQr
 type CreateStackRequest struct {
 	Name            string
@@ -126,7 +113,7 @@ type Stack struct {
 	Updated         string
 	Created         string
 	StatusReason    string
-	Status          StackStatus
+	Status          string
 	Description     string
 	DisableRollback bool
 	TimeoutMins     int
@@ -158,7 +145,7 @@ type DescribeStackResponse struct {
 	Created             string
 	TemplateDescription string
 	StatusReason        string
-	Status              StackStatus
+	Status              string
 	Outputs             interface{}
 	DisableRollback     bool
 	TimeoutMins         int

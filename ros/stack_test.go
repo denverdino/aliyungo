@@ -127,6 +127,43 @@ func TestClient_DescribeStack(t *testing.T) {
 	}
 }
 
+func TestClient_UpdateStack(t *testing.T) {
+	stackName := os.Getenv("StackName")
+	stackId := os.Getenv("StackId")
+
+	p := map[string]interface{}{
+		"VpcId":              "vpc-uf63x7z49v37kcazrbmca",
+		"VSwitchId":          "vsw-uf66bi1fvhf1kyv8v4kvl",
+		"NatGateway":         false,
+		"K8SExportAddress":   "139.224.136.43",
+		"ImageId":            "centos_7",
+		"MasterInstanceType": "ecs.n4.large",
+		"WorkerInstanceType": "ecs.n4.large",
+		"NumOfNodes":         3,
+		"LoginPassword":      "Hello1234",
+	}
+
+	tmpl, err := loadK8s()
+	if err != nil {
+		t.Fatalf("Failed to load k8s file %++v", err)
+	}
+
+	//ps, _ := json.Marshal(p)
+	args := &UpdateStackRequest{
+		Template:        tmpl,
+		Parameters:      p,
+		DisableRollback: false,
+		TimeoutMins:     30,
+	}
+
+	response, err := debugClientForTestCase.UpdateStack(TestRegionId, stackId, stackName, args)
+	if err != nil {
+		t.Fatalf("Failed to UpdateStack %++v", err)
+	} else {
+		t.Logf("Success %++v", response)
+	}
+}
+
 func loadK8s() (string, error) {
 	b, err := ioutil.ReadFile("k8s.json")
 	if err != nil {

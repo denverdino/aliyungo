@@ -192,8 +192,13 @@ type DBInstanceAttribute struct {
 	VpcId                       string
 }
 
+
 type ReadOnlyDBInstanceIds struct {
-	ReadOnlyDBInstanceId []string
+	ReadOnlyDBInstanceId []ReadOnlyDBInstanceId
+}
+
+type ReadOnlyDBInstanceId struct {
+	DBInstanceId string
 }
 
 // DescribeDBInstanceAttribute describes db instance

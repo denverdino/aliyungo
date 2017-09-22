@@ -12,7 +12,7 @@ const (
 	LiveStream                = "liveStream"
 	Ipaddr                    = "ipaddr"
 	Domain                    = "domain"
-	OSS                       = "OSS"
+	OSS                       = "oss"
 	Domestic                  = "domestic"
 	Overseas                  = "overseas"
 	Global                    = "global"

@@ -164,3 +164,25 @@ func (client *Client) WaitForClusterAsyn(clusterId string, status ClusterState, 
 	}
 	return nil
 }
+
+func (client *Client) GetProjectClient(clusterId string) (projectClient *ProjectClient, err error) {
+	cluster, err := client.DescribeCluster(clusterId)
+	if err != nil {
+		return
+	}
+
+	certs, err := client.GetClusterCerts(clusterId)
+	if err != nil {
+		return
+	}
+
+	projectClient, err = NewProjectClient(clusterId, cluster.MasterURL, certs)
+
+	if err != nil {
+		return
+	}
+
+	projectClient.SetDebug(client.debug)
+
+	return
+}

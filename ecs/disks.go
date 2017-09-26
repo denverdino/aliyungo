@@ -135,6 +135,7 @@ type CreateDiskArgs struct {
 	ZoneId       string
 	DiskName     string
 	Description  string
+	Encrypted    bool
 	DiskCategory DiskCategory
 	Size         int
 	SnapshotId   string

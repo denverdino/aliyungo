@@ -160,6 +160,7 @@ go test
   * cheyang
   * Hobo Chen
   * Shuwei Yin 
+  * Xujin Zheng (xujinzheng@gmail.com)
 
 
 ## License

@@ -4,32 +4,29 @@
 
 This is an unofficial Go SDK for Aliyun Services. You are welcome for contribution.
 
-
 ## Package Structure
 
-*  ecs: [Elastic Compute Service](https://help.aliyun.com/document_detail/ecs/open-api/summary.html)
-*  oss: [Open Storage Service](https://help.aliyun.com/document_detail/oss/api-reference/abstract.html)
-*  slb: [Server Load Balancer](https://help.aliyun.com/document_detail/slb/api-reference/brief-introduction.html)
-*  dns: [DNS](https://help.aliyun.com/document_detail/dns/api-reference/summary.html)
-*  sls: [Logging Service](https://help.aliyun.com/document_detail/sls/api/overview.html)
-*  ram: [Resource Access Management](https://help.aliyun.com/document_detail/ram/ram-api-reference/intro/intro.html)
-*  rds: [Relational Database Service](https://help.aliyun.com/document_detail/26226.html)
-*  cms: [Cloud Monitor Service](https://help.aliyun.com/document_detail/28615.html)
-*  cs: [Container Service](https://help.aliyun.com/product/25972.html)
-*  sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
-*  dm: [Direct Mail](https://help.aliyun.com/document_detail/29414.html)
-*  sms: [Short Message Service](https://help.aliyun.com/product/44282.html)
-*  push: [Cloud Mobile Push](https://help.aliyun.com/document_detail/30049.html)
-*  opensearch: [OpenSearch](https://help.aliyun.com/document_detail/29118.html)
-*  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
-*  nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
-*  cdn: [Content Delivery Network](https://help.aliyun.com/document_detail/27101.html)
-*  mns: [Message Service](https://help.aliyun.com/document_detail/27414.html)
-*  ess: [Auto Scaling](https://help.aliyun.com/document_detail/25857.html)
-*  common: Common libary of Aliyun Go SDK
-*  util: Utility helpers
-
-
+* ecs: [Elastic Compute Service](https://help.aliyun.com/document_detail/ecs/open-api/summary.html)
+* oss: [Open Storage Service](https://help.aliyun.com/document_detail/oss/api-reference/abstract.html)
+* slb: [Server Load Balancer](https://help.aliyun.com/document_detail/slb/api-reference/brief-introduction.html)
+* dns: [DNS](https://help.aliyun.com/document_detail/dns/api-reference/summary.html)
+* sls: [Logging Service](https://help.aliyun.com/document_detail/sls/api/overview.html)
+* ram: [Resource Access Management](https://help.aliyun.com/document_detail/ram/ram-api-reference/intro/intro.html)
+* rds: [Relational Database Service](https://help.aliyun.com/document_detail/26226.html)
+* cms: [Cloud Monitor Service](https://help.aliyun.com/document_detail/28615.html)
+* cs: [Container Service](https://help.aliyun.com/product/25972.html)
+* sts: [Security Token Service](https://help.aliyun.com/document_detail/28756.html)
+* dm: [Direct Mail](https://help.aliyun.com/document_detail/29414.html)
+* sms: [Short Message Service](https://help.aliyun.com/product/44282.html)
+* push: [Cloud Mobile Push](https://help.aliyun.com/document_detail/30049.html)
+* opensearch: [OpenSearch](https://help.aliyun.com/document_detail/29118.html)
+* mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
+* nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
+* cdn: [Content Delivery Network](https://help.aliyun.com/document_detail/27101.html)
+* mns: [Message Service](https://help.aliyun.com/document_detail/27414.html)
+* ess: [Auto Scaling](https://help.aliyun.com/document_detail/25857.html)
+* common: Common libary of Aliyun Go SDK
+* util: Utility helpers
 
 ## Quick Start
 
@@ -37,7 +34,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 package main
 
 import (
-	"fmt"
+  "fmt"
 
 	"github.com/denverdino/aliyungo/ecs"
 )
@@ -54,26 +51,25 @@ func main() {
 
 ## Documentation
 
-  *  ECS: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
-  *  OSS: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
-  *  SLB: [https://godoc.org/github.com/denverdino/aliyungo/slb](https://godoc.org/github.com/denverdino/aliyungo/slb) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/slb?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/slb)
-  *  DNS: [https://godoc.org/github.com/denverdino/aliyungo/dns](https://godoc.org/github.com/denverdino/aliyungo/dns) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dns)
-  *  SLS: [https://godoc.org/github.com/denverdino/aliyungo/sls](https://godoc.org/github.com/denverdino/aliyungo/sls) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sls?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sls)
-  *  RAM: [https://godoc.org/github.com/denverdino/aliyungo/ram](https://godoc.org/github.com/denverdino/aliyungo/ram) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ram?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ram)
-  *  RDS: [https://godoc.org/github.com/denverdino/aliyungo/rds](https://godoc.org/github.com/denverdino/aliyungo/rds) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/rds?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/rds)
-  *  CMS: [https://godoc.org/github.com/denverdino/aliyungo/cms](https://godoc.org/github.com/denverdino/aliyungo/cms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cms)
-  *  CS: [https://godoc.org/github.com/denverdino/aliyungo/cs](https://godoc.org/github.com/denverdino/aliyungo/cs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cs)
-  *  STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
-  *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
-  *  SMS: [https://godoc.org/github.com/denverdino/aliyungo/sms](https://godoc.org/github.com/denverdino/aliyungo/sms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sms)
-  *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq)
-  *  NAS: [https://godoc.org/github.com/denverdino/aliyungo/nas](https://godoc.org/github.com/denverdino/aliyungo/nas) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/nas?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/nas)
-  *  OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch)
-  *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push)
-  *  CDN: [https://godoc.org/github.com/denverdino/aliyungo/cdn](https://godoc.org/github.com/denverdino/aliyungo/cdn)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cdn?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cdn)
-  *  MNS: [https://godoc.org/github.com/denverdino/aliyungo/mns](https://godoc.org/github.com/denverdino/aliyungo/mns)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mns)
-  *  ESS: [https://godoc.org/github.com/denverdino/aliyungo/ess](https://godoc.org/github.com/denverdino/aliyungo/ess)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ess?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ess)
-
+  * ECS: [https://godoc.org/github.com/denverdino/aliyungo/ecs](https://godoc.org/github.com/denverdino/aliyungo/ecs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ecs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ecs)
+  * OSS: [https://godoc.org/github.com/denverdino/aliyungo/oss](https://godoc.org/github.com/denverdino/aliyungo/oss) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/oss?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/oss)
+  * SLB: [https://godoc.org/github.com/denverdino/aliyungo/slb](https://godoc.org/github.com/denverdino/aliyungo/slb) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/slb?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/slb)
+  * DNS: [https://godoc.org/github.com/denverdino/aliyungo/dns](https://godoc.org/github.com/denverdino/aliyungo/dns) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dns)
+  * SLS: [https://godoc.org/github.com/denverdino/aliyungo/sls](https://godoc.org/github.com/denverdino/aliyungo/sls) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sls?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sls)
+  * RAM: [https://godoc.org/github.com/denverdino/aliyungo/ram](https://godoc.org/github.com/denverdino/aliyungo/ram) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ram?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ram)
+  * RDS: [https://godoc.org/github.com/denverdino/aliyungo/rds](https://godoc.org/github.com/denverdino/aliyungo/rds) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/rds?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/rds)
+  * CMS: [https://godoc.org/github.com/denverdino/aliyungo/cms](https://godoc.org/github.com/denverdino/aliyungo/cms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cms)
+  * CS: [https://godoc.org/github.com/denverdino/aliyungo/cs](https://godoc.org/github.com/denverdino/aliyungo/cs) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cs?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cs)
+  * STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
+  * DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
+  * SMS: [https://godoc.org/github.com/denverdino/aliyungo/sms](https://godoc.org/github.com/denverdino/aliyungo/sms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sms)
+  * MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq)
+  * NAS: [https://godoc.org/github.com/denverdino/aliyungo/nas](https://godoc.org/github.com/denverdino/aliyungo/nas) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/nas?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/nas)
+  * OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch)
+  * PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push)
+  * CDN: [https://godoc.org/github.com/denverdino/aliyungo/cdn](https://godoc.org/github.com/denverdino/aliyungo/cdn)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cdn?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cdn)
+  * MNS: [https://godoc.org/github.com/denverdino/aliyungo/mns](https://godoc.org/github.com/denverdino/aliyungo/mns)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mns)
+  * ESS: [https://godoc.org/github.com/denverdino/aliyungo/ess](https://godoc.org/github.com/denverdino/aliyungo/ess)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ess?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ess)
 
 ## Build and Install
 
@@ -82,7 +78,6 @@ go get:
 ```sh
 go get github.com/denverdino/aliyungo
 ```
-
 
 ## Test ECS
 
@@ -95,10 +90,10 @@ Modify "ecs/config_test.go"
 	TestIAmRich         = false
 ```
 
-*  TestAccessKeyId: the Access Key Id
-*  TestAccessKeySecret: the Access Key Secret.
-*  TestInstanceId: the existing instance id for testing. It will be stopped and restarted during testing.
-*  TestIAmRich(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
+* TestAccessKeyId: the Access Key Id
+* TestAccessKeySecret: the Access Key Secret.
+* TestInstanceId: the existing instance id for testing. It will be stopped and restarted during testing.
+* TestIAmRich(Optional): If it is set to true, it will perform tests to create virtual machines and disks under your account. And you will pay the bill. :-)
 
 Under "ecs" and run
 
@@ -117,11 +112,10 @@ Modify "oss/config_test.go"
 	TestBucket          = "denverdino"
 ```
 
-*  TestAccessKeyId: the Access Key Id
-*  TestAccessKeySecret: the Access Key Secret.
-*  TestRegion: the region of OSS for testing
-*  TestBucket: the bucket name for testing
-
+* TestAccessKeyId: the Access Key Id
+* TestAccessKeySecret: the Access Key Secret.
+* TestRegion: the region of OSS for testing
+* TestBucket: the bucket name for testing
 
 Under "oss" and run
 
@@ -169,17 +163,15 @@ go test
   * Shuwei Yin
   * Xujin Zheng (xujinzheng@gmail.com)
 
-
 ## License
-This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
 
+This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
 
 ## Related projects
 
   * Aliyun ECS driver for Docker Machine: [Pull request](https://github.com/docker/machine/pull/1182)
 
   * Aliyun OSS driver for Docker Registry V2: [Pull request](https://github.com/docker/distribution/pull/514)
-
 
 ## References
 

@@ -162,6 +162,7 @@ go test
   * Hobo Chen
   * Shuwei Yin
   * Xujin Zheng (xujinzheng@gmail.com)
+  * Dino Lai (dinos80152@gmail.com)
 
 ## License
 

@@ -24,6 +24,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
 *  nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
 *  cdn: [Content Delivery Network](https://help.aliyun.com/document_detail/27101.html)
+*  mns: [Message Service](https://help.aliyun.com/document_detail/27414.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -69,6 +70,8 @@ func main() {
   *  OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch)
   *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push)
   *  CDN: [https://godoc.org/github.com/denverdino/aliyungo/cdn](https://godoc.org/github.com/denverdino/aliyungo/cdn)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cdn?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cdn)
+  *  MNS: [https://godoc.org/github.com/denverdino/aliyungo/mns](https://godoc.org/github.com/denverdino/aliyungo/mns)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mns)
+
 
 ## Build and Install
 

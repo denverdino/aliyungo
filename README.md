@@ -1,4 +1,4 @@
-# AliyunGo: Go SDK for Aliyun Services 
+# AliyunGo: Go SDK for Aliyun Services
 
 [![Build Status](https://travis-ci.org/denverdino/aliyungo.svg?branch=master)](https://travis-ci.org/denverdino/aliyungo) [![CircleCI](https://circleci.com/gh/denverdino/aliyungo.svg?style=svg)](https://circleci.com/gh/denverdino/aliyungo) [![Go Report Card](https://goreportcard.com/badge/github.com/denverdino/aliyungo)](https://goreportcard.com/report/github.com/denverdino/aliyungo)
 
@@ -23,6 +23,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  opensearch: [OpenSearch](https://help.aliyun.com/document_detail/29118.html)
 *  mq: [Message Queue](https://help.aliyun.com/document_detail/29532.html)
 *  nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
+*  cdn: [Content Delivery Network](https://help.aliyun.com/document_detail/27101.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -63,10 +64,11 @@ func main() {
   *  STS: [https://godoc.org/github.com/denverdino/aliyungo/sts](https://godoc.org/github.com/denverdino/aliyungo/sts) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sts?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sts)
   *  DM: [https://godoc.org/github.com/denverdino/aliyungo/dm](https://godoc.org/github.com/denverdino/aliyungo/dm) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/dm?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/dm)
   *  SMS: [https://godoc.org/github.com/denverdino/aliyungo/sms](https://godoc.org/github.com/denverdino/aliyungo/sms) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/sms?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/sms)
-  *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq) 
-  *  NAS: [https://godoc.org/github.com/denverdino/aliyungo/nas](https://godoc.org/github.com/denverdino/aliyungo/nas) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/nas?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/nas) 
-  *  OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch) 
-  *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push) 
+  *  MQ: [https://godoc.org/github.com/denverdino/aliyungo/mq](https://godoc.org/github.com/denverdino/aliyungo/mq) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mq?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mq)
+  *  NAS: [https://godoc.org/github.com/denverdino/aliyungo/nas](https://godoc.org/github.com/denverdino/aliyungo/nas) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/nas?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/nas)
+  *  OPENSEARCH: [https://godoc.org/github.com/denverdino/aliyungo/opensearch](https://godoc.org/github.com/denverdino/aliyungo/opensearch) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/opensearch?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/opensearch)
+  *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push)
+  *  CDN: [https://godoc.org/github.com/denverdino/aliyungo/cdn](https://godoc.org/github.com/denverdino/aliyungo/cdn)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cdn?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cdn)
 
 ## Build and Install
 
@@ -79,7 +81,7 @@ go get github.com/denverdino/aliyungo
 
 ## Test ECS
 
-Modify "ecs/config_test.go" 
+Modify "ecs/config_test.go"
 
 ```sh
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
@@ -101,7 +103,7 @@ go test
 
 ## Test OSS
 
-Modify "oss/config_test.go" 
+Modify "oss/config_test.go"
 
 ```sh
 	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
@@ -159,7 +161,7 @@ go test
   * zhuzhih2017
   * cheyang
   * Hobo Chen
-  * Shuwei Yin 
+  * Shuwei Yin
   * Xujin Zheng (xujinzheng@gmail.com)
 
 

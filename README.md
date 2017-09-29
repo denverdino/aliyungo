@@ -25,6 +25,7 @@ This is an unofficial Go SDK for Aliyun Services. You are welcome for contributi
 *  nas: [Network Attached Storage](https://help.aliyun.com/document_detail/27518.html)
 *  cdn: [Content Delivery Network](https://help.aliyun.com/document_detail/27101.html)
 *  mns: [Message Service](https://help.aliyun.com/document_detail/27414.html)
+*  ess: [Auto Scaling](https://help.aliyun.com/document_detail/25857.html)
 *  common: Common libary of Aliyun Go SDK
 *  util: Utility helpers
 
@@ -71,6 +72,7 @@ func main() {
   *  PUSH: [https://godoc.org/github.com/denverdino/aliyungo/push](https://godoc.org/github.com/denverdino/aliyungo/push) [![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/push?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/push)
   *  CDN: [https://godoc.org/github.com/denverdino/aliyungo/cdn](https://godoc.org/github.com/denverdino/aliyungo/cdn)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/cdn?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/cdn)
   *  MNS: [https://godoc.org/github.com/denverdino/aliyungo/mns](https://godoc.org/github.com/denverdino/aliyungo/mns)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/mns?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/mns)
+  *  ESS: [https://godoc.org/github.com/denverdino/aliyungo/ess](https://godoc.org/github.com/denverdino/aliyungo/ess)[![GoDoc](https://godoc.org/github.com/denverdino/aliyungo/ess?status.svg)](https://godoc.org/github.com/denverdino/aliyungo/ess)
 
 
 ## Build and Install

@@ -103,6 +103,46 @@ const (
 // default resource value for create order
 const DefaultResource = "buy"
 
+type CreateOrderArgs struct {
+	CommodityCode       CommodityCode
+	RegionId            common.Region
+	ZoneId              string
+	Engine              Engine
+	EngineVersion       string
+	PayType             DBPayType
+	DBInstanceClass     string
+	DBInstanceStorage   int
+	DBInstanceNetType   common.NetType
+	InstanceNetworkType common.NetworkType
+	VPCId               string
+	VSwitchId           string
+	UsedTime            int
+	TimeType            common.TimeType
+	Quantity            int
+	InstanceUsedType    string
+	Resource            string
+	AutoPay             string
+	AutoRenew           string
+	BackupId            string
+	RestoreTime         string
+	SecurityIPList      string
+	BusinessInfo        string
+}
+
+type CreateOrderResponse struct {
+	common.Response
+	DBInstanceId string
+	OrderId      int
+}
+
+// CreateOrder create db instance order
+// you can read doc at http://docs.alibaba-inc.com/pages/viewpage.action?pageId=259349053
+func (client *Client) CreateOrder(args *CreateOrderArgs) (resp CreateOrderResponse, err error) {
+	response := CreateOrderResponse{}
+	err = client.Invoke("CreateOrder", args, &response)
+	return response, err
+}
+
 type CreateDBInstanceArgs struct {
 	RegionId              common.Region
 	ZoneId                string

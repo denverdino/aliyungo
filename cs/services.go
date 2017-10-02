@@ -8,20 +8,33 @@ import (
 	"time"
 )
 
+type Container struct {
+	Name      string            `json:"name"`
+	Node      string            `json:"node"`
+	VMID      string            `json:"vm_id"`
+	IP        string            `json:"ip"`
+	Running   bool              `json:"running"`
+	Status    string            `json:"status"`
+	Health    string            `json:"health"`
+	StatusExt string            `json:"status_ext"`
+	FailCount int               `json:"fail_count"`
+	Ports     map[string][]Port `json:"ports"`
+}
+
 type Service struct {
-	ID             string            `json:"id"`
-	Name           string            `json:"name"`
-	Project        string            `json:"project"`
-	ComposeVersion string            `json:"compose_version"`
-	Containers     map[string]string `json:"containers"`
-	Created        time.Time         `json:"created"`
-	CurrentState   string            `json:"current_state"`
-	Definition     Definition        `json:"definition"`
-	DesiredState   string            `json:"desired_state"`
-	Extensions     map[string]string `json:"extensions"`
-	Hash           string            `json:"hash"`
-	Updated        time.Time         `json:"updated"`
-	Version        string            `json:"version"`
+	ID             string                 `json:"id"`
+	Name           string                 `json:"name"`
+	Project        string                 `json:"project"`
+	ComposeVersion string                 `json:"compose_version"`
+	Containers     map[string]Container   `json:"containers"`
+	Created        time.Time              `json:"created"`
+	CurrentState   string                 `json:"current_state"`
+	Definition     Definition             `json:"definition"`
+	DesiredState   string                 `json:"desired_state"`
+	Extensions     map[string]interface{} `json:"extensions"`
+	Hash           string                 `json:"hash"`
+	Updated        time.Time              `json:"updated"`
+	Version        string                 `json:"version"`
 }
 
 type ScaleType string

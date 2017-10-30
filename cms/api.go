@@ -28,6 +28,13 @@ type CmsClientInterface interface {
 	DeleteMetrics(request DeleteMetricsRequest) (Response, error)
 	GetMetricsMeta(request GetMetricsMetaRequest) (GetMetricsMetaResponse, error)
 
+	//Alarm
+	ListAlarm(req ListAlarmRequest) (ListAlarmResponse, error)
+	EnableAlarm(req EnableAlarmRequest) (EnableAlarmResponse, error)
+	DisableAlarm(req DisableAlarmRequest) (DisableAlarmResponse, error)
+	DeleteAlarm(req DeleteAlarmRequest) (DeleteAlarmResponse, error)
+	CreateAlarm(req CreateAlarmRequest) (CreateAlarmResponse, error)
+
 	//DimTable
 	CreateDimTable(request CreateDimTableRequest) (CreateDimTableResponse, error)
 	UpdateDimTable(request UpdateDimTableRequest) (Response, error)

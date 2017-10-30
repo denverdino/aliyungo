@@ -71,6 +71,13 @@ func (client *Client) SetDebug(debug bool) {
 
 // Invoke sends the raw HTTP request for ECS services
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
+	return client.InvokeWithMethod(ECSRequestMethod, action, args, response)
+}
+
+/**
+ 	some interface can only invoke with post request
+**/
+func (client *Client) InvokeWithMethod(method string, action string, args interface{}, response interface{}) error {
 
 	request := Request{}
 	request.initWithOwnerId(client.version, action, client.AccessKeyId, client.OwnerId)
@@ -79,12 +86,22 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	util.SetQueryValues(args, &query)
 
 	// Sign request
-	signature := util.CreateSignatureForRequest(ECSRequestMethod, &query, client.AccessKeySecret)
+	signature := util.CreateSignatureForRequest(method, &query, client.AccessKeySecret)
 
 	// Generate the request URL
 	requestURL := client.endpoint + "?" + query.Encode() + "&Signature=" + url.QueryEscape(signature)
 
-	httpReq, err := http.NewRequest(ECSRequestMethod, requestURL, nil)
+	var data []byte
+	var err error
+	if method == POSTRequestMethod && args != nil {
+		data, err = json.Marshal(args)
+		if err != nil {
+			log.Printf("Failed to marshal data")
+			return err
+		}
+	}
+
+	httpReq, err := http.NewRequest(method, requestURL, bytes.NewBuffer(data))
 
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version)
@@ -94,6 +111,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 
 	t0 := time.Now()
+
 	httpResp, err := client.httpClient.Do(httpReq)
 	t1 := time.Now()
 	if err != nil {
@@ -102,7 +120,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	statusCode := httpResp.StatusCode
 
 	if client.debug {
-		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
+		log.Printf("Invoke %s %s %d (%v)", method, requestURL, statusCode, t1.Sub(t0))
 	}
 
 	defer httpResp.Body.Close()

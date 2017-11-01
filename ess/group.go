@@ -48,10 +48,11 @@ type ModifyScalingGroupArgs struct {
 	ScalingGroupId               string
 	ScalingGroupName             string
 	ActiveScalingConfigurationId string
-	MinSize                      int
-	MaxSize                      int
-	DefaultCooldown              int
-	RemovalPolicy                common.FlattenArray
+	// NOTE: Set MinSize/MaxSize type to int pointer to distinguish zero value from unset value.
+	MinSize         *int
+	MaxSize         *int
+	DefaultCooldown int
+	RemovalPolicy   common.FlattenArray
 }
 
 type ModifyScalingGroupResponse struct {

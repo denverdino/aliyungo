@@ -104,7 +104,7 @@ func TestDescribeLoadBalancers(t *testing.T) {
 	client := NewTestBIDClientForDebug()
 
 	args := DescribeLoadBalancersArgs{
-		RegionId: common.Beijing,
+		RegionId: common.APSouthEast3,
 	}
 
 	lbs, err := client.DescribeLoadBalancers(&args)

@@ -1,19 +1,22 @@
 package slb
 
-import "github.com/denverdino/aliyungo/common"
+import (
+	"github.com/denverdino/aliyungo/common"
+	"os"
+)
 
 //Modify with your Access Key Id and Access Key Secret
 
-const (
+var  (
 	// BID 小号
 	//	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	//	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	//BID 大账号
-	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
-	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
+	TestAccessKeyId     = os.Getenv("MY_ACCESS_KEY_ID")
+	TestAccessKeySecret = os.Getenv("MY_ACCESS_KEY_SECRET")
 	TestInstanceId      = "MY_INSTANCE_ID"
 	TestLoadBalancerID  = "MY_LOADBALANCERID"
-	TestRegionId        = common.APNorthEast1
+	TestRegionId        = common.APSouthEast3
 	TestOwnerId         = ""
 	TestIAmRich         = false
 	TestQuick           = false

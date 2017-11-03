@@ -15,6 +15,7 @@ const (
 	JSONResponseFormat = "JSON"
 	XMLResponseFormat  = "XML"
 	ECSRequestMethod   = "GET"
+	POSTRequestMethod  = "POST"
 )
 
 type Request struct {

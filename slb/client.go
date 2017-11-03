@@ -23,6 +23,7 @@ var (
 		common.MEEast1:      "https://slb.me-east-1.aliyuncs.com",      //迪拜
 		common.APSouthEast2: "https://slb.ap-southeast-2.aliyuncs.com", //澳洲
 		common.ZhangJiaKou:  "https://slb.cn-zhangjiakou.aliyuncs.com", //张家口
+		common.APSouthEast3:"slb.ap-southeast-3.aliyuncs.com",//马来西亚
 	}
 )
 

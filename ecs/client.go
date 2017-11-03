@@ -29,6 +29,7 @@ var (
 		common.MEEast1:      "https://ecs.me-east-1.aliyuncs.com",      //迪拜
 		common.APSouthEast2: "https://ecs.ap-southeast-2.aliyuncs.com", //澳洲
 		common.ZhangJiaKou:  "https://ecs.cn-zhangjiakou.aliyuncs.com", //华北三
+		common.APSouthEast3: "https://ecs.ap-southeast-3.aliyuncs.com", //马来西亚
 	}
 )
 

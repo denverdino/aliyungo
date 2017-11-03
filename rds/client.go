@@ -24,7 +24,6 @@ var (
 		common.APSouthEast2: "https://rds.ap-southeast-2.aliyuncs.com", //澳洲
 		common.ZhangJiaKou:  "https://rds.cn-zhangjiakou.aliyuncs.com", //张家口
 		common.APSouthEast3: "https://rds.ap-southeast-3.aliyuncs.com", //马来西亚
-
 	}
 )
 

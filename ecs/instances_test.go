@@ -428,12 +428,12 @@ func TestClient_DescribeInstanceAttribute(t *testing.T) {
 }
 
 func TestClient_DescribeInstances(t *testing.T) {
-	instances := []string{TestInstanceId}
-	data, _ := json.Marshal(instances)
+	//instances := []string{TestInstanceId}
+	//data, _ := json.Marshal(instances)
 	client := NewTestECSClientForDebug()
 	instance, _, err := client.DescribeInstances(&DescribeInstancesArgs{
 		RegionId:    TestRegionId,
-		InstanceIds: string(data),
+		//InstanceIds: string(data),
 	})
 	if err != nil {
 		t.Fatal("Failed to DescribeInstanceAttribute %++v", err)

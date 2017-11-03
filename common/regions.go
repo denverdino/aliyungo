@@ -22,8 +22,10 @@ const (
 	EUCentral1      = Region("eu-central-1")   //德国
 	MEEast1         = Region("me-east-1")      //中东
 	APSouthEast2    = Region("ap-southeast-2") //澳洲
+	APSouthEast3    = Region("ap-southeast-3") //马来西亚
+
 )
 
 var ValidRegions = []Region{Hangzhou, Qingdao, Beijing, BeiJingHpc, Shenzhen, ZhangJiaKou, Hongkong,
 	Shanghai, USWest1, USEast1, APSouthEast1, APNorthEast1, ShenZhenFinance, ShanghaiFinance,
-	EUCentral1, MEEast1, APSouthEast2}
+	EUCentral1, MEEast1, APSouthEast2, APSouthEast3}

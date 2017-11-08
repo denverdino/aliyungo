@@ -6,7 +6,7 @@ type LifecycleState string
 
 const (
 	Active    = LifecycleState("Active")
-	Inacitve  = LifecycleState("Inacitve")
+	Inacitve  = LifecycleState("Inactive")
 	Deleting  = LifecycleState("Deleting")
 	InService = LifecycleState("InService")
 	Pending   = LifecycleState("Pending")

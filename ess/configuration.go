@@ -3,6 +3,7 @@ package ess
 import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
+	"encoding/base64"
 )
 
 type CreateScalingConfigurationArgs struct {
@@ -18,6 +19,9 @@ type CreateScalingConfigurationArgs struct {
 	SystemDisk_Category      common.UnderlineString
 	SystemDisk_Size          common.UnderlineString
 	DataDisk                 []DataDiskType
+	UserData                string
+	KeyPairName             string
+	RamRoleName             string
 }
 
 type DataDiskType struct {
@@ -36,6 +40,10 @@ type CreateScalingConfigurationResponse struct {
 //
 // You can read doc at https://help.aliyun.com/document_detail/25944.html?spm=5176.doc25942.6.625.KcE5ir
 func (client *Client) CreateScalingConfiguration(args *CreateScalingConfigurationArgs) (resp *CreateScalingConfigurationResponse, err error) {
+	if args.UserData != "" {
+		// Encode to base64 string
+		args.UserData = base64.StdEncoding.EncodeToString([]byte(args.UserData))
+	}
 	response := CreateScalingConfigurationResponse{}
 	err = client.InvokeByFlattenMethod("CreateScalingConfiguration", args, &response)
 
@@ -78,6 +86,9 @@ type ScalingConfigurationItemType struct {
 	DataDisks                struct {
 		DataDisk []DataDiskItemType
 	}
+	KeyPairName             string
+	RamRoleName             string
+	UserData   string
 }
 
 type DataDiskItemType struct {

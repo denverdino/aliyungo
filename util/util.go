@@ -49,7 +49,7 @@ func Encode(v url.Values) string {
 	sort.Strings(keys)
 	for _, k := range keys {
 		vs := v[k]
-		prefix := url.QueryEscape(k)
+		prefix := k
 		for _, v := range vs {
 			if buf.Len() > 0 {
 				buf.WriteByte('&')
@@ -57,7 +57,7 @@ func Encode(v url.Values) string {
 			buf.WriteString(prefix)
 			if v != "" {
 				buf.WriteString("=")
-				buf.WriteString(url.QueryEscape(v))
+				buf.WriteString(v)
 			}
 		}
 	}

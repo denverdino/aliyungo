@@ -2,6 +2,8 @@ package ecs
 
 import (
 	"testing"
+	"os"
+	"time"
 )
 
 func TestDisks(t *testing.T) {
@@ -148,4 +150,32 @@ func TestReplaceSystemDisk(t *testing.T) {
 		}
 	}
 	t.Logf("Replace system disk %s successfully ", diskId)
+}
+
+func TestResizeDisk(t *testing.T) {
+	accessKeyId := os.Getenv("ACCESS_KEY_ID")
+	accessKeySecret := os.Getenv("ACCESS_KEY_SECRET")
+
+	client := NewClient(accessKeyId, accessKeySecret)
+
+	args := CreateDiskArgs{
+		RegionId: "cn-beijing",
+		ZoneId: "cn-beijing-a",
+		Size: 40,
+		DiskCategory: DiskCategoryCloudEfficiency,
+	}
+	diskId, err := client.CreateDisk(&args)
+
+	if err != nil {
+		t.Errorf("CreateDisk failed %v", err)
+	}
+
+	time.Sleep(time.Duration(90) * time.Second)		// wait for disk inner status ready to resize
+	err = client.ResizeDisk(diskId, 60)
+
+	if err != nil {
+		t.Errorf("ResizeDisk failed %v", err)
+	}
+
+	_ = client.DeleteDisk(diskId)
 }

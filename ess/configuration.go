@@ -19,9 +19,10 @@ type CreateScalingConfigurationArgs struct {
 	SystemDisk_Category      common.UnderlineString
 	SystemDisk_Size          common.UnderlineString
 	DataDisk                 []DataDiskType
-	UserData                string
-	KeyPairName             string
-	RamRoleName             string
+	UserData                 string
+	KeyPairName              string
+	RamRoleName              string
+	Tags 			 string
 }
 
 type DataDiskType struct {
@@ -68,6 +69,10 @@ type DescribeScalingConfigurationsResponse struct {
 		ScalingConfiguration []ScalingConfigurationItemType
 	}
 }
+type TagItemType struct {
+	Key   string
+	Value string
+}
 
 type ScalingConfigurationItemType struct {
 	ScalingConfigurationId   string
@@ -88,7 +93,10 @@ type ScalingConfigurationItemType struct {
 	}
 	KeyPairName             string
 	RamRoleName             string
-	UserData   string
+	UserData   		string
+	Tags 			struct {
+		Tag []TagItemType
+	}
 }
 
 type DataDiskItemType struct {

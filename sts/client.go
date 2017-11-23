@@ -36,7 +36,6 @@ func NewClientWithEndpoint(endpoint string, accessKeyId string, accessKeySecret 
 func NewClientWithEndpointAndSecurityToken(endpoint string, accessKeyId string, accessKeySecret string, securityToken string) *STSClient {
 	client := &STSClient{}
 	client.WithEndpoint(endpoint).
-		WithEndpoint(endpoint).
 		WithVersion(STSAPIVersion).
 		WithAccessKeyId(accessKeyId).
 		WithAccessKeySecret(accessKeySecret).

@@ -36,7 +36,6 @@ func NewClientWithEndpoint(endpoint string, accessKeyId string, accessKeySecret 
 func NewClientWithEndpointAndSecurityToken(endpoint string, accessKeyId string, accessKeySecret string, securityToken string) RamClientInterface {
 	client := &RamClient{}
 	client.WithEndpoint(endpoint).
-		WithEndpoint(endpoint).
 		WithVersion(RAMAPIVersion).
 		WithAccessKeyId(accessKeyId).
 		WithAccessKeySecret(accessKeySecret).

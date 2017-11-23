@@ -71,7 +71,6 @@ func NewECSClientWithEndpoint(endpoint string, accessKeyId string, accessKeySecr
 func NewECSClientWithEndpointAndSecurityToken(endpoint string, accessKeyId string, accessKeySecret string, securityToken string, regionID common.Region) *Client {
 	client := &Client{}
 	client.WithEndpoint(endpoint).
-		WithEndpoint(endpoint).
 		WithVersion(ECSAPIVersion).
 		WithAccessKeyId(accessKeyId).
 		WithAccessKeySecret(accessKeySecret).
@@ -105,7 +104,6 @@ func NewVPCClientWithEndpoint(endpoint string, accessKeyId string, accessKeySecr
 func NewVPCClientWithEndpointAndSecurityToken(endpoint string, accessKeyId string, accessKeySecret string, securityToken string, regionID common.Region) *Client {
 	client := &Client{}
 	client.WithEndpoint(endpoint).
-		WithEndpoint(endpoint).
 		WithVersion(VPCAPIVersion).
 		WithAccessKeyId(accessKeyId).
 		WithAccessKeySecret(accessKeySecret).

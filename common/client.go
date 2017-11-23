@@ -227,7 +227,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId, client.securityToken)
+	request.init(client.version, action, client.AccessKeyId, client.securityToken, client.regionID)
 
 	query := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &query)
@@ -299,7 +299,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 	}
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId, client.securityToken)
+	request.init(client.version, action, client.AccessKeyId, client.securityToken, client.regionID)
 
 	query := util.ConvertToQueryValues(request)
 
@@ -374,7 +374,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	}
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId, client.securityToken)
+	request.init(client.version, action, client.AccessKeyId, client.securityToken, client.regionID)
 
 	data := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &data)

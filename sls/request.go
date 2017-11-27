@@ -4,12 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 type request struct {
@@ -65,6 +68,9 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	req.headers["Host"] = req.endpoint
 	req.headers["x-log-apiversion"] = client.version
 	req.headers["x-log-signaturemethod"] = "hmac-sha1"
+	if client.securityToken != "" {
+		req.headers["x-acs-security-token"] = client.securityToken
+	}
 
 	client.signRequest(req, payload)
 
@@ -85,9 +91,15 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	t0 := time.Now()
 	resp, err := client.httpClient.Do(hreq)
+	t1 := time.Now()
 	if err != nil {
 		return nil, err
+	}
+
+	if client.debug {
+		log.Printf("Invoke %s %s %d (%v)", req.method, req.url(), resp.StatusCode, t1.Sub(t0))
 	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 204 && resp.StatusCode != 206 {

@@ -2,30 +2,52 @@ package mns
 
 import (
 	"encoding/xml"
+	"os"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
-// 您在控制台创建的Queue
-var QueueName = ""
-
-// 公测集群URL
-var ENDPOINT = ""
-
-// 阿里云官网身份验证访问码
-var Ak = ""
-
-// 阿里云身份验证密钥
-var Sk = ""
+var (
+	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeySecret = os.Getenv("AccessKeySecret")
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestEndpoint        = os.Getenv("Endpoint")
+	TestQueueName       = os.Getenv("QueueName")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
+)
 
 type MessageData struct {
 	MessageBody string
 }
 
 func TestNewClient(t *testing.T) {
-	client := NewClient(Ak, Sk, ENDPOINT)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret, TestEndpoint)
 	queue := Queue{
 		Client:    client,
-		QueueName: QueueName,
+		QueueName: TestQueueName,
+		Base64:    false,
+	}
+
+	msg := Message{MessageBody: "MessageBody"}
+	data, err := xml.Marshal(msg)
+	if err != nil {
+		t.Error(err)
+	}
+
+	msgId, err := queue.Send(GetCurrentUnixMicro(), data)
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Logf("send message %v", msgId)
+	}
+}
+
+func TestNewClientForAssumeRole(t *testing.T) {
+	client := NewClientForAssumeRole(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, TestEndpoint)
+	queue := Queue{
+		Client:    client,
+		QueueName: TestQueueName,
 		Base64:    false,
 	}
 
@@ -46,10 +68,10 @@ func TestNewClient(t *testing.T) {
 func TestReceiveClient(t *testing.T) {
 
 	// time.Sleep(100 * time.Second)
-	client := NewClient(Ak, Sk, ENDPOINT)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret, TestEndpoint)
 	queue := Queue{
 		Client:    client,
-		QueueName: QueueName,
+		QueueName: TestQueueName,
 		Base64:    false,
 	}
 	respChan := make(chan MsgReceive)
@@ -81,10 +103,10 @@ func TestReceiveClient(t *testing.T) {
 }
 
 func msgDelete(receiptHandle string, t *testing.T) {
-	client := NewClient(Ak, Sk, ENDPOINT)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret, TestEndpoint)
 	queue := Queue{
 		Client:    client,
-		QueueName: QueueName,
+		QueueName: TestQueueName,
 		Base64:    false,
 	}
 	errChan := make(chan error)

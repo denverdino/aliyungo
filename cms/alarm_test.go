@@ -125,6 +125,8 @@ func TestClient_ListAlarmHistory(t *testing.T) {
 
 func TestClient_ListContactGroup(t *testing.T) {
 	client := NewTestClientForDebug()
+	client.SetSecurityToken(TestSecurityToken)
+
 	args := &ListContactGroupArgs{}
 
 	response, err := client.ListContactGroup(args)

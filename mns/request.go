@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 type request struct {
@@ -62,7 +65,9 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	req.headers["Date"] = util.GetGMTime()
 	req.headers["Host"] = req.endpoint
 	req.headers["x-mns-version"] = client.Version
-
+	if client.SecurityToken != "" {
+		req.headers["x-acs-security-token"] = client.SecurityToken
+	}
 	client.SignRequest(req, payload)
 
 	var reader io.Reader
@@ -84,9 +89,16 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	t0 := time.Now()
 	resp, err := client.httpClient.Do(hreq)
+	t1 := time.Now()
+
 	if err != nil {
 		return nil, err
+	}
+
+	if client.debug {
+		log.Printf("Invoke %s %s %d (%v)", req.method, req.url(), resp.StatusCode, t1.Sub(t0))
 	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 201 && resp.StatusCode != 204 {

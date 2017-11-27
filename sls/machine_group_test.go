@@ -55,3 +55,21 @@ func TestCreateMachineGroup(t *testing.T) {
 		t.Fatalf("Delete machine error: %v", err)
 	}
 }
+
+func TestClient_ListMachineGroups(t *testing.T) {
+	client := NewTestClientForDebug()
+	p, err := client.Project(TestProjectName)
+	if err != nil {
+		t.Fatalf("get project fail: %++v", err)
+	}
+
+	machines, err := p.ListMachines(TestMachineGroup, 0, 100)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		for index, machine := range machines.Machines {
+			t.Logf("Machines[%d] = %++v", index, machine)
+		}
+
+	}
+}

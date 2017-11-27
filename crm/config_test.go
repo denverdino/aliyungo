@@ -1,9 +1,10 @@
-package cms
+package crm
 
 import (
 	"os"
 
 	"github.com/denverdino/aliyungo/common"
+	"github.com/menglingwei/aliyungo/crm"
 )
 
 var (
@@ -13,20 +14,11 @@ var (
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
 )
 
-var testClient *CMSClient
+var testDebugClient *crm.Client
 
-func NewTestClient() *CMSClient {
-	if testClient == nil {
-		testClient = NewCMSClient(TestAccessKeyId, TestAccessKeySecret)
-	}
-	return testClient
-}
-
-var testDebugClient *CMSClient
-
-func NewTestClientForDebug() *CMSClient {
+func NewTestClientForDebug() *crm.Client {
 	if testDebugClient == nil {
-		testDebugClient = NewCMSClient(TestAccessKeyId, TestAccessKeySecret)
+		testDebugClient = crm.NewClient(TestAccessKeyId, TestAccessKeySecret)
 		testDebugClient.SetDebug(true)
 	}
 	return testDebugClient

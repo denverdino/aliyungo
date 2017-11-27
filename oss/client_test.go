@@ -17,8 +17,9 @@ import (
 )
 
 var (
-	client     *oss.Client
-	TestBucket = strconv.FormatInt(time.Now().Unix(), 10)
+	client           *oss.Client
+	assumeRoleClient *oss.Client
+	TestBucket       = strconv.FormatInt(time.Now().Unix(), 10)
 )
 
 func init() {
@@ -30,6 +31,8 @@ func init() {
 		client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
 	}
 
+	assumeRoleClient = oss.NewOSSClientForAssumeRole(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, false)
+	assumeRoleClient.SetDebug(true)
 }
 
 func TestCreateBucket(t *testing.T) {
@@ -427,4 +430,13 @@ func (rr *randReader) Read(p []byte) (n int, err error) {
 
 func newRandReader(n int64) *randReader {
 	return &randReader{r: n}
+}
+
+func TestNewOSSClientForAssumeRole_GetServices(t *testing.T) {
+	bucketList, err := assumeRoleClient.GetService()
+	if err != nil {
+		t.Fatal("Error %++v", err)
+	} else {
+		t.Logf("GetService: %++v", bucketList)
+	}
 }

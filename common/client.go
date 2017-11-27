@@ -11,6 +11,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"os"
+	"strconv"
 
 	"github.com/denverdino/aliyungo/util"
 )
@@ -43,7 +45,17 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 	client.AccessKeyId = accessKeyId
 	client.AccessKeySecret = accessKeySecret + "&"
 	client.debug = false
-	client.httpClient = &http.Client{}
+	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
+	if err != nil {
+		handshakeTimeout = 0
+	}
+	if handshakeTimeout == 0 {
+		client.httpClient = &http.Client{}
+	} else {
+		t := &http.Transport{
+			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second,}
+		client.httpClient = &http.Client{Transport: t,}
+	}
 	client.endpoint = endpoint
 	client.version = version
 }
@@ -59,7 +71,17 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 // Intialize client object when all properties are ready
 func (client *Client) InitClient() *Client {
 	client.debug = false
-	client.httpClient = &http.Client{}
+	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
+	if err != nil {
+		handshakeTimeout = 0
+	}
+	if handshakeTimeout == 0 {
+		client.httpClient = &http.Client{}
+	} else {
+		t := &http.Transport{
+			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second,}
+		client.httpClient = &http.Client{Transport: t,}
+	}
 	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret)
 	return client
 }

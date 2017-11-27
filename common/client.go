@@ -32,7 +32,8 @@ type Client struct {
 	serviceCode     string
 	regionID        Region
 	businessInfo    string
-	userAgent 	string
+	userAgent       string
+	securityToken   string
 }
 
 // NewClient creates a new instance of ECS client
@@ -50,6 +51,11 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 	client.serviceCode = serviceCode
 	client.regionID = regionID
 	client.setEndpointByLocation(regionID, serviceCode, accessKeyId, accessKeySecret)
+}
+
+func (client *Client) NewInitForAssumeRole(endpoint, version, accessKeyId, accessKeySecret, serviceCode string, regionID Region, securityToken string) {
+	client.NewInit(endpoint, version, accessKeyId, accessKeySecret, serviceCode, regionID)
+	client.securityToken = securityToken
 }
 
 //NewClient using location service
@@ -113,6 +119,11 @@ func (client *Client) SetUserAgent(userAgent string) {
 	client.userAgent = userAgent
 }
 
+//set SecurityToken
+func (client *Client) SetSecurityToken(securityToken string) {
+	client.securityToken = securityToken
+}
+
 // Invoke sends the raw HTTP request for ECS services
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 
@@ -121,6 +132,12 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 
 	query := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &query)
+	if client.securityToken != "" {
+		s := []string{
+			client.securityToken,
+		}
+		query["SecurityToken"] = s
+	}
 
 	// Sign request
 	signature := util.CreateSignatureForRequest(ECSRequestMethod, &query, client.AccessKeySecret)
@@ -137,7 +154,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 
-	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+ " " +client.userAgent)
+	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+" "+client.userAgent)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)
@@ -208,7 +225,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 
-	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+ " " +client.userAgent)
+	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+" "+client.userAgent)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)
@@ -291,7 +308,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 
-	httpReq.Header.Set("User-Agent", httpReq.Header.Get("User-Agent")+ " " +client.userAgent)
+	httpReq.Header.Set("User-Agent", httpReq.Header.Get("User-Agent")+" "+client.userAgent)
 
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)

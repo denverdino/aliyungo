@@ -308,7 +308,7 @@ func TestAttachInstanceRamRole(t *testing.T) {
 	t.Logf("Attach successfully.")
 
 	// DescribeInstanceRamRole
-	resp, err := client.DescribeInstanceRamRole(&AttachInstancesArgs{RegionId:TestRegionID,InstanceIds:args.InstanceIds})
+	resp, err := client.DescribeInstanceRamRole(&AttachInstancesArgs{RegionId: TestRegionID, InstanceIds: args.InstanceIds})
 	if err != nil {
 		t.Fatalf("Failed to DescribeInstanceRamRole %++v", err)
 	}
@@ -322,4 +322,27 @@ func TestAttachInstanceRamRole(t *testing.T) {
 	}
 
 	t.Logf("Detach successfully")
+}
+
+func TestClient_DescribeInstances(t *testing.T) {
+	client := NewTestClientForDebug()
+	client.SetSecurityToken(TestSecurityToken)
+
+	args := &DescribeInstancesArgs{
+		RegionId: TestRegionID,
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   100,
+		},
+		//SecurityToken: TestSecurityToken,
+	}
+
+	response, _, err := client.DescribeInstances(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		for index, instance := range response {
+			t.Logf("response[%d] = %++v", index, instance)
+		}
+	}
 }

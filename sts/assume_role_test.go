@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/denverdino/aliyungo/ram"
+	"fmt"
 )
 
 /*
@@ -138,4 +139,23 @@ func TestAssumeRole(t *testing.T) {
 	}
 	t.Logf("pass AssumeRole %v", resp)
 
+}
+
+func TestSTSClient_AssumeRole(t *testing.T) {
+	client := NewTestClient()
+
+	roleArn := os.Getenv("RoleArn")
+
+	req := AssumeRoleRequest{
+		RoleArn:roleArn,
+		RoleSessionName:fmt.Sprintf("role-test-%d",time.Now().Unix()),
+		DurationSeconds:3600,
+	}
+
+	response,err := client.AssumeRole(req)
+	if err!=nil{
+		t.Fatalf("%++v",err)
+	}else{
+		t.Logf("Response=%++v",response)
+	}
 }

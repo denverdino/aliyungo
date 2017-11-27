@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/denverdino/aliyungo/ecs"
 	"github.com/denverdino/aliyungo/ram"
 )
 
@@ -136,6 +137,25 @@ func TestAssumeRole(t *testing.T) {
 		t.Errorf("Failed to AssumeRole %v", err)
 		return
 	}
+
+	ecsClient := ecs.NewECSClientWithSecurityToken(resp.Credentials.AccessKeyId, resp.Credentials.AccessKeySecret, resp.Credentials.SecurityToken, "")
+	_, err = ecsClient.DescribeRegions()
+	if err != nil {
+		t.Errorf("Failed to DescribeRegions %v", err)
+		return
+	}
+
+	ramClient = ram.NewClientWithSecurityToken(resp.Credentials.AccessKeyId, resp.Credentials.AccessKeySecret, resp.Credentials.SecurityToken)
+	req2 := ram.ListUserRequest{
+		Marker:   "",
+		MaxItems: 2,
+	}
+	_, err = ramClient.ListUsers(req2)
+	if err != nil {
+		t.Errorf("Failed to ListUsers %v", err)
+		return
+	}
+
 	t.Logf("pass AssumeRole %v", resp)
 
 }

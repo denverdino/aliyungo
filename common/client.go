@@ -33,6 +33,7 @@ type Client struct {
 	regionID        Region
 	businessInfo    string
 	userAgent 	string
+	securityToken string
 }
 
 // NewClient creates a new instance of ECS client
@@ -108,6 +109,11 @@ func (client *Client) SetBusinessInfo(businessInfo string) {
 	}
 }
 
+// SetSecurityToken for STS call
+func (client *Client) SetSecurityToken(securityToke string) {
+	client.securityToken = securityToke
+}
+
 // SetUserAgent sets user agent to the request/response message
 func (client *Client) SetUserAgent(userAgent string) {
 	client.userAgent = userAgent
@@ -120,6 +126,9 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	request.init(client.version, action, client.AccessKeyId)
 
 	query := util.ConvertToQueryValues(request)
+	if(client.securityToken!=""){
+		query.Add("SecurityToken", client.securityToken)
+	}
 	util.SetQueryValues(args, &query)
 
 	// Sign request
@@ -190,7 +199,9 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 	request.init(client.version, action, client.AccessKeyId)
 
 	query := util.ConvertToQueryValues(request)
-
+	if(client.securityToken!=""){
+		query.Add("SecurityToken", client.securityToken)
+	}
 	util.SetQueryValueByFlattenMethod(args, &query)
 
 	// Sign request
@@ -263,6 +274,9 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	request.init(client.version, action, client.AccessKeyId)
 
 	data := util.ConvertToQueryValues(request)
+	if(client.securityToken!=""){
+		data.Add("SecurityToken",client.securityToken)
+	}
 	util.SetQueryValues(args, &data)
 
 	// Sign request

@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	VERSION            = "2016-02-29"
-	END_POINT          = "https://nasservice-inner.aliyuncs.com"
+	VERSION            = "2017-06-26"
+	END_POINT          = "https://nas.aliyuncs.com"
 	DEFAULT_POLICY     = "readwrite"
 	DEFAULT_SQUASHTYPE = "no_squash"
 	DEFAULT_PRIORITY   = "1"

@@ -258,12 +258,6 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 
 	query := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &query)
-	if client.securityToken != "" {
-		s := []string{
-			client.securityToken,
-		}
-		query["SecurityToken"] = s
-	}
 
 	// Sign request
 	signature := util.CreateSignatureForRequest(ECSRequestMethod, &query, client.AccessKeySecret)
@@ -410,7 +404,6 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 
 	request := Request{}
 	request.init(client.version, action, client.AccessKeyId, client.securityToken, client.regionID)
-
 	data := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &data)
 

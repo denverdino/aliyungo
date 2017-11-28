@@ -128,16 +128,10 @@ func (client *Client) SetSecurityToken(securityToken string) {
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId)
+	request.init(client.version, action, client.AccessKeyId, client.securityToken)
 
 	query := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &query)
-	if client.securityToken != "" {
-		s := []string{
-			client.securityToken,
-		}
-		query["SecurityToken"] = s
-	}
 
 	// Sign request
 	signature := util.CreateSignatureForRequest(ECSRequestMethod, &query, client.AccessKeySecret)
@@ -204,7 +198,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 func (client *Client) InvokeByFlattenMethod(action string, args interface{}, response interface{}) error {
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId)
+	request.init(client.version, action, client.AccessKeyId, client.securityToken)
 
 	query := util.ConvertToQueryValues(request)
 
@@ -277,7 +271,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 func (client *Client) InvokeByAnyMethod(method, action, path string, args interface{}, response interface{}) error {
 
 	request := Request{}
-	request.init(client.version, action, client.AccessKeyId)
+	request.init(client.version, action, client.AccessKeyId, client.securityToken)
 
 	data := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &data)

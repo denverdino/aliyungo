@@ -7,6 +7,31 @@ import (
 	"github.com/denverdino/aliyungo/ecs"
 )
 
+func TestClient_DescribeClusters(t *testing.T) {
+
+	client := NewTestDebugAussumeRoleClient()
+
+	clusters, err := client.DescribeClusters("")
+	if err != nil {
+		t.Fatalf("Failed to DescribeClusters: %v", err)
+	}
+
+	for _, cluster := range clusters {
+		t.Logf("Cluster: %++v", cluster)
+		c, err := client.DescribeCluster(cluster.ClusterID)
+		if err != nil {
+			t.Errorf("Failed to DescribeCluster: %v", err)
+		}
+		t.Logf("Cluster Describe: %++v", c)
+		certs, err := client.GetClusterCerts(cluster.ClusterID)
+		if err != nil {
+			t.Errorf("Failed to GetClusterCerts: %v", err)
+		}
+		t.Logf("Cluster certs: %++v", certs)
+
+	}
+}
+
 func TestListClusters(t *testing.T) {
 
 	client := NewTestClientForDebug()

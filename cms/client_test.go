@@ -1,9 +1,10 @@
 package cms
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 const (
@@ -13,6 +14,7 @@ const (
 var (
 	UT_ACCESSKEYID     = os.Getenv("AccessKeyId")
 	UT_ACCESSKEYSECRET = os.Getenv("AccessKeySecret")
+	UT_SECURITY_TOKEN  = os.Getenv("SecurityToken")
 )
 
 func TestCresateAlert(t *testing.T) {
@@ -20,6 +22,10 @@ func TestCresateAlert(t *testing.T) {
 		t.SkipNow()
 	}
 	client := NewClient(UT_ACCESSKEYID, UT_ACCESSKEYSECRET)
+	if UT_SECURITY_TOKEN != "" {
+		client.SetSecurityToken(UT_SECURITY_TOKEN)
+	}
+	client.SetDebug(true)
 
 	req := `
 	{

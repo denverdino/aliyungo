@@ -18,10 +18,19 @@ type Client struct {
 	version    string
 	internal   bool
 	//region     common.Region
+	securityToken string
 }
 
 type CMSClient struct {
 	common.Client
+}
+
+func (client *Client) SetSecurityToken(securityToken string) {
+	client.securityToken = securityToken
+}
+
+func (client *Client) SetDebug(debug bool) {
+	client.debug = debug
 }
 
 const (

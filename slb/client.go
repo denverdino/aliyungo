@@ -42,8 +42,28 @@ func NewSLBClient(accessKeyId, accessKeySecret string, regionID common.Region) *
 	return NewClientWithRegion(endpoint, accessKeyId, accessKeySecret, regionID)
 }
 
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string, regionID common.Region) *Client {
+	endpoint := os.Getenv("SLB_ENDPOINT")
+	if endpoint == "" {
+		endpoint = SLBDefaultEndpoint
+	}
+
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)
+}
+
 func NewClientWithRegion(endpoint string, accessKeyId, accessKeySecret string, regionID common.Region) *Client {
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "", regionID)
+}
+
+func NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken string, regionID common.Region) *Client {
 	client := &Client{}
-	client.NewInit(endpoint, SLBAPIVersion, accessKeyId, accessKeySecret, SLBServiceCode, regionID)
+	client.WithEndpoint(endpoint).
+		WithVersion(SLBAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(SLBServiceCode).
+		WithRegionID(regionID).
+		InitClient()
 	return client
 }

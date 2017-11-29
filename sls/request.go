@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 type request struct {
@@ -49,7 +50,7 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	}
 
 	if req.endpoint == "" {
-		req.endpoint = client.endpoint
+		req.endpoint = client.Endpoint()
 	}
 
 	contentLength := "0"
@@ -63,7 +64,7 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	req.headers["x-log-bodyrawsize"] = contentLength
 	req.headers["Date"] = util.GetGMTime()
 	req.headers["Host"] = req.endpoint
-	req.headers["x-log-apiversion"] = client.version
+	req.headers["x-log-apiversion"] = client.Version()
 	req.headers["x-log-signaturemethod"] = "hmac-sha1"
 
 	client.signRequest(req, payload)
@@ -85,7 +86,10 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := client.httpClient.Do(hreq)
+
+	// TODO: Temporary solution - the entire codes of this file should be re-written in the future
+	// to avoid use client.HttpClient(). And then remove HttpClient() from common.Client.
+	resp, err := client.HttpClient().Do(hreq)
 	if err != nil {
 		return nil, err
 	}

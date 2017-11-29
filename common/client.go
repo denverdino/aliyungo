@@ -9,10 +9,10 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
-	"time"
 	"os"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/denverdino/aliyungo/util"
 )
@@ -53,8 +53,8 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 		client.httpClient = &http.Client{}
 	} else {
 		t := &http.Transport{
-			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second,}
-		client.httpClient = &http.Client{Transport: t,}
+			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
+		client.httpClient = &http.Client{Transport: t}
 	}
 	client.endpoint = endpoint
 	client.version = version
@@ -71,6 +71,7 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 // Intialize client object when all properties are ready
 func (client *Client) InitClient() *Client {
 	client.debug = false
+
 	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
 	if err != nil {
 		handshakeTimeout = 0
@@ -79,8 +80,8 @@ func (client *Client) InitClient() *Client {
 		client.httpClient = &http.Client{}
 	} else {
 		t := &http.Transport{
-			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second,}
-		client.httpClient = &http.Client{Transport: t,}
+			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
+		client.httpClient = &http.Client{Transport: t}
 	}
 	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret)
 	return client
@@ -121,7 +122,7 @@ func (client *Client) ensureProperties() error {
 }
 
 // ----------------------------------------------------
-// WithXXX methods
+// WithXxx methods
 // ----------------------------------------------------
 
 // WithEndpoint sets custom endpoint
@@ -185,7 +186,45 @@ func (client *Client) WithUserAgent(userAgent string) *Client {
 }
 
 // ----------------------------------------------------
-// SetXXX methods
+// Properties
+// ----------------------------------------------------
+
+func (client *Client) Endpoint() string {
+	return client.endpoint
+}
+
+func (client *Client) Version() string {
+	return client.version
+}
+
+func (client *Client) RegionID() Region {
+	return client.regionID
+}
+
+func (client *Client) ServiceCode() string {
+	return client.serviceCode
+}
+
+func (client *Client) DebugMode() bool {
+	return client.debug
+}
+
+func (client *Client) BusinessInfo() string {
+	return client.businessInfo
+}
+
+func (client *Client) UserAgent() string {
+	return client.userAgent
+}
+
+// TODO: Temporary soulution for old codes
+// Not to use this property method, it's temporary
+func (client *Client) HttpClient() *http.Client {
+	return client.httpClient
+}
+
+// ----------------------------------------------------
+// SetXxx methods
 // ----------------------------------------------------
 
 // SetEndpoint sets custom endpoint

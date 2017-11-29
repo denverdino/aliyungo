@@ -1,9 +1,10 @@
 package cms
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 const (
@@ -108,5 +109,5 @@ func TestGetAlertDimension(t *testing.T) {
 	client := NewClient(UT_ACCESSKEYID, UT_ACCESSKEYSECRET)
 
 	result, err := client.GetDimensions("acs_custom_xxxx", "xxxx")
-	t.Logf("GetDimensionsRequest result : %++v %++v %v \n ", result, result.DataPoints[0], err)
+	t.Logf("GetDimensionsRequest result: %++v %v \n ", result, err)
 }

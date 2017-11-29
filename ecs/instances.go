@@ -224,6 +224,7 @@ type SpotStrategyType string
 const (
 	NoSpot             = SpotStrategyType("NoSpot")
 	SpotWithPriceLimit = SpotStrategyType("SpotWithPriceLimit")
+	SpotAsPriceGo      = SpotStrategyType("SpotAsPriceGo")
 )
 
 //
@@ -262,8 +263,9 @@ type InstanceAttributesType struct {
 	Tags struct {
 		Tag []TagItemType
 	}
-	SpotStrategy SpotStrategyType
-	KeyPairName  string
+	SpotStrategy   SpotStrategyType
+	SpotPriceLimit float64
+	KeyPairName    string
 }
 
 type DescribeInstanceAttributeResponse struct {
@@ -535,6 +537,7 @@ type CreateInstanceArgs struct {
 	AutoRenew               bool
 	AutoRenewPeriod         int
 	SpotStrategy            SpotStrategyType
+	SpotPriceLimit          float64
 	KeyPairName             string
 	RamRoleName             string
 }
@@ -658,7 +661,7 @@ func (client *Client) DetachInstanceRamRole(args *AttachInstancesArgs) (err erro
 
 type DescribeInstanceRamRoleResponse struct {
 	common.Response
-	InstanceRamRoleSets struct{
+	InstanceRamRoleSets struct {
 		InstanceRamRoleSet []InstanceRamRoleSetType
 	}
 }

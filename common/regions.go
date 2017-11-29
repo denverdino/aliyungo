@@ -30,7 +30,7 @@ const (
 var ValidRegions = []Region{
 	Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, Zhangjiakou,
 	USWest1, USEast1,
-	APNorthEast1, APSouthEast1, APSouthEast2,APSouthEast3,
+	APNorthEast1, APSouthEast1, APSouthEast2, APSouthEast3,
 	MEEast1,
 	EUCentral1,
 }

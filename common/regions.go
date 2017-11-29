@@ -24,7 +24,6 @@ const (
 	MEEast1 = Region("me-east-1")
 
 	EUCentral1 = Region("eu-central-1")
-
 )
 
 var ValidRegions = []Region{

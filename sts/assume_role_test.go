@@ -7,8 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/denverdino/aliyungo/ram"
 	"fmt"
+
+	"github.com/denverdino/aliyungo/ram"
 )
 
 /*
@@ -147,15 +148,15 @@ func TestSTSClient_AssumeRole(t *testing.T) {
 	roleArn := os.Getenv("RoleArn")
 
 	req := AssumeRoleRequest{
-		RoleArn:roleArn,
-		RoleSessionName:fmt.Sprintf("role-test-%d",time.Now().Unix()),
-		DurationSeconds:3600,
+		RoleArn:         roleArn,
+		RoleSessionName: fmt.Sprintf("commander-role-%d", time.Now().Unix()),
+		DurationSeconds: 3600,
 	}
 
-	response,err := client.AssumeRole(req)
-	if err!=nil{
-		t.Fatalf("%++v",err)
-	}else{
-		t.Logf("Response=%++v",response)
+	response, err := client.AssumeRole(req)
+	if err != nil {
+		t.Fatalf("%++v", err)
+	} else {
+		t.Logf("Response=%++v", response)
 	}
 }

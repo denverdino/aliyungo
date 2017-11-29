@@ -19,9 +19,10 @@ type CreateScalingGroupArgs struct {
 	LoadBalancerId   string
 	VpcId            string
 	VSwitchId        string
-	MaxSize          int
-	MinSize          int
-	DefaultCooldown  int
+	// NOTE: Set MinSize, MaxSize and DefaultCooldown type to int pointer to distinguish zero value from unset value.
+	MinSize         *int
+	MaxSize         *int
+	DefaultCooldown  *int
 	RemovalPolicy    common.FlattenArray
 	DBInstanceId     common.FlattenArray
 }
@@ -51,7 +52,7 @@ type ModifyScalingGroupArgs struct {
 	// NOTE: Set MinSize/MaxSize type to int pointer to distinguish zero value from unset value.
 	MinSize         *int
 	MaxSize         *int
-	DefaultCooldown int
+	DefaultCooldown *int
 	RemovalPolicy   common.FlattenArray
 }
 

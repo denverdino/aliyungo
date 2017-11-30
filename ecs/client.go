@@ -71,3 +71,17 @@ func NewECSClient(accessKeyId, accessKeySecret, ownerId string, regionId common.
 	client.InitWithOwnerId(endpoint, ECSAPIVersion, accessKeyId, accessKeySecret, ownerId)
 	return client
 }
+
+func CreateECSClient(accessKeyId, accessKeySecret, securityToken, ownerId string, regionId common.Region) *Client{
+	client := &Client{}
+	endpoint := os.Getenv("ECS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = ECSDefaultEndpoint
+		if v, ok := ECSAPIEndpoint[regionId]; ok {
+			endpoint = v
+		}
+	}
+
+	client.InitForAssumeRole(endpoint, ECSAPIVersion, accessKeyId, accessKeySecret,securityToken, ownerId)
+	return client
+}

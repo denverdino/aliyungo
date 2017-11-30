@@ -22,6 +22,7 @@ type Request struct {
 	Format               string
 	Version              string
 	AccessKeyId          string
+	SecurityToken        string
 	Signature            string
 	SignatureMethod      string
 	Timestamp            util.ISO6801Time
@@ -46,6 +47,11 @@ func (request *Request) init(version string, action string, AccessKeyId string) 
 func (request *Request) initWithOwnerId(version string, action string, AccessKeyId string, ownerId string) {
 	request.init(version, action, AccessKeyId)
 	request.OwnerId = ownerId
+}
+
+func (request *Request) initForAssumeRole(version string, action string, AccessKeyId string, securityToken string, ownerId string) {
+	request.initWithOwnerId(version, action, AccessKeyId, ownerId)
+	request.SecurityToken = securityToken
 }
 
 type Response struct {

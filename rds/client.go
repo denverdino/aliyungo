@@ -53,3 +53,17 @@ func NewRDSClient(accessKeyId, accessKeySecret string, regionId common.Region) *
 
 	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
 }
+
+func CreateRDSClient(accessKeyId, accessKeySecret string, securityToken string, regionId common.Region) *Client {
+	client := &Client{}
+	endpoint := os.Getenv("RDS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = RDSDefaultEndpoint
+		if v, ok := RDSAPIEndpoint[regionId]; ok {
+			endpoint = v
+		}
+	}
+
+	client.InitForAssumeRole(endpoint, RDSAPIVersion, accessKeyId, accessKeySecret, securityToken, "")
+	return client
+}

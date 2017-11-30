@@ -25,3 +25,9 @@ func NewClientWithVersion(accessKeyId string, accessKeySecret string, version st
 	client.SetDebug(true)
 	return client
 }
+
+func CreateCMSClient(accessKeyId string, accessKeySecret string, securityToken string) CmsClientInterface {
+	client := &CmsClient{}
+	client.InitForAssumeRole(CMSDefaultEndpoint, CMSAPIVersion, accessKeyId, accessKeySecret, securityToken, "")
+	return client
+}

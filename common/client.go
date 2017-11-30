@@ -16,6 +16,7 @@ import (
 type Client struct {
 	AccessKeyId     string //Access Key Id
 	AccessKeySecret string //Access Key Secret
+	SecurityToken   string
 	debug           bool
 	httpClient      *http.Client
 	endpoint        string
@@ -37,6 +38,11 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 func (client *Client) InitWithOwnerId(endpoint, version, accessKeyId, accessKeySecret string, ownerId string) {
 	client.Init(endpoint, version, accessKeyId, accessKeySecret)
 	client.OwnerId = ownerId
+}
+
+func (client *Client) InitForAssumeRole(endpoint, version, accessKeyId, accessKeySecret, securityToken, ownerId string) {
+	client.InitWithOwnerId(endpoint, version, accessKeyId, accessKeySecret, ownerId)
+	client.SecurityToken = securityToken
 }
 
 //set ownerId
@@ -69,6 +75,11 @@ func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
 
+//set SecurityToken
+func (client *Client) SetSecurityToken(securityToken string) {
+	client.SecurityToken = securityToken
+}
+
 // Invoke sends the raw HTTP request for ECS services
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 	return client.InvokeWithMethod(ECSRequestMethod, action, args, response)
@@ -80,7 +91,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 func (client *Client) InvokeWithMethod(method string, action string, args interface{}, response interface{}) error {
 
 	request := Request{}
-	request.initWithOwnerId(client.version, action, client.AccessKeyId, client.OwnerId)
+	request.initForAssumeRole(client.version, action, client.AccessKeyId, client.SecurityToken, client.OwnerId)
 
 	query := util.ConvertToQueryValues(request)
 	util.SetQueryValues(args, &query)

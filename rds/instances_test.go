@@ -1,22 +1,17 @@
 package rds
 
 import (
-	"github.com/stretchr/testify/assert"
-	"os"
 	"testing"
-)
 
-var (
-	UT_ACCESSKEYID     = os.Getenv("AccessKeyId")
-	UT_ACCESSKEYSECRET = os.Getenv("AccessKeySecret")
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient_ModifySecurityIps(t *testing.T) {
 
-	if UT_ACCESSKEYID == "" {
+	if TestAccessKeyId == "" {
 		t.SkipNow()
 	}
-	client := NewClient(UT_ACCESSKEYID, UT_ACCESSKEYSECRET)
+	client := NewClient(TestAccessKeyId, TestAccessKeySecret)
 	client.SetDebug(true)
 
 	// TODO:
@@ -29,4 +24,16 @@ func TestClient_ModifySecurityIps(t *testing.T) {
 	assert.NotNil(t, resp)
 
 	t.Logf("the result is %++v ", resp)
+}
+
+func TestClient_DescribeRegions(t *testing.T) {
+	client := NewTestClientForDebug()
+	client.SetSecurityToken(TestSecurityToken)
+
+	regions, err := client.DescribeRegions()
+	if err != nil {
+		t.Fatal("Error %++v", err)
+	} else {
+		t.Logf("Result = %++v", regions)
+	}
 }

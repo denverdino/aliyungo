@@ -2,6 +2,7 @@ package rds
 
 import (
 	"fmt"
+
 	"github.com/denverdino/aliyungo/common"
 )
 
@@ -65,4 +66,32 @@ func (client *Client) DescribeDBInstanceIPArrayList(args *DescribeDBInstanceIPAr
 	resp := &DescribeDBInstanceIPArrayListResponse{}
 	err := client.Invoke("DescribeDBInstanceIPArrayList", args, resp)
 	return resp, err
+}
+
+type DescribeRegionsArgs struct {
+}
+
+type DescribeRegionsResponse struct {
+	Regions struct {
+		RDSRegion []RDSRegion
+	}
+}
+
+type RDSRegion struct {
+	RegionId string
+	ZoneId   string
+}
+
+// DescribeRegions describe rds regions
+//
+// You can read doc at https://help.aliyun.com/document_detail/26243.html?spm=5176.doc26244.6.715.OSNUa8
+func (client *Client) DescribeRegions() (resp *DescribeRegionsResponse, err error) {
+	args := DescribeRegionsArgs{}
+	response := DescribeRegionsResponse{}
+	err = client.Invoke("DescribeRegions", &args, &response)
+
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
 }

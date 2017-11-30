@@ -23,6 +23,7 @@ import (
 //}
 
 func TestGetDimTable(t *testing.T) {
+	client := NewTestClientForDebug()
 	request := GetDimTableRequest{
 		DimTableName: "zhishi_test",
 	}

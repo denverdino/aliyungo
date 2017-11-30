@@ -432,12 +432,35 @@ func TestClient_DescribeInstances(t *testing.T) {
 	//data, _ := json.Marshal(instances)
 	client := NewTestECSClientForDebug()
 	instance, _, err := client.DescribeInstances(&DescribeInstancesArgs{
-		RegionId:    TestRegionId,
+		RegionId: TestRegionId,
 		//InstanceIds: string(data),
 	})
 	if err != nil {
 		t.Fatal("Failed to DescribeInstanceAttribute %++v", err)
 	} else {
 		t.Logf("Response = %++v", instance)
+	}
+}
+
+func TestClient_DescribeInstances2(t *testing.T) {
+	client := NewTestClientForDebug()
+	client.SetSecurityToken(TestSecurityToken)
+
+	args := &DescribeInstancesArgs{
+		RegionId: TestRegionID,
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   100,
+		},
+		//SecurityToken: TestSecurityToken,
+	}
+
+	response, _, err := client.DescribeInstances(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		for index, instance := range response {
+			t.Logf("response[%d] = %++v", index, instance)
+		}
 	}
 }

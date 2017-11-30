@@ -13,8 +13,11 @@ var (
 	//	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
 	//	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
 	//BID 大账号
-	TestAccessKeyId     = os.Getenv("MY_ACCESS_KEY_ID")
-	TestAccessKeySecret = os.Getenv("MY_ACCESS_KEY_SECRET")
+	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeySecret = os.Getenv("AccessKeySecret")
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
+
 	TestInstanceId      = os.Getenv("MY_ECS_INSTANCE_ID")
 	TestSecurityGroupId = "MY_SECURITY_GROUP_ID"
 	TestInstanceType    = "ecs.n4.small"

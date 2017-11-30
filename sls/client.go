@@ -1,10 +1,12 @@
 package sls
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
-	"fmt"
-	"encoding/json"
+
+	"github.com/denverdino/aliyungo/common"
 
 	"os"
 )
@@ -12,11 +14,12 @@ import (
 type Client struct {
 	accessKeyId     string //Access Key Id
 	accessKeySecret string //Access Key Secret
+	securityToken   string //sts token
 	debug           bool
 	httpClient      *http.Client
 	version         string
 	internal        bool
-	region          string
+	region          common.Region
 	endpoint        string
 }
 
@@ -39,11 +42,11 @@ type LogGroupItem struct {
 
 const (
 	SLSDefaultEndpoint = "sls.aliyuncs.com"
-	SLSAPIVersion = "0.6.0"
-	METHOD_GET = "GET"
-	METHOD_POST = "POST"
-	METHOD_PUT = "PUT"
-	METHOD_DELETE = "DELETE"
+	SLSAPIVersion      = "0.6.0"
+	METHOD_GET         = "GET"
+	METHOD_POST        = "POST"
+	METHOD_PUT         = "PUT"
+	METHOD_DELETE      = "DELETE"
 )
 
 // NewClient creates a new instance of ECS client
@@ -53,6 +56,24 @@ func NewClient(region string, internal bool, accessKeyId, accessKeySecret string
 		endpoint = SLSDefaultEndpoint
 	}
 	return NewClientWithEndpoint(endpoint, region, internal, accessKeyId, accessKeySecret)
+}
+
+func NewClientForAssumeRole(region common.Region, internal bool, accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("SLS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = SLSDefaultEndpoint
+	}
+
+	return &Client{
+		accessKeyId:     accessKeyId,
+		accessKeySecret: accessKeySecret,
+		securityToken:   securityToken,
+		internal:        internal,
+		region:          region,
+		version:         SLSAPIVersion,
+		endpoint:        endpoint,
+		httpClient:      &http.Client{},
+	}
 }
 
 func NewClientWithEndpoint(endpoint string, region string, internal bool, accessKeyId, accessKeySecret string) *Client {
@@ -69,22 +90,22 @@ func NewClientWithEndpoint(endpoint string, region string, internal bool, access
 
 func (client *Client) Project(name string) (*Project, error) {
 
-//	newClient := client.forProject(name)
-//
-//	req := &request{
-//		method: METHOD_GET,
-//		path: "/",
-//	}
-//
-//	project := &Project{}
-//
-//	if err := newClient.requestWithJsonResponse(req, project); err != nil {
-//		return nil, err
-//	}
-//	project.client = newClient
-//	return project, nil
-	return &Project {
-		Name: name,
+	//	newClient := client.forProject(name)
+	//
+	//	req := &request{
+	//		method: METHOD_GET,
+	//		path: "/",
+	//	}
+	//
+	//	project := &Project{}
+	//
+	//	if err := newClient.requestWithJsonResponse(req, project); err != nil {
+	//		return nil, err
+	//	}
+	//	project.client = newClient
+	//	return project, nil
+	return &Project{
+		Name:   name,
 		client: client.forProject(name),
 	}, nil
 }
@@ -103,7 +124,7 @@ func (client *Client) forProject(name string) *Client {
 func (client *Client) DeleteProject(name string) error {
 	req := &request{
 		method: METHOD_DELETE,
-		path: "/",
+		path:   "/",
 	}
 
 	newClient := client.forProject(name)
@@ -112,7 +133,7 @@ func (client *Client) DeleteProject(name string) error {
 
 func (client *Client) CreateProject(name string, description string) error {
 	project := &Project{
-		Name: name,
+		Name:        name,
 		Description: description,
 	}
 	data, err := json.Marshal(project)
@@ -121,8 +142,8 @@ func (client *Client) CreateProject(name string, description string) error {
 	}
 
 	req := &request{
-		method: METHOD_POST,
-		path: "/",
+		method:      METHOD_POST,
+		path:        "/",
 		payload:     data,
 		contentType: "application/json",
 	}
@@ -166,5 +187,3 @@ func (client *Client) CreateProject(name string, description string) error {
 //		LogGroupList: logGroups,
 //	})
 //}
-
-

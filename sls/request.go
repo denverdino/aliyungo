@@ -3,13 +3,14 @@ package sls
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/denverdino/aliyungo/util"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
-	"fmt"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 type request struct {
@@ -65,7 +66,9 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	req.headers["Host"] = req.endpoint
 	req.headers["x-log-apiversion"] = client.version
 	req.headers["x-log-signaturemethod"] = "hmac-sha1"
-
+	if client.securityToken != "" {
+		req.headers["x-acs-security-token"] = client.securityToken
+	}
 	client.signRequest(req, payload)
 
 	var reader io.Reader

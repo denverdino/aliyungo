@@ -16,6 +16,7 @@ import (
 type Client struct {
 	AccessKeyId     string //Access Key Id
 	AccessKeySecret string //Access Key Secret
+	SecurityToken   string
 	debug           bool
 	httpClient      *http.Client
 	endpoint        string
@@ -37,6 +38,11 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 func (client *Client) InitWithOwnerId(endpoint, version, accessKeyId, accessKeySecret string, ownerId string) {
 	client.Init(endpoint, version, accessKeyId, accessKeySecret)
 	client.OwnerId = ownerId
+}
+
+func (client *Client) InitForAssumeRole(endpoint, version, accessKeyId, accessKeySecret ,securityToken, ownerId string){
+	client.InitWithOwnerId(endpoint,version,accessKeyId,accessKeySecret,ownerId)
+	client.SecurityToken = securityToken
 }
 
 //set ownerId

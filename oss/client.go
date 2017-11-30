@@ -32,6 +32,7 @@ const DefaultContentType = "application/octet-stream"
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
+	SecurityToken   string
 	Region          Region
 	Internal        bool
 	Secure          bool
@@ -86,6 +87,18 @@ var attempts = util.AttemptStrategy{
 }
 
 // NewOSSClient creates a new OSS.
+
+func NewOSSClientForAssumeRole(region Region, internal bool, accessKeyId string, accessKeySecret string, securityToken string, secure bool) *Client {
+	return &Client{
+		AccessKeyId:     accessKeyId,
+		AccessKeySecret: accessKeySecret,
+		SecurityToken:   securityToken,
+		Region:          region,
+		Internal:        internal,
+		debug:           false,
+		Secure:          secure,
+	}
+}
 
 func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string, secure bool) *Client {
 	return &Client{
@@ -982,6 +995,9 @@ func partiallyEscapedPath(path string) string {
 func (client *Client) prepare(req *request) error {
 	// Copy so they can be mutated without affecting on retries.
 	headers := copyHeader(req.headers)
+	if client.SecurityToken != "" {
+		headers.Set("x-oss-security-token", client.SecurityToken)
+	}
 	params := make(url.Values)
 
 	for k, v := range req.params {

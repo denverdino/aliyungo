@@ -25,6 +25,7 @@ const (
 type Client struct {
 	AccessKeyId     string
 	AccessKeySecret string
+	SecurityToken   string
 	endpoint        string
 	Version         string
 	debug           bool
@@ -47,6 +48,18 @@ func NewClient(accessKeyId, accessKeySecret string) *Client {
 	}
 }
 
+func NewClientForAussumeRole(accessKeyId, accessKeySecret, securityToken string) *Client {
+	return &Client{
+		AccessKeyId:     accessKeyId,
+		AccessKeySecret: accessKeySecret,
+		SecurityToken:   securityToken,
+		endpoint:        ROSDefaultEndpoint,
+		Version:         ROSAPIVersion,
+		httpClient:      &http.Client{},
+	}
+}
+
+
 // SetDebug sets debug mode to log the request/response message
 func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
@@ -55,6 +68,10 @@ func (client *Client) SetDebug(debug bool) {
 // SetUserAgent sets user agent to log the request/response message
 func (client *Client) SetUserAgent(userAgent string) {
 	client.userAgent = userAgent
+}
+
+func (client *Client) SetSecurityToken(securityToken string){
+	client.SecurityToken = securityToken
 }
 
 type Request struct {
@@ -102,7 +119,7 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	}
 
 	if region != "" {
-		httpReq.Header.Set("x-acs-region-id", string(region))
+		httpReq.Header["x-acs-region-id"] = []string{string(region)}
 	}
 
 	//httpReq.Header.Set("x-acs-caller-type", "customer")
@@ -120,12 +137,17 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	httpReq.Header.Set("Date", util.GetGMTime())
 	httpReq.Header.Set("Accept", "application/json")
 	//httpReq.Header.Set("x-acs-version", client.Version)
-	httpReq.Header.Set("x-acs-signature-version", "1.0")
-	httpReq.Header.Set("x-acs-signature-nonce", util.CreateRandomString())
-	httpReq.Header.Set("x-acs-signature-method", "HMAC-SHA1")
+
+	httpReq.Header["x-acs-signature-version"] = []string{"1.0"}
+	httpReq.Header["x-acs-signature-nonce"] = []string{util.CreateRandomString()}
+	httpReq.Header["x-acs-signature-method"] = []string{"HMAC-SHA1"}
 
 	if client.userAgent != "" {
 		httpReq.Header.Set("User-Agent", client.userAgent)
+	}
+
+	if client.SecurityToken != "" {
+		httpReq.Header["x-acs-security-token"] = []string{client.SecurityToken}
 	}
 
 	client.signRequest(httpReq)

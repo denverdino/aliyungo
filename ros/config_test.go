@@ -11,7 +11,8 @@ import (
 var (
 	TestAccessKeyId     = os.Getenv("AccessKeyId")
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
-	TestRegionId        = common.Region(os.Getenv("RegionId"))
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
 
 	clientForTestCase      = NewTestClient()
 	debugClientForTestCase = NewTestClientForDebug()
@@ -23,6 +24,7 @@ func NewTestClient() *Client {
 	if testClient == nil {
 		testClient = NewClient(TestAccessKeyId, TestAccessKeySecret)
 	}
+	testClient.SetSecurityToken(TestSecurityToken)
 	return testClient
 }
 
@@ -33,5 +35,6 @@ func NewTestClientForDebug() *Client {
 		testDebugClient = NewClient(TestAccessKeyId, TestAccessKeySecret)
 		testDebugClient.SetDebug(true)
 	}
+	testDebugClient.SetSecurityToken(TestSecurityToken)
 	return testDebugClient
 }

@@ -70,7 +70,7 @@ func TestClient_CreateStack(t *testing.T) {
 		TimeoutMins:     30,
 	}
 
-	response, err := debugClientForTestCase.CreateStack(TestRegionId, args)
+	response, err := debugClientForTestCase.CreateStack(TestRegionID, args)
 	if err != nil {
 		t.Fatalf("Failed to CreateStack %++v", err)
 	} else {
@@ -82,7 +82,7 @@ func TestClient_DeleteStack(t *testing.T) {
 	stackName := os.Getenv("StackName")
 	stackId := os.Getenv("StackId")
 
-	response, err := debugClientForTestCase.DeleteStack(TestRegionId, stackId, stackName)
+	response, err := debugClientForTestCase.DeleteStack(TestRegionID, stackId, stackName)
 	if err != nil {
 		t.Fatalf("Failed to DeleteStack %++v", err)
 	} else {
@@ -94,7 +94,7 @@ func TestClient_AbandonStack(t *testing.T) {
 	stackName := os.Getenv("StackName")
 	stackId := os.Getenv("StackId")
 
-	response, err := debugClientForTestCase.AbandonStack(TestRegionId, stackId, stackName)
+	response, err := debugClientForTestCase.AbandonStack(TestRegionID, stackId, stackName)
 	if err != nil {
 		t.Fatalf("Failed to AbandonStack %++v", err)
 	} else {
@@ -104,7 +104,7 @@ func TestClient_AbandonStack(t *testing.T) {
 
 func TestClient_DescribeStacks(t *testing.T) {
 	args := &DescribeStacksRequest{
-		RegionId: TestRegionId,
+		RegionId: TestRegionID,
 	}
 
 	stacks, err := debugClientForTestCase.DescribeStacks(args)
@@ -119,7 +119,7 @@ func TestClient_DescribeStack(t *testing.T) {
 	stackName := os.Getenv("StackName")
 	stackId := os.Getenv("StackId")
 
-	response, err := debugClientForTestCase.DescribeStack(TestRegionId, stackId, stackName)
+	response, err := debugClientForTestCase.DescribeStack(TestRegionID, stackId, stackName)
 	if err != nil {
 		t.Fatalf("Failed to DescribeStack %++v", err)
 	} else {
@@ -156,7 +156,7 @@ func TestClient_UpdateStack(t *testing.T) {
 		TimeoutMins:     30,
 	}
 
-	response, err := debugClientForTestCase.UpdateStack(TestRegionId, stackId, stackName, args)
+	response, err := debugClientForTestCase.UpdateStack(TestRegionID, stackId, stackName, args)
 	if err != nil {
 		t.Fatalf("Failed to UpdateStack %++v", err)
 	} else {

@@ -8,8 +8,8 @@ type Client struct {
 
 const (
 	// CRMDefaultEndpoint is the default API endpoint of CRM services
-	CRMDefaultEndpoint = "https://crm-cn-hangzhou.aliyuncs.com"
-	CRMAPIVersion      = "2015-04-08"
+	CRMDefaultEndpoint = "https://account-crm.aliyuncs.com"
+	CRMAPIVersion      = "2016-06-06"
 )
 
 // NewClient creates a new instance of CRM client

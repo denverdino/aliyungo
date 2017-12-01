@@ -11,6 +11,7 @@ const (
 
 type LabelSeriesArgs struct {
 	LabelSeries string
+	PK int64
 }
 
 type LabelSeries struct {

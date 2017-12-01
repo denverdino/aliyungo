@@ -160,3 +160,4 @@ func TestSTSClient_AssumeRole(t *testing.T) {
 		t.Logf("Response=%++v", response)
 	}
 }
+

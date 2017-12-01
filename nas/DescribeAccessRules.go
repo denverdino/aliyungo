@@ -1,27 +1,35 @@
 package nas
 
+import "github.com/denverdino/aliyungo/common"
+
 type DescribeAccessRulesRequest struct {
+	RegionId        common.Region
 	AccessGroupName string
-	Version         string
-	RegionId        string
+	AccessRuleId    string
+	PageSize        int
+	PageNumber      int
 }
 
 type DescribeAccessRulesResponse struct {
-	Rules []Rule
-	Code  string
+	common.Response
+	TotalCount  int
+	PageSize    int
+	PageNumber  int
+	AccessRules struct {
+		AccessRule []AccessRule
+	}
 }
 
-type Rule struct {
-	Priority     string
+type AccessRule struct {
+	RWAccess     string
+	UserAccess   string
+	Priority     int
 	SourceCidrIp string
-	SquashType   string
-	RuleId       string
-	Policy       string
+	AccessRuleId string
 }
 
 func (client *Client) DescribeAccessRules(args *DescribeAccessRulesRequest) (resp DescribeAccessRulesResponse, err error) {
 	response := DescribeAccessRulesResponse{}
-	args.Version = VERSION
 	err = client.Invoke("DescribeAccessRules", args, &response)
 	return response, err
 }

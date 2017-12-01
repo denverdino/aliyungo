@@ -1,22 +1,23 @@
 package nas
 
+import "github.com/denverdino/aliyungo/common"
+
 type CreateMountTargetRequest struct {
-	FileSystemName  string
+	RegionId        common.Region
+	FileSystemId    string
 	AccessGroupName string
 	NetworkType     string
 	VpcId           string
 	VSwitchId       string
-	Version         string
-	RegionId        string
 }
 
 type CreateMountTargetResponse struct {
-	Code string
+	common.Response
+	MountTargetDomain string
 }
 
 func (client *Client) CreateMountTarget(args *CreateMountTargetRequest) (resp CreateMountTargetResponse, err error) {
 	response := CreateMountTargetResponse{}
-	args.Version = VERSION
 
 	err = client.Invoke("CreateMountTarget", args, &response)
 	return response, err

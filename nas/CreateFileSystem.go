@@ -1,20 +1,21 @@
 package nas
 
+import "github.com/denverdino/aliyungo/common"
+
 type CreateFileSystemRequest struct {
-	ZoneId   string
-	Version  string
-	RegionId string
+	RegionId     common.Region
+	StorageType  string
+	ProtocolType string
+	Description  string
 }
 
 type CreateFileSystemResponse struct {
-	FileSystemName string
-	RequestId      string
-	Code           string
+	common.Response
+	FileSystemId string
 }
 
 func (client *Client) CreateFileSystem(args *CreateFileSystemRequest) (resp CreateFileSystemResponse, err error) {
 	response := CreateFileSystemResponse{}
-	args.Version = VERSION
 
 	err = client.Invoke("CreateFileSystem", args, &response)
 	return response, err

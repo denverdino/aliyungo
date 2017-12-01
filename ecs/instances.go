@@ -245,6 +245,7 @@ type ModifyInstanceAttributeArgs struct {
 	Description  string
 	Password     string
 	HostName     string
+	UserData     string
 }
 
 type ModifyInstanceAttributeResponse struct {

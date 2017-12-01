@@ -1,31 +1,34 @@
 package nas
 
+import "github.com/denverdino/aliyungo/common"
+
 type DescribeMountTargetsRequest struct {
-	FileSystemName string
-	Version        string
-	RegionId       string
+	FileSystemId      string
+	RegionId          common.Region
+	MountTargetDomain string
+
+	PageSize   int
+	PageNumber int
 }
 
 type DescribeMountTargetsResponse struct {
-	MountTargets []MountTarget
-	Code         string
+	common.Response
+	MountTargets struct {
+		MountTarget []MountTarget
+	}
 }
 
 type MountTarget struct {
-	AccessGroupName string
-	MountTargetIp   string
-	NetworkType     string
-	Status          string
-	MountTargetId   string
-	VpcId           string
-	VSwitchId       string
-	DomainName      string
-	CloudInstId     string
+	AccessGroupName   string
+	MountTargetDomain string
+	VpcId             string
+	VSwitchId         string
+	NetworkType       string
+	Status            string
 }
 
 func (client *Client) DescribeMountTargets(args *DescribeMountTargetsRequest) (resp DescribeMountTargetsResponse, err error) {
 	response := DescribeMountTargetsResponse{}
-	args.Version = VERSION
 	err = client.Invoke("DescribeMountTargets", args, &response)
 	return response, err
 }

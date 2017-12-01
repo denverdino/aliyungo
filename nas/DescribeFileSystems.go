@@ -1,31 +1,47 @@
 package nas
 
+import "github.com/denverdino/aliyungo/common"
+
 type DescribeFileSystemsRequest struct {
-	FileSystemName string
-	Version        string
-	RegionId       string
+	FileSystemId string
+	PageSize     int
+	PageNumber   int
+	RegionId     common.Region
 }
 
 type DescribeFileSystemsResponse struct {
-	FileSystems []FileSystem
-	Code        string
+	common.Response
+	FileSystems struct {
+		FileSystem []FileSystem
+	}
+	TotalCount int
+	PageSize   int
+	PageNumber int
 }
 
 type FileSystem struct {
-	CreateTime       uint64
-	MountTargetCount uint64
-	PackageId        string
-	FileSystemName   string
-	FileSystemType   string
-	MeteredSize      uint64
-	FileSystemDesc   string
-	QuotaSize        uint64
-	ZoneId           string
+	StorageType  string
+	ProtocolType string
+	CreateTime   string
+	Destription  string
+	MountTargets struct {
+		MountTarget []MountTarget
+	}
+	FileSystemId string
+	RegionId     common.Region
+	MeteredSize  int64
+	Packages     struct {
+		Package []Package
+	}
+}
+
+type Package struct {
+	PackageId string
 }
 
 func (client *Client) DescribeFileSystems(args *DescribeFileSystemsRequest) (resp DescribeFileSystemsResponse, err error) {
 	response := DescribeFileSystemsResponse{}
-	args.Version = VERSION
+	//args.Version = VERSION
 	err = client.Invoke("DescribeFileSystems", args, &response)
 	return response, err
 }

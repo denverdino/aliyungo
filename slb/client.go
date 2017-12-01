@@ -52,7 +52,7 @@ func NewClientWithOwnerID(accessKeyId, accessKeySecret string, ownerId string) *
 	return client
 }
 
-func NewSLBClient(accessKeyId, accessKeySecret, ownerId string, regionId common.Region) *Client {
+func NewSLBClient(accessKeyId, accessKeySecret string , regionId common.Region) *Client {
 	client := &Client{}
 	endpoint := os.Getenv("SLB_ENDPOINT")
 	if endpoint == "" {
@@ -62,7 +62,7 @@ func NewSLBClient(accessKeyId, accessKeySecret, ownerId string, regionId common.
 		}
 	}
 
-	client.InitWithOwnerId(endpoint, SLBAPIVersion, accessKeyId, accessKeySecret, ownerId)
+	client.Init(endpoint, SLBAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }
 

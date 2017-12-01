@@ -58,7 +58,7 @@ func NewClientWithOwnerID(accessKeyId, accessKeySecret string, ownerId string) *
 	return client
 }
 
-func NewECSClient(accessKeyId, accessKeySecret, ownerId string, regionId common.Region) *Client {
+func NewECSClient(accessKeyId, accessKeySecret string, regionId common.Region) *Client {
 	client := &Client{}
 	endpoint := os.Getenv("ECS_ENDPOINT")
 	if endpoint == "" {
@@ -68,7 +68,7 @@ func NewECSClient(accessKeyId, accessKeySecret, ownerId string, regionId common.
 		}
 	}
 
-	client.InitWithOwnerId(endpoint, ECSAPIVersion, accessKeyId, accessKeySecret, ownerId)
+	client.Init(endpoint, ECSAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }
 

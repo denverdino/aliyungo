@@ -296,7 +296,7 @@ func (vpc *MetaDataClient) send() ([]string, error) {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
-		return nil, err
+		return nil, fmt.Errorf("Aliyun Metadata API Error: Status Code: %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
 

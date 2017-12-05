@@ -2,6 +2,7 @@ package nas
 
 import (
 	"github.com/denverdino/aliyungo/common"
+	"os"
 )
 
 const (
@@ -18,7 +19,25 @@ type Client struct {
 
 // NewClient creates a new instance of NAS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret,"")
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("NAS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = END_POINT
+	}
+
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken)
+}
+
+func NewClientWithEndpointAndSecurityToken(endpoint string, accessKeyId, accessKeySecret, securityToken string) *Client {
 	client := &Client{}
-	client.Init(END_POINT, VERSION, accessKeyId, accessKeySecret)
+	client.WithEndpoint(endpoint).
+		WithVersion(VERSION).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		InitClient()
 	return client
 }

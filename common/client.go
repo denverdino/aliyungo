@@ -30,7 +30,7 @@ type Client struct {
 	AccessKeyId     string //Access Key Id
 	AccessKeySecret string //Access Key Secret
 	securityToken   string
-	debug           bool
+	debugMode       bool
 	httpClient      *http.Client
 	endpoint        string
 	version         string
@@ -44,7 +44,7 @@ type Client struct {
 func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret string) {
 	client.AccessKeyId = accessKeyId
 	client.AccessKeySecret = accessKeySecret + "&"
-	client.debug = false
+	client.debugMode = false
 	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
 	if err != nil {
 		handshakeTimeout = 0
@@ -70,7 +70,7 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 
 // Intialize client object when all properties are ready
 func (client *Client) InitClient() *Client {
-	client.debug = false
+	client.debugMode = false
 
 	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
 	if err != nil {
@@ -167,9 +167,9 @@ func (client *Client) WithSecurityToken(securityToken string) *Client {
 	return client
 }
 
-// WithDebug sets debug mode to log the request/response message
-func (client *Client) WithDebug(debug bool) *Client {
-	client.SetDebug(debug)
+// WithDebugMode sets debugMode mode to log the request/response message
+func (client *Client) WithDebugMode(debug bool) *Client {
+	client.SetDebugMode(debug)
 	return client
 }
 
@@ -206,7 +206,7 @@ func (client *Client) ServiceCode() string {
 }
 
 func (client *Client) DebugMode() bool {
-	return client.debug
+	return client.debugMode
 }
 
 func (client *Client) BusinessInfo() string {
@@ -262,9 +262,9 @@ func (client *Client) SetSecurityToken(securityToken string) {
 	client.securityToken = securityToken
 }
 
-// SetDebug sets debug mode to log the request/response message
-func (client *Client) SetDebug(debug bool) {
-	client.debug = debug
+// SetDebugMode sets debugMode mode to log the request/response message
+func (client *Client) SetDebugMode(debugMode bool) {
+	client.debugMode = debugMode
 }
 
 // SetBusinessInfo sets business info to log the request/response message
@@ -317,7 +317,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.debugMode {
 		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
 	}
 
@@ -328,7 +328,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 		return GetClientError(err)
 	}
 
-	if client.debug {
+	if client.debugMode {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))
@@ -390,7 +390,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.debugMode {
 		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
 	}
 
@@ -401,7 +401,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 		return GetClientError(err)
 	}
 
-	if client.debug {
+	if client.debugMode {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))
@@ -475,7 +475,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.debugMode {
 		log.Printf("Invoke %s %s %d (%v) %v", ECSRequestMethod, client.endpoint, statusCode, t1.Sub(t0), data.Encode())
 	}
 
@@ -486,7 +486,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 		return GetClientError(err)
 	}
 
-	if client.debug {
+	if client.debugMode {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))

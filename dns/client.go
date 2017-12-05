@@ -23,27 +23,39 @@ func NewClient(accessKeyId, accessKeySecret string) *Client {
 	if endpoint == "" {
 		endpoint = DNSDefaultEndpoint
 	}
-	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "")
 }
 
 // NewClientNew creates a new instance of DNS client, with http://alidns.aliyuncs.com as default endpoint
 func NewClientNew(accessKeyId, accessKeySecret string) *Client {
-	endpoint := os.Getenv("DNS_ENDPOINT")
-	if endpoint == "" {
-		endpoint = DNSDefaultEndpointNew
-	}
-	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret,"")
 }
 
 // NewCustomClient creates a new instance of ECS client with customized API endpoint
 func NewCustomClient(accessKeyId, accessKeySecret string, endpoint string) *Client {
-	client := &Client{}
-	client.Init(endpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
-	return client
+	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
 }
 
-func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string) *Client {
+func NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret string) *Client {
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "")
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("DNS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = DNSDefaultEndpointNew
+	}
+
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken)
+}
+
+func NewClientWithEndpointAndSecurityToken(endpoint string, accessKeyId, accessKeySecret, securityToken string) *Client {
 	client := &Client{}
-	client.Init(endpoint, DNSAPIVersion, accessKeyId, accessKeySecret)
+	client.WithEndpoint(endpoint).
+		WithVersion(DNSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		InitClient()
 	return client
 }

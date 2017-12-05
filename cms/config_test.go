@@ -22,7 +22,7 @@ var testDebugClient *CMSClient
 func NewTestClientForDebug() *CMSClient {
 	if testDebugClient == nil {
 		testDebugClient = NewCMSClient(TestAccessKeyId, TestAccessKeySecret)
-		testDebugClient.SetDebug(true)
+		testDebugClient.SetDebugMode(true)
 	}
 	return testDebugClient
 }

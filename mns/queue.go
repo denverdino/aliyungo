@@ -18,7 +18,7 @@ func getPath(queue string) string {
 //发送队列消息
 func (queue *Queue) Send(time int64, message []byte) (msg MsgSend, err error) {
 	req := &request{
-		endpoint:    queue.Endpoint,
+		endpoint:    queue.Endpoint(),
 		method:      http.MethodPost,
 		path:        getPath(queue.QueueName),
 		payload:     message,
@@ -52,7 +52,7 @@ func (queue *Queue) Send(time int64, message []byte) (msg MsgSend, err error) {
 //消费队列消息
 func (queue *Queue) Receive(messageChan chan MsgReceive, errChan chan error) {
 	req := &request{
-		endpoint: queue.Endpoint,
+		endpoint: queue.Endpoint(),
 		method:   http.MethodGet,
 		path:     getPath(queue.QueueName),
 		params: map[string]string{
@@ -93,7 +93,7 @@ func (queue *Queue) Receive(messageChan chan MsgReceive, errChan chan error) {
 //删除队列消息
 func (queue *Queue) Delete(receiptHandle string, errChan chan error) {
 	req := &request{
-		endpoint: queue.Endpoint,
+		endpoint: queue.Endpoint(),
 		method:   http.MethodDelete,
 		path:     getPath(queue.QueueName),
 		params: map[string]string{

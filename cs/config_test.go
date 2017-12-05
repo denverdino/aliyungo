@@ -21,7 +21,7 @@ var testDebugClient *Client
 func NewTestClientForDebug() *Client {
 	if testDebugClient == nil {
 		testDebugClient = NewClient(TestAccessKeyId, TestAccessKeySecret)
-		testDebugClient.SetDebug(true)
+		testDebugClient.SetDebugMode(true)
 	}
 	return testDebugClient
 }

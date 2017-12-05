@@ -14,23 +14,19 @@ import (
 
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
+	"os"
 )
 
 const (
 	// CRMDefaultEndpoint is the default API endpoint of CRM services
 	CSDefaultEndpoint = "https://cs.aliyuncs.com"
 	CSAPIVersion      = "2015-12-15"
+	CSServiceCode     = "cs"
 )
 
 // The Client type encapsulates operations with an OSS region.
 type Client struct {
-	AccessKeyId     string
-	AccessKeySecret string
-	endpoint        string
-	Version         string
-	debug           bool
-	userAgent       string
-	httpClient      *http.Client
+	common.Client
 }
 
 type Response struct {
@@ -39,23 +35,28 @@ type Response struct {
 
 // NewClient creates a new instance of CRM client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	return &Client{
-		AccessKeyId:     accessKeyId,
-		AccessKeySecret: accessKeySecret,
-		endpoint:        CSDefaultEndpoint,
-		Version:         CSAPIVersion,
-		httpClient:      &http.Client{},
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret,"")
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("CS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = CSDefaultEndpoint
 	}
+
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken)
 }
 
-// SetDebug sets debug mode to log the request/response message
-func (client *Client) SetDebug(debug bool) {
-	client.debug = debug
-}
-
-// SetUserAgent sets user agent to log the request/response message
-func (client *Client) SetUserAgent(userAgent string) {
-	client.userAgent = userAgent
+func NewClientWithEndpointAndSecurityToken(endpoint string, accessKeyId, accessKeySecret, securityToken string) *Client {
+	client := &Client{}
+	client.WithEndpoint(endpoint).
+		WithVersion(CSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(CSServiceCode).
+		InitClient()
+	return client
 }
 
 type Request struct {
@@ -89,7 +90,7 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 		contentMD5 = base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 	}
 
-	requestURL := client.endpoint + path
+	requestURL := client.Endpoint() + path
 	if query != nil && len(query) > 0 {
 		requestURL = requestURL + "?" + util.Encode(query)
 	}
@@ -120,21 +121,21 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	httpReq.Header.Set("x-acs-signature-nonce", util.CreateRandomString())
 	httpReq.Header.Set("x-acs-signature-method", "HMAC-SHA1")
 
-	if client.userAgent != "" {
-		httpReq.Header.Set("User-Agent", client.userAgent)
+	if client.UserAgent() != "" {
+		httpReq.Header.Set("User-Agent", client.UserAgent())
 	}
 
 	client.signRequest(httpReq)
 
 	t0 := time.Now()
-	httpResp, err := client.httpClient.Do(httpReq)
+	httpResp, err := client.HttpClient().Do(httpReq)
 	t1 := time.Now()
 	if err != nil {
 		return common.GetClientError(err)
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.DebugMode() {
 		log.Printf("Invoke %s %s %d (%v)", method, requestURL, statusCode, t1.Sub(t0))
 	}
 
@@ -145,7 +146,7 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 		return common.GetClientError(err)
 	}
 
-	if client.debug {
+	if client.DebugMode() {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))

@@ -33,7 +33,7 @@ var testDebugClient *Client
 func NewTestClientForDebug() *Client {
 	if testDebugClient == nil {
 		testDebugClient = NewClient(TestAccessKeyId, TestAccessKeySecret)
-		testDebugClient.SetDebug(true)
+		testDebugClient.SetDebugMode(true)
 	}
 	return testDebugClient
 }
@@ -43,7 +43,7 @@ var testLocationClient *Client
 func NetTestLocationClientForDebug() *Client {
 	if testLocationClient == nil {
 		testLocationClient = NewECSClient(TestAccessKeyId, TestAccessKeySecret, TestRegionID)
-		testLocationClient.SetDebug(true)
+		testLocationClient.SetDebugMode(true)
 	}
 
 	return testLocationClient

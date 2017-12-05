@@ -182,7 +182,7 @@ func (client *Client) GetProjectClient(clusterId string) (projectClient *Project
 		return
 	}
 
-	projectClient.SetDebug(client.debug)
+	projectClient.SetDebug(client.DebugMode())
 
 	return
 }

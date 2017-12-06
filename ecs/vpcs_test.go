@@ -175,3 +175,23 @@ func testCreateInstanceVpc(t *testing.T, client *Client, regionId common.Region,
 
 	return instanceId, sgId, err
 }
+
+func TestClient_DescribeVpcs(t *testing.T) {
+	client := NewTestClientForDebug()
+	client.SetSecurityToken(TestSecurityToken)
+
+	args := &DescribeVpcsArgs{
+		RegionId: TestRegionID,
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   100,
+		},
+	}
+
+	vpcs, _, err := client.DescribeVpcs(args)
+	if err != nil {
+		t.Fatal("Error %++v", err)
+	} else {
+		t.Logf("Result = %++v", vpcs)
+	}
+}

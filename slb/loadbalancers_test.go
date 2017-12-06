@@ -62,3 +62,20 @@ func TestLoadBlancer(t *testing.T) {
 	t.Logf("DeleteLoadBalancer successfully: %s", lbId)
 
 }
+
+func TestClient_DescribeLoadBalancers(t *testing.T) {
+	client := NewTestClientForDebug()
+	client.SetSecurityToken(TestSecurityToken)
+
+	args := &DescribeLoadBalancersArgs{
+		RegionId: TestRegionID,
+		//SecurityToken: TestSecurityToken,
+	}
+
+	slbs, err := client.DescribeLoadBalancers(args)
+	if err != nil {
+		t.Fatal("Failed %++v", err)
+	} else {
+		t.Logf("Result = %++v", slbs)
+	}
+}

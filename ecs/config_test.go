@@ -1,17 +1,23 @@
 package ecs
 
-import "github.com/denverdino/aliyungo/common"
+import (
+	"os"
+
+	"github.com/denverdino/aliyungo/common"
+)
 
 //Modify with your Access Key Id and Access Key Secret
 
-const (
-	TestAccessKeyId     = "MY_ACCESS_KEY_ID"
-	TestAccessKeySecret = "MY_ACCESS_KEY_SECRET"
+var (
+	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeySecret = os.Getenv("AccessKeySecret")
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
+
 	TestInstanceId      = "MY_TEST_INSTANCEID"
 	TestSecurityGroupId = "MY_TEST_SECURITY_GROUP_ID"
 	TestImageId         = "MY_IMAGE_ID"
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
-	TestRegionID        = common.APNorthEast1
 	TestInstanceType    = "ecs.n4.large"
 	TestVSwitchID       = "MY_TEST_VSWITCHID"
 

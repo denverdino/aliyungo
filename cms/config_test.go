@@ -1,11 +1,16 @@
 package cms
 
-import "github.com/denverdino/aliyungo/common"
+import (
+	"os"
 
-const (
-	TestAccessKeyId     = "YOUR_ACCESS_KEY_ID"
-	TestAccessKeySecret = "YOUR_ACCESS_KEY_SECRET"
-	TestRegionID        = common.Hangzhou
+	"github.com/denverdino/aliyungo/common"
+)
+
+var (
+	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeySecret = os.Getenv("AccessKeySecret")
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
 )
 
 var testClient *CMSClient

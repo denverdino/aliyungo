@@ -223,11 +223,6 @@ func (client *Client) SetAccessKeySecret(secret string) {
 	client.AccessKeySecret = secret + "&"
 }
 
-// SetAccessKeySecret sets securityToken
-func (client *Client) SetSecurityToken(securityToken string) {
-	client.securityToken = securityToken
-}
-
 // SetDebug sets debug mode to log the request/response message
 func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
@@ -245,6 +240,11 @@ func (client *Client) SetBusinessInfo(businessInfo string) {
 // SetUserAgent sets user agent to the request/response message
 func (client *Client) SetUserAgent(userAgent string) {
 	client.userAgent = userAgent
+}
+
+//set SecurityToken
+func (client *Client) SetSecurityToken(securityToken string) {
+	client.securityToken = securityToken
 }
 
 // Invoke sends the raw HTTP request for ECS services

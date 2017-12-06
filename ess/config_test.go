@@ -30,7 +30,7 @@ var testDebugClient *Client
 func NewTestClientForDebug(regionId common.Region) *Client {
 	if testDebugClient == nil {
 		testDebugClient = NewESSClient(TestAccessKeyId, TestAccessKeySecret, regionId)
-		testDebugClient.SetDebug(true)
+		testDebugClient.SetDebugMode(true)
 	}
 	return testDebugClient
 }

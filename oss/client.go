@@ -26,20 +26,23 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
+const (
+	// OSSDefaultEndpoint is the default API endpoint of OSS services
+	OSSDefaultEndpoint = "https://oss.aliyuncs.com"
+	OSSAPIVersion      = "0.1"
+	OSSServiceCode     = "oss"
+)
+
 const DefaultContentType = "application/octet-stream"
 
 // The Client type encapsulates operations with an OSS region.
 type Client struct {
-	AccessKeyId     string
-	AccessKeySecret string
-	SecurityToken   string
-	Region          Region
-	Internal        bool
-	Secure          bool
-	ConnectTimeout  time.Duration
-
-	endpoint string
-	debug    bool
+	common.Client
+	OssRegion      Region
+	Internal       bool
+	Secure         bool
+	securityToken  string
+	ConnectTimeout time.Duration
 }
 
 // The Bucket type encapsulates operations with an bucket.
@@ -86,43 +89,53 @@ var attempts = util.AttemptStrategy{
 	Delay: 200 * time.Millisecond,
 }
 
+// NewClient creates a new instance of OSS client
+func NewClient(accessKeyId, accessKeySecret string, regionID common.Region) *Client {
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret, "", regionID)
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string, regionID common.Region) *Client {
+	return NewClientWithEndpointAndSecurityToken(accessKeyId, accessKeySecret, securityToken, regionID)
+}
+
+func NewClientWithEndpointAndSecurityToken(accessKeyId, accessKeySecret, securityToken string, regionID common.Region) *Client {
+	client := &Client{
+		OssRegion:     Region(regionID),
+		securityToken: securityToken,
+	}
+	client.
+		WithVersion(OSSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(OSSServiceCode).
+		WithRegionID(regionID).
+		InitClient()
+	return client
+}
+
 // NewOSSClient creates a new OSS.
-
-func NewOSSClientForAssumeRole(region Region, internal bool, accessKeyId string, accessKeySecret string, securityToken string, secure bool) *Client {
-	return &Client{
-		AccessKeyId:     accessKeyId,
-		AccessKeySecret: accessKeySecret,
-		SecurityToken:   securityToken,
-		Region:          region,
-		Internal:        internal,
-		debug:           false,
-		Secure:          secure,
-	}
+func NewOSSClient(regionID Region, internal bool, accessKeyId string, accessKeySecret string, secure bool) *Client {
+	return NewOSSClientForAssumeRole(regionID, internal, accessKeyId, accessKeySecret, "", secure)
 }
 
-func NewOSSClient(region Region, internal bool, accessKeyId string, accessKeySecret string, secure bool) *Client {
-	return &Client{
-		AccessKeyId:     accessKeyId,
-		AccessKeySecret: accessKeySecret,
-		Region:          region,
-		Internal:        internal,
-		debug:           false,
-		Secure:          secure,
+func NewOSSClientForAssumeRole(regionID Region, internal bool, accessKeyId string, accessKeySecret string, securityToken string, secure bool) *Client {
+	client := &Client{
+		OssRegion:     regionID,
+		Internal:      internal,
+		Secure:        secure,
+		securityToken: securityToken,
 	}
-}
 
-// SetDebug sets debug mode to log the request/response message
-func (client *Client) SetDebug(debug bool) {
-	client.debug = debug
-}
-
-// Bucket returns a Bucket with the given name.
-func (client *Client) Bucket(name string) *Bucket {
-	name = strings.ToLower(name)
-	return &Bucket{
-		Client: client,
-		Name:   name,
-	}
+	client.
+		WithVersion(OSSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(OSSServiceCode).
+		WithRegionID(common.Region(regionID)).
+		InitClient()
+	return client
 }
 
 type BucketInfo struct {
@@ -141,6 +154,15 @@ type GetServiceResp struct {
 
 type GetBucketInfoResp struct {
 	Bucket BucketInfo
+}
+
+// Bucket returns a Bucket with the given name.
+func (client *Client) Bucket(name string) *Bucket {
+	name = strings.ToLower(name)
+	return &Bucket{
+		Client: client,
+		Name:   name,
+	}
 }
 
 // GetService gets a list of all buckets owned by an account.
@@ -179,14 +201,8 @@ var createBucketConfiguration = `<CreateBucketConfiguration>
 // locationConstraint returns an io.Reader specifying a LocationConstraint if
 // required for the region.
 func (client *Client) locationConstraint() io.Reader {
-	constraint := fmt.Sprintf(createBucketConfiguration, client.Region)
+	constraint := fmt.Sprintf(createBucketConfiguration, client.RegionID())
 	return strings.NewReader(constraint)
-}
-
-// override default endpoint
-func (client *Client) SetEndpoint(endpoint string) {
-	// TODO check endpoint
-	client.endpoint = endpoint
 }
 
 // Info query basic information about the bucket
@@ -889,7 +905,7 @@ func (b *Bucket) UploadSignedURL(name, method, contentType string, expires time.
 	signature := base64.StdEncoding.EncodeToString(macsum)
 	signature = strings.TrimSpace(signature)
 
-	signedurl, err := url.Parse(b.Region.GetEndpoint(b.Internal, b.Name, b.Secure))
+	signedurl, err := url.Parse(b.OssRegion.GetEndpoint(b.Internal, b.Name, b.Secure))
 	if err != nil {
 		log.Println("ERROR sining url for OSS upload", err)
 		return ""
@@ -935,7 +951,7 @@ func (b *Bucket) PostFormArgsEx(path string, expires time.Time, redirect string,
 	signer.Write([]byte(policy64))
 	fields["signature"] = base64.StdEncoding.EncodeToString(signer.Sum(nil))
 
-	action = fmt.Sprintf("%s/%s/", b.Client.Region, b.Name)
+	action = fmt.Sprintf("%s/%s/", b.Client.OssRegion, b.Name)
 	return
 }
 
@@ -985,10 +1001,10 @@ func (client *Client) query(req *request, resp interface{}) error {
 // Sets baseurl on req from bucket name and the region endpoint
 func (client *Client) setBaseURL(req *request) error {
 
-	if client.endpoint == "" {
-		req.baseurl = client.Region.GetEndpoint(client.Internal, req.bucket, client.Secure)
+	if client.Endpoint() == "" {
+		req.baseurl = client.OssRegion.GetEndpoint(client.Internal, req.bucket, client.Secure)
 	} else {
-		req.baseurl = fmt.Sprintf("%s://%s", getProtocol(client.Secure), client.endpoint)
+		req.baseurl = fmt.Sprintf("%s://%s", getProtocol(client.Secure), client.Endpoint())
 	}
 
 	return nil
@@ -1024,8 +1040,8 @@ func partiallyEscapedPath(path string) string {
 func (client *Client) prepare(req *request) error {
 	// Copy so they can be mutated without affecting on retries.
 	headers := copyHeader(req.headers)
-	if len(client.SecurityToken) != 0 {
-		headers.Set("x-oss-security-token", client.SecurityToken)
+	if len(client.securityToken) != 0 {
+		headers.Set("x-oss-security-token", client.securityToken)
 	}
 
 	params := make(url.Values)
@@ -1107,7 +1123,7 @@ func (client *Client) doHttpRequest(c *http.Client, hreq *http.Request, resp int
 	if err != nil {
 		return nil, err
 	}
-	if client.debug {
+	if client.DebugMode() {
 		log.Printf("%s %s %d\n", hreq.Method, hreq.URL.String(), hresp.StatusCode)
 		contentType := hresp.Header.Get("Content-Type")
 		if contentType == "application/xml" || contentType == "text/xml" {
@@ -1124,7 +1140,7 @@ func (client *Client) doHttpRequest(c *http.Client, hreq *http.Request, resp int
 		err = xml.NewDecoder(hresp.Body).Decode(resp)
 		hresp.Body.Close()
 
-		if client.debug {
+		if client.DebugMode() {
 			log.Printf("aliyungo.oss> decoded xml into %#v", resp)
 		}
 
@@ -1136,7 +1152,7 @@ func (client *Client) doHttpRequest(c *http.Client, hreq *http.Request, resp int
 // If resp is not nil, the XML data contained in the response
 // body will be unmarshalled on it.
 func (client *Client) run(req *request, resp interface{}) (*http.Response, error) {
-	if client.debug {
+	if client.DebugMode() {
 		log.Printf("Running OSS request: %#v", req)
 	}
 
@@ -1181,7 +1197,7 @@ func (e *Error) Error() string {
 }
 
 func (client *Client) buildError(r *http.Response) error {
-	if client.debug {
+	if client.DebugMode() {
 		log.Printf("got error (status code %v)", r.StatusCode)
 		data, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -1200,7 +1216,7 @@ func (client *Client) buildError(r *http.Response) error {
 	if err.Message == "" {
 		err.Message = r.Status
 	}
-	if client.debug {
+	if client.DebugMode() {
 		log.Printf("err: %#v\n", err)
 	}
 	return &err

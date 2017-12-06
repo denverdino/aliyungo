@@ -9,10 +9,10 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
-	"time"
 	"os"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/denverdino/aliyungo/util"
 )
@@ -30,7 +30,7 @@ type Client struct {
 	AccessKeyId     string //Access Key Id
 	AccessKeySecret string //Access Key Secret
 	securityToken   string
-	debug           bool
+	debugMode       bool
 	httpClient      *http.Client
 	endpoint        string
 	version         string
@@ -44,7 +44,7 @@ type Client struct {
 func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret string) {
 	client.AccessKeyId = accessKeyId
 	client.AccessKeySecret = accessKeySecret + "&"
-	client.debug = false
+	client.debugMode = false
 	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
 	if err != nil {
 		handshakeTimeout = 0
@@ -53,8 +53,8 @@ func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret strin
 		client.httpClient = &http.Client{}
 	} else {
 		t := &http.Transport{
-			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second,}
-		client.httpClient = &http.Client{Transport: t,}
+			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
+		client.httpClient = &http.Client{Transport: t}
 	}
 	client.endpoint = endpoint
 	client.version = version
@@ -70,7 +70,8 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 
 // Intialize client object when all properties are ready
 func (client *Client) InitClient() *Client {
-	client.debug = false
+	client.debugMode = false
+
 	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
 	if err != nil {
 		handshakeTimeout = 0
@@ -79,8 +80,8 @@ func (client *Client) InitClient() *Client {
 		client.httpClient = &http.Client{}
 	} else {
 		t := &http.Transport{
-			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second,}
-		client.httpClient = &http.Client{Transport: t,}
+			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
+		client.httpClient = &http.Client{Transport: t}
 	}
 	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret)
 	return client
@@ -121,7 +122,7 @@ func (client *Client) ensureProperties() error {
 }
 
 // ----------------------------------------------------
-// WithXXX methods
+// WithXxx methods
 // ----------------------------------------------------
 
 // WithEndpoint sets custom endpoint
@@ -166,9 +167,9 @@ func (client *Client) WithSecurityToken(securityToken string) *Client {
 	return client
 }
 
-// WithDebug sets debug mode to log the request/response message
-func (client *Client) WithDebug(debug bool) *Client {
-	client.SetDebug(debug)
+// WithDebugMode sets debugMode mode to log the request/response message
+func (client *Client) WithDebugMode(debug bool) *Client {
+	client.SetDebugMode(debug)
 	return client
 }
 
@@ -185,7 +186,45 @@ func (client *Client) WithUserAgent(userAgent string) *Client {
 }
 
 // ----------------------------------------------------
-// SetXXX methods
+// Properties
+// ----------------------------------------------------
+
+func (client *Client) Endpoint() string {
+	return client.endpoint
+}
+
+func (client *Client) Version() string {
+	return client.version
+}
+
+func (client *Client) RegionID() Region {
+	return client.regionID
+}
+
+func (client *Client) ServiceCode() string {
+	return client.serviceCode
+}
+
+func (client *Client) DebugMode() bool {
+	return client.debugMode
+}
+
+func (client *Client) BusinessInfo() string {
+	return client.businessInfo
+}
+
+func (client *Client) UserAgent() string {
+	return client.userAgent
+}
+
+// TODO: Temporary soulution for old codes
+// Not to use this property method, it's temporary
+func (client *Client) HttpClient() *http.Client {
+	return client.httpClient
+}
+
+// ----------------------------------------------------
+// SetXxx methods
 // ----------------------------------------------------
 
 // SetEndpoint sets custom endpoint
@@ -223,9 +262,9 @@ func (client *Client) SetSecurityToken(securityToken string) {
 	client.securityToken = securityToken
 }
 
-// SetDebug sets debug mode to log the request/response message
-func (client *Client) SetDebug(debug bool) {
-	client.debug = debug
+// SetDebugMode sets debugMode mode to log the request/response message
+func (client *Client) SetDebugMode(debugMode bool) {
+	client.debugMode = debugMode
 }
 
 // SetBusinessInfo sets business info to log the request/response message
@@ -278,7 +317,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.debugMode {
 		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
 	}
 
@@ -289,7 +328,7 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 		return GetClientError(err)
 	}
 
-	if client.debug {
+	if client.debugMode {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))
@@ -351,7 +390,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.debugMode {
 		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
 	}
 
@@ -362,7 +401,7 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 		return GetClientError(err)
 	}
 
-	if client.debug {
+	if client.debugMode {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))
@@ -436,7 +475,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	}
 	statusCode := httpResp.StatusCode
 
-	if client.debug {
+	if client.debugMode {
 		log.Printf("Invoke %s %s %d (%v) %v", ECSRequestMethod, client.endpoint, statusCode, t1.Sub(t0), data.Encode())
 	}
 
@@ -447,7 +486,7 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 		return GetClientError(err)
 	}
 
-	if client.debug {
+	if client.debugMode {
 		var prettyJSON bytes.Buffer
 		err = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(string(prettyJSON.Bytes()))

@@ -16,7 +16,7 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 		t.Fatalf("Failed to describe instance %s: %v", TestInstanceId, err)
 	}
 
-	//client.SetDebug(true)
+	//client.SetDebugMode(true)
 
 	regionId := instance.RegionId
 	zoneId := instance.ZoneId

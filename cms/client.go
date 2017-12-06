@@ -1,23 +1,14 @@
 package cms
 
 import (
-	"net/http"
-
 	"os"
 
 	"github.com/denverdino/aliyungo/common"
 )
 
 type Client struct {
-	endpoint        string
-	accessKeyId     string //Access Key Id
-	accessKeySecret string //Access Key Secret
-
-	debug      bool
-	httpClient *http.Client
-	version    string
-	internal   bool
-	//region     common.Region
+	common.Client
+	internal bool
 }
 
 type CMSClient struct {
@@ -38,30 +29,44 @@ const (
 	CMSServiceCode     = "cms"
 )
 
-//TODO 旧的API
 // NewClient creates a new instance of ECS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	return &Client{
-		accessKeyId:     accessKeyId,
-		accessKeySecret: accessKeySecret,
-		internal:        false,
-		//region:          region,
-		version:    APIVersion,
-		endpoint:   DefaultEndpoint,
-		httpClient: &http.Client{},
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret, "")
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("CMS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = CMSDefaultEndpoint
 	}
+
+	return NewClientWithEndpointAndSecurityToken(endpoint, false, accessKeyId, accessKeySecret, securityToken)
+}
+
+func NewClientWithEndpointAndSecurityToken(endpoint string, internal bool, accessKeyId, accessKeySecret, securityToken string) *Client {
+	client := &Client{
+		internal: internal,
+	}
+	client.WithEndpoint(endpoint).
+		WithVersion(CMSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(CMSServiceCode).
+		InitClient()
+	return client
 }
 
 func (client *Client) GetApiUri() string {
-	return client.endpoint
+	return client.Endpoint()
 }
 
 func (client *Client) GetAccessKey() string {
-	return client.accessKeyId
+	return client.AccessKeyId
 }
 
 func (client *Client) GetAccessSecret() string {
-	return client.accessKeySecret
+	return client.AccessKeySecret
 }
 
 // NewClient creates a new instance of CMS client

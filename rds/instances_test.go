@@ -1,10 +1,11 @@
 package rds
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 func TestDBPostpaidClassicInstanceCreationAndDeletion(t *testing.T) {
@@ -160,6 +161,7 @@ func TestGetZonesByRegionId(t *testing.T) {
 	resp, err := client.DescribeRegions()
 	if err != nil {
 		t.Errorf("Failed to describe rds regions %v", err)
+		return
 	}
 
 	regions := resp.Regions.RDSRegion
@@ -328,6 +330,10 @@ func TestModifyDBInstanceSpec(t *testing.T) {
 		DBInstanceId: DBInstanceUpgradeId,
 	}
 	attrResp, err := client.DescribeDBInstanceAttribute(&arrtArgs)
+	if err != nil {
+		t.Errorf("Failed to DescribeDBInstanceAttribute: %v, %v", arrtArgs, err)
+		return
+	}
 	t.Logf("Instance: %++v  %v", attrResp, err)
 
 	if attrResp.Items.DBInstanceAttribute[0].DBInstanceClass != DBInstanceUpgradeClass {

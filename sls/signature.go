@@ -3,10 +3,11 @@ package sls
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/denverdino/aliyungo/util"
 	"net/url"
 	"sort"
 	"strings"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 const HeaderSLSPrefix1 = "x-log-"
@@ -42,8 +43,8 @@ func (client *Client) signRequest(req *request, payload []byte) {
 
 	signString := req.method + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n" + canonicalizedHeader + "\n" + canonicalizedResource
 
-	signature := util.CreateSignature(signString, client.accessKeySecret)
-	req.headers["Authorization"] = "LOG " + client.accessKeyId + ":" + signature
+	signature := util.CreateSignature(signString, client.AccessKeySecret)
+	req.headers["Authorization"] = "LOG " + client.AccessKeyId + ":" + signature
 }
 
 func canonicalizeResource(req *request) string {

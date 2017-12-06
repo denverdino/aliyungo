@@ -19,30 +19,39 @@ const (
 
 // NewClient creates a new instance of RDS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
-	endpoint := os.Getenv("ESS_ENDPOINT")
-	if endpoint == "" {
-		endpoint = ESSDefaultEndpoint
-	}
-	return NewClientWithEndpoint(endpoint, accessKeyId, accessKeySecret)
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret, "", "")
 }
 
 func NewClientWithEndpoint(endpoint string, accessKeyId, accessKeySecret string) *Client {
-	client := &Client{}
-	client.Init(endpoint, ESSAPIVersion, accessKeyId, accessKeySecret)
-	return client
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "", "")
 }
 
 func NewESSClient(accessKeyId, accessKeySecret string, regionID common.Region) *Client {
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret, "", regionID)
+}
+
+func NewClientWithRegion(endpoint string, accessKeyId, accessKeySecret string, regionID common.Region) *Client {
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "", regionID)
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string, regionID common.Region) *Client {
 	endpoint := os.Getenv("ESS_ENDPOINT")
 	if endpoint == "" {
 		endpoint = ESSDefaultEndpoint
 	}
 
-	return NewClientWithRegion(endpoint, accessKeyId, accessKeySecret, regionID)
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)
 }
 
-func NewClientWithRegion(endpoint string, accessKeyId, accessKeySecret string, regionID common.Region) *Client {
+func NewClientWithEndpointAndSecurityToken(endpoint string, accessKeyId, accessKeySecret, securityToken string, regionID common.Region) *Client {
 	client := &Client{}
-	client.NewInit(endpoint, ESSAPIVersion, accessKeyId, accessKeySecret, ESSServiceCode, regionID)
+	client.WithEndpoint(endpoint).
+		WithVersion(ESSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(ESSServiceCode).
+		WithRegionID(regionID).
+		InitClient()
 	return client
 }

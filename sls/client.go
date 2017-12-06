@@ -3,7 +3,6 @@ package sls
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/denverdino/aliyungo/common"
 	"github.com/golang/protobuf/proto"
@@ -13,14 +12,8 @@ import (
 )
 
 type Client struct {
-	accessKeyId     string //Access Key Id
-	accessKeySecret string //Access Key Secret
-	debug           bool
-	httpClient      *http.Client
-	version         string
-	internal        bool
-	region          common.Region
-	endpoint        string
+	common.Client
+	internal bool
 }
 
 type Project struct {
@@ -61,25 +54,37 @@ const (
 	METHOD_DELETE      = "DELETE"
 )
 
-// NewClient creates a new instance of ECS client
-func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
+// NewClient creates a new instance of SLS client
+func NewClient(regionID common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
+	return NewClientWithSecurityToken(accessKeyId, accessKeySecret, "", internal, regionID)
+}
+
+func NewClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string, internal bool, regionID common.Region) *Client {
 	endpoint := os.Getenv("SLS_ENDPOINT")
 	if endpoint == "" {
 		endpoint = SLSDefaultEndpoint
 	}
-	return NewClientWithEndpoint(endpoint, region, internal, accessKeyId, accessKeySecret)
+
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken, internal, regionID)
 }
 
-func NewClientWithEndpoint(endpoint string, region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
-	return &Client{
-		accessKeyId:     accessKeyId,
-		accessKeySecret: accessKeySecret,
-		internal:        internal,
-		region:          region,
-		version:         SLSAPIVersion,
-		endpoint:        endpoint,
-		httpClient:      &http.Client{},
+func NewClientWithEndpoint(endpoint string, regionID common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {
+	return NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "", internal, regionID)
+}
+
+func NewClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken string, internal bool, regionID common.Region) *Client {
+	client := &Client{
+		internal: internal,
 	}
+
+	client.WithEndpoint(endpoint).
+		WithVersion(SLSAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithRegionID(regionID).
+		InitClient()
+	return client
 }
 
 func (client *Client) Project(name string) (*Project, error) {
@@ -107,11 +112,11 @@ func (client *Client) Project(name string) (*Project, error) {
 func (client *Client) forProject(name string) *Client {
 	newclient := *client
 
-	region := string(client.region)
+	region := string(client.RegionID())
 	if client.internal {
 		region = fmt.Sprintf("%s-intranet", region)
 	}
-	newclient.endpoint = fmt.Sprintf("%s.%s.%s", name, region, client.endpoint)
+	newclient.SetEndpoint(fmt.Sprintf("%s.%s.%s", name, region, client.Endpoint()))
 	return &newclient
 }
 

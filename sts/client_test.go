@@ -23,6 +23,6 @@ func NewRAMTestClient() ram.RamClientInterface {
 
 func NewTestClient() *STSClient {
 	client := NewClient(AccessKeyId, AccessKeySecret)
-	//client.SetDebug(true)
+	//client.SetDebugMode(true)
 	return client
 }

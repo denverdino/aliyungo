@@ -30,7 +30,7 @@ var testDebugClient *Client
 func NewTestClientForDebug() *Client {
 	if testDebugClient == nil {
 		testDebugClient = NewClient(TestAccessKeyId, TestAccessKeySecret)
-		testDebugClient.SetDebug(true)
+		testDebugClient.SetDebugMode(true)
 	}
 	return testDebugClient
 }
@@ -40,7 +40,7 @@ var testDebugNewSLBClient *Client
 func NewTestNewSLBClientForDebug() *Client {
 	if testDebugNewSLBClient == nil {
 		testDebugNewSLBClient = NewSLBClient(TestAccessKeyId, TestAccessKeySecret, TestRegionID)
-		testDebugNewSLBClient.SetDebug(true)
+		testDebugNewSLBClient.SetDebugMode(true)
 	}
 	return testDebugNewSLBClient
 }

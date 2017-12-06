@@ -48,7 +48,7 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	}
 
 	if req.endpoint == "" {
-		req.endpoint = client.Endpoint
+		req.endpoint = client.Endpoint()
 	}
 
 	contentLength := "0"
@@ -61,7 +61,7 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	req.headers["Content-Length"] = contentLength
 	req.headers["Date"] = util.GetGMTime()
 	req.headers["Host"] = req.endpoint
-	req.headers["x-mns-version"] = client.Version
+	req.headers["x-mns-version"] = client.Version()
 
 	client.SignRequest(req, payload)
 
@@ -84,7 +84,7 @@ func (client *Client) doRequest(req *request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := client.httpClient.Do(hreq)
+	resp, err := client.HttpClient().Do(hreq)
 	if err != nil {
 		return nil, err
 	}

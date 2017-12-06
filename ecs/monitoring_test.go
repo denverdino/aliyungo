@@ -9,7 +9,7 @@ import (
 
 func TestMonitoring(t *testing.T) {
 	client := NewTestClient()
-	//client.SetDebug(true)
+	//client.SetDebugMode(true)
 
 	//Describe test instance
 	instance, err := client.DescribeInstanceAttribute(TestInstanceId)

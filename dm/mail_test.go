@@ -3,6 +3,7 @@ package dm
 import (
 	"os"
 	"testing"
+	"strconv"
 )
 
 func TestBatchMail(t *testing.T) {
@@ -25,7 +26,7 @@ func TestSingleMail(t *testing.T) {
 	ID := os.Getenv("ALI_DM_ACCESS_KEY_ID")
 	SECRET := os.Getenv("ALI_DM_ACCESS_KEY_SECRET")
 	accountName := os.Getenv("ALI_DM_ACCOUNT_NAME")
-	replyToAddress := os.Getenv("ALI_DM_REPLY_TO_ADDRESS")
+	replyToAddress,_ := strconv.ParseBool(os.Getenv("ALI_DM_REPLY_TO_ADDRESS"))
 	toAddress := os.Getenv("ALI_DM_TO_ADDRESS")
 	client := NewClient(ID, SECRET)
 	err := client.SendSingleMail(&SendSingleMailArgs{SendEmailArgs: SendEmailArgs{AccountName:accountName,

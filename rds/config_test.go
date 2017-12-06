@@ -1,11 +1,19 @@
 package rds
 
+import (
+	"os"
+
+	"github.com/denverdino/aliyungo/common"
+)
+
 //Modify with your Access Key Id and Access Key Secret
 
-const (
-	TestAccessKeyId        = "MY_ACCESS_KEY_ID"
-	TestAccessKeySecret    = "MY_ACCESS_KEY_SECRET"
-	RegionId               = "MY_TEST_REGION_ID"
+var (
+	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeySecret = os.Getenv("AccessKeySecret")
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
+
 	ZoneId                 = "MY_TEST_ZONE_ID"
 	VPCId                  = "MY_TEST_VPC_ID"
 	VSwitchId              = "MY_TEST_VSWITCH_ID"

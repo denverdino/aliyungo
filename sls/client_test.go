@@ -1,20 +1,25 @@
 package sls
 
 import (
-	"github.com/denverdino/aliyungo/common"
+	"os"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
-const (
-	AccessKeyId      = ""
-	AccessKeySecret  = ""
-	Region           = common.Hangzhou
-	TestProjectName  = "test-project123"
-	TestLogstoreName = "test-logstore"
+var (
+	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeySecret = os.Getenv("AccessKeySecret")
+	TestSecurityToken   = os.Getenv("SecurityToken")
+	TestRegionID        = common.Region(os.Getenv("RegionId"))
+	TestMachineGroup    = os.Getenv("MachineGroup")
+	Region              = common.Hangzhou
+	TestProjectName     = os.Getenv("ProjectName")
+	TestLogstoreName    = "test-logstore"
 )
 
 func DefaultProject(t *testing.T) *Project {
-	client := NewClient(Region, false, AccessKeyId, AccessKeySecret)
+	client := NewClient(Region, false, TestAccessKeyId, TestAccessKeySecret)
 	err := client.CreateProject(TestProjectName, "description")
 	if err != nil {
 		if e, ok := err.(*Error); ok && e.Code != "ProjectAlreadyExist" {
@@ -42,3 +47,12 @@ func DefaultProject(t *testing.T) *Project {
 	return p
 }
 
+var testDebugClient *Client
+
+func NewTestClientForDebug() *Client {
+	if testDebugClient == nil {
+		testDebugClient = NewClientForAssumeRole(TestRegionID, false, TestAccessKeyId, TestAccessKeySecret, TestSecurityToken)
+		testDebugClient.SetDebug(true)
+	}
+	return testDebugClient
+}

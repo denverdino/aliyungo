@@ -3,10 +3,11 @@ package sls
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/denverdino/aliyungo/util"
 	"net/url"
 	"sort"
 	"strings"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 const HeaderSLSPrefix1 = "x-log-"

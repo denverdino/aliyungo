@@ -15,12 +15,17 @@ import (
 type Client struct {
 	accessKeyId     string //Access Key Id
 	accessKeySecret string //Access Key Secret
+	securityToken   string //sts token
 	debug           bool
 	httpClient      *http.Client
 	version         string
 	internal        bool
 	region          common.Region
 	endpoint        string
+}
+
+func (client *Client) SetDebug(debug bool) {
+	client.debug = debug
 }
 
 type Project struct {
@@ -68,6 +73,24 @@ func NewClient(region common.Region, internal bool, accessKeyId, accessKeySecret
 		endpoint = SLSDefaultEndpoint
 	}
 	return NewClientWithEndpoint(endpoint, region, internal, accessKeyId, accessKeySecret)
+}
+
+func NewClientForAssumeRole(region common.Region, internal bool, accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("SLS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = SLSDefaultEndpoint
+	}
+
+	return &Client{
+		accessKeyId:     accessKeyId,
+		accessKeySecret: accessKeySecret,
+		securityToken:   securityToken,
+		internal:        internal,
+		region:          region,
+		version:         SLSAPIVersion,
+		endpoint:        endpoint,
+		httpClient:      &http.Client{},
+	}
 }
 
 func NewClientWithEndpoint(endpoint string, region common.Region, internal bool, accessKeyId, accessKeySecret string) *Client {

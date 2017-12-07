@@ -344,7 +344,7 @@ func TestClient_DescribeRegions(t *testing.T) {
 
 	regions, err := client.DescribeRegions()
 	if err != nil {
-		t.Fatal("Error %++v", err)
+		t.Fatalf("Error %++v", err)
 	} else {
 		t.Logf("Result = %++v", regions)
 	}

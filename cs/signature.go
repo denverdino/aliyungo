@@ -36,7 +36,6 @@ func canonicalizeHeader(headers http.Header) (newHeaders http.Header, result str
 	newHeaders = http.Header{}
 
 	for k, v := range headers {
-		fmt.Printf("Header[%d] = %++v", k, v)
 		if lower := strings.ToLower(k); strings.HasPrefix(lower, headerOSSPrefix) {
 			newHeaders[lower] = v
 			canonicalizedHeaders = append(canonicalizedHeaders, lower)

@@ -190,7 +190,7 @@ func TestClient_DescribeVpcs(t *testing.T) {
 
 	vpcs, _, err := client.DescribeVpcs(args)
 	if err != nil {
-		t.Fatal("Error %++v", err)
+		t.Fatalf("Error %++v", err)
 	} else {
 		t.Logf("Result = %++v", vpcs)
 	}

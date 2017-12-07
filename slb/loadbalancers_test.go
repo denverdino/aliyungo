@@ -74,7 +74,7 @@ func TestClient_DescribeLoadBalancers(t *testing.T) {
 
 	slbs, err := client.DescribeLoadBalancers(args)
 	if err != nil {
-		t.Fatal("Failed %++v", err)
+		t.Fatalf("Failed %++v", err)
 	} else {
 		t.Logf("Result = %++v", slbs)
 	}

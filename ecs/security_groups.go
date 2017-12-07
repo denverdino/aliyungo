@@ -6,10 +6,15 @@ import (
 )
 
 type NicType string
+type Direction string
 
 const (
 	NicTypeInternet = NicType("internet")
 	NicTypeIntranet = NicType("intranet")
+
+	DirectionIngress = Direction("ingress")
+	DirectionEgress  = Direction("egress")
+	DirectionAll     = Direction("all")
 )
 
 type IpProtocol string
@@ -32,8 +37,8 @@ const (
 type DescribeSecurityGroupAttributeArgs struct {
 	SecurityGroupId string
 	RegionId        common.Region
-	NicType         NicType //enum for internet (default) |intranet
-	Direction       string  // enum ingress egress
+	NicType         NicType   //enum for internet (default) |intranet
+	Direction       Direction // enum ingress egress
 }
 
 //

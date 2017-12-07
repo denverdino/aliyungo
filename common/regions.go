@@ -24,6 +24,9 @@ const (
 	MEEast1 = Region("me-east-1")
 
 	EUCentral1 = Region("eu-central-1")
+
+	ShenZhenFinance = Region("cn-shenzhen-finance-1")
+	ShanghaiFinance = Region("cn-shanghai-finance-1")
 )
 
 var ValidRegions = []Region{
@@ -32,4 +35,5 @@ var ValidRegions = []Region{
 	APNorthEast1, APSouthEast1, APSouthEast2, APSouthEast3,
 	MEEast1,
 	EUCentral1,
+	ShenZhenFinance, ShanghaiFinance,
 }

@@ -435,7 +435,7 @@ func newRandReader(n int64) *randReader {
 func TestNewOSSClientForAssumeRole_GetServices(t *testing.T) {
 	bucketList, err := assumeRoleClient.GetService()
 	if err != nil {
-		t.Fatal("Error %++v", err)
+		t.Fatalf("Error %++v", err)
 	} else {
 		t.Logf("GetService: %++v", bucketList)
 	}

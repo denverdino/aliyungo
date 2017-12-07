@@ -27,6 +27,8 @@ type CreateLoadBalancerArgs struct {
 	InternetChargeType InternetChargeType
 	Bandwidth          int
 	ClientToken        string
+	MasterZoneId       string
+	SlaveZoneId        string
 }
 
 type CreateLoadBalancerResponse struct {

@@ -14,8 +14,10 @@ type DBInstanceIPArray struct {
 
 // ref: https://help.aliyun.com/document_detail/26242.html
 type ModifySecurityIpsArgs struct {
-	DBInstanceId string
-	DBInstanceIPArray
+	DBInstanceId               string
+	SecurityIps                string
+	DBInstanceIPArrayName      string
+	DBInstanceIPArrayAttribute string
 }
 
 func (client *Client) ModifySecurityIps(args *ModifySecurityIpsArgs) (resp common.Response, err error) {
@@ -228,7 +230,6 @@ type DBInstanceAttribute struct {
 	VSwitchId                   string
 	VpcId                       string
 }
-
 
 type ReadOnlyDBInstanceIds struct {
 	ReadOnlyDBInstanceId []ReadOnlyDBInstanceId

@@ -440,6 +440,28 @@ func (client *Client) DescribeInstancesWithRaw(args *DescribeInstancesArgs) (res
 	return response, nil
 }
 
+type ModifyInstanceAutoReleaseTimeArgs struct {
+	InstanceId      string
+	AutoReleaseTime string
+}
+
+type ModifyInstanceAutoReleaseTimeResponse struct {
+	common.Response
+}
+
+// 对给定的实例设定自动释放时间。
+//
+// You can read doc at https://help.aliyun.com/document_detail/47576.html
+func (client *Client) ModifyInstanceAutoReleaseTime(instanceId, time string) error {
+	args := ModifyInstanceAutoReleaseTimeArgs{
+		InstanceId:      instanceId,
+		AutoReleaseTime: time,
+	}
+	response := ModifyInstanceAutoReleaseTimeResponse{}
+	err := client.Invoke("ModifyInstanceAutoReleaseTime", &args, &response)
+	return err
+}
+
 type DeleteInstanceArgs struct {
 	InstanceId string
 }

@@ -10,7 +10,7 @@ type RecordTypeNew struct {
 	Type       string
 	Value      string
 	TTL        float64
-	Priority   string
+	Priority   int32
 	Line       string
 	Status     string
 	Locked     bool

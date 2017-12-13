@@ -3,6 +3,8 @@ package slb
 import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
+	"time"
+	"fmt"
 )
 
 type AddressType string
@@ -237,4 +239,32 @@ func (client *Client) DescribeLoadBalancerAttribute(loadBalancerId string) (load
 		return nil, err
 	}
 	return &response.LoadBalancerType, err
+}
+
+// WaitForListener waits for listener to given status
+func (client *Client) WaitForLoadBalancerAsyn(loadBalancerId string, status Status, timeout int) error {
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+
+	for {
+		lb, err := client.DescribeLoadBalancerAttribute(loadBalancerId)
+
+		e, _ := err.(*common.Error)
+		if e != nil {
+			if e.StatusCode == 404 || e.Code == "InvalidLoadBalancerId.NotFound" {
+				continue
+			}
+			return err
+		} else if lb != nil && Status(lb.LoadBalancerStatus) == status {
+			//TODO
+			break
+		}
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return common.GetClientErrorFromString(fmt.Sprintf("Timeout waitting for load balacner %#v", status))
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

@@ -1,144 +1,113 @@
 package metadata
 
 import (
-	"errors"
 	"fmt"
-	"net/http"
-	"strings"
 	"testing"
+	"strings"
+	"errors"
 )
 
 func init() {
 	fmt.Println("make sure your ecs is in vpc before you run ```go test```")
 }
 
-type MockMetaDataClient struct {
-	I IMetaDataClient
+func send(resource string) (string, error) {
+
+	if strings.Contains(resource, HOSTNAME) {
+		return "hostname-test", nil
+	}
+
+	if strings.Contains(resource, DNS_NAMESERVERS) {
+		return "8.8.8.8\n8.8.4.4", nil
+	}
+
+	if strings.Contains(resource, EIPV4) {
+		return "1.1.1.1-test", nil
+	}
+
+	if strings.Contains(resource, IMAGE_ID) {
+		return "image-id-test", nil
+	}
+
+	if strings.Contains(resource, INSTANCE_ID) {
+		return "instanceid-test", nil
+	}
+
+	if strings.Contains(resource, MAC) {
+		return "mac-test", nil
+	}
+
+	if strings.Contains(resource, NETWORK_TYPE) {
+		return "network-type-test", nil
+	}
+
+	if strings.Contains(resource, OWNER_ACCOUNT_ID) {
+		return "owner-account-id-test", nil
+	}
+
+	if strings.Contains(resource, PRIVATE_IPV4) {
+		return "private-ipv4-test", nil
+	}
+
+	if strings.Contains(resource, REGION) {
+		return "region-test", nil
+	}
+
+	if strings.Contains(resource, SERIAL_NUMBER) {
+		return "serial-number-test", nil
+	}
+
+	if strings.Contains(resource, SOURCE_ADDRESS) {
+		return "source-address-test", nil
+	}
+
+	if strings.Contains(resource, VPC_CIDR_BLOCK) {
+		return "vpc-cidr-block-test", nil
+	}
+
+	if strings.Contains(resource, VPC_ID) {
+		return "vpc-id-test", nil
+	}
+
+	if strings.Contains(resource, VSWITCH_CIDR_BLOCK) {
+		return "vswitch-cidr-block-test", nil
+	}
+
+	if strings.Contains(resource, VSWITCH_ID) {
+		return "vswitch-id-test", nil
+	}
+
+	if strings.Contains(resource, NTP_CONF_SERVERS) {
+		return "ntp1.server.com\nntp2.server.com", nil
+	}
+
+	if strings.Contains(resource, ZONE) {
+		return "zone-test", nil
+	}
+	if strings.Contains(resource, RAM_SECURITY) {
+		role := `
+		{
+  "AccessKeyId" : "",
+  "AccessKeySecret" : "",
+  "Expiration" : "2017-12-05T13:30:01Z",
+  "SecurityToken" : "",
+  "LastUpdated" : "2017-12-05T07:30:01Z",
+  "Code" : "Success"
+}
+		`
+		return role, nil
+	}
+	return "", errors.New("unknow resource error.")
 }
 
-func (vpc *MockMetaDataClient) Version(version string) IMetaDataClient {
-	vpc.I.Version(version)
-	return vpc
-}
-
-func (vpc *MockMetaDataClient) ResourceType(rtype string) IMetaDataClient {
-	vpc.I.ResourceType(rtype)
-	return vpc
-}
-
-func (vpc *MockMetaDataClient) Resource(resource string) IMetaDataClient {
-	vpc.I.Resource(resource)
-	return vpc
-}
-
-func (vpc *MockMetaDataClient) Url() (string, error) {
-	return vpc.I.Url()
-}
-
-func (m *MockMetaDataClient) Go() ([]string, error) {
-	uri, err := m.Url()
-	if err != nil {
-		return []string{}, errors.New("error retrieve url")
-	}
-	if strings.Contains(uri, HOSTNAME) {
-		return []string{"hostname-test"}, nil
-	}
-
-	if strings.Contains(uri, DNS_NAMESERVERS) {
-		return []string{"8.8.8.8", "8.8.4.4"}, nil
-	}
-
-	if strings.Contains(uri, EIPV4) {
-		return []string{"1.1.1.1-test"}, nil
-	}
-
-	if strings.Contains(uri, IMAGE_ID) {
-		return []string{"image-id-test"}, nil
-	}
-
-	if strings.Contains(uri, INSTANCE_ID) {
-		return []string{"instanceid-test"}, nil
-	}
-
-	if strings.Contains(uri, MAC) {
-		return []string{"mac-test"}, nil
-	}
-
-	if strings.Contains(uri, NETWORK_TYPE) {
-		return []string{"network-type-test"}, nil
-	}
-
-	if strings.Contains(uri, OWNER_ACCOUNT_ID) {
-		return []string{"owner-account-id-test"}, nil
-	}
-
-	if strings.Contains(uri, PRIVATE_IPV4) {
-		return []string{"private-ipv4-test"}, nil
-	}
-
-	if strings.Contains(uri, REGION) {
-		return []string{"region-test"}, nil
-	}
-
-	if strings.Contains(uri, SERIAL_NUMBER) {
-		return []string{"serial-number-test"}, nil
-	}
-
-	if strings.Contains(uri, SOURCE_ADDRESS) {
-		return []string{"source-address-test"}, nil
-	}
-
-	if strings.Contains(uri, VPC_CIDR_BLOCK) {
-		return []string{"vpc-cidr-block-test"}, nil
-	}
-
-	if strings.Contains(uri, VPC_ID) {
-		return []string{"vpc-id-test"}, nil
-	}
-
-	if strings.Contains(uri, VSWITCH_CIDR_BLOCK) {
-		return []string{"vswitch-cidr-block-test"}, nil
-	}
-
-	if strings.Contains(uri, VSWITCH_ID) {
-		return []string{"vswitch-id-test"}, nil
-	}
-
-	if strings.Contains(uri, NTP_CONF_SERVERS) {
-		return []string{"ntp1.server.com", "ntp2.server.com"}, nil
-	}
-
-	if strings.Contains(uri, ZONE) {
-		return []string{"zone-test"}, nil
-	}
-
-	return nil, errors.New("unknow resource error.")
-}
 
 func TestOK(t *testing.T) {
 	fmt.Println("ok")
 }
 
-func NewMockMetaData(client *http.Client) *MetaData {
-	if client == nil {
-		client = &http.Client{}
-	}
-	return &MetaData{
-		c: &MetaDataClient{client: client},
-	}
-}
-
-//func NewMockMetaData(client *http.Client)* MetaData{
-//	if client == nil {
-//		client = &http.Client{}
-//	}
-//	return &MetaData{
-//		c: &MockMetaDataClient{&MetaDataClient{client:client}},
-//	}
-//}
 
 func TestHostname(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.HostName()
 	if err != nil {
 		t.Errorf("hostname err: %s", err.Error())
@@ -149,7 +118,7 @@ func TestHostname(t *testing.T) {
 }
 
 func TestEIPV4(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.EIPv4()
 	if err != nil {
 		t.Errorf("EIPV4 err: %s", err.Error())
@@ -159,7 +128,7 @@ func TestEIPV4(t *testing.T) {
 	}
 }
 func TestImageID(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.ImageID()
 	if err != nil {
 		t.Errorf("IMAGE_ID err: %s", err.Error())
@@ -169,7 +138,7 @@ func TestImageID(t *testing.T) {
 	}
 }
 func TestInstanceID(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.InstanceID()
 	if err != nil {
 		t.Errorf("IMAGE_ID err: %s", err.Error())
@@ -179,7 +148,7 @@ func TestInstanceID(t *testing.T) {
 	}
 }
 func TestMac(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.Mac()
 	if err != nil {
 		t.Errorf("Mac err: %s", err.Error())
@@ -189,7 +158,7 @@ func TestMac(t *testing.T) {
 	}
 }
 func TestNetworkType(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.NetworkType()
 	if err != nil {
 		t.Errorf("NetworkType err: %s", err.Error())
@@ -199,7 +168,7 @@ func TestNetworkType(t *testing.T) {
 	}
 }
 func TestOwnerAccountID(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.OwnerAccountID()
 	if err != nil {
 		t.Errorf("owneraccountid err: %s", err.Error())
@@ -209,7 +178,7 @@ func TestOwnerAccountID(t *testing.T) {
 	}
 }
 func TestPrivateIPv4(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.PrivateIPv4()
 	if err != nil {
 		t.Errorf("privateIPv4 err: %s", err.Error())
@@ -219,7 +188,7 @@ func TestPrivateIPv4(t *testing.T) {
 	}
 }
 func TestRegion(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.Region()
 	if err != nil {
 		t.Errorf("region err: %s", err.Error())
@@ -229,7 +198,7 @@ func TestRegion(t *testing.T) {
 	}
 }
 func TestSerialNumber(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.SerialNumber()
 	if err != nil {
 		t.Errorf("serial number err: %s", err.Error())
@@ -240,7 +209,7 @@ func TestSerialNumber(t *testing.T) {
 }
 
 func TestSourceAddress(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.SourceAddress()
 	if err != nil {
 		t.Errorf("source address err: %s", err.Error())
@@ -250,7 +219,7 @@ func TestSourceAddress(t *testing.T) {
 	}
 }
 func TestVpcCIDRBlock(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.VpcCIDRBlock()
 	if err != nil {
 		t.Errorf("vpcCIDRBlock err: %s", err.Error())
@@ -260,7 +229,7 @@ func TestVpcCIDRBlock(t *testing.T) {
 	}
 }
 func TestVpcID(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.VpcID()
 	if err != nil {
 		t.Errorf("vpcID err: %s", err.Error())
@@ -270,7 +239,7 @@ func TestVpcID(t *testing.T) {
 	}
 }
 func TestVswitchCIDRBlock(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.VswitchCIDRBlock()
 	if err != nil {
 		t.Errorf("vswitchCIDRBlock err: %s", err.Error())
@@ -280,7 +249,7 @@ func TestVswitchCIDRBlock(t *testing.T) {
 	}
 }
 func TestVswitchID(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.VswitchID()
 	if err != nil {
 		t.Errorf("vswitch id err: %s", err.Error())
@@ -289,8 +258,20 @@ func TestVswitchID(t *testing.T) {
 		t.Error("vswitch-id not equal vswitch-id-test")
 	}
 }
+
+func TestRamToken(t *testing.T) {
+	meta := NewMockMetaData(nil, send)
+	ram, err := meta.RamRoleToken("list")
+	if err != nil {
+		t.Errorf("ram role token: error, %s", err.Error())
+	}
+	if ram.AccessKeySecret == "" {
+		t.Error("get ram role token failed")
+	}
+}
+
 func TestNTPConfigServers(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.NTPConfigServers()
 	if err != nil {
 		t.Errorf("ntpconfigservers err: %s", err.Error())
@@ -300,7 +281,7 @@ func TestNTPConfigServers(t *testing.T) {
 	}
 }
 func TestDNSServers(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.DNSNameServers()
 	if err != nil {
 		t.Errorf("dnsservers err: %s", err.Error())
@@ -311,7 +292,7 @@ func TestDNSServers(t *testing.T) {
 }
 
 func TestZone(t *testing.T) {
-	meta := NewMockMetaData(nil)
+	meta := NewMockMetaData(nil, send)
 	host, err := meta.Zone()
 	if err != nil {
 		t.Errorf("zone err: %s", err.Error())

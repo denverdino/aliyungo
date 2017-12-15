@@ -128,6 +128,7 @@ type EipAddressSetType struct {
 	AllocationId       string
 	Status             EipStatus
 	InstanceId         string
+	InstanceType       string
 	Bandwidth          string // Why string
 	InternetChargeType common.InternetChargeType
 	OperationLocks     OperationLocksType

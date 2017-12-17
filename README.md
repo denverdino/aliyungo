@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/denverdino/aliyungo.svg?branch=master)](https://travis-ci.org/denverdino/aliyungo) [![CircleCI](https://circleci.com/gh/denverdino/aliyungo.svg?style=svg)](https://circleci.com/gh/denverdino/aliyungo) [![Go Report Card](https://goreportcard.com/badge/github.com/denverdino/aliyungo)](https://goreportcard.com/report/github.com/denverdino/aliyungo)
 
-This is an unofficial Go SDK for Aliyun Services. You are welcome for contribution.
+This is an unofficial Go SDK for Aliyun services. You are welcome for contribution.
+
+The official SDK for Aliyun services is published. Please visit https://github.com/aliyun/alibaba-cloud-sdk-go for details
 
 ## Package Structure
 

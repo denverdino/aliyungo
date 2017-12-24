@@ -12,8 +12,9 @@ import (
 	"time"
 
 	"encoding/json"
-	"github.com/denverdino/aliyungo/util"
 	"reflect"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 const (
@@ -248,6 +249,15 @@ func (m *MetaData) Zone() (string, error) {
 		return "", err
 	}
 	return zone.result[0], nil
+}
+
+func (m *MetaData) RoleName() (string, error) {
+	var roleName ResultList
+	err := m.New().Resource("ram/security-credentials/").Do(&roleName)
+	if err != nil {
+		return "", err
+	}
+	return roleName.result[0], nil
 }
 
 func (m *MetaData) RamRoleToken(role string) (RoleAuth, error) {

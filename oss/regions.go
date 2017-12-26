@@ -16,6 +16,7 @@ const (
 	Shenzhen    = Region("oss-cn-shenzhen")
 	Shanghai    = Region("oss-cn-shanghai")
 	Zhangjiakou = Region("oss-cn-zhangjiakou")
+	Huhehaote   = Region("oss-cn-huhehaote")
 
 	USWest1      = Region("oss-us-west-1")
 	USEast1      = Region("oss-us-east-1")

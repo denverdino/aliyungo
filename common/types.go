@@ -48,6 +48,7 @@ type TimeType string
 const (
 	Hour  = TimeType("Hour")
 	Day   = TimeType("Day")
+	Week = TimeType("Week")
 	Month = TimeType("Month")
 	Year  = TimeType("Year")
 )

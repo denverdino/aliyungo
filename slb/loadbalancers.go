@@ -241,6 +241,27 @@ func (client *Client) DescribeLoadBalancerAttribute(loadBalancerId string) (load
 	return &response.LoadBalancerType, err
 }
 
+type NewDescribeLoadBalancerAttributeArgs struct {
+	LoadBalancerId string
+	RegionId common.Region
+	MasterZoneId	string
+	SlaveZoneId	string
+}
+
+// New DescribeLoadBalancerAttribute to describe loadbalancer attribute using regionId avoiding to get not found error
+//
+// You can read doc at https://www.alibabacloud.com/help/doc-detail/27583.htm
+
+func (client *Client) NewDescribeLoadBalancerAttribute(args *NewDescribeLoadBalancerAttributeArgs) (loadBalancer *LoadBalancerType, err error) {
+
+	response := &DescribeLoadBalancerAttributeResponse{}
+	err = client.Invoke("DescribeLoadBalancerAttribute", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return &response.LoadBalancerType, err
+}
+
 // WaitForListener waits for listener to given status
 func (client *Client) WaitForLoadBalancerAsyn(loadBalancerId string, status Status, timeout int) error {
 	if timeout <= 0 {

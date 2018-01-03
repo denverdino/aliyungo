@@ -100,6 +100,7 @@ type ConnectionMode string
 const (
 	Performance = ConnectionMode("Performance")
 	Safty       = ConnectionMode("Safty")
+	Standard = ConnectionMode("Standard")
 )
 
 // default resource value for create order
@@ -323,6 +324,7 @@ type DBInstanceAccount struct {
 	DatabasePrivileges struct {
 		DatabasePrivilege []DatabasePrivilege
 	}
+	AccountType AccountType
 }
 
 type AccountStatus string
@@ -545,6 +547,42 @@ func (client *Client) WaitForPublicConnection(instanceId string, timeout int) er
 	return nil
 }
 
+func (client *Client) WaitForDBConnection(instanceId string, netType IPType, timeout int) error {
+	if timeout <= 0 {
+		timeout = InstanceDefaultTimeout
+	}
+	for {
+		args := DescribeDBInstanceNetInfoArgs{
+			DBInstanceId: instanceId,
+		}
+
+		resp, err := client.DescribeDBInstanceNetInfo(&args)
+		if err != nil {
+			return err
+		}
+
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+
+		timeout = timeout - DefaultWaitForInterval
+		time.Sleep(DefaultWaitForInterval * time.Second)
+
+		ready := false
+		for _, info := range resp.DBInstanceNetInfos.DBInstanceNetInfo {
+			if info.IPType == netType {
+				ready = true
+			}
+		}
+
+		if ready {
+			break
+		}
+
+	}
+	return nil
+}
+
 func (client *Client) WaitForAccountPrivilege(instanceId, accountName, dbName string, privilege AccountPrivilege, timeout int) error {
 	if timeout <= 0 {
 		timeout = InstanceDefaultTimeout
@@ -589,6 +627,53 @@ func (client *Client) WaitForAccountPrivilege(instanceId, accountName, dbName st
 	}
 	return nil
 }
+
+func (client *Client) WaitForAccountPrivilegeRevoked(instanceId, accountName, dbName string, timeout int) error {
+	if timeout <= 0 {
+		timeout = InstanceDefaultTimeout
+	}
+	for {
+		args := DescribeAccountsArgs{
+			DBInstanceId: instanceId,
+			AccountName:  accountName,
+		}
+
+		resp, err := client.DescribeAccounts(&args)
+		if err != nil {
+			return err
+		}
+
+		accs := resp.Accounts.DBInstanceAccount
+
+		if len(accs) < 1 {
+			continue
+		}
+
+		acc := accs[0]
+
+		exist := false
+		for _, dp := range acc.DatabasePrivileges.DatabasePrivilege {
+			if dp.DBName == dbName {
+				exist = true
+				break
+			}
+		}
+
+		if !exist {
+			break
+		}
+
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+
+		timeout = timeout - DefaultWaitForInterval
+		time.Sleep(DefaultWaitForInterval * time.Second)
+
+	}
+	return nil
+}
+
 
 type DeleteDBInstanceArgs struct {
 	DBInstanceId string
@@ -682,6 +767,19 @@ func (client *Client) CreateDatabase(args *CreateDatabaseArgs) (resp *CreateData
 	return &response, nil
 }
 
+type ModifyDatabaseDescriptionArgs struct {
+	DBInstanceId     string
+	DBName           string
+	DBDescription    string
+}
+
+// ModifyDBDescription create rds database description
+//
+func (client *Client) ModifyDatabaseDescription(args *ModifyDatabaseDescriptionArgs) error {
+	response := common.Response{}
+	return client.Invoke("ModifyDBDescription", args, &response)
+}
+
 type CreateAccountResponse struct {
 	common.Response
 }
@@ -737,6 +835,19 @@ func (client *Client) ResetAccountPassword(instanceId, accountName, accountPassw
 		return nil, err
 	}
 	return &response, nil
+}
+
+type ModifyAccountDescriptionArgs struct {
+	DBInstanceId     string
+	AccountName           string
+	AccountDescription    string
+}
+
+// ModifyDBDescription create rds database description
+//
+func (client *Client) ModifyAccountDescription(args *ModifyAccountDescriptionArgs) error {
+	response := common.Response{}
+	return client.Invoke("ModifyAccountDescription", args, &response)
 }
 
 type DeleteAccountResponse struct {
@@ -797,6 +908,21 @@ func (client *Client) GrantAccountPrivilege(args *GrantAccountPrivilegeArgs) (re
 	return &response, nil
 }
 
+type RevokeAccountPrivilegeArgs struct {
+	DBInstanceId     string
+	AccountName      string
+	DBName           string
+}
+
+// RevokeAccountPrivilege revoke database privilege from account
+//
+// You can read doc at https://help.aliyun.com/document_detail/26267.html
+func (client *Client) RevokeAccountPrivilege(args *RevokeAccountPrivilegeArgs) error {
+	response := common.Response{}
+	return client.Invoke("RevokeAccountPrivilege", args, &response)
+}
+
+
 type AllocateInstancePublicConnectionResponse struct {
 	common.Response
 }
@@ -820,8 +946,37 @@ func (client *Client) AllocateInstancePublicConnection(args *AllocateInstancePub
 	return &response, nil
 }
 
+type ReleaseInstancePublicConnectionArgs struct {
+	DBInstanceId           string
+	CurrentConnectionString string
+}
+
+func (client *Client) ReleaseInstancePublicConnection(args *ReleaseInstancePublicConnectionArgs) error{
+	response := common.Response{}
+	return client.Invoke("ReleaseInstancePublicConnection", args, &response)
+}
+
+type SwitchDBInstanceNetTypeArgs struct {
+	DBInstanceId           string
+	ConnectionStringPrefix string
+	Port int
+}
+
+func (client *Client) SwitchDBInstanceNetType(args *SwitchDBInstanceNetTypeArgs) error{
+	response := common.Response{}
+	return client.Invoke("SwitchDBInstanceNetType", args, &response)
+}
+
+type ConnectionStringType string
+
+const (
+	ConnectionNormal  = ConnectionStringType("Normal")
+	ReadWriteSplitting = ConnectionStringType("ReadWriteSplitting")
+)
+
 type DescribeDBInstanceNetInfoArgs struct {
 	DBInstanceId string
+	ConnectionStringType ConnectionStringType
 }
 
 type DescribeDBInstanceNetInfoResponse struct {
@@ -860,6 +1015,21 @@ func (client *Client) DescribeDBInstanceNetInfo(args *DescribeDBInstanceNetInfoA
 		return nil, err
 	}
 	return &response, nil
+}
+
+type ModifyDBInstanceConnectionStringArgs struct {
+	DBInstanceId string
+	CurrentConnectionString string
+	ConnectionStringPrefix string
+	Port string
+}
+
+// ModifyDBInstanceConnectionString modify rds connection string
+//
+// You can read doc at https://help.aliyun.com/document_detail/26238.html
+func (client *Client) ModifyDBInstanceConnectionString(args *ModifyDBInstanceConnectionStringArgs) error {
+	response := common.Response{}
+	return client.Invoke("ModifyDBInstanceConnectionString", args, &response)
 }
 
 type BackupPolicy struct {

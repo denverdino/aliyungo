@@ -57,6 +57,7 @@ type AllocateEipAddressArgs struct {
 	RegionId           common.Region
 	Bandwidth          int
 	InternetChargeType common.InternetChargeType
+	ISP                string
 	ClientToken        string
 }
 

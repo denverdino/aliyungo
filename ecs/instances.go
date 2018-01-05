@@ -534,34 +534,42 @@ var (
 	IoOptimizedOptimized = IoOptimized("optimized")
 )
 
+type SecurityEnhancementStrategy string
+
+var (
+	InactiveSecurityEnhancementStrategy = SecurityEnhancementStrategy("Active")
+	DeactiveSecurityEnhancementStrategy = SecurityEnhancementStrategy("Deactive")
+)
+
 type CreateInstanceArgs struct {
-	RegionId                common.Region
-	ZoneId                  string
-	ImageId                 string
-	InstanceType            string
-	SecurityGroupId         string
-	InstanceName            string
-	Description             string
-	InternetChargeType      common.InternetChargeType
-	InternetMaxBandwidthIn  int
-	InternetMaxBandwidthOut int
-	HostName                string
-	Password                string
-	IoOptimized             IoOptimized
-	SystemDisk              SystemDiskType
-	DataDisk                []DataDiskType
-	VSwitchId               string
-	PrivateIpAddress        string
-	ClientToken             string
-	InstanceChargeType      common.InstanceChargeType
-	Period                  int
-	UserData                string
-	AutoRenew               bool
-	AutoRenewPeriod         int
-	SpotStrategy            SpotStrategyType
-	SpotPriceLimit          float64
-	KeyPairName             string
-	RamRoleName             string
+	RegionId                    common.Region
+	ZoneId                      string
+	ImageId                     string
+	InstanceType                string
+	SecurityGroupId             string
+	InstanceName                string
+	Description                 string
+	InternetChargeType          common.InternetChargeType
+	InternetMaxBandwidthIn      int
+	InternetMaxBandwidthOut     int
+	HostName                    string
+	Password                    string
+	IoOptimized                 IoOptimized
+	SystemDisk                  SystemDiskType
+	DataDisk                    []DataDiskType
+	VSwitchId                   string
+	PrivateIpAddress            string
+	ClientToken                 string
+	InstanceChargeType          common.InstanceChargeType
+	Period                      int
+	UserData                    string
+	AutoRenew                   bool
+	AutoRenewPeriod             int
+	SpotStrategy                SpotStrategyType
+	SpotPriceLimit              float64
+	KeyPairName                 string
+	RamRoleName                 string
+	SecurityEnhancementStrategy SecurityEnhancementStrategy
 }
 
 type CreateInstanceResponse struct {

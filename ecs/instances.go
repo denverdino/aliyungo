@@ -534,35 +534,42 @@ var (
 	IoOptimizedOptimized = IoOptimized("optimized")
 )
 
+type SecurityEnhancementStrategy string
+
+var (
+	InactiveSecurityEnhancementStrategy = SecurityEnhancementStrategy("Active")
+	DeactiveSecurityEnhancementStrategy = SecurityEnhancementStrategy("Deactive")
+)
+
 type CreateInstanceArgs struct {
-	RegionId                common.Region
-	ZoneId                  string
-	ImageId                 string
-	InstanceType            string
-	SecurityGroupId         string
-	InstanceName            string
-	Description             string
-	InternetChargeType      common.InternetChargeType
-	InternetMaxBandwidthIn  int
-	InternetMaxBandwidthOut int
-	HostName                string
-	Password                string
-	IoOptimized             IoOptimized
-	SystemDisk              SystemDiskType
-	DataDisk                []DataDiskType
-	VSwitchId               string
-	PrivateIpAddress        string
-	ClientToken             string
-	InstanceChargeType      common.InstanceChargeType
-	Period                  int
-	PeriodUnit                  common.TimeType
-	UserData                string
-	AutoRenew               bool
-	AutoRenewPeriod         int
-	SpotStrategy            SpotStrategyType
-	SpotPriceLimit          float64
-	KeyPairName             string
-	RamRoleName             string
+	RegionId                    common.Region
+	ZoneId                      string
+	ImageId                     string
+	InstanceType                string
+	SecurityGroupId             string
+	InstanceName                string
+	Description                 string
+	InternetChargeType          common.InternetChargeType
+	InternetMaxBandwidthIn      int
+	InternetMaxBandwidthOut     int
+	HostName                    string
+	Password                    string
+	IoOptimized                 IoOptimized
+	SystemDisk                  SystemDiskType
+	DataDisk                    []DataDiskType
+	VSwitchId                   string
+	PrivateIpAddress            string
+	ClientToken                 string
+	InstanceChargeType          common.InstanceChargeType
+	Period                      int
+	UserData                    string
+	AutoRenew                   bool
+	AutoRenewPeriod             int
+	SpotStrategy                SpotStrategyType
+	SpotPriceLimit              float64
+	KeyPairName                 string
+	RamRoleName                 string
+	SecurityEnhancementStrategy SecurityEnhancementStrategy
 }
 
 type CreateInstanceResponse struct {
@@ -707,11 +714,11 @@ func (client *Client) DescribeInstanceRamRole(args *AttachInstancesArgs) (resp *
 }
 
 type ModifyInstanceSpecArgs struct {
-	InstanceId   string
-	InstanceType string
+	InstanceId              string
+	InstanceType            string
 	InternetMaxBandwidthOut *int
-	InternetMaxBandwidthIn *int
-	ClientToken  string
+	InternetMaxBandwidthIn  *int
+	ClientToken             string
 }
 
 type ModifyInstanceSpecResponse struct {
@@ -730,8 +737,8 @@ func (client *Client) ModifyInstanceSpec(args *ModifyInstanceSpecArgs) error {
 }
 
 type ModifyInstanceVpcAttributeArgs struct {
-	InstanceId   string
-	VSwitchId	string
+	InstanceId       string
+	VSwitchId        string
 	PrivateIpAddress string
 }
 
@@ -748,14 +755,14 @@ func (client *Client) ModifyInstanceVpcAttribute(args *ModifyInstanceVpcAttribut
 }
 
 type ModifyInstanceChargeTypeArgs struct {
-	InstanceIds	string
-	RegionId	common.Region
-	Period	int
-	PeriodUnit	common.TimeType
-	IncludeDataDisks	bool
-	DryRun	bool
-	AutoPay	bool
-	ClientToken string
+	InstanceIds      string
+	RegionId         common.Region
+	Period           int
+	PeriodUnit       common.TimeType
+	IncludeDataDisks bool
+	DryRun           bool
+	AutoPay          bool
+	ClientToken      string
 }
 
 type ModifyInstanceChargeTypeResponse struct {

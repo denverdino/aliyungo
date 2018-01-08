@@ -430,7 +430,7 @@ func (b *Bucket) Put(path string, data []byte, contType string, perm ACL, option
 func (b *Bucket) PutCopy(path string, perm ACL, options CopyOptions, source string) (*CopyObjectResult, error) {
 	headers := make(http.Header)
 
-	headers.Set("x-oss-acl", string(perm))
+	headers.Set("x-oss-object-acl", string(perm))
 	headers.Set("x-oss-copy-source", source)
 
 	options.addHeaders(headers)
@@ -455,7 +455,7 @@ func (b *Bucket) PutReader(path string, r io.Reader, length int64, contType stri
 	headers := make(http.Header)
 	headers.Set("Content-Length", strconv.FormatInt(length, 10))
 	headers.Set("Content-Type", contType)
-	headers.Set("x-oss-acl", string(perm))
+	headers.Set("x-oss-object-acl", string(perm))
 
 	options.addHeaders(headers)
 	req := &request{

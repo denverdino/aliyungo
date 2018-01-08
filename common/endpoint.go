@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-
-	"path/filepath"
 )
 
 const (
@@ -115,9 +113,7 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 }
 
 func loadEndpointFromFile(region Region, serviceCode string) string {
-	path, _ := os.Getwd()
-	configfile := filepath.Join(filepath.Dir(path), "common/endpoints.xml")
-	data, err := ioutil.ReadFile(configfile)
+	data, err := ioutil.ReadFile("./endpoints.xml")
 	if err != nil {
 		return ""
 	}

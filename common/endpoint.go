@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"path/filepath"
 )
 
 const (
@@ -25,18 +27,38 @@ func init() {
 
 }
 
-func NewLocationClient(accessKeyId, accessKeySecret string) *Client {
+type LocationClient struct {
+	Client
+}
+
+func NewLocationClient(accessKeyId, accessKeySecret string) *LocationClient {
 	endpoint := os.Getenv("LOCATION_ENDPOINT")
 	if endpoint == "" {
 		endpoint = locationDefaultEndpoint
 	}
 
-	client := &Client{}
+	client := &LocationClient{}
 	client.Init(endpoint, locationAPIVersion, accessKeyId, accessKeySecret)
 	return client
 }
 
-func (client *Client) DescribeEndpoint(args *DescribeEndpointArgs) (*DescribeEndpointResponse, error) {
+func NewLocationClientWithSecurityToken(accessKeyId, accessKeySecret, securityToken string) *LocationClient {
+	endpoint := os.Getenv("LOCATION_ENDPOINT")
+	if endpoint == "" {
+		endpoint = locationDefaultEndpoint
+	}
+
+	client := &LocationClient{}
+	client.WithEndpoint(endpoint).
+		WithVersion(locationAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		InitClient()
+	return client
+}
+
+func (client *LocationClient) DescribeEndpoint(args *DescribeEndpointArgs) (*DescribeEndpointResponse, error) {
 	response := &DescribeEndpointResponse{}
 	err := client.Invoke("DescribeEndpoint", args, response)
 	if err != nil {
@@ -61,7 +83,7 @@ func setProductRegionEndpoint(region Region, serviceCode string, endpoint string
 	}
 }
 
-func (client *Client) DescribeOpenAPIEndpoint(region Region, serviceCode string) string {
+func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode string) string {
 	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
 		return endpoint
 	}
@@ -93,17 +115,17 @@ func (client *Client) DescribeOpenAPIEndpoint(region Region, serviceCode string)
 }
 
 func loadEndpointFromFile(region Region, serviceCode string) string {
-	data, err := ioutil.ReadFile("./endpoints.xml")
+	path, _ := os.Getwd()
+	configfile := filepath.Join(filepath.Dir(path), "common/endpoints.xml")
+	data, err := ioutil.ReadFile(configfile)
 	if err != nil {
 		return ""
 	}
-
 	var endpoints Endpoints
 	err = xml.Unmarshal(data, &endpoints)
 	if err != nil {
 		return ""
 	}
-
 	for _, endpoint := range endpoints.Endpoint {
 		if endpoint.RegionIds.RegionId == string(region) {
 			for _, product := range endpoint.Products.Product {

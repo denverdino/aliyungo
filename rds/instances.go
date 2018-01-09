@@ -1,6 +1,7 @@
 package rds
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/denverdino/aliyungo/common"
@@ -20,10 +21,59 @@ type ModifySecurityIpsArgs struct {
 	DBInstanceIPArrayAttribute string
 }
 
-func (client *Client) ModifySecurityIps(args *ModifySecurityIpsArgs) (resp common.Response, err error) {
-	response := common.Response{}
+type DescribeDBInstanceIPArrayListArgs struct {
+	DBInstanceId          string
+	DBInstanceIPArrayName string
+}
+
+type DBInstanceIPs struct {
+	DBInstanceIPArrayName      string
+	DBInstanceIPArrayAttribute string
+	SecurityIPList             string
+}
+
+type DBInstanceIPsItems struct {
+	DBInstanceIPArray []DBInstanceIPs
+}
+
+type DescribeDBInstanceIPArrayListResponse struct {
+	common.Response
+
+	Items *DBInstanceIPsItems
+}
+
+func (client *Client) ModifySecurityIps(args *ModifySecurityIpsArgs) (resp *common.Response, err error) {
+	response := &common.Response{}
+	if args.SecurityIps == "" {
+		return response, nil
+	}
+	//Query security ips and add new ips
+	request := &DescribeDBInstanceIPArrayListArgs{
+		DBInstanceId:          args.DBInstanceId,
+		DBInstanceIPArrayName: args.DBInstanceIPArrayName,
+	}
+	descResponse, err := client.DescribeDBInstanceIPArrayList(request)
+	if err != nil {
+		return response, err
+	}
+	fmt.Printf(" the result is %++v", descResponse)
+	if err == nil && descResponse.Items != nil {
+		for _, item := range descResponse.Items.DBInstanceIPArray {
+			if item.DBInstanceIPArrayName == args.DBInstanceIPArrayName && item.SecurityIPList != "" {
+				args.SecurityIps = args.SecurityIps + "," + item.SecurityIPList
+			}
+		}
+	}
+	fmt.Printf(" the args is %++v", args)
 	err = client.Invoke("ModifySecurityIps", args, &response)
 	return response, err
+
+}
+
+func (client *Client) DescribeDBInstanceIPArrayList(args *DescribeDBInstanceIPArrayListArgs) (*DescribeDBInstanceIPArrayListResponse, error) {
+	resp := &DescribeDBInstanceIPArrayListResponse{}
+	err := client.Invoke("DescribeDBInstanceIPArrayList", args, resp)
+	return resp, err
 }
 
 type DescribeDBInstanceIPsArgs struct {

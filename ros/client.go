@@ -50,6 +50,17 @@ func NewClient(accessKeyId, accessKeySecret string) *Client {
 	}
 }
 
+func NewROSClientWithSecurityToken(accessKeyId string, accessKeySecret string, securityToken string) *Client {
+	return &Client{
+		AccessKeyId:     accessKeyId,
+		AccessKeySecret: accessKeySecret,
+		SecurityToken:   securityToken,
+		endpoint:        ROSDefaultEndpoint,
+		Version:         ROSAPIVersion,
+		httpClient:      &http.Client{},
+	}
+}
+
 func NewClientForAussumeRole(accessKeyId, accessKeySecret, securityToken string) *Client {
 	return &Client{
 		AccessKeyId:     accessKeyId,

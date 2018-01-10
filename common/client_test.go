@@ -13,7 +13,7 @@ var testDebugClient *LocationClient
 
 func NewTestClientForDebug() *LocationClient {
 	if testDebugClient == nil {
-		testDebugClient = NewLocationClientWithSecurityToken(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken)
+		testDebugClient = NewLocationClient(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken)
 		testDebugClient.SetDebug(true)
 	}
 	return testDebugClient

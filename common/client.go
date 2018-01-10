@@ -43,7 +43,11 @@ type Client struct {
 // Initialize properties of a client instance
 func (client *Client) Init(endpoint, version, accessKeyId, accessKeySecret string) {
 	client.AccessKeyId = accessKeyId
-	client.AccessKeySecret = accessKeySecret + "&"
+	ak := accessKeySecret
+	if !strings.HasSuffix(ak, "&") {
+		ak += "&"
+	}
+	client.AccessKeySecret = ak
 	client.debug = false
 	handshakeTimeout, err := strconv.Atoi(os.Getenv("TLSHandshakeTimeout"))
 	if err != nil {
@@ -65,7 +69,7 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 	client.Init(endpoint, version, accessKeyId, accessKeySecret)
 	client.serviceCode = serviceCode
 	client.regionID = regionID
-	client.setEndpointByLocation(regionID, serviceCode, accessKeyId, accessKeySecret)
+	client.setEndpointByLocation(regionID, serviceCode, accessKeyId, accessKeySecret, client.securityToken)
 }
 
 // Intialize client object when all properties are ready
@@ -82,7 +86,7 @@ func (client *Client) InitClient() *Client {
 			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
 		client.httpClient = &http.Client{Transport: t}
 	}
-	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret)
+	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret, client.securityToken)
 	return client
 }
 
@@ -92,8 +96,9 @@ func (client *Client) NewInitForAssumeRole(endpoint, version, accessKeyId, acces
 }
 
 //NewClient using location service
-func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKeyId, accessKeySecret string) {
-	locationClient := NewLocationClient(accessKeyId, accessKeySecret)
+func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKeyId, accessKeySecret, securityToken string) {
+	locationClient := NewLocationClient(accessKeyId, accessKeySecret, securityToken)
+	locationClient.SetDebug(true)
 	ep := locationClient.DescribeOpenAPIEndpoint(region, serviceCode)
 	if ep == "" {
 		ep = loadEndpointFromFile(region, serviceCode)

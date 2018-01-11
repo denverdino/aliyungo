@@ -17,9 +17,9 @@ type SendSmsArgs struct {
 
 type SendSmsResponse struct {
 	common.Response
-	Code string
+	Code    string
 	Message string
-	BizId string
+	BizId   string
 }
 
 func (this *DYSmsClient) SendSms(args *SendSmsArgs) (*SendSmsResponse, error) {

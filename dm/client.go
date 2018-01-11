@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	EmailEndPoint = "https://dm.aliyuncs.com/"
-	SingleSendMail = "SingleSendMail"
-	BatchSendMail = "BatchSendMail"
+	EmailEndPoint   = "https://dm.aliyuncs.com/"
+	SingleSendMail  = "SingleSendMail"
+	BatchSendMail   = "BatchSendMail"
 	EmailAPIVersion = "2015-11-23"
 )
 

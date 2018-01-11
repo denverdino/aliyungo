@@ -1,9 +1,9 @@
 package ess
 
 import (
+	"encoding/base64"
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
-	"encoding/base64"
 )
 
 type CreateScalingConfigurationArgs struct {
@@ -22,7 +22,7 @@ type CreateScalingConfigurationArgs struct {
 	UserData                 string
 	KeyPairName              string
 	RamRoleName              string
-	Tags 			 string
+	Tags                     string
 }
 
 type DataDiskType struct {
@@ -91,10 +91,10 @@ type ScalingConfigurationItemType struct {
 	DataDisks                struct {
 		DataDisk []DataDiskItemType
 	}
-	KeyPairName             string
-	RamRoleName             string
-	UserData   		string
-	Tags 			struct {
+	KeyPairName string
+	RamRoleName string
+	UserData    string
+	Tags        struct {
 		Tag []TagItemType
 	}
 }

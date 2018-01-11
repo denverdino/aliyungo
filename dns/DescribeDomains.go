@@ -9,12 +9,12 @@ import (
 type DescribeDomainsArgs struct {
 	// optional
 	common.Pagination
-	KeyWord    string
-	GroupId    string
+	KeyWord string
+	GroupId string
 }
 
 type DescribeDomainsResponse struct {
-	response   common.Response
+	response common.Response
 	common.PaginationResult
 	Domains struct {
 		Domain []DomainType

@@ -6,7 +6,7 @@ import (
 
 var (
 	accountAliasRequest = AccountAliasRequest{AccountAlias: "hello"}
-	passwordPolicy   = PasswordPolicyRequest{
+	passwordPolicy      = PasswordPolicyRequest{
 		PasswordPolicy: PasswordPolicy{
 			MinimumPasswordLength:      10,
 			RequireLowercaseCharacters: true,

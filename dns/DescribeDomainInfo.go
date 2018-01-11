@@ -15,7 +15,7 @@ type DomainType struct {
 	InstanceId  string
 	VersionCode string
 	PunyCode    string
-	DnsServers struct {
+	DnsServers  struct {
 		DnsServer []string
 	}
 }

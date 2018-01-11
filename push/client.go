@@ -3,8 +3,8 @@ package push
 import "github.com/denverdino/aliyungo/common"
 
 const (
-	PushEndPoint = "https://cloudpush.aliyuncs.com/"
-	Push = "Push"
+	PushEndPoint   = "https://cloudpush.aliyuncs.com/"
+	Push           = "Push"
 	PushAPIVersion = "2016-08-01"
 )
 

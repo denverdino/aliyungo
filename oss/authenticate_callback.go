@@ -1,18 +1,18 @@
 package oss
 
 import (
+	"crypto"
+	"crypto/md5"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/base64"
-	"regexp"
+	"encoding/pem"
 	"errors"
+	"io/ioutil"
+	"net/http"
+	"regexp"
 	"strings"
 	"sync"
-	"net/http"
-	"io/ioutil"
-	"crypto/x509"
-	"crypto/rsa"
-	"crypto"
-	"encoding/pem"
-	"crypto/md5"
 )
 
 type authenticationType struct {
@@ -21,9 +21,10 @@ type authenticationType struct {
 }
 
 var (
-	authentication = authenticationType{lock:&sync.RWMutex{}, certificate: map[string]*rsa.PublicKey{}}
-	urlReg = regexp.MustCompile(`^http(|s)://gosspublic.alicdn.com/[0-9a-zA-Z]`)
+	authentication = authenticationType{lock: &sync.RWMutex{}, certificate: map[string]*rsa.PublicKey{}}
+	urlReg         = regexp.MustCompile(`^http(|s)://gosspublic.alicdn.com/[0-9a-zA-Z]`)
 )
+
 //验证OSS向业务服务器发来的回调函数。
 //该方法是并发安全的
 //pubKeyUrl 回调请求头中[x-oss-pub-key-url]一项，以Base64编码
@@ -43,7 +44,7 @@ func AuthenticateCallBack(pubKeyUrl, reqUrl, reqBody, authorization string) erro
 	}
 	//获取文件名
 	rs := []rune(url)
-	filename := string(rs[strings.LastIndex(url, "/"): len(rs) - 1])
+	filename := string(rs[strings.LastIndex(url, "/") : len(rs)-1])
 	authentication.lock.RLock()
 	certificate := authentication.certificate[filename]
 	authentication.lock.RUnlock()

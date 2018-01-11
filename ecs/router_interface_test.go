@@ -1,8 +1,8 @@
 package ecs
 
 import (
-	"testing"
 	"github.com/denverdino/aliyungo/common"
+	"testing"
 )
 
 func TestRouteInterface(t *testing.T) {
@@ -46,7 +46,6 @@ func TestRouteInterface(t *testing.T) {
 		Spec:              newSpec,
 		RegionId:          createArgs.RegionId,
 		RouterInterfaceId: resp.RouterInterfaceId,
-
 	}
 	_, err = client.ModifyRouterInterfaceSpec(&modifyArgs)
 	if err != nil {
@@ -61,7 +60,6 @@ func TestRouteInterface(t *testing.T) {
 		OppositeRouterId:         oppositeRouterId,
 		OppositeInterfaceId:      oppositeInterfaceId,
 		OppositeInterfaceOwnerId: oppositeInterfaceOwnerId,
-
 	}
 	_, err = client.ModifyRouterInterfaceAttribute(&modifyAArgs)
 	if err != nil {

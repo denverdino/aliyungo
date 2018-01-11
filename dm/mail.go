@@ -15,7 +15,7 @@ type SendBatchMailArgs struct {
 	SendEmailArgs
 	TemplateName string
 	ReceiverName string
-	TagName string
+	TagName      string
 }
 
 //remember to setup the accountName in your aliyun console
@@ -50,4 +50,3 @@ type SendSingleMailArgs struct {
 func (this *Client) SendSingleMail(args *SendSingleMailArgs) error {
 	return this.InvokeByAnyMethod(http.MethodPost, SingleSendMail, "", args, &common.Response{})
 }
-

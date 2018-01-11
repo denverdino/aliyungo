@@ -25,7 +25,7 @@ func TestChangeDomainGroup(t *testing.T) {
 	// change to new group
 	changeArgs := ChangeDomainGroupArgs{
 		DomainName: addDomainRes.DomainName,
-		GroupId: addGroupRes.GroupId,
+		GroupId:    addGroupRes.GroupId,
 	}
 	_, err := client.ChangeDomainGroup(&changeArgs)
 	if err == nil {

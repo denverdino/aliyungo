@@ -50,7 +50,7 @@ type DomainDetail struct {
 	CertificateName         string
 	ServerCertificate       string
 	ServerCertificateStatus string
-	Sources struct {
+	Sources                 struct {
 		Source []string
 	}
 }
@@ -75,7 +75,7 @@ type DomainInfo struct {
 }
 
 type DomainsData struct {
-	Source string
+	Source  string
 	Domains struct {
 		domainNames []string
 	}
@@ -86,7 +86,7 @@ type DomainsData struct {
 
 type DomainBySourceResponse struct {
 	CdnCommonResponse
-	Sources string
+	Sources     string
 	DomainsList struct {
 		DomainsData []DomainsData
 	}

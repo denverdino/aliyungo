@@ -56,6 +56,5 @@ func canonicalizeHeader(headers http.Header) (newHeaders http.Header, result str
 		canonicalizedHeader += k + ":" + v + "\n"
 	}
 
-
 	return newHeaders, canonicalizedHeader
 }

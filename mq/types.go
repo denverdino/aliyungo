@@ -1,10 +1,6 @@
 package mq
 
-
-
 var newline string = "\n"
-
-
 
 type SendMessage struct {
 	Topic      string
@@ -19,7 +15,7 @@ type Messages struct {
 	Topic      string
 	Tag        string
 	ConsumerId string
-	Time int64
+	Time       int64
 }
 
 type Message struct {
@@ -51,5 +47,3 @@ func getStatusCodeMessage(statusCode int) string {
 		return "Unknown Error"
 	}
 }
-
-

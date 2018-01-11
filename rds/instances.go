@@ -100,7 +100,7 @@ type ConnectionMode string
 const (
 	Performance = ConnectionMode("Performance")
 	Safty       = ConnectionMode("Safty")
-	Standard = ConnectionMode("Standard")
+	Standard    = ConnectionMode("Standard")
 )
 
 // default resource value for create order
@@ -674,7 +674,6 @@ func (client *Client) WaitForAccountPrivilegeRevoked(instanceId, accountName, db
 	return nil
 }
 
-
 type DeleteDBInstanceArgs struct {
 	DBInstanceId string
 }
@@ -768,9 +767,9 @@ func (client *Client) CreateDatabase(args *CreateDatabaseArgs) (resp *CreateData
 }
 
 type ModifyDatabaseDescriptionArgs struct {
-	DBInstanceId     string
-	DBName           string
-	DBDescription    string
+	DBInstanceId  string
+	DBName        string
+	DBDescription string
 }
 
 // ModifyDBDescription create rds database description
@@ -838,9 +837,9 @@ func (client *Client) ResetAccountPassword(instanceId, accountName, accountPassw
 }
 
 type ModifyAccountDescriptionArgs struct {
-	DBInstanceId     string
-	AccountName           string
-	AccountDescription    string
+	DBInstanceId       string
+	AccountName        string
+	AccountDescription string
 }
 
 // ModifyDBDescription create rds database description
@@ -909,9 +908,9 @@ func (client *Client) GrantAccountPrivilege(args *GrantAccountPrivilegeArgs) (re
 }
 
 type RevokeAccountPrivilegeArgs struct {
-	DBInstanceId     string
-	AccountName      string
-	DBName           string
+	DBInstanceId string
+	AccountName  string
+	DBName       string
 }
 
 // RevokeAccountPrivilege revoke database privilege from account
@@ -921,7 +920,6 @@ func (client *Client) RevokeAccountPrivilege(args *RevokeAccountPrivilegeArgs) e
 	response := common.Response{}
 	return client.Invoke("RevokeAccountPrivilege", args, &response)
 }
-
 
 type AllocateInstancePublicConnectionResponse struct {
 	common.Response
@@ -947,11 +945,11 @@ func (client *Client) AllocateInstancePublicConnection(args *AllocateInstancePub
 }
 
 type ReleaseInstancePublicConnectionArgs struct {
-	DBInstanceId           string
+	DBInstanceId            string
 	CurrentConnectionString string
 }
 
-func (client *Client) ReleaseInstancePublicConnection(args *ReleaseInstancePublicConnectionArgs) error{
+func (client *Client) ReleaseInstancePublicConnection(args *ReleaseInstancePublicConnectionArgs) error {
 	response := common.Response{}
 	return client.Invoke("ReleaseInstancePublicConnection", args, &response)
 }
@@ -959,10 +957,10 @@ func (client *Client) ReleaseInstancePublicConnection(args *ReleaseInstancePubli
 type SwitchDBInstanceNetTypeArgs struct {
 	DBInstanceId           string
 	ConnectionStringPrefix string
-	Port int
+	Port                   int
 }
 
-func (client *Client) SwitchDBInstanceNetType(args *SwitchDBInstanceNetTypeArgs) error{
+func (client *Client) SwitchDBInstanceNetType(args *SwitchDBInstanceNetTypeArgs) error {
 	response := common.Response{}
 	return client.Invoke("SwitchDBInstanceNetType", args, &response)
 }
@@ -970,12 +968,12 @@ func (client *Client) SwitchDBInstanceNetType(args *SwitchDBInstanceNetTypeArgs)
 type ConnectionStringType string
 
 const (
-	ConnectionNormal  = ConnectionStringType("Normal")
+	ConnectionNormal   = ConnectionStringType("Normal")
 	ReadWriteSplitting = ConnectionStringType("ReadWriteSplitting")
 )
 
 type DescribeDBInstanceNetInfoArgs struct {
-	DBInstanceId string
+	DBInstanceId         string
 	ConnectionStringType ConnectionStringType
 }
 
@@ -1018,10 +1016,10 @@ func (client *Client) DescribeDBInstanceNetInfo(args *DescribeDBInstanceNetInfoA
 }
 
 type ModifyDBInstanceConnectionStringArgs struct {
-	DBInstanceId string
+	DBInstanceId            string
 	CurrentConnectionString string
-	ConnectionStringPrefix string
-	Port string
+	ConnectionStringPrefix  string
+	Port                    string
 }
 
 // ModifyDBInstanceConnectionString modify rds connection string

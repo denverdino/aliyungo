@@ -70,10 +70,10 @@ type DescribeImagesResponse struct {
 type DiskDeviceMapping struct {
 	SnapshotId string
 	//Why Size Field is string-type.
-	Size   string
+	Size string
 	// Now the key Size change to DiskImageSize
 	DiskImageSize string
-	Device string
+	Device        string
 	//For import images
 	Format    string
 	OSSBucket string

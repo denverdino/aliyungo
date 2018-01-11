@@ -1,10 +1,10 @@
 package slb
 
 import (
+	"fmt"
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
 	"time"
-	"fmt"
 )
 
 type AddressType string
@@ -243,9 +243,9 @@ func (client *Client) DescribeLoadBalancerAttribute(loadBalancerId string) (load
 
 type NewDescribeLoadBalancerAttributeArgs struct {
 	LoadBalancerId string
-	RegionId common.Region
-	MasterZoneId	string
-	SlaveZoneId	string
+	RegionId       common.Region
+	MasterZoneId   string
+	SlaveZoneId    string
 }
 
 // New DescribeLoadBalancerAttribute to describe loadbalancer attribute using regionId avoiding to get not found error

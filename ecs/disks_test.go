@@ -1,8 +1,8 @@
 package ecs
 
 import (
-	"testing"
 	"os"
+	"testing"
 	"time"
 )
 
@@ -159,9 +159,9 @@ func TestResizeDisk(t *testing.T) {
 	client := NewClient(accessKeyId, accessKeySecret)
 
 	args := CreateDiskArgs{
-		RegionId: "cn-beijing",
-		ZoneId: "cn-beijing-a",
-		Size: 40,
+		RegionId:     "cn-beijing",
+		ZoneId:       "cn-beijing-a",
+		Size:         40,
 		DiskCategory: DiskCategoryCloudEfficiency,
 	}
 	diskId, err := client.CreateDisk(&args)
@@ -170,7 +170,7 @@ func TestResizeDisk(t *testing.T) {
 		t.Errorf("CreateDisk failed %v", err)
 	}
 
-	time.Sleep(time.Duration(90) * time.Second)		// wait for disk inner status ready to resize
+	time.Sleep(time.Duration(90) * time.Second) // wait for disk inner status ready to resize
 	err = client.ResizeDisk(diskId, 60)
 
 	if err != nil {

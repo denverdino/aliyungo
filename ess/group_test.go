@@ -14,11 +14,14 @@ func TestEssScalingGroupCreationAndDeletion(t *testing.T) {
 
 	client := NewTestClient(common.Region(RegionId))
 
+	maxSize := 1
+	minSize := 1
+
 	args := CreateScalingGroupArgs{
 		RegionId:         common.Region(RegionId),
 		ScalingGroupName: "test_sg",
-		MaxSize:          1,
-		MinSize:          1,
+		MaxSize:          &maxSize,
+		MinSize:          &minSize,
 		RemovalPolicy:    []string{"OldestInstance", "NewestInstance"},
 	}
 
@@ -29,10 +32,12 @@ func TestEssScalingGroupCreationAndDeletion(t *testing.T) {
 	instanceId := resp.ScalingGroupId
 	t.Logf("Instance %s is created successfully.", instanceId)
 
+	defaultCooldown := 200
+
 	mArgs := ModifyScalingGroupArgs{
 		ScalingGroupId:   instanceId,
 		ScalingGroupName: "sg_modify",
-		DefaultCooldown:  200,
+		DefaultCooldown:  &defaultCooldown,
 	}
 
 	_, err = client.ModifyScalingGroup(&mArgs)

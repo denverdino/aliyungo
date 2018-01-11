@@ -290,12 +290,11 @@ func TestModifyBackupPolicy(t *testing.T) {
 func TestModifySecurityIps(t *testing.T) {
 	client := NewTestClient()
 
-	sargs := DBInstanceIPArray{
-		SecurityIps: "127.0.0.1",
-	}
+	securityIps := "127.0.0.1"
+
 	args := ModifySecurityIpsArgs{
-		DBInstanceId:      DBInstanceId,
-		DBInstanceIPArray: sargs,
+		DBInstanceId: DBInstanceId,
+		SecurityIps:  securityIps,
 	}
 
 	_, err := client.ModifySecurityIps(&args)

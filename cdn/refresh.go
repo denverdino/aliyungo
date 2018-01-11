@@ -1,8 +1,8 @@
 package cdn
 
 import (
-	"time"
 	"github.com/denverdino/aliyungo/common"
+	"time"
 )
 
 type RefreshRequest struct {

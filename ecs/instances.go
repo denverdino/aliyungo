@@ -555,7 +555,7 @@ type CreateInstanceArgs struct {
 	ClientToken             string
 	InstanceChargeType      common.InstanceChargeType
 	Period                  int
-	PeriodUnit                  common.TimeType
+	PeriodUnit              common.TimeType
 	UserData                string
 	AutoRenew               bool
 	AutoRenewPeriod         int
@@ -707,11 +707,11 @@ func (client *Client) DescribeInstanceRamRole(args *AttachInstancesArgs) (resp *
 }
 
 type ModifyInstanceSpecArgs struct {
-	InstanceId   string
-	InstanceType string
+	InstanceId              string
+	InstanceType            string
 	InternetMaxBandwidthOut *int
-	InternetMaxBandwidthIn *int
-	ClientToken  string
+	InternetMaxBandwidthIn  *int
+	ClientToken             string
 }
 
 type ModifyInstanceSpecResponse struct {
@@ -730,8 +730,8 @@ func (client *Client) ModifyInstanceSpec(args *ModifyInstanceSpecArgs) error {
 }
 
 type ModifyInstanceVpcAttributeArgs struct {
-	InstanceId   string
-	VSwitchId	string
+	InstanceId       string
+	VSwitchId        string
 	PrivateIpAddress string
 }
 
@@ -748,14 +748,14 @@ func (client *Client) ModifyInstanceVpcAttribute(args *ModifyInstanceVpcAttribut
 }
 
 type ModifyInstanceChargeTypeArgs struct {
-	InstanceIds	string
-	RegionId	common.Region
-	Period	int
-	PeriodUnit	common.TimeType
-	IncludeDataDisks	bool
-	DryRun	bool
-	AutoPay	bool
-	ClientToken string
+	InstanceIds      string
+	RegionId         common.Region
+	Period           int
+	PeriodUnit       common.TimeType
+	IncludeDataDisks bool
+	DryRun           bool
+	AutoPay          bool
+	ClientToken      string
 }
 
 type ModifyInstanceChargeTypeResponse struct {

@@ -16,15 +16,15 @@ const (
 type CreateScalingGroupArgs struct {
 	RegionId         common.Region
 	ScalingGroupName string
-	LoadBalancerIds   string
+	LoadBalancerIds  string
 	VpcId            string
 	VSwitchId        string
 	// NOTE: Set MinSize, MaxSize and DefaultCooldown type to int pointer to distinguish zero value from unset value.
 	MinSize         *int
 	MaxSize         *int
-	DefaultCooldown  *int
-	RemovalPolicy    common.FlattenArray
-	DBInstanceId     common.FlattenArray
+	DefaultCooldown *int
+	RemovalPolicy   common.FlattenArray
+	DBInstanceId    common.FlattenArray
 }
 
 type CreateScalingGroupResponse struct {

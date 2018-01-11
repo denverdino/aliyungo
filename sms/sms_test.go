@@ -11,9 +11,11 @@ func TestSms(t *testing.T) {
 	SIGNAME := os.Getenv("ALI_DM_SMS_SIGN_NAME")
 	TEMPCODE := os.Getenv("ALI_DM_SMS_TEMPLATE_CODE")
 	NUM := os.Getenv("ALI_DM_SMS_TEST_PHONE")
-	client := NewClient(ID, SECRET)
-	client.SendSms(SendSmsArgs{SignName: SIGNAME,
-		TemplateCode: TEMPCODE,
-		RecNum: NUM,
-		ParamString :`{"number": "123"}`})
+	client := NewDYSmsClient(ID, SECRET)
+	client.SendSms(&SendSmsArgs{
+		SignName:      SIGNAME,
+		TemplateCode:  TEMPCODE,
+		PhoneNumbers:  NUM,
+		TemplateParam: `{"number": "123"}`,
+	})
 }

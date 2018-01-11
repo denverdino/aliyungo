@@ -21,7 +21,7 @@ const (
 	Active   = InterfaceStatus("Active")
 	Inactive = InterfaceStatus("Inactive")
 	// 'Idle' means the router interface is not connected. 'Idl' may be a incorrect status.
-	Idle      = InterfaceStatus("Idle")
+	Idle = InterfaceStatus("Idle")
 
 	InitiatingSide = Role("InitiatingSide")
 	AcceptingSide  = Role("AcceptingSide")
@@ -80,7 +80,7 @@ type Filter struct {
 type DescribeRouterInterfacesArgs struct {
 	RegionId common.Region
 	common.Pagination
-	Filter   []Filter
+	Filter []Filter
 }
 
 type RouterInterfaceItemType struct {
@@ -238,7 +238,6 @@ func (client *Client) WaitForRouterInterfaceAsyn(regionId common.Region, interfa
 		interfaces, err := client.DescribeRouterInterfaces(&DescribeRouterInterfacesArgs{
 			RegionId: regionId,
 			Filter:   []Filter{Filter{Key: "RouterInterfaceId", Value: []string{interfaceId}}},
-
 		})
 		if err != nil {
 			return err

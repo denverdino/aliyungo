@@ -11,7 +11,7 @@ type Service struct {
 	OpeningTime        string
 	ChangingChargeType string
 	ChangingAffectTime time.Time
-	OperationLocks struct {
+	OperationLocks     struct {
 		LockReason []string
 	}
 }

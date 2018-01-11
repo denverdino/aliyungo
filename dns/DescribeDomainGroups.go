@@ -14,11 +14,11 @@ type DomainGroupType struct {
 type DescribeDomainGroupsArgs struct {
 	//optional
 	common.Pagination
-	KeyWord    string
+	KeyWord string
 }
 
 type DescribeDomainGroupsResponse struct {
-	response   common.Response
+	response common.Response
 	common.PaginationResult
 	DomainGroups struct {
 		DomainGroup []DomainGroupType

@@ -8,7 +8,7 @@ import (
 
 type ChangeDomainGroupArgs struct {
 	DomainName string
-	GroupId string
+	GroupId    string
 }
 
 type ChangeDomainGroupResponse struct {

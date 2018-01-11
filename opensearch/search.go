@@ -4,9 +4,9 @@ import "net/http"
 
 type SearchArgs struct {
 	//搜索主体
-	Query        string `ArgName:"query"`
+	Query string `ArgName:"query"`
 	//要查询的应用名
-	Index_name   string `ArgName:"index_name"`
+	Index_name string `ArgName:"index_name"`
 	//[可以通过此参数获取本次查询需要的字段内容]
 	Fetch_fields string `ArgName:"fetch_fields"`
 	//[指定要使用的查询分析规则]

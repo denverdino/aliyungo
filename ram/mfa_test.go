@@ -1,9 +1,9 @@
 package ram
 
 import (
+	"strconv"
 	"testing"
 	"time"
-	"strconv"
 )
 
 var (

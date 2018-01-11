@@ -1,4 +1,4 @@
-package slb
+package kms
 
 import (
 	"os"
@@ -6,19 +6,19 @@ import (
 	"github.com/denverdino/aliyungo/common"
 )
 
-//Modify with your Access Key Id and Access Key Secret
-
 var (
 	TestAccessKeyId     = os.Getenv("AccessKeyId")
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
 	TestSecurityToken   = os.Getenv("SecurityToken")
-	TestLoadBlancerID   = "MY_LOADBALANCEID"
-	TestVServerGroupID  = "MY_VSERVER_GROUPID"
-	TestListenerPort    = 9000
-	TestInstanceId      = "MY_INSTANCE_ID"
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
-	TestIAmRich         = false
-	TestQuick           = false
+	TestKeyId           = os.Getenv("KeyId")
+
+	encryptionContext = map[string]string{
+		"Key1": "Value1",
+		"Key2": "Value2",
+	}
+
+	debugClient = NetTestLocationClientForDebug()
 )
 
 var testClient *Client
@@ -40,12 +40,13 @@ func NewTestClientForDebug() *Client {
 	return testDebugClient
 }
 
-var testDebugNewSLBClient *Client
+var testLocationClient *Client
 
-func NewTestNewSLBClientForDebug() *Client {
-	if testDebugNewSLBClient == nil {
-		testDebugNewSLBClient = NewSLBClientWithSecurityToken(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, TestRegionID)
-		testDebugNewSLBClient.SetDebug(true)
+func NetTestLocationClientForDebug() *Client {
+	if testLocationClient == nil {
+		testLocationClient = NewClientWithRegion(TestAccessKeyId, TestAccessKeySecret, TestRegionID)
+		testLocationClient.SetDebug(true)
 	}
-	return testDebugNewSLBClient
+
+	return testLocationClient
 }

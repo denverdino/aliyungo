@@ -64,8 +64,8 @@ func TestLoadBlancer(t *testing.T) {
 }
 
 func TestClient_DescribeLoadBalancers(t *testing.T) {
-	client := NewTestClientForDebug()
-	client.SetSecurityToken(TestSecurityToken)
+	client := NewTestNewSLBClientForDebug()
+	//client.SetSecurityToken(TestSecurityToken)
 
 	args := &DescribeLoadBalancersArgs{
 		RegionId: TestRegionID,

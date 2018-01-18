@@ -116,7 +116,7 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	}
 
 	if region != "" {
-		httpReq.Header.Set("x-acs-region-id", string(region))
+		httpReq.Header["x-acs-region-id"] = []string{string(region)}
 	}
 
 	if contentType != "" {

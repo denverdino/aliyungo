@@ -1,12 +1,12 @@
 package cs
 
 import (
-	"fmt"
 	"net/http"
 	"sort"
 	"strings"
 
 	"github.com/denverdino/aliyungo/util"
+	"log"
 )
 
 func (client *Client) signRequest(request *http.Request) {
@@ -23,7 +23,7 @@ func (client *Client) signRequest(request *http.Request) {
 
 	stringToSign := request.Method + "\n" + accept + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n" + canonicalizedHeader + canonicalizedResource
 
-	fmt.Printf("stringToSign = %s: ", stringToSign)
+	log.Printf("stringToSign = %s: ", stringToSign)
 	signature := util.CreateSignature(stringToSign, client.AccessKeySecret)
 	headers.Set("Authorization", "acs "+client.AccessKeyId+":"+signature)
 }

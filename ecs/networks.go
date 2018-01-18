@@ -36,8 +36,9 @@ func (client *Client) AllocatePublicIpAddress(instanceId string) (ipAddress stri
 
 type ModifyInstanceNetworkSpec struct {
 	InstanceId              string
-	InternetMaxBandwidthOut int
-	InternetMaxBandwidthIn  int
+	InternetMaxBandwidthOut *int
+	InternetMaxBandwidthIn  *int
+	NetworkChargeType common.InternetChargeType
 }
 
 type ModifyInstanceNetworkSpecResponse struct {

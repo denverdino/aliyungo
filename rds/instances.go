@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/denverdino/aliyungo/common"
+	"log"
 )
 
 type DBInstanceIPArray struct {
@@ -539,6 +540,7 @@ func (client *Client) WaitForAccount(instanceId string, accountName string, stat
 		}
 
 		accs := resp.Accounts.DBInstanceAccount
+		log.Printf("**********acc: %#v", accs)
 
 		if timeout <= 0 {
 			return common.GetClientErrorFromString("Timeout")
@@ -1078,6 +1080,19 @@ type ModifyDBInstanceConnectionStringArgs struct {
 func (client *Client) ModifyDBInstanceConnectionString(args *ModifyDBInstanceConnectionStringArgs) error {
 	response := common.Response{}
 	return client.Invoke("ModifyDBInstanceConnectionString", args, &response)
+}
+
+type ModifyDBInstanceDescriptionArgs struct {
+	DBInstanceId            string
+	DBInstanceDescription string
+}
+
+// ModifyDBInstanceDescription modify rds instance name
+//
+// You can read doc at https://help.aliyun.com/document_detail/26248.html
+func (client *Client) ModifyDBInstanceDescription(args *ModifyDBInstanceDescriptionArgs) error {
+	response := common.Response{}
+	return client.Invoke("ModifyDBInstanceDescription", args, &response)
 }
 
 type BackupPolicy struct {

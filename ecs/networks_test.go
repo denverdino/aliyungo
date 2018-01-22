@@ -84,3 +84,21 @@ func TestClient_AllocateEipAddress(t *testing.T) {
 	}
 
 }
+
+func TestClient_DescribeEipAddresses(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	args := &DescribeEipAddressesArgs{
+		RegionId:               TestRegionID,
+		AssociatedInstanceType: AssociatedInstanceTypeNat,
+		AssociatedInstanceId:   TestInstanceId,
+	}
+
+	eips, _, err := client.DescribeEipAddresses(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		for index, item := range eips {
+			t.Logf("eips[%d]=%++v", index, item)
+		}
+	}
+}

@@ -21,6 +21,17 @@ const (
 	PayByTraffic   = InternetChargeType("paybytraffic")
 )
 
+type LoadBalancerSpecType string
+
+const (
+	S1Small = "slb.s1.small"
+	S2Small = "slb.s2.small"
+	S2Medium = "slb.s2.medium"
+	S3Small = "slb.s3.small"
+	S3Medium = "slb.s3.medium"
+	S3Large = "slb.s3.large"
+)
+
 type CreateLoadBalancerArgs struct {
 	RegionId           common.Region
 	LoadBalancerName   string
@@ -31,6 +42,7 @@ type CreateLoadBalancerArgs struct {
 	ClientToken        string
 	MasterZoneId       string
 	SlaveZoneId        string
+	LoadBalancerSpec   LoadBalancerSpecType
 }
 
 type CreateLoadBalancerResponse struct {
@@ -92,6 +104,22 @@ type ModifyLoadBalancerInternetSpecResponse struct {
 func (client *Client) ModifyLoadBalancerInternetSpec(args *ModifyLoadBalancerInternetSpecArgs) (err error) {
 	response := &ModifyLoadBalancerInternetSpecResponse{}
 	err = client.Invoke("ModifyLoadBalancerInternetSpec", args, response)
+	return err
+}
+
+type ModifyLoadBalancerInstanceSpecArgs struct {
+	RegionId common.Region
+	LoadBalancerId     string
+	LoadBalancerSpec   LoadBalancerSpecType
+}
+
+// ModifyLoadBalancerInstanceSpec Modify loadbalancer instance spec
+//
+// You can read doc at https://help.aliyun.com/document_detail/53360.html
+
+func (client *Client) ModifyLoadBalancerInstanceSpec(args *ModifyLoadBalancerInstanceSpecArgs) (err error) {
+	response := &common.Response{}
+	err = client.Invoke("ModifyLoadBalancerInstanceSpec", args, response)
 	return err
 }
 
@@ -194,6 +222,7 @@ type LoadBalancerType struct {
 	BackendServers struct {
 		BackendServer []BackendServerType
 	}
+	LoadBalancerSpec   LoadBalancerSpecType
 }
 
 type DescribeLoadBalancersResponse struct {

@@ -39,12 +39,26 @@ type CreateNatGatewayResponse struct {
 	BandwidthPackageIds BandwidthPackageIdType
 }
 
+type CreateBandwidthPackageResponse struct {
+	common.Response
+	BandwidthPackageId string
+}
+
 // CreateNatGateway creates Virtual Private Cloud
 //
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/vpc&createvpc
 func (client *Client) CreateNatGateway(args *CreateNatGatewayArgs) (resp *CreateNatGatewayResponse, err error) {
 	response := CreateNatGatewayResponse{}
 	err = client.Invoke("CreateNatGateway", args, &response)
+	if err != nil {
+		return nil, err
+	}
+	return &response, err
+}
+
+func (client *Client) CreatBandwidthPackage(args CreateBandwidthPackageArgs) (resp *CreateBandwidthPackageResponse, err error) {
+	response := CreateBandwidthPackageResponse{}
+	err = client.Invoke("CreateBandwidthPackage", args, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -146,6 +160,61 @@ func (client *Client) DeleteNatGateway(args *DeleteNatGatewayArgs) error {
 	return err
 }
 
+type CreateBandwidthPackageArgs struct {
+	RegionId     common.Region
+	NatGatewayId string
+	IpCount      int
+	Bandwidth    int
+	Zone         string
+	Name         string
+	Description  string
+}
+
+type CreateBandwidthResponse struct {
+	BandwidthPackageId string
+}
+
+func (client *Client) CreateBandwidthPackage(args *CreateBandwidthPackageArgs) (resp *CreateBandwidthResponse, err error) {
+	response := CreateBandwidthResponse{}
+	err = client.Invoke("CreateBandwidthPackage", args, &response)
+	if err != nil {
+		return nil, err
+	}
+	return &response, err
+}
+
+type ModifyBandwithPackageAttributeArgs struct {
+	RegionId           common.Region
+	BandwidthPackageId string
+	Name               string
+	Description        string
+}
+
+type ModifyBandwithPackageAttributeResponse struct {
+	common.Response
+}
+
+func (client *Client) ModifyBandwithPackageAttribute(args *ModifyBandwithPackageAttributeArgs) error {
+	response := ModifyBandwithPackageAttributeResponse{}
+	return client.Invoke("ModifyBandwidthPackageAttribute", args, &response)
+}
+
+type ModifyBandwithPackageSpecArgs struct {
+	RegionId           common.Region
+	BandwidthPackageId string
+	Bandwidth          string
+	ClientToken        string
+}
+
+type ModifyBandwithPackageSpecResponse struct {
+	common.Response
+}
+
+func (client *Client) ModifyBandwithPackageSpec(args *ModifyBandwithPackageSpecArgs) error {
+	response := ModifyBandwithPackageSpecResponse{}
+	return client.Invoke("ModifyBandwidthPackageSpec", args, &response)
+}
+
 type DescribeBandwidthPackagesArgs struct {
 	RegionId           common.Region
 	BandwidthPackageId string
@@ -161,6 +230,9 @@ type DescribeBandwidthPackageType struct {
 	Bandwidth          string
 	BandwidthPackageId string
 	IpCount            string
+	Description        string
+	Name               string
+	NatGatewayId       string
 	PublicIpAddresses  struct {
 		PublicIpAddresse []PublicIpAddresseType
 	}

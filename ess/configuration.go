@@ -15,7 +15,7 @@ type CreateScalingConfigurationArgs struct {
 	ScalingConfigurationName string
 	InternetChargeType       common.InternetChargeType
 	InternetMaxBandwidthIn   int
-	InternetMaxBandwidthOut  int
+	InternetMaxBandwidthOut  *int
 	SystemDisk_Category      common.UnderlineString
 	SystemDisk_Size          common.UnderlineString
 	DataDisk                 []DataDiskType

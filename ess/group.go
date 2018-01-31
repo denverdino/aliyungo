@@ -28,7 +28,7 @@ type CreateScalingGroupArgs struct {
 	MaxSize         *int
 	DefaultCooldown *int
 	RemovalPolicy   common.FlattenArray
-	DBInstanceId    common.FlattenArray
+	DBInstanceIds   string
 }
 
 type CreateScalingGroupResponse struct {
@@ -111,6 +111,7 @@ type ScalingGroupItemType struct {
 	RemovingCapacity             int
 	RemovalPolicies              RemovalPolicySetType
 	DBInstanceIds                DBInstanceIdSetType
+	LoadBalancerIds              LoadBalancerIdSetType
 }
 
 type VSwitchIdsSetType struct {
@@ -123,6 +124,9 @@ type RemovalPolicySetType struct {
 
 type DBInstanceIdSetType struct {
 	DBInstanceId []string
+}
+type LoadBalancerIdSetType struct {
+	LoadBalancerId []string
 }
 
 // DescribeScalingGroups describes scaling groups

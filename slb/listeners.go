@@ -103,6 +103,9 @@ type HTTPListenerType struct {
 	VServerGroup           FlagType
 	VServerGroupId         string
 	Gzip                   FlagType
+	XForwardedFor_SLBID    FlagType
+	XForwardedFor_SLBIP    FlagType
+	XForwardedFor_proto    FlagType
 }
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 

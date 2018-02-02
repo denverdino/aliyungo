@@ -23,6 +23,7 @@ type CreateScalingConfigurationArgs struct {
 	KeyPairName              string
 	RamRoleName              string
 	Tags                     string
+	InstanceName             string
 }
 
 type DataDiskType struct {
@@ -80,6 +81,7 @@ type ScalingConfigurationItemType struct {
 	ScalingGroupId           string
 	ImageId                  string
 	InstanceType             string
+	InstanceName             string
 	IoOptimized              string
 	SecurityGroupId          string
 	InternetChargeType       string

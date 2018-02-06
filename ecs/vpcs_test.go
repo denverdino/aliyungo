@@ -202,8 +202,8 @@ func TestClient_CreateVpc(t *testing.T) {
 	args := &CreateVpcArgs{
 		RegionId:    common.Beijing,
 		CidrBlock:   "172.16.0.0/16",
-		VpcName:     "上海任意门测试",
-		Description: "上海任意门测试",
+		VpcName:     "vpc-test",
+		Description: "vpc-test",
 		ClientToken: client.GenerateClientToken(),
 	}
 

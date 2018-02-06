@@ -16,6 +16,8 @@ type DescribeTemplateResponse struct {
 	Resources                interface{}
 	Description              interface{}
 	Conditions               interface{}
+	Mappings                 interface{}
+	Metadata                 interface{}
 }
 
 func (client *Client) DescribeTemplate(stackId, stackName string) (*DescribeTemplateResponse, error) {

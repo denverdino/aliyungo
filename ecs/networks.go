@@ -38,7 +38,7 @@ type ModifyInstanceNetworkSpec struct {
 	InstanceId              string
 	InternetMaxBandwidthOut *int
 	InternetMaxBandwidthIn  *int
-	NetworkChargeType common.InternetChargeType
+	NetworkChargeType       common.InternetChargeType
 }
 
 type ModifyInstanceNetworkSpecResponse struct {
@@ -88,9 +88,10 @@ type EipInstanceType string
 const (
 	EcsInstance = "EcsInstance"
 	SlbInstance = "SlbInstance"
-	Nat = "Nat"
-	HaVip = "HaVip"
+	Nat         = "Nat"
+	HaVip       = "HaVip"
 )
+
 type AssociateEipAddressArgs struct {
 	AllocationId string
 	InstanceId   string

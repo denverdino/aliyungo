@@ -24,12 +24,12 @@ const (
 type LoadBalancerSpecType string
 
 const (
-	S1Small = "slb.s1.small"
-	S2Small = "slb.s2.small"
+	S1Small  = "slb.s1.small"
+	S2Small  = "slb.s2.small"
 	S2Medium = "slb.s2.medium"
-	S3Small = "slb.s3.small"
+	S3Small  = "slb.s3.small"
 	S3Medium = "slb.s3.medium"
-	S3Large = "slb.s3.large"
+	S3Large  = "slb.s3.large"
 )
 
 type CreateLoadBalancerArgs struct {
@@ -108,9 +108,9 @@ func (client *Client) ModifyLoadBalancerInternetSpec(args *ModifyLoadBalancerInt
 }
 
 type ModifyLoadBalancerInstanceSpecArgs struct {
-	RegionId common.Region
-	LoadBalancerId     string
-	LoadBalancerSpec   LoadBalancerSpecType
+	RegionId         common.Region
+	LoadBalancerId   string
+	LoadBalancerSpec LoadBalancerSpecType
 }
 
 // ModifyLoadBalancerInstanceSpec Modify loadbalancer instance spec
@@ -222,7 +222,7 @@ type LoadBalancerType struct {
 	BackendServers struct {
 		BackendServer []BackendServerType
 	}
-	LoadBalancerSpec   LoadBalancerSpecType
+	LoadBalancerSpec LoadBalancerSpecType
 }
 
 type DescribeLoadBalancersResponse struct {

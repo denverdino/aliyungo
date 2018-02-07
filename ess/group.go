@@ -307,7 +307,7 @@ const DefaultWaitTimeout = 120
 const DefaultWaitForInterval = 5
 
 // WaitForScalingGroup waits for group to given status
-func (client *Client) WaitForScalingGroup (regionId common.Region, groupId string, status LifecycleState, timeout int) error {
+func (client *Client) WaitForScalingGroup(regionId common.Region, groupId string, status LifecycleState, timeout int) error {
 	if timeout <= 0 {
 		timeout = DefaultWaitTimeout
 	}

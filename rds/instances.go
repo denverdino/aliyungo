@@ -1083,7 +1083,7 @@ func (client *Client) ModifyDBInstanceConnectionString(args *ModifyDBInstanceCon
 }
 
 type ModifyDBInstanceDescriptionArgs struct {
-	DBInstanceId            string
+	DBInstanceId          string
 	DBInstanceDescription string
 }
 
@@ -1165,6 +1165,31 @@ func (client *Client) ModifyDBInstanceSpec(args *ModifyDBInstanceSpecArgs) (resp
 	response := ModifyDBInstanceSpecResponse{}
 	err = client.Invoke("ModifyDBInstanceSpec", args, &response)
 
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}
+
+type ModifyDBInstancePayTypeArgs struct {
+	DBInstanceId string
+	PayType      DBPayType
+	Period       common.TimeType
+	UsedTime     string
+	AutoPay      string
+}
+
+type ModifyDBInstancePayTypeResponse struct {
+	common.Response
+	OrderId int
+}
+
+// ModifyDBInstancePayType modify db charge type
+//
+// You can read doc at https://help.aliyun.com/document_detail/26247.html
+func (client *Client) ModifyDBInstancePayType(args *ModifyDBInstancePayTypeArgs) (resp *ModifyDBInstancePayTypeResponse, err error) {
+	response := ModifyDBInstancePayTypeResponse{}
+	err = client.Invoke("ModifyDBInstancePayType", args, &response)
 	if err != nil {
 		return nil, err
 	}

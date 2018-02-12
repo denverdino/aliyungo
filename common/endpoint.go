@@ -136,7 +136,16 @@ func setProductRegionEndpoint(region Region, serviceCode string, endpoint string
 	}
 }
 
-func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode string) string {
+func (client *LocationClient) DescribeAPIEndpoint(region Region, serviceCode string) string {
+	endpoint := client.DescribeAPIEndpointByType(region, serviceCode, "localAPI")
+	if endpoint == "" {
+		endpoint = client.DescribeAPIEndpointByType(region, serviceCode, "openAPI")
+	}
+
+	return endpoint
+}
+
+func (client *LocationClient) DescribeAPIEndpointByType(region Region, serviceCode string, apiType string) string {
 	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
 		return endpoint
 	}
@@ -146,7 +155,7 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 	args := &DescribeEndpointsArgs{
 		Id:          region,
 		ServiceCode: serviceCode,
-		Type:        "openAPI",
+		Type:        apiType,
 	}
 
 	endpoint, err := client.DescribeEndpoints(args)

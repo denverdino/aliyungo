@@ -28,7 +28,7 @@ func TestClient_DescribeOpenAPIEndpoint(t *testing.T) {
 
 	for _, region := range regions {
 		for _, service := range services {
-			endpoint := client.DescribeOpenAPIEndpoint(Region(region), service)
+			endpoint := client.DescribeAPIEndpoint(Region(region), service)
 			t.Logf("Endpoint[%s][%s]=%s", string(region), service, endpoint)
 		}
 	}

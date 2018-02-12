@@ -195,3 +195,22 @@ func TestClient_DescribeVpcs(t *testing.T) {
 		t.Logf("Result = %++v", vpcs)
 	}
 }
+
+func TestClient_CreateVpc(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	args := &CreateVpcArgs{
+		RegionId:    common.Beijing,
+		CidrBlock:   "172.16.0.0/16",
+		VpcName:     "vpc-test",
+		Description: "vpc-test",
+		ClientToken: client.GenerateClientToken(),
+	}
+
+	response, err := client.CreateVpc(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("Result %++v", response)
+	}
+}

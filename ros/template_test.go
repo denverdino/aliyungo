@@ -13,7 +13,7 @@ func TestClient_DescribeTemplate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to DescribeTemplate %++v", err)
 	} else {
-		t.Logf("Resource = %++v", response)
+		t.Logf("Resource = %++v", response.Mappings)
 	}
 }
 

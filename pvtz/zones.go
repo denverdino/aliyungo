@@ -81,16 +81,15 @@ func (client *Client) AddZone(args *AddZoneArgs) (response *AddZoneResponse, err
 	return response, err
 }
 
-
 type DeleteZoneArgs struct {
-	ZoneId     string
+	ZoneId       string
 	Lang         string
 	UserClientIp string
 }
 
 type DeleteZoneResponse struct {
 	common.Response
-	ZoneId   string
+	ZoneId string
 }
 
 // DeleteZone delete zone
@@ -100,5 +99,111 @@ func (client *Client) DeleteZone(args *DeleteZoneArgs) (err error) {
 	response := &DeleteZoneResponse{}
 	err = client.Invoke("DeleteZone", args, &response)
 
+	return err
+}
+
+type CheckZoneNameArgs struct {
+	ZoneName     string
+	Lang         string
+	UserClientIp string
+}
+
+type CheckZoneNameResponse struct {
+	common.Response
+	Success bool
+	Check   bool
+}
+
+// CheckZoneName check zone name available or not
+//
+// You can read doc at https://help.aliyun.com/document_detail/66240.html
+func (client *Client) CheckZoneName(args *CheckZoneNameArgs) (bool, error) {
+	response := &CheckZoneNameResponse{}
+	err := client.Invoke("CheckZoneName", args, &response)
+	if err != nil {
+		return false, err
+	}
+
+	return response.Check, err
+}
+
+type UpdateZoneRemarkArgs struct {
+	ZoneId       string
+	Lang         string
+	UserClientIp string
+	Remark       string
+}
+
+type UpdateZoneRemarkResponse struct {
+	common.Response
+	ZoneId string
+}
+
+// CheckZoneName check zone name available or not
+//
+// You can read doc at https://help.aliyun.com/document_detail/66242.html
+func (client *Client) UpdateZoneRemark(args *UpdateZoneRemarkArgs) error {
+	response := &UpdateZoneRemarkResponse{}
+	err := client.Invoke("UpdateZoneRemark", args, &response)
+	return err
+}
+
+type DescribeZoneInfoArgs struct {
+	ZoneId       string
+	Lang         string
+	UserClientIp string
+	common.Pagination
+}
+
+type VPCType struct {
+	RegionId common.Region
+	VpcId    string
+	VpcName  string
+}
+
+type DescribeZoneInfoResponse struct {
+	common.Response
+	ZoneName        string
+	ZoneId          string
+	Remark          string
+	RecordCount     int
+	RegionName      string
+	IsPtr           bool
+	CreateTime      util.ISO6801Time
+	CreateTimestamp int64
+	UpdateTime      util.ISO6801Time
+	UpdateTimestamp int64
+	BindVpcs        struct {
+		VPC []VPCType
+	}
+}
+
+// DescribeZoneInfo describes zone info
+//
+// You can read doc at https://help.aliyun.com/document_detail/66244.html
+func (client *Client) DescribeZoneInfo(args *DescribeZoneInfoArgs) (response *DescribeZoneInfoResponse, err error) {
+
+	response = &DescribeZoneInfoResponse{}
+	err = client.Invoke("DescribeZoneInfo", args, response)
+	return response, err
+}
+
+type BindZoneVpcArgs struct {
+	ZoneId       string
+	Lang         string
+	UserClientIp string
+	Vpcs         []VPCType
+}
+
+type BindZoneVpcResponse struct {
+	common.Response
+}
+
+// BindZoneVpc bind zone to VPC
+//
+// You can read doc at https://help.aliyun.com/document_detail/66244.html
+func (client *Client) BindZoneVpc(args *BindZoneVpcArgs) (err error) {
+	response := &BindZoneVpcResponse{}
+	err = client.Invoke("BindZoneVpc", args, response)
 	return err
 }

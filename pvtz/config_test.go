@@ -9,7 +9,7 @@ import (
 var (
 	TestAccessKeyId     = os.Getenv("AccessKeyId")
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
-
+	TestVPCId           = os.Getenv("VPCId")
 )
 
 var testClient *Client
@@ -30,4 +30,3 @@ func NewTestClientForDebug() *Client {
 	}
 	return testDebugClient
 }
-

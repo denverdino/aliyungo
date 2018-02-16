@@ -1,9 +1,9 @@
 package pvtz
 
 import (
+	"github.com/denverdino/aliyungo/common"
 	"testing"
 )
-
 
 func TestDescribeRegions(t *testing.T) {
 	client := NewTestClient()
@@ -16,18 +16,54 @@ func TestDescribeRegions(t *testing.T) {
 func TestAddZone(t *testing.T) {
 	client := NewTestClient()
 
+	checkResult, err := client.CheckZoneName(&CheckZoneNameArgs{
+		ZoneName: "demo.com",
+	})
+
+	t.Logf("CheckZoneName: %v, %v", checkResult, err)
+
 	response, err := client.AddZone(&AddZoneArgs{
-		ZoneName:"demo.com",
+		ZoneName: "demo.com",
 	})
 
 	t.Logf("AddZone: %++v, %v", response, err)
-	TestDescribeZones(t)
+	testDescribeZones(t)
 
 	zoneId := response.ZoneId
 
+	err = client.UpdateZoneRemark(&UpdateZoneRemarkArgs{
+		ZoneId: zoneId,
+		Remark: "specialZone",
+	})
+	t.Logf("UpdateZoneRemark: %v", err)
+
 	testDescribeZoneRecords(t, zoneId)
 
+	err = client.BindZoneVpc(&BindZoneVpcArgs{
+		ZoneId: zoneId,
+		Vpcs: []VPCType{
+			VPCType{
+				RegionId: common.Beijing,
+				VpcId:    TestVPCId,
+			},
+		},
+	})
+	t.Logf("BindZoneVpc:  %v", err)
+
+	zoneInfo, err := client.DescribeZoneInfo(&DescribeZoneInfoArgs{
+		ZoneId: zoneId,
+	})
+
+	t.Logf("DescribeZoneInfo:  %v %v", zoneInfo, err)
+
+	err = client.BindZoneVpc(&BindZoneVpcArgs{
+		ZoneId: zoneId,
+		Vpcs:   []VPCType{},
+	})
+	t.Logf("unbind ZoneVpc:  %v", err)
+
 	testDeleteZone(t, zoneId)
+
 }
 
 func testDeleteZone(t *testing.T, zoneId string) {
@@ -39,7 +75,7 @@ func testDeleteZone(t *testing.T, zoneId string) {
 	t.Logf("DeleteZone: %v", err)
 }
 
-func TestDescribeZones(t *testing.T) {
+func testDescribeZones(t *testing.T) {
 	client := NewTestClient()
 
 	zones, err := client.DescribeZones(&DescribeZonesArgs{})
@@ -52,10 +88,10 @@ func testDescribeZoneRecords(t *testing.T, zoneId string) {
 
 	response, err := client.AddZoneRecord(&AddZoneRecordArgs{
 		ZoneId: zoneId,
-		Rr: "www",
-		Type: "A",
-		Ttl: 60,
-		Value: "1.1.1.1",
+		Rr:     "www",
+		Type:   "A",
+		Ttl:    60,
+		Value:  "1.1.1.1",
 	})
 
 	t.Logf("AddZoneRecord: %v, %v", response, err)
@@ -71,9 +107,16 @@ func testDescribeZoneRecords(t *testing.T, zoneId string) {
 
 	t.Logf("records: %v, %v", records, err)
 
-
 	err = client.DeleteZoneRecord(&DeleteZoneRecordArgs{
 		RecordId: recordId,
 	})
 	t.Logf("DeleteZoneRecord: %v", err)
+}
+
+func TestDescribeChangeLogs(t *testing.T) {
+	client := NewTestClient()
+
+	changeLogs, err := client.DescribeChangeLogs(&DescribeChangeLogsArgs{})
+
+	t.Logf("Change logs: %v, %v", changeLogs, err)
 }

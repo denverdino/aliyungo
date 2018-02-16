@@ -76,5 +76,3 @@ func NewPVTZClientWithEndpointAndSecurityToken(endpoint string, accessKeyId stri
 		InitClient()
 	return client
 }
-
-

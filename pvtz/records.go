@@ -1,8 +1,8 @@
 package pvtz
 
 import (
+	"log"
 	"github.com/denverdino/aliyungo/common"
-	//"github.com/denverdino/aliyungo/util"
 )
 
 type RecordStatus string
@@ -20,6 +20,7 @@ type DescribeZoneRecordsArgs struct {
 
 //
 type ZoneRecordType struct {
+	RecordId int64
 	Rr       string
 	Type     string
 	Ttl      int
@@ -62,6 +63,46 @@ func (client *Client) DescribeZoneRecords(args *DescribeZoneRecordsArgs) (record
 
 	return result, nil
 }
+
+func (client *Client) DescribeZoneRecordsByRR(zoneId string, rr string) (records []ZoneRecordType, err error) {
+	records, err = client.DescribeZoneRecords(&DescribeZoneRecordsArgs{
+		ZoneId: zoneId,
+		Keyword: rr,
+	})
+
+	if err != nil {
+		return records, err
+	}
+
+	result := make([]ZoneRecordType, 0, 0)
+	for _, record := range records {
+		if record.Rr == rr {
+			result = append(result, record)
+		}
+	}
+	return result, err
+}
+
+func (client *Client) DeleteZoneRecordsByRR(zoneId string, rr string) error {
+	records, err := client.DescribeZoneRecordsByRR(zoneId, rr)
+
+	if err != nil {
+		return err
+	}
+
+	for _, record := range records {
+		if record.Rr == rr {
+			err := client.DeleteZoneRecord(&DeleteZoneRecordArgs{
+				RecordId: record.RecordId,
+			})
+			if err != nil {
+				log.Printf("failed to delete zone record %d: %v\n", record.RecordId, err)
+			}
+		}
+	}
+	return nil
+}
+
 
 type AddZoneRecordArgs struct {
 	ZoneName     string

@@ -59,7 +59,7 @@ type DescribeDisksArgs struct {
 	Category           DiskCategory //enum for all(default) | cloud | ephemeral
 	Status             DiskStatus   //enum for In_use | Available | Attaching | Detaching | Creating | ReIniting | All(default)
 	SnapshotId         string
-	Name               string
+	DiskName           string
 	Portable           *bool //optional
 	DeleteWithInstance *bool //optional
 	DeleteAutoSnapshot *bool //optional

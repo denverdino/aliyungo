@@ -78,6 +78,7 @@ type DiskItemType struct {
 	DiskName           string
 	Description        string
 	Type               DiskType
+	Encrypted          bool
 	Category           DiskCategory
 	Size               int
 	ImageId            string

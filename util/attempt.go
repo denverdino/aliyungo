@@ -13,6 +13,7 @@ type AttemptStrategy struct {
 	Total time.Duration // total duration of attempt.
 	Delay time.Duration // interval between each try in the burst.
 	Min   int           // minimum number of retries; overrides Total
+	Max   int           // restriction on the maximum number of retries allowed;
 }
 
 type Attempt struct {
@@ -37,6 +38,13 @@ func (s AttemptStrategy) Start() *Attempt {
 // Next waits until it is time to perform the next attempt or returns
 // false if it is time to stop trying.
 func (a *Attempt) Next() bool {
+	//
+	// If Max restriction is set & we have tried "count" number of times, stop trying
+	//
+	if !a.force && a.strategy.Max > 0 && a.count == a.strategy.Max {
+		return false
+	}
+
 	now := time.Now()
 	sleep := a.nextSleep(now)
 	if !a.force && !now.Add(sleep).Before(a.end) && a.strategy.Min <= a.count {
@@ -67,6 +75,11 @@ func (a *Attempt) HasNext() bool {
 	if a.force || a.strategy.Min > a.count {
 		return true
 	}
+
+	if a.strategy.Max > 0 && a.count == a.strategy.Max {
+		return false
+	}
+
 	now := time.Now()
 	if now.Add(a.nextSleep(now)).Before(a.end) {
 		a.force = true

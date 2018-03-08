@@ -157,6 +157,20 @@ const (
 // default resource value for create order
 const DefaultResource = "buy"
 
+type PaginationResult struct {
+	TotalRecordCount int
+	PageNumber       int
+	PageRecordCount  int
+}
+
+// NextPage gets the next page of the result set
+func (r *PaginationResult) NextPage() *common.Pagination {
+	if r.PageNumber*r.PageRecordCount >= r.TotalRecordCount {
+		return nil
+	}
+	return &common.Pagination{PageNumber: r.PageNumber + 1, PageSize: r.PageRecordCount}
+}
+
 type CreateOrderArgs struct {
 	CommodityCode       CommodityCode
 	RegionId            common.Region
@@ -234,7 +248,7 @@ func (client *Client) CreateDBInstance(args *CreateDBInstanceArgs) (resp CreateD
 	return response, err
 }
 
-type DescribeDBInstancesArgs struct {
+type DescribeDBInstanceAttributeArgs struct {
 	DBInstanceId string
 }
 
@@ -243,6 +257,29 @@ type DescribeDBInstanceAttributeResponse struct {
 	Items struct {
 		DBInstanceAttribute []DBInstanceAttribute
 	}
+}
+
+type DescribeDBInstancesArgs struct {
+	RegionId            common.Region
+	Engine              Engine
+	DBInstanceType      string
+	InstanceNetworkType string
+	ConnectionMode      ConnectionMode
+	Tags                string
+
+	common.Pagination
+}
+
+type DescribeDBInstancesResponse struct {
+	common.Response
+
+	Databases []Database
+
+	Items struct {
+		DBInstance []DBInstanceAttribute
+	}
+
+	common.PaginationResult
 }
 
 type DBInstanceAttribute struct {
@@ -291,10 +328,26 @@ type ReadOnlyDBInstanceId struct {
 	DBInstanceId string
 }
 
+// DescribeDBInstances describes db instances
+//
+// You can read doc at https://help.aliyun.com/document_detail/26232.html
+func (client *Client) DescribeDBInstances(args *DescribeDBInstancesArgs) (resp *DescribeDBInstancesResponse, err error) {
+
+	response := DescribeDBInstancesResponse{}
+
+	err = client.Invoke("DescribeDBInstances", args, &response)
+
+	if err == nil {
+		return &response, nil
+	}
+
+	return nil, err
+}
+
 // DescribeDBInstanceAttribute describes db instance
 //
 // You can read doc at https://help.aliyun.com/document_detail/26231.html?spm=5176.doc26228.6.702.uhzm31
-func (client *Client) DescribeDBInstanceAttribute(args *DescribeDBInstancesArgs) (resp *DescribeDBInstanceAttributeResponse, err error) {
+func (client *Client) DescribeDBInstanceAttribute(args *DescribeDBInstanceAttributeArgs) (resp *DescribeDBInstanceAttributeResponse, err error) {
 
 	response := DescribeDBInstanceAttributeResponse{}
 
@@ -416,7 +469,7 @@ func (client *Client) WaitForInstance(instanceId string, status InstanceStatus, 
 		timeout = InstanceDefaultTimeout
 	}
 	for {
-		args := DescribeDBInstancesArgs{
+		args := DescribeDBInstanceAttributeArgs{
 			DBInstanceId: instanceId,
 		}
 
@@ -450,7 +503,7 @@ func (client *Client) WaitForInstanceAsyn(instanceId string, status InstanceStat
 		timeout = InstanceDefaultTimeout
 	}
 	for {
-		args := DescribeDBInstancesArgs{
+		args := DescribeDBInstanceAttributeArgs{
 			DBInstanceId: instanceId,
 		}
 

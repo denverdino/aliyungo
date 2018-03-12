@@ -23,7 +23,10 @@ func (client *Client) signRequest(request *http.Request) {
 
 	stringToSign := request.Method + "\n" + accept + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n" + canonicalizedHeader + canonicalizedResource
 
-	log.Printf("stringToSign = %s: ", stringToSign)
+	if client.debug {
+		log.Printf("stringToSign = %s: ", stringToSign)
+	}
+
 	signature := util.CreateSignature(stringToSign, client.AccessKeySecret)
 	headers.Set("Authorization", "acs "+client.AccessKeyId+":"+signature)
 }

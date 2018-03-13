@@ -116,8 +116,9 @@ func (client *Client) DescribeInstanceStatusWithRaw(args *DescribeInstanceStatus
 }
 
 type StopInstanceArgs struct {
-	InstanceId string
-	ForceStop  bool
+	InstanceId  string
+	ForceStop   bool
+	StoppedMode string
 }
 
 type StopInstanceResponse struct {
@@ -131,6 +132,17 @@ func (client *Client) StopInstance(instanceId string, forceStop bool) error {
 	args := StopInstanceArgs{
 		InstanceId: instanceId,
 		ForceStop:  forceStop,
+	}
+	response := StopInstanceResponse{}
+	err := client.Invoke("StopInstance", &args, &response)
+	return err
+}
+
+func (client *Client) StopInstanceKeepCharging(instanceId string) error {
+	args := StopInstanceArgs{
+		InstanceId:  instanceId,
+		ForceStop:   true,
+		StoppedMode: "KeepCharging",
 	}
 	response := StopInstanceResponse{}
 	err := client.Invoke("StopInstance", &args, &response)

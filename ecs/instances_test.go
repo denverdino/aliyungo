@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"testing"
 
+	"time"
+
+	"os"
+
 	"github.com/denverdino/aliyungo/common"
 )
 
@@ -345,4 +349,110 @@ func TestClient_DescribeInstances(t *testing.T) {
 			t.Logf("response[%d] = %++v", index, instance)
 		}
 	}
+}
+
+func TestClient_DescribeInstanceAttributeForOpenAPI(t *testing.T) {
+	InvokeAPI("localAPI", os.Getenv("LocalEndPoint"))
+	fmt.Println("=============================================")
+	InvokeAPI("openAPI", os.Getenv("OpenEndPoint"))
+}
+
+func InvokeAPI(apiType, endpoint string) {
+	fmt.Println("Start to invoke " + apiType)
+	success := 0
+	failed := 0
+	for index := 0; index < 1000; index++ {
+		client := NewECSClientWithEndpointAndSecurityToken(endpoint, TestAccessKeyId, TestAccessKeySecret, "", TestRegionID)
+		//client.SetDebug(true)
+		t0 := time.Now()
+		//instanceIds := []string{TestInstanceId}
+		//res, _ := json.Marshal(instanceIds)
+		args := &DescribeInstancesArgs{
+			RegionId: TestRegionID,
+			//InstanceIds: string(res),
+		}
+		//_, err := client.DescribeInstanceAttribute(TestInstanceId)
+		_, _, err := client.DescribeInstances(args)
+		t1 := time.Now()
+		fmt.Printf("Index=%d cost (%v) Error %++v", index, t1.Sub(t0), err)
+		fmt.Println()
+		if err != nil {
+			failed++
+		} else {
+			success++
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	fmt.Printf("%s Result : succes:%d,failed:%d", apiType, success, failed)
+	fmt.Println()
+}
+
+func TestDescribeInstanceAttribute(t *testing.T) {
+	client := NetTestLocationClientForDebug()
+
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		if len(instance.PublicIpAddress.IpAddress) > 0 {
+			t.Logf("already  associate publi ip %s", instance.PublicIpAddress.IpAddress[0])
+		}
+		//t.Logf("Result %++v", instance)
+	}
+}
+
+func TestClient_ReplaceSystemDisk(t *testing.T) {
+	client := NetTestLocationClientForDebug()
+
+	err := client.StopInstanceKeepCharging(TestInstanceId)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+		return
+	}
+	err = client.WaitForInstance(TestInstanceId, Stopped, 10*60)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+		return
+	}
+
+	replaceArgs := &ReplaceSystemDiskArgs{
+		InstanceId: TestInstanceId,
+		ImageId:    "centos_7_04_64_20G_alibase_201701015.vhd",
+		SystemDisk: SystemDiskType{
+			Size: 40,
+		},
+		ClientToken: client.GenerateClientToken(),
+	}
+
+	_, err = client.ReplaceSystemDisk(replaceArgs)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+		return
+	}
+
+	time.Sleep(30 * time.Second)
+
+	modifyArgs := &ModifyInstanceAttributeArgs{
+		InstanceId: TestInstanceId,
+		Password:   "Hello1234",
+		//InstanceName: d.GetMachineName(),
+	}
+	err = client.ModifyInstanceAttribute(modifyArgs)
+
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+		return
+	}
+
+	instance, err := client.DescribeInstanceAttribute(TestInstanceId)
+
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+		return
+	}
+	if len(instance.PublicIpAddress.IpAddress) > 0 {
+		t.Logf("already  associate publi ip %s", instance.PublicIpAddress.IpAddress[0])
+	}
+
 }

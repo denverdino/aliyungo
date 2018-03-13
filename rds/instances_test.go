@@ -37,7 +37,7 @@ func TestDBPostpaidClassicInstanceCreationAndDeletion(t *testing.T) {
 	instanceId := resp.DBInstanceId
 	t.Logf("Instance %s is created successfully.", instanceId)
 
-	arrtArgs := DescribeDBInstancesArgs{
+	arrtArgs := DescribeDBInstanceAttributeArgs{
 		DBInstanceId: instanceId,
 	}
 	attrResp, err := client.DescribeDBInstanceAttribute(&arrtArgs)
@@ -89,7 +89,7 @@ func TestDBPrepaidInstanceCreation(t *testing.T) {
 	instanceId := resp.DBInstanceId
 	t.Logf("Instance %s is created successfully.", instanceId)
 
-	arrtArgs := DescribeDBInstancesArgs{
+	arrtArgs := DescribeDBInstanceAttributeArgs{
 		DBInstanceId: instanceId,
 	}
 	attrResp, err := client.DescribeDBInstanceAttribute(&arrtArgs)
@@ -136,7 +136,7 @@ func TestDBPostpaidVpcInstanceCreationAndDeletion(t *testing.T) {
 	instanceId := resp.DBInstanceId
 	t.Logf("Instance %s is created successfully.", instanceId)
 
-	arrtArgs := DescribeDBInstancesArgs{
+	arrtArgs := DescribeDBInstanceAttributeArgs{
 		DBInstanceId: instanceId,
 	}
 	attrResp, err := client.DescribeDBInstanceAttribute(&arrtArgs)
@@ -324,7 +324,7 @@ func TestModifyDBInstanceSpec(t *testing.T) {
 		t.Errorf("Failed to modify db instance %s: %v", DBInstanceUpgradeId, err)
 	}
 
-	arrtArgs := DescribeDBInstancesArgs{
+	arrtArgs := DescribeDBInstanceAttributeArgs{
 		DBInstanceId: DBInstanceUpgradeId,
 	}
 	attrResp, err := client.DescribeDBInstanceAttribute(&arrtArgs)

@@ -5,7 +5,6 @@ import (
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -133,7 +132,9 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	httpReq.Header["x-acs-signature-nonce"] = []string{util.CreateRandomString()}
 	httpReq.Header["x-acs-signature-method"] = []string{"HMAC-SHA1"}
 
-	fmt.Printf("Header = %++v", httpReq.Header)
+	if client.debug {
+		log.Printf("Header = %++v", httpReq.Header)
+	}
 
 	if client.userAgent != "" {
 		httpReq.Header.Set("User-Agent", client.userAgent)

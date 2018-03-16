@@ -98,6 +98,42 @@ func (client *Client) CreateCluster(region common.Region, args *ClusterCreationA
 	return
 }
 
+type KubernetesStackArgs struct {
+	VPCID            	  string              `json:"VpcId,omitempty"`
+	VSwitchID        	  string              `json:"VSwitchId,omitempty"`
+	MasterInstanceType        string 	      `json:"MasterInstanceType"`
+	WorkerInstanceType        string 	      `json:"MasterInstanceType"`
+	NumOfNodes		  int64		      `json:"NumOfNodes"`
+	Password         	  string              `json:"LoginPassword"`
+	DockerVersion		  string 	      `json:"DockerVersion"`
+	KubernetesVersion         string	      `json:"KubernetesVersion"`
+	ZoneId			  string	      `json:"ZoneId"`
+	ContainerCIDR		  string	      `json:"ContainerCIDR"`
+	ServiceCIDR		  string	      `json:"ServiceCIDR"`
+	SSHFlags		  bool		      `json:"SSHFlags"`
+	MasterSystemDiskSize      int64               `json:"MasterSystemDiskSize"`
+	MasterSystemDiskCategory  ecs.DiskCategory    `json:"MasterSystemDiskCategory"`
+	WorkerSystemDiskSize      int64               `json:"MasterSystemDiskSize"`
+	WorkerSystemDiskCategory  ecs.DiskCategory    `json:"MasterSystemDiskCategory"`
+	ImageID                   string              `json:"ImageId,omitempty"`
+	CloudMonitorFlags         bool                `json:"CloudMonitorFlags"`
+	SNatEntry                 bool                `json:"SNatEntry"`
+}
+
+type KubernetesCreationArgs struct {
+	ClusterType          string                `json:"cluster_type"`
+	Name                 string                `json:"name"`
+	DisableRollback      bool 		   `json:"disable_rollback"`
+	TimeoutMins          int64                 `json:"timeout_mins"`
+	KubernetesVersion    string 	           `json:"kubernetes_version"`
+	StackParams          KubernetesStackArgs   `json:"stack_params"`
+}
+
+func (client *Client) CreateKubernetesCluster(region common.Region, args *KubernetesCreationArgs) (cluster ClusterCreationResponse, err error) {
+	err = client.Invoke(region, http.MethodPost, "/clusters", nil, args, &cluster)
+	return
+}
+
 type ClusterResizeArgs struct {
 	Size             int64            `json:"size"`
 	InstanceType     string           `json:"instance_type"`
@@ -108,8 +144,20 @@ type ClusterResizeArgs struct {
 	IOOptimized      ecs.IoOptimized  `json:"io_optimized"`
 }
 
+type ModifyClusterNameArgs struct {
+	Name                 string                `json:"name"`
+}
+
 func (client *Client) ResizeCluster(clusterID string, args *ClusterResizeArgs) error {
 	return client.Invoke("", http.MethodPut, "/clusters/"+clusterID, nil, args, nil)
+}
+
+func (client *Client) ResizeKubernetes(clusterID string, args *KubernetesCreationArgs) error {
+	return client.Invoke("", http.MethodPut, "/clusters/"+clusterID, nil, args, nil)
+}
+
+func (client *Client) ModifyClusterName(clusterID, clusterName string) error {
+	return client.Invoke("", http.MethodPost, "/clusters/"+clusterID+"/name/"+clusterName, nil, nil, nil)
 }
 
 func (client *Client) DeleteCluster(clusterID string) error {

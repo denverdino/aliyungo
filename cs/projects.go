@@ -63,6 +63,7 @@ type ProjectUpdationArgs struct {
 	Version     string            `json:"version"`
 	Environment map[string]string `json:"environment"`
 	LatestImage bool              `json:"latest_image"`
+	UpdateMethod string 	      `json:"update_method"`
 }
 
 func (client *ProjectClient) GetProjects(q string, services, containers bool) (projects GetProjectsResponse, err error) {
@@ -181,6 +182,30 @@ func (client *ProjectClient) DeleteProject(name string, forceDelete, deleteVolum
 	query.Add("volume", strconv.FormatBool(deleteVolume))
 
 	err = client.Invoke(http.MethodDelete, "/projects/"+name, query, nil, nil)
+
+	return
+}
+
+func (client *ProjectClient) ConfirmBlueGreenProject(name string, force bool) (err error) {
+
+	if len(name) == 0 {
+		err = errors.New("project name is empty")
+		return
+	}
+
+	err = client.Invoke(http.MethodPost, "/projects/"+name+"/confirm-update?force="+strconv.FormatBool(force), nil, nil, nil)
+
+	return
+}
+
+func (client *ProjectClient) RollBackBlueGreenProject(name string, force bool) (err error) {
+
+	if len(name) == 0 {
+		err = errors.New("project name is empty")
+		return
+	}
+
+	err = client.Invoke(http.MethodPost, "/projects/"+name+"/rollback-update?force="+strconv.FormatBool(force), nil, nil, nil)
 
 	return
 }

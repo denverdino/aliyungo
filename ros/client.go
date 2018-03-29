@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 
 	"fmt"
@@ -41,32 +42,44 @@ type Response struct {
 
 // NewClient creates a new instance of ROS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
+	endpoint := os.Getenv("ROS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = ROSDefaultEndpoint
+	}
 	return &Client{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
-		endpoint:        ROSDefaultEndpoint,
+		endpoint:        endpoint,
 		Version:         ROSAPIVersion,
 		httpClient:      &http.Client{},
 	}
 }
 
 func NewROSClientWithSecurityToken(accessKeyId string, accessKeySecret string, securityToken string) *Client {
+	endpoint := os.Getenv("ROS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = ROSDefaultEndpoint
+	}
 	return &Client{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
 		SecurityToken:   securityToken,
-		endpoint:        ROSDefaultEndpoint,
+		endpoint:        endpoint,
 		Version:         ROSAPIVersion,
 		httpClient:      &http.Client{},
 	}
 }
 
 func NewClientForAussumeRole(accessKeyId, accessKeySecret, securityToken string) *Client {
+	endpoint := os.Getenv("ROS_ENDPOINT")
+	if endpoint == "" {
+		endpoint = ROSDefaultEndpoint
+	}
 	return &Client{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
 		SecurityToken:   securityToken,
-		endpoint:        ROSDefaultEndpoint,
+		endpoint:        endpoint,
 		Version:         ROSAPIVersion,
 		httpClient:      &http.Client{},
 	}

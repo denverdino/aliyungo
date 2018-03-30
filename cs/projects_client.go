@@ -12,9 +12,10 @@ import (
 	"net/url"
 	"time"
 
+	"strings"
+
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
-	"strings"
 )
 
 type ProjectClient struct {
@@ -48,7 +49,7 @@ func NewProjectClient(clusterId, endpoint string, clusterCerts ClusterCerts) (cl
 	}
 
 	client = &ProjectClient{
-		clusterId:clusterId,
+		clusterId:  clusterId,
 		endpoint:   endpoint,
 		httpClient: httpClient,
 	}

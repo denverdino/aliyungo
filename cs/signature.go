@@ -5,8 +5,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/denverdino/aliyungo/util"
 	"log"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 func (client *Client) signRequest(request *http.Request) {

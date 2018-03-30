@@ -2,9 +2,10 @@ package slb
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/util"
-	"time"
 )
 
 type AddressType string

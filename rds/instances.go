@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/denverdino/aliyungo/common"
 	"log"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type DBInstanceIPArray struct {

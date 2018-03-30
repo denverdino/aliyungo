@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"testing"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 func TestRouteInterface(t *testing.T) {

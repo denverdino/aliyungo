@@ -1,8 +1,9 @@
 package dns
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type Client struct {

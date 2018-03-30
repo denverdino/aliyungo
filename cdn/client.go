@@ -1,8 +1,9 @@
 package cdn
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 const (

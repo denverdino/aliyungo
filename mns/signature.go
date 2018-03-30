@@ -1,10 +1,11 @@
 package mns
 
 import (
-	"github.com/denverdino/aliyungo/util"
 	"net/url"
 	"sort"
 	"strings"
+
+	"github.com/denverdino/aliyungo/util"
 )
 
 const HeaderMNSPrefix = "x-mns-"

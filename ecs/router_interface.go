@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"time"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type EcsCommonResponse struct {

@@ -57,13 +57,13 @@ type ProjectCreationArgs struct {
 }
 
 type ProjectUpdationArgs struct {
-	Name        string            `json:"-"`
-	Description string            `json:"description"`
-	Template    string            `json:"template"`
-	Version     string            `json:"version"`
-	Environment map[string]string `json:"environment"`
-	LatestImage bool              `json:"latest_image"`
-	UpdateMethod string 	      `json:"update_method"`
+	Name         string            `json:"-"`
+	Description  string            `json:"description"`
+	Template     string            `json:"template"`
+	Version      string            `json:"version"`
+	Environment  map[string]string `json:"environment"`
+	LatestImage  bool              `json:"latest_image"`
+	UpdateMethod string            `json:"update_method"`
 }
 
 func (client *ProjectClient) GetProjects(q string, services, containers bool) (projects GetProjectsResponse, err error) {

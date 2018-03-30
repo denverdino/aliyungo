@@ -1,8 +1,9 @@
 package sms
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"net/http"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 //阿里云通信

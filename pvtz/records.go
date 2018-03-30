@@ -2,6 +2,7 @@ package pvtz
 
 import (
 	"log"
+
 	"github.com/denverdino/aliyungo/common"
 )
 
@@ -66,7 +67,7 @@ func (client *Client) DescribeZoneRecords(args *DescribeZoneRecordsArgs) (record
 
 func (client *Client) DescribeZoneRecordsByRR(zoneId string, rr string) (records []ZoneRecordType, err error) {
 	records, err = client.DescribeZoneRecords(&DescribeZoneRecordsArgs{
-		ZoneId: zoneId,
+		ZoneId:  zoneId,
 		Keyword: rr,
 	})
 
@@ -102,7 +103,6 @@ func (client *Client) DeleteZoneRecordsByRR(zoneId string, rr string) error {
 	}
 	return nil
 }
-
 
 type AddZoneRecordArgs struct {
 	ZoneName     string

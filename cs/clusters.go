@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"net/url"
 
+	"math"
+	"time"
+
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/denverdino/aliyungo/util"
-	"math"
-	"time"
 )
 
 type ClusterState string
@@ -99,34 +100,34 @@ func (client *Client) CreateCluster(region common.Region, args *ClusterCreationA
 }
 
 type KubernetesStackArgs struct {
-	VPCID            	  string              `json:"VpcId,omitempty"`
-	VSwitchID        	  string              `json:"VSwitchId,omitempty"`
-	MasterInstanceType        string 	      `json:"MasterInstanceType"`
-	WorkerInstanceType        string 	      `json:"MasterInstanceType"`
-	NumOfNodes		  int64		      `json:"NumOfNodes"`
-	Password         	  string              `json:"LoginPassword"`
-	DockerVersion		  string 	      `json:"DockerVersion"`
-	KubernetesVersion         string	      `json:"KubernetesVersion"`
-	ZoneId			  string	      `json:"ZoneId"`
-	ContainerCIDR		  string	      `json:"ContainerCIDR"`
-	ServiceCIDR		  string	      `json:"ServiceCIDR"`
-	SSHFlags		  bool		      `json:"SSHFlags"`
-	MasterSystemDiskSize      int64               `json:"MasterSystemDiskSize"`
-	MasterSystemDiskCategory  ecs.DiskCategory    `json:"MasterSystemDiskCategory"`
-	WorkerSystemDiskSize      int64               `json:"MasterSystemDiskSize"`
-	WorkerSystemDiskCategory  ecs.DiskCategory    `json:"MasterSystemDiskCategory"`
-	ImageID                   string              `json:"ImageId,omitempty"`
-	CloudMonitorFlags         bool                `json:"CloudMonitorFlags"`
-	SNatEntry                 bool                `json:"SNatEntry"`
+	VPCID                    string           `json:"VpcId,omitempty"`
+	VSwitchID                string           `json:"VSwitchId,omitempty"`
+	MasterInstanceType       string           `json:"MasterInstanceType"`
+	WorkerInstanceType       string           `json:"MasterInstanceType"`
+	NumOfNodes               int64            `json:"NumOfNodes"`
+	Password                 string           `json:"LoginPassword"`
+	DockerVersion            string           `json:"DockerVersion"`
+	KubernetesVersion        string           `json:"KubernetesVersion"`
+	ZoneId                   string           `json:"ZoneId"`
+	ContainerCIDR            string           `json:"ContainerCIDR"`
+	ServiceCIDR              string           `json:"ServiceCIDR"`
+	SSHFlags                 bool             `json:"SSHFlags"`
+	MasterSystemDiskSize     int64            `json:"MasterSystemDiskSize"`
+	MasterSystemDiskCategory ecs.DiskCategory `json:"MasterSystemDiskCategory"`
+	WorkerSystemDiskSize     int64            `json:"MasterSystemDiskSize"`
+	WorkerSystemDiskCategory ecs.DiskCategory `json:"MasterSystemDiskCategory"`
+	ImageID                  string           `json:"ImageId,omitempty"`
+	CloudMonitorFlags        bool             `json:"CloudMonitorFlags"`
+	SNatEntry                bool             `json:"SNatEntry"`
 }
 
 type KubernetesCreationArgs struct {
-	ClusterType          string                `json:"cluster_type"`
-	Name                 string                `json:"name"`
-	DisableRollback      bool 		   `json:"disable_rollback"`
-	TimeoutMins          int64                 `json:"timeout_mins"`
-	KubernetesVersion    string 	           `json:"kubernetes_version"`
-	StackParams          KubernetesStackArgs   `json:"stack_params"`
+	ClusterType       string              `json:"cluster_type"`
+	Name              string              `json:"name"`
+	DisableRollback   bool                `json:"disable_rollback"`
+	TimeoutMins       int64               `json:"timeout_mins"`
+	KubernetesVersion string              `json:"kubernetes_version"`
+	StackParams       KubernetesStackArgs `json:"stack_params"`
 }
 
 func (client *Client) CreateKubernetesCluster(region common.Region, args *KubernetesCreationArgs) (cluster ClusterCreationResponse, err error) {
@@ -145,7 +146,7 @@ type ClusterResizeArgs struct {
 }
 
 type ModifyClusterNameArgs struct {
-	Name                 string                `json:"name"`
+	Name string `json:"name"`
 }
 
 func (client *Client) ResizeCluster(clusterID string, args *ClusterResizeArgs) error {

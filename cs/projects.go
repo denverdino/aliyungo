@@ -209,3 +209,26 @@ func (client *ProjectClient) RollBackBlueGreenProject(name string, force bool) (
 
 	return
 }
+
+type SwarmNodeType struct {
+	IP                string
+	Healthy           bool
+	InstanceId        string
+	ZoneId            string
+	RegionId          string
+	Status            string
+	CreationTime      string `json:"created"`
+	UpdatedTime       string `json:"updated"`
+	Containers        int
+	ContainersRunning int
+	ContainersPaused  int
+	ContainersStopped int
+	AgentVersion      string
+	Name              string
+}
+type GetSwarmClusterNodesResponse []SwarmNodeType
+
+func (client *ProjectClient) GetSwarmClusterNodes() (project GetSwarmClusterNodesResponse, err error) {
+	err = client.Invoke(http.MethodGet, "/hosts/", nil, nil, &project)
+	return
+}

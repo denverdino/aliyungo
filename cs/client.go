@@ -34,6 +34,12 @@ type Client struct {
 	httpClient      *http.Client
 }
 
+type PaginationResult struct {
+	TotalCount int `json:"total_count"`
+	PageNumber int `json:"page_number"`
+	PageSize   int `json:"page_size"`
+}
+
 type Response struct {
 	RequestId string `json:"request_id"`
 }

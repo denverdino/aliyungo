@@ -19,6 +19,9 @@ type LogtailInput struct {
 	FilterKey     []string `json:"filterKey,omitempty"`
 	FilterRegex   []string `json:"filterRegex,omitempty"`
 	TopicFormat   string   `json:"topicFormat,omitempty"`
+	Separator     string   `json:"separator,omitempty"`
+	Quote         string   `json:"quote,omitempty"`
+	AutoExtend    bool     `json:"autoExtend,omitempty"`
 }
 
 type LogtailOutput struct {

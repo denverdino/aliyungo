@@ -1,6 +1,7 @@
 package ros
 
 import (
+	"encoding/json"
 	"testing"
 
 	"fmt"
@@ -136,7 +137,9 @@ func TestClient_DescribeStack(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to DescribeStack %++v", err)
 	} else {
+		output, _ := json.Marshal(response.Outputs)
 		t.Logf("Success %++v", response)
+		t.Logf("outputs = %s", string(output))
 	}
 }
 

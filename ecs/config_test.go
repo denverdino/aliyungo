@@ -13,7 +13,9 @@ var (
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
 	TestSecurityToken   = os.Getenv("SecurityToken")
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
-	TestVpcId           = os.Getenv("VpcId")
+	TestZoneId          = os.Getenv("ZoneId")
+
+	TestVpcId = os.Getenv("VpcId")
 
 	TestInstanceId      = os.Getenv("InstanceId")
 	TestSecurityGroupId = "MY_TEST_SECURITY_GROUP_ID"

@@ -214,3 +214,22 @@ func TestClient_CreateVpc(t *testing.T) {
 		t.Logf("Result %++v", response)
 	}
 }
+
+func Test_DescribeNatGateways(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	args := &DescribeNatGatewaysArgs{
+		RegionId: common.Shanghai,
+		VpcId:    TestVpcId,
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   50,
+		},
+	}
+
+	ngws, _, err := client.DescribeNatGateways(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("NGW = %++v", ngws)
+	}
+}

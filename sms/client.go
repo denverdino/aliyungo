@@ -8,6 +8,7 @@ import "github.com/denverdino/aliyungo/common"
 const (
 	DYSmsEndPoint   = "https://dysmsapi.aliyuncs.com/"
 	SendSms         = "SendSms"
+	QuerySms        = "QuerySendDetails"
 	DYSmsAPIVersion = "2017-05-25"
 
 	SmsEndPoint   = "https://sms.aliyuncs.com/"

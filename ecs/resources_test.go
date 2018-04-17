@@ -15,8 +15,8 @@ func Test_DescribeAvailableResource(t *testing.T) {
 		ZoneId:              TestZoneId,
 		InstanceChargeType:  common.PostPaid,
 		IoOptimized:         "optimized",
-		InstanceType:        "ecs.c5.xlarge",
-		NetworkCategory:     "vpc",
+		//InstanceType:        "ecs.n4.small",
+		NetworkCategory: "Vpc",
 	}
 
 	response, err := client.DescribeAvailableResource(args)

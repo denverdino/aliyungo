@@ -166,6 +166,9 @@ type DescribeNetworkQuotasArgs struct {
 
 type DescribeNetworkQuotasResponse struct {
 	common.Response
+	Quota    string
+	Product  string
+	RegionId string
 }
 
 func (client *Client) DescribeNetworkQuotas(args *DescribeNetworkQuotasArgs) (*DescribeNetworkQuotasResponse, error) {

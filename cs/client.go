@@ -133,7 +133,7 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("Date", util.GetGMTime())
 	httpReq.Header.Set("Accept", "application/json")
-	//httpReq.Header.Set("x-acs-version", client.Version)
+	httpReq.Header["x-acs-version"] = []string{client.Version}
 	httpReq.Header["x-acs-signature-version"] = []string{"1.0"}
 	httpReq.Header["x-acs-signature-nonce"] = []string{util.CreateRandomString()}
 	httpReq.Header["x-acs-signature-method"] = []string{"HMAC-SHA1"}

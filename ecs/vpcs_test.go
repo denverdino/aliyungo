@@ -197,21 +197,66 @@ func TestClient_DescribeVpcs(t *testing.T) {
 }
 
 func TestClient_CreateVpc(t *testing.T) {
-	client := NewTestClientForDebug()
+	client := NewVpcTestClientForDebug()
 
-	args := &CreateVpcArgs{
-		RegionId:    common.Beijing,
-		CidrBlock:   "172.16.0.0/16",
-		VpcName:     "vpc-test",
-		Description: "vpc-test",
-		ClientToken: client.GenerateClientToken(),
+	for i := 0; i < 1; i++ {
+		args := &CreateVpcArgs{
+			RegionId:    common.Qingdao,
+			CidrBlock:   "172.16.0.0/16",
+			VpcName:     "vpc-quota-test",
+			Description: "vpc-quota-test",
+			ClientToken: client.GenerateClientToken(),
+		}
+
+		response, err := client.CreateVpc(args)
+		if err != nil {
+			t.Fatalf("Error %++v", err)
+		} else {
+			t.Logf("Result %++v", response)
+		}
+		time.Sleep(1 * time.Second)
+	}
+}
+
+func TestClient_AllocateEipAddress2(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	for i := 0; i < 200; i++ {
+		args := &AllocateEipAddressArgs{
+			RegionId:           common.Beijing,
+			Bandwidth:          100,
+			InternetChargeType: common.PayByTraffic,
+			ClientToken:        client.GenerateClientToken(),
+		}
+
+		ip, id, err := client.AllocateEipAddress(args)
+		if err != nil {
+			t.Fatalf("Error %++v", err)
+		} else {
+			t.Logf("Eip = %s, Id=%s", ip, id)
+		}
+	}
+}
+
+func TestClient_DeleteVpc(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+
+	args := &DescribeVpcsArgs{
+		RegionId: common.Beijing,
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   100,
+		},
 	}
 
-	response, err := client.CreateVpc(args)
+	vpcs, _, err := client.DescribeVpcs(args)
 	if err != nil {
 		t.Fatalf("Error %++v", err)
 	} else {
-		t.Logf("Result %++v", response)
+		for _, vpc := range vpcs {
+			if vpc.VpcName == "vpc-quota-test" {
+				client.DeleteVpc(vpc.VpcId)
+			}
+		}
 	}
 }
 
@@ -231,5 +276,76 @@ func Test_DescribeNatGateways(t *testing.T) {
 		t.Fatalf("Error %++v", err)
 	} else {
 		t.Logf("NGW = %++v", ngws)
+	}
+}
+
+func TestClient_DescribeNetworkQuotas(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	args := &DescribeNetworkQuotasArgs{
+		Product:  "vpc",
+		RegionId: TestRegionID,
+	}
+
+	response, err := client.DescribeNetworkQuotas(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("quota = %++v", response)
+	}
+}
+
+func TestClient_DescribeEipAddressesWithRaw(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	regions, err := client.DescribeRegions()
+	if err == nil {
+		total := 0
+		for _, region := range regions {
+			args := &DescribeEipAddressesArgs{
+				RegionId: region.RegionId,
+				Pagination: common.Pagination{
+					PageNumber: 1,
+					PageSize:   50,
+				},
+			}
+
+			eips, page, err := client.DescribeEipAddresses(args)
+			if err != nil {
+				t.Fatalf("Error %++v", err)
+			} else {
+				t.Logf("eips = %++v", eips)
+				t.Logf("page = %++v", page)
+				total += page.TotalCount
+			}
+		}
+		t.Logf("total Eips = %d", total)
+	}
+}
+
+func TestClient_DescribeVpcsWithRaw(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	args := &DescribeVpcsArgs{
+		RegionId: common.Beijing,
+		Pagination: common.Pagination{
+			PageNumber: 1,
+			PageSize:   100,
+		},
+	}
+
+	vpcs, page, err := client.DescribeVpcs(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("vpcs = %++v", vpcs)
+		t.Logf("page = %++v", page)
+	}
+}
+
+func TestClient_DescribeRegions(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	regions, err := client.DescribeRegions()
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("Regions = %++v", regions)
 	}
 }

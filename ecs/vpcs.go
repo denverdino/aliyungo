@@ -158,3 +158,23 @@ func (client *Client) WaitForVpcAvailable(regionId common.Region, vpcId string, 
 	}
 	return nil
 }
+
+type DescribeNetworkQuotasArgs struct {
+	Product  string
+	RegionId common.Region
+}
+
+type DescribeNetworkQuotasResponse struct {
+	common.Response
+}
+
+func (client *Client) DescribeNetworkQuotas(args *DescribeNetworkQuotasArgs) (*DescribeNetworkQuotasResponse, error) {
+	response := &DescribeNetworkQuotasResponse{}
+
+	err := client.Invoke("DescribeNetworkQuotas", args, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, err
+}

@@ -98,9 +98,14 @@ func (client *Client) NewInitForAssumeRole(endpoint, version, accessKeyId, acces
 //NewClient using location service
 func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKeyId, accessKeySecret, securityToken string) {
 	locationClient := NewLocationClient(accessKeyId, accessKeySecret, securityToken)
+	locationClient.SetDebug(true)
 	ep := locationClient.DescribeOpenAPIEndpoint(region, serviceCode)
 	if ep == "" {
 		ep = loadEndpointFromFile(region, serviceCode)
+	}
+
+	if ep == "" {
+		panic("InvalidEndpoint")
 	}
 
 	if ep != "" {

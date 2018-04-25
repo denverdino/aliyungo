@@ -47,7 +47,7 @@ func NewTestClientForDebug() *Client {
 
 var testVpcDebugClient *Client
 
-func NewVpcTestClientForDebug() *Client {
+func  NewVpcTestClientForDebug() *Client {
 	if testVpcDebugClient == nil {
 		testVpcDebugClient = NewVPCClient(TestAccessKeyId, TestAccessKeySecret, TestRegionID)
 		testVpcDebugClient.SetDebug(true)

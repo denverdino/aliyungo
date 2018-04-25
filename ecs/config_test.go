@@ -18,11 +18,11 @@ var (
 	TestVpcId = os.Getenv("VpcId")
 
 	TestInstanceId      = os.Getenv("InstanceId")
-	TestSecurityGroupId = "MY_TEST_SECURITY_GROUP_ID"
-	TestImageId         = "MY_IMAGE_ID"
+	TestSecurityGroupId = os.Getenv("SecurityGroupId")
+	TestImageId         = os.Getenv("ImageId")
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
-	TestInstanceType    = "ecs.n4.large"
-	TestVSwitchID       = "MY_TEST_VSWITCHID"
+	TestInstanceType    = os.Getenv("InstanceType")
+	TestVSwitchID       = os.Getenv("VSwitchID")
 
 	TestIAmRich = false
 	TestQuick   = false

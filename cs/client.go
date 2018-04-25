@@ -132,7 +132,7 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	httpReq.Header["x-acs-signature-version"] = []string{"1.0"}
 	httpReq.Header["x-acs-signature-nonce"] = []string{util.CreateRandomString()}
 	httpReq.Header["x-acs-signature-method"] = []string{"HMAC-SHA1"}
-
+	//httpReq.Header["x-acs-version"] = []string{"2018-04-18"}
 	fmt.Printf("Header = %++v", httpReq.Header)
 
 	if client.userAgent != "" {

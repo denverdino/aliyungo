@@ -199,9 +199,9 @@ func TestClient_DescribeVpcs(t *testing.T) {
 func TestClient_CreateVpc(t *testing.T) {
 	client := NewVpcTestClientForDebug()
 
-	for i := 0; i < 1; i++ {
+	for i := 0; i < 100; i++ {
 		args := &CreateVpcArgs{
-			RegionId:    common.Qingdao,
+			RegionId:    common.Beijing,
 			CidrBlock:   "172.16.0.0/16",
 			VpcName:     "vpc-quota-test",
 			Description: "vpc-quota-test",
@@ -244,7 +244,7 @@ func TestClient_DeleteVpc(t *testing.T) {
 		RegionId: common.Beijing,
 		Pagination: common.Pagination{
 			PageNumber: 1,
-			PageSize:   100,
+			PageSize:   50,
 		},
 	}
 

@@ -265,8 +265,8 @@ func TestLocationECSClient(t *testing.T) {
 		InstanceType:       TestInstanceType,
 		SecurityGroupId:    TestSecurityGroupId,
 		VSwitchId:          TestVSwitchID,
-		InstanceChargeType: common.PrePaid,
-		Period:             1,
+		InstanceChargeType: common.PostPaid,
+		//Period:             1,
 	}
 
 	instanceId, err := client.CreateInstance(&args)

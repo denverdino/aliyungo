@@ -141,7 +141,6 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
 		return endpoint
 	}
-	
 	defaultProtocols := HTTP_PROTOCOL
 
 	args := &DescribeEndpointsArgs{
@@ -154,7 +153,7 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 	var err error
 	for index := 0; index < 5; index++ {
 		endpoint, err = client.DescribeEndpoints(args)
-		if err == nil || len(endpoint.Endpoints.Endpoint) > 0 {
+		if err == nil && endpoint != nil && len(endpoint.Endpoints.Endpoint) > 0 {
 			break
 		}
 		time.Sleep(500 * time.Millisecond)

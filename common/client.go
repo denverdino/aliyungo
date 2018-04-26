@@ -69,7 +69,6 @@ func (client *Client) NewInit(endpoint, version, accessKeyId, accessKeySecret, s
 	client.Init(endpoint, version, accessKeyId, accessKeySecret)
 	client.serviceCode = serviceCode
 	client.regionID = regionID
-	client.setEndpointByLocation(regionID, serviceCode, accessKeyId, accessKeySecret, client.securityToken)
 }
 
 // Intialize client object when all properties are ready
@@ -86,13 +85,19 @@ func (client *Client) InitClient() *Client {
 			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
 		client.httpClient = &http.Client{Transport: t}
 	}
-	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret, client.securityToken)
 	return client
 }
 
 func (client *Client) NewInitForAssumeRole(endpoint, version, accessKeyId, accessKeySecret, serviceCode string, regionID Region, securityToken string) {
 	client.NewInit(endpoint, version, accessKeyId, accessKeySecret, serviceCode, regionID)
 	client.securityToken = securityToken
+}
+
+//getLocationEndpoint
+func (client *Client) getEndpointByLocation() string {
+	locationClient := NewLocationClient(client.AccessKeyId, client.AccessKeySecret, client.securityToken)
+	locationClient.SetDebug(true)
+	return locationClient.DescribeOpenAPIEndpoint(client.regionID, client.serviceCode)
 }
 
 //NewClient using location service
@@ -102,10 +107,6 @@ func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKe
 	ep := locationClient.DescribeOpenAPIEndpoint(region, serviceCode)
 	if ep == "" {
 		ep = loadEndpointFromFile(region, serviceCode)
-	}
-
-	if ep == "" {
-		panic("InvalidEndpoint")
 	}
 
 	if ep != "" {
@@ -256,9 +257,25 @@ func (client *Client) SetSecurityToken(securityToken string) {
 	client.securityToken = securityToken
 }
 
+func (client *Client) initEndpoint() error {
+	if client.serviceCode != "" && client.regionID != "" {
+		endpoint := client.getEndpointByLocation()
+		if endpoint == "" {
+			return GetCustomError("InvalidEndpoint", "endpoint is empty,pls check")
+		}
+		client.endpoint = endpoint
+	}
+	return nil
+}
+
 // Invoke sends the raw HTTP request for ECS services
 func (client *Client) Invoke(action string, args interface{}, response interface{}) error {
 	if err := client.ensureProperties(); err != nil {
+		return err
+	}
+
+	//init endpoint
+	if err := client.initEndpoint(); err != nil {
 		return err
 	}
 
@@ -335,6 +352,11 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 		return err
 	}
 
+	//init endpoint
+	if err := client.initEndpoint(); err != nil {
+		return err
+	}
+
 	request := Request{}
 	request.init(client.version, action, client.AccessKeyId, client.securityToken, client.regionID)
 
@@ -408,6 +430,11 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 //2017.1.30 增加了一个path参数，用来拓展访问的地址
 func (client *Client) InvokeByAnyMethod(method, action, path string, args interface{}, response interface{}) error {
 	if err := client.ensureProperties(); err != nil {
+		return err
+	}
+
+	//init endpoint
+	if err := client.initEndpoint(); err != nil {
 		return err
 	}
 
@@ -504,4 +531,14 @@ func GetClientErrorFromString(str string) error {
 
 func GetClientError(err error) error {
 	return GetClientErrorFromString(err.Error())
+}
+
+func GetCustomError(code, message string) error {
+	return &Error{
+		ErrorResponse: ErrorResponse{
+			Code:    code,
+			Message: message,
+		},
+		StatusCode: 400,
+	}
 }

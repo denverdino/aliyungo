@@ -177,11 +177,16 @@ func testCreateInstanceVpc(t *testing.T, client *Client, regionId common.Region,
 }
 
 func TestClient_DescribeVpcs(t *testing.T) {
-	client := NewTestClientForDebug()
+	defer func() {
+		if err := recover(); err != nil {
+			t.Errorf("Error %++v", err)
+		}
+	}()
+	client := NewVpcTestClientForDebug()
 	client.SetSecurityToken(TestSecurityToken)
 
 	args := &DescribeVpcsArgs{
-		RegionId: TestRegionID,
+		RegionId: common.EUCentral1,
 		Pagination: common.Pagination{
 			PageNumber: 1,
 			PageSize:   100,

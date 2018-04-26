@@ -141,7 +141,7 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
 		return endpoint
 	}
-	return ""
+	
 	defaultProtocols := HTTP_PROTOCOL
 
 	args := &DescribeEndpointsArgs{

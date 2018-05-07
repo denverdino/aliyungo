@@ -197,6 +197,7 @@ type ListenerPortAndProtocolType struct {
 type BackendServerType struct {
 	ServerId string
 	Weight   int
+	Type     string
 }
 
 type LoadBalancerType struct {

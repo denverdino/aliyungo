@@ -199,7 +199,7 @@ type GetKubernetesClusterNodesResponse struct {
 
 func (client *Client) GetKubernetesClusterNodes(id string, pagination common.Pagination) (nodes []KubernetesNodeType, paginationResult *PaginationResult, err error) {
 	response := &GetKubernetesClusterNodesResponse{}
-	err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/nodes?pageNumber="+strconv.Itoa(pagination.PageNumber)+"pageSize="+strconv.Itoa(pagination.PageSize), nil, nil, &response)
+	err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/nodes?pageNumber="+strconv.Itoa(pagination.PageNumber)+"&pageSize="+strconv.Itoa(pagination.PageSize), nil, nil, &response)
 	if err != nil {
 		return nil, nil, err
 	}

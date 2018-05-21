@@ -17,11 +17,11 @@ type SendSmsArgs struct {
 }
 
 type QuerySmsArgs struct {
-	PhoneNumber     string
-	BizId           string
-	SendDate        string
-	PageSize        string
-	CurrentPage     string
+	PhoneNumber string
+	BizId       string
+	SendDate    string
+	PageSize    string
+	CurrentPage string
 }
 
 type SendSmsResponse struct {
@@ -33,10 +33,10 @@ type SendSmsResponse struct {
 
 type QuerySmsResponse struct {
 	common.Response
-	Code       string
-	Message    string
-	TotalCount int
-	TotalPage  string
+	Code              string
+	Message           string
+	TotalCount        int
+	TotalPage         string
 	SmsSendDetailDTOs struct {
 		SmsSendDetailDTO []SmsSendDetailDTOsItem
 	}
@@ -48,7 +48,7 @@ type SmsSendDetailDTOsItem struct {
 	ErrCode      string
 	TemplateCode string
 	Content      string
-	SendDate	 string
+	SendDate     string
 	ReceiveDate  string
 	OutId        string
 }

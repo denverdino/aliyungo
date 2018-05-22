@@ -1100,7 +1100,7 @@ func (client *Client) setupHttpRequest(req *request) (*http.Request, error) {
 // body will be unmarshalled on it.
 func (client *Client) doHttpRequest(c *http.Client, hreq *http.Request, resp interface{}) (*http.Response, error) {
 
-	if true {
+	if client.debug {
 		log.Printf("%s %s ...\n", hreq.Method, hreq.URL.String())
 	}
 	hresp, err := c.Do(hreq)

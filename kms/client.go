@@ -17,7 +17,7 @@ type Client struct {
 	common.Client
 }
 
-// NewClient creates a new instance of ECS client
+// NewClient creates a new instance of KMS client
 func NewClient(accessKeyId, accessKeySecret string) *Client {
 	endpoint := os.Getenv("KMS_ENDPOINT")
 	if endpoint == "" {

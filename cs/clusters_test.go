@@ -57,7 +57,7 @@ func TestListClusters(t *testing.T) {
 	}
 }
 
-func _TestCreateClusters(t *testing.T) {
+func TestCreateClusters(t *testing.T) {
 
 	client := NewTestClientForDebug()
 

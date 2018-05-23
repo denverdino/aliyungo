@@ -321,6 +321,45 @@ func TestClient_DescribeEipAddressesWithRaw(t *testing.T) {
 	}
 }
 
+func TestClient_ReleaseEipAddress (t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	regions, err := client.DescribeRegions()
+	if err == nil {
+		for _, region := range regions {
+			eipAddress := make([]EipAddressSetType,0)
+
+			vpcClient := NewVPCClient(TestAccessKeyId,TestAccessKeySecret,region.RegionId)
+			vpcClient.SetDebug(true)
+
+			args := DescribeEipAddressesArgs{
+				RegionId: region.RegionId,
+				Pagination: common.Pagination{
+					PageNumber: 1,
+					PageSize:   50,
+				},
+			}
+
+			for {
+				eips, page, err := vpcClient.DescribeEipAddresses(&args)
+				if err!=nil{
+					break
+				}
+
+				eipAddress = append(eipAddress, eips...)
+				if page.NextPage()==nil{
+					break
+				}
+
+				args.Pagination = *page.NextPage()
+			}
+
+			for _,eip := range eipAddress{
+				vpcClient.ReleaseEipAddress(eip.AllocationId)
+			}
+		}
+	}
+}
+
 func TestClient_DescribeVpcsWithRaw(t *testing.T) {
 	client := NewVpcTestClientForDebug()
 	args := &DescribeVpcsArgs{

@@ -258,6 +258,12 @@ func (client *Client) SetSecurityToken(securityToken string) {
 }
 
 func (client *Client) initEndpoint() error {
+	// if set any value to "CUSTOMIZED_ENDPOINT" could skip location service.
+	// example: export CUSTOMIZED_ENDPOINT=true
+	if os.Getenv("CUSTOMIZED_ENDPOINT") != "" {
+		return nil
+	}
+
 	if client.serviceCode != "" && client.regionID != "" {
 		endpoint := client.getEndpointByLocation()
 		if endpoint == "" {

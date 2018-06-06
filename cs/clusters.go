@@ -178,6 +178,15 @@ func (client *Client) GetClusterCerts(id string) (certs ClusterCerts, err error)
 	return
 }
 
+type ClusterConfig struct {
+	Config   string `json:"config"`
+}
+
+func (client *Client) GetClusterConfig(id string) (config ClusterConfig, err error) {
+	err = client.Invoke("", http.MethodGet, "/k8s/"+id+"/user_config", nil, nil, &config)
+	return
+}
+
 type KubernetesNodeType struct {
 	InstanceType       string   `json:"instance_type"`
 	IpAddress          []string `json:"ip_address"`

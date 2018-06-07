@@ -20,12 +20,11 @@ func NewCRClientWithSecurityToken(region, accessKeyId, accessKeySecret, security
 	}
 }
 
-
 type CRAuthorizationToken struct {
 	Data struct {
-		AuthorizationToken	string `json:"authorizationToken"`
-		TempUserName		string `json:"tempUserName"`
-		ExpireDate		int64 `json:"expireDate"`
+		AuthorizationToken string `json:"authorizationToken"`
+		TempUserName       string `json:"tempUserName"`
+		ExpireDate         int64  `json:"expireDate"`
 	} `json:"data"`
 	RequestId string `json:"requestId"`
 }
@@ -36,6 +35,6 @@ func (client *Client) GetCRAuthorizationToken() (crtoken CRAuthorizationToken, e
 }
 
 func (client *Client) GetCRRepoInfo(repoNamespace, repoName string) (str string, err error) {
-	err = client.Invoke("", http.MethodGet, "/repos/" + repoNamespace + "/" + repoName, nil, nil, &str)
+	err = client.Invoke("", http.MethodGet, "/repos/"+repoNamespace+"/"+repoName, nil, nil, &str)
 	return
 }

@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"time"
 
+	"fmt"
+
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/denverdino/aliyungo/util"
@@ -179,7 +181,7 @@ func (client *Client) GetClusterCerts(id string) (certs ClusterCerts, err error)
 }
 
 type ClusterConfig struct {
-	Config   string `json:"config"`
+	Config string `json:"config"`
 }
 
 func (client *Client) GetClusterConfig(id string) (config ClusterConfig, err error) {
@@ -241,6 +243,8 @@ func (client *Client) WaitForClusterAsyn(clusterId string, status ClusterState, 
 		cluster, err := client.DescribeCluster(clusterId)
 		if err != nil {
 			return err
+		} else if cluster.State == Failed {
+			return fmt.Errorf("Waitting for cluster %s %s failed. Looking the specified reason in the web console.", clusterId, status)
 		} else if cluster.State == status {
 			//TODO
 			break

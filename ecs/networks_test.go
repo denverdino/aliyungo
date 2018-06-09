@@ -42,7 +42,11 @@ func testEipAddress(t *testing.T, client *Client, regionId common.Region, instan
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
 
-	err = client.AssociateEipAddress(allocationId, instanceId)
+	err = client.AssociateEipAddress(&AssociateEipAddressArgs{
+		AllocationId: allocationId,
+		InstanceId:   instanceId,
+		InstanceType: EcsInstance,
+	})
 	if err != nil {
 		t.Errorf("Failed to associate EIP address: %v", err)
 	}
@@ -50,7 +54,11 @@ func testEipAddress(t *testing.T, client *Client, regionId common.Region, instan
 	if err != nil {
 		t.Errorf("Failed to wait EIP %s: %v", allocationId, err)
 	}
-	err = client.UnassociateEipAddress(allocationId, instanceId)
+	err = client.UnassociateEipAddress(&UnallocateEipAddressArgs{
+		AllocationId: allocationId,
+		InstanceId:   instanceId,
+		InstanceType: EcsInstance,
+	})
 	if err != nil {
 		t.Errorf("Failed to unassociate EIP address: %v", err)
 	}

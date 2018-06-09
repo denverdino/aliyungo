@@ -104,12 +104,8 @@ type AssociateEipAddressResponse struct {
 
 // AssociateEipAddress associates EIP address to VM instance
 //
-// You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/network&associateeipaddress
-func (client *Client) AssociateEipAddress(allocationId string, instanceId string) error {
-	args := AssociateEipAddressArgs{
-		AllocationId: allocationId,
-		InstanceId:   instanceId,
-	}
+// You can read doc at https://help.aliyun.com/document_detail/36017.html
+func (client *Client) AssociateEipAddress(args *AssociateEipAddressArgs) error {
 	response := ModifyInstanceNetworkSpecResponse{}
 	return client.Invoke("AssociateEipAddress", &args, &response)
 }

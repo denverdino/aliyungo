@@ -83,9 +83,9 @@ func (p *Pagination) Validate() {
 	if p.PageSize < 0 {
 		log.Printf("Invalid PageSize: %d", p.PageSize)
 		p.PageSize = 10
-	} else if p.PageSize > 50 {
+	} else if p.PageSize > 100 {
 		log.Printf("Invalid PageSize: %d", p.PageSize)
-		p.PageSize = 50
+		p.PageSize = 100
 	}
 }
 

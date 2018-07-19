@@ -87,3 +87,42 @@ func _TestDeleteClusters(t *testing.T) {
 	}
 	t.Logf("Cluster %s is deleting", clusterId)
 }
+
+func _TestCreateKubernetesMultiAZCluster(t *testing.T) {
+
+	client := NewTestClientForDebug()
+
+	args := KubernetesMultiAZCreationArgs{
+		Name:                     "multiaz-test",
+		ClusterType:              "Kubernetes",
+		DisableRollback:          true,
+		MultiAZ:                  true,
+		VPCID:                    "vpc-test",
+		VSwitchIdA:               "vsw-test",
+		VSwitchIdB:               "vsw-test",
+		VSwitchIdC:               "vsw-test",
+		NumOfNodesA:              1,
+		NumOfNodesB:              2,
+		NumOfNodesC:              3,
+		MasterInstanceTypeA:      "ecs.sn1ne.large",
+		MasterInstanceTypeB:      "ecs.sn1ne.large",
+		MasterInstanceTypeC:      "ecs.sn1ne.large",
+		MasterSystemDiskCategory: "cloud_efficiency",
+		MasterSystemDiskSize:     40,
+		WorkerInstanceTypeA:      "ecs.sn1ne.large",
+		WorkerInstanceTypeB:      "ecs.sn1ne.large",
+		WorkerInstanceTypeC:      "ecs.sn1ne.large",
+		WorkerSystemDiskCategory: "cloud_efficiency",
+		WorkerSystemDiskSize:     40,
+		SSHFlags:                 true,
+		ContainerCIDR:            "172.16.0.0/16",
+		ServiceCIDR:              "172.19.0.0/20",
+		LoginPassword:            "test-password",
+	}
+	cluster, err := client.CreateKubernetesMultiAZCluster(common.Hangzhou, &args)
+	if err != nil {
+		t.Fatalf("Failed to CreateCluster: %v", err)
+	}
+
+	t.Logf("Cluster: %++v", cluster)
+}

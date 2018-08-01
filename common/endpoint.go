@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"log"
 )
 
 const (
@@ -160,6 +161,7 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 	}
 
 	if err != nil || endpoint == nil || len(endpoint.Endpoints.Endpoint) <= 0 {
+		log.Printf("aliyungo: can not get endpoint from service, use default. endpoint=[%v], error=[%v]\n",endpoint, err)
 		return ""
 	}
 

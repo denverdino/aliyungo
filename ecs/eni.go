@@ -139,7 +139,7 @@ func (client *Client) WaitForNetworkInterface(regionId common.Region, eniID stri
 			return fmt.Errorf("Failed to describe network interface %v: %v", eniID, err)
 		}
 
-		if nisResponse.NetworkInterfaceSets.NetworkInterfaceSet[0].Status == status {
+		if len(nisResponse.NetworkInterfaceSets.NetworkInterfaceSet) > 0 && nisResponse.NetworkInterfaceSets.NetworkInterfaceSet[0].Status == status {
 			break
 		}
 

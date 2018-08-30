@@ -82,6 +82,8 @@ type PushArgs struct {
 	AndroidNotificationBarType int
 	//[Android通知在通知栏展示时排列位置的优先级]
 	AndroidNotificationBarPriority int
+	//[Android NotificationChannel 参数，兼容 8.0 系统]
+	AndroidNotificationChannel string
 	//[设定通知的扩展属性]
 	AndroidExtParameters string
 	/*----下述配置仅作用于Android辅助弹窗功能----*/

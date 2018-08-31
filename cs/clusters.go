@@ -12,7 +12,6 @@ import (
 
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
-	"github.com/denverdino/aliyungo/util"
 )
 
 type ClusterState string
@@ -46,7 +45,7 @@ type ClusterType struct {
 	AgentVersion           string           `json:"agent_version"`
 	ClusterID              string           `json:"cluster_id"`
 	Name                   string           `json:"name"`
-	Created                util.ISO6801Time `json:"created"`
+	Created                time.Time  `json:"created"`
 	ExternalLoadbalancerID string           `json:"external_loadbalancer_id"`
 	MasterURL              string           `json:"master_url"`
 	NetworkMode            NetworkModeType  `json:"network_mode"`
@@ -54,7 +53,7 @@ type ClusterType struct {
 	SecurityGroupID        string           `json:"security_group_id"`
 	Size                   int64            `json:"size"`
 	State                  ClusterState     `json:"state"`
-	Updated                util.ISO6801Time `json:"updated"`
+	Updated                time.Time `json:"updated"`
 	VPCID                  string           `json:"vpc_id"`
 	VSwitchID              string           `json:"vswitch_id"`
 	NodeStatus             string           `json:"node_status"`

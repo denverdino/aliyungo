@@ -51,6 +51,7 @@ func TestClient_DescribeKubernetesClusters(t *testing.T) {
 			t.Errorf("Failed to DescribeCluster: %v", err)
 		}
 		t.Logf("Cluster Describe: %++v", c)
+		t.Logf("Cluster KeyPair %v", c.Parameters.KeyPair)
 
 		if c.MetaData.MultiAZ || c.MetaData.SubClass == "3az" {
 			t.Logf("%v is a MultiAZ kubernetes cluster", c.ClusterID)

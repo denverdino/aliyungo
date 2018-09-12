@@ -215,6 +215,7 @@ type KubernetesClusterParameter struct {
 	EtcdVersion              string `json:"EtcdVersion"`
 	KubernetesVersion        string `json:"KubernetesVersion"`
 	VPCID                    string `json:"VpcId"`
+	KeyPair                  string `json:"KeyPair"`
 	MasterSystemDiskCategory string `json:"MasterSystemDiskCategory"`
 	MasterSystemDiskSize     string `json:"MasterSystemDiskSize"`
 	WorkerSystemDiskCategory string `json:"WorkerSystemDiskCategory"`

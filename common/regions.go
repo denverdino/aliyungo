@@ -42,3 +42,13 @@ var ValidRegions = []Region{
 	EUCentral1,
 	ShenZhenFinance, ShanghaiFinance,
 }
+
+// IsValidRegion checks if r is an Ali supported region.
+func IsValidRegion(r string) bool {
+	for _, v := range ValidRegions {
+		if r == string(v) {
+			return true
+		}
+	}
+	return false
+}

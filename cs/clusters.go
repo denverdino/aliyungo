@@ -142,6 +142,9 @@ type KubernetesCreationArgs struct {
 	WorkerInstanceType       string           `json:"worker_instance_type,omitempty"`
 	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size,omitempty"`
 	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category,omitempty"`
+	WorkerDataDisk           bool             `json:"worker_data_disk,omitempty"`
+	WorkerDataDiskCategory   string           `json:"worker_data_disk_category,omitempty"`
+	WorkerDataDiskSize       int64            `json:"worker_data_disk_size,omitempty"`
 	LoginPassword            string           `json:"login_password,omitempty"`
 	KeyPair                  string           `json:"key_pair,omitempty"`
 	NumOfNodes               int64            `json:"num_of_nodes,omitempty"`
@@ -178,6 +181,9 @@ type KubernetesMultiAZCreationArgs struct {
 	WorkerInstanceTypeC      string           `json:"worker_instance_type_c,omitempty"`
 	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category"`
 	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size"`
+	WorkerDataDisk           bool             `json:"worker_data_disk"`
+	WorkerDataDiskCategory   string           `json:"worker_data_disk_category"`
+	WorkerDataDiskSize       int64            `json:"worker_data_disk_size"`
 	NumOfNodesA              int64            `json:"num_of_nodes_a"`
 	NumOfNodesB              int64            `json:"num_of_nodes_b"`
 	NumOfNodesC              int64            `json:"num_of_nodes_c"`

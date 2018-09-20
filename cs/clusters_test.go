@@ -152,6 +152,9 @@ func _TestCreateKubernetesCluster(t *testing.T) {
 		ContainerCIDR:            "172.16.0.0/16",
 		ServiceCIDR:              "172.19.0.0/20",
 		LoginPassword:            "test-password123",
+		WorkerDataDisk:           true,
+		WorkerDataDiskCategory:   "cloud_efficiency",
+		WorkerDataDiskSize:       100,
 	}
 	cluster, err := client.CreateKubernetesCluster(common.Hangzhou, &args)
 	if err != nil {
@@ -191,6 +194,9 @@ func _TestCreateKubernetesMultiAZCluster(t *testing.T) {
 		ContainerCIDR:            "172.17.0.0/16",
 		ServiceCIDR:              "172.20.0.0/20",
 		LoginPassword:            "test-password123",
+		WorkerDataDisk:           true,
+		WorkerDataDiskCategory:   "cloud_efficiency",
+		WorkerDataDiskSize:       100,
 	}
 	cluster, err := client.CreateKubernetesMultiAZCluster(common.Hangzhou, &args)
 	if err != nil {

@@ -226,6 +226,8 @@ type KubernetesClusterParameter struct {
 	MasterSystemDiskSize     string `json:"MasterSystemDiskSize"`
 	WorkerSystemDiskCategory string `json:"WorkerSystemDiskCategory"`
 	WorkerSystemDiskSize     string `json:"WorkerSystemDiskSize"`
+	WorkerDataDiskCategory   string `json:"WorkerDataDiskCategory"`
+	WorkerDataDiskSize       string `json:"WorkerDataDiskSize"`
 	ZoneId                   string `json:"ZoneId"`
 
 	// Single AZ

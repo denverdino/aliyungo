@@ -157,6 +157,9 @@ func _TestCreateKubernetesCluster(t *testing.T) {
 		WorkerDataDisk:           true,
 		WorkerDataDiskCategory:   "cloud_efficiency",
 		WorkerDataDiskSize:       100,
+		NodeCIDRMask:             "25",
+		LoggingType:              "SLS",
+		SLSProjectName:           "k8s-test-my-terraform-singleaz",
 	}
 	cluster, err := client.CreateKubernetesCluster(common.Hangzhou, &args)
 	if err != nil {
@@ -199,6 +202,9 @@ func _TestCreateKubernetesMultiAZCluster(t *testing.T) {
 		WorkerDataDisk:           true,
 		WorkerDataDiskCategory:   "cloud_efficiency",
 		WorkerDataDiskSize:       100,
+		NodeCIDRMask:             "25",
+		LoggingType:              "SLS",
+		SLSProjectName:           "k8s-test-my-terraform",
 	}
 	cluster, err := client.CreateKubernetesMultiAZCluster(common.Hangzhou, &args)
 	if err != nil {

@@ -232,6 +232,8 @@ type KubernetesClusterParameter struct {
 	MasterSystemDiskSize     string `json:"MasterSystemDiskSize"`
 	WorkerSystemDiskCategory string `json:"WorkerSystemDiskCategory"`
 	WorkerSystemDiskSize     string `json:"WorkerSystemDiskSize"`
+	WorkerDataDisk           bool
+	RawWorkerDataDisk        string `json:"WorkerDataDisk"`
 	WorkerDataDiskCategory   string `json:"WorkerDataDiskCategory"`
 	WorkerDataDiskSize       string `json:"WorkerDataDiskSize"`
 	ZoneId                   string `json:"ZoneId"`
@@ -298,6 +300,9 @@ func (client *Client) DescribeKubernetesCluster(id string) (cluster KubernetesCl
 	err = json.Unmarshal([]byte(cluster.RawMetaData), &metaData)
 	cluster.MetaData = metaData
 	cluster.RawMetaData = ""
+	if cluster.Parameters.RawWorkerDataDisk == "True" {
+		cluster.Parameters.WorkerDataDisk = true
+	}
 	return
 }
 

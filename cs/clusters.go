@@ -92,6 +92,7 @@ type ClusterCreationArgs struct {
 	ECSImageID       string           `json:"ecs_image_id,omitempty"`
 	IOOptimized      ecs.IoOptimized  `json:"io_optimized"`
 	ReleaseEipFlag   bool             `json:"release_eip_flag"`
+	NeedSLB          bool             `json:"need_slb"` 
 }
 
 type ClusterCreationResponse struct {

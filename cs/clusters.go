@@ -92,7 +92,7 @@ type ClusterCreationArgs struct {
 	ECSImageID       string           `json:"ecs_image_id,omitempty"`
 	IOOptimized      ecs.IoOptimized  `json:"io_optimized"`
 	ReleaseEipFlag   bool             `json:"release_eip_flag"`
-	NeedSLB          bool             `json:"need_slb"` 
+	NeedSLB          bool             `json:"need_slb"`
 }
 
 type ClusterCreationResponse struct {
@@ -155,6 +155,7 @@ type KubernetesCreationArgs struct {
 	NodeCIDRMask             string           `json:"node_cidr_mask,omitempty"`
 	LoggingType              string           `json:"logging_type,omitempty"`
 	SLSProjectName           string           `json:"sls_project_name,omitempty"`
+	PublicSLB                bool             `json:"public_slb"`
 
 	ClusterType string `json:"cluster_type"`
 	Network     string `json:"network,omitempty"`
@@ -198,6 +199,7 @@ type KubernetesMultiAZCreationArgs struct {
 	NodeCIDRMask             string           `json:"node_cidr_mask,omitempty"`
 	LoggingType              string           `json:"logging_type,omitempty"`
 	SLSProjectName           string           `json:"sls_project_name,omitempty"`
+	PublicSLB                bool             `json:"public_slb"`
 
 	KubernetesVersion string `json:"kubernetes_version,omitempty"`
 	Network           string `json:"network,omitempty"`
@@ -241,6 +243,8 @@ type KubernetesClusterParameter struct {
 	NodeCIDRMask             string `json:"NodeCIDRMask"`
 	LoggingType              string `json:"LoggingType"`
 	SLSProjectName           string `json:"SLSProjectName"`
+	PublicSLB                bool
+	RawPublicSLB             string `json:"PublicSLB"`
 
 	// Single AZ
 	MasterInstanceType string `json:"MasterInstanceType"`
@@ -301,10 +305,17 @@ func (client *Client) DescribeKubernetesCluster(id string) (cluster KubernetesCl
 	err = json.Unmarshal([]byte(cluster.RawMetaData), &metaData)
 	cluster.MetaData = metaData
 	cluster.RawMetaData = ""
-	if cluster.Parameters.RawWorkerDataDisk == "True" {
-		cluster.Parameters.WorkerDataDisk = true
-	}
+	cluster.Parameters.WorkerDataDisk = convertStringToBool(cluster.Parameters.RawWorkerDataDisk)
+	cluster.Parameters.PublicSLB = convertStringToBool(cluster.Parameters.RawPublicSLB)
 	return
+}
+
+func convertStringToBool(raw string) bool {
+	if raw == "True" {
+		return true
+	} else {
+		return false
+	}
 }
 
 type ClusterResizeArgs struct {

@@ -4,10 +4,10 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 	"time"
-	"log"
 )
 
 const (
@@ -51,6 +51,12 @@ var (
 			"slb": "https://slb.eu-central-1.aliyuncs.com",
 			"rds": "https://rds.eu-central-1.aliyuncs.com",
 			"vpc": "https://vpc.eu-central-1.aliyuncs.com",
+		},
+		EUWest1: {
+			"ecs": "https://ecs.eu-west-1.aliyuncs.com",
+			"slb": "https://slb.eu-west-1.aliyuncs.com",
+			"rds": "https://rds.eu-west-1.aliyuncs.com",
+			"vpc": "https://vpc.eu-west-1.aliyuncs.com",
 		},
 		Zhangjiakou: {
 			"ecs": "https://ecs.cn-zhangjiakou.aliyuncs.com",
@@ -161,7 +167,7 @@ func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode
 	}
 
 	if err != nil || endpoint == nil || len(endpoint.Endpoints.Endpoint) <= 0 {
-		log.Printf("aliyungo: can not get endpoint from service, use default. endpoint=[%v], error=[%v]\n",endpoint, err)
+		log.Printf("aliyungo: can not get endpoint from service, use default. endpoint=[%v], error=[%v]\n", endpoint, err)
 		return ""
 	}
 

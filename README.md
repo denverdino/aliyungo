@@ -1,6 +1,7 @@
 # AliyunGo: Go SDK for Aliyun Services
 
 [![Build Status](https://travis-ci.org/denverdino/aliyungo.svg?branch=master)](https://travis-ci.org/denverdino/aliyungo) [![CircleCI](https://circleci.com/gh/denverdino/aliyungo.svg?style=svg)](https://circleci.com/gh/denverdino/aliyungo) [![Go Report Card](https://goreportcard.com/badge/github.com/denverdino/aliyungo)](https://goreportcard.com/report/github.com/denverdino/aliyungo)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdenverdino%2Faliyungo.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdenverdino%2Faliyungo?ref=badge_shield)
 
 This is an unofficial Go SDK for Aliyun services. You are welcome for contribution.
 
@@ -169,6 +170,9 @@ go test
 ## License
 
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt) for the full license text.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdenverdino%2Faliyungo.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdenverdino%2Faliyungo?ref=badge_large)
 
 ## Related projects
 

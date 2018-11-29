@@ -1,6 +1,10 @@
 package slb
 
-import "testing"
+import (
+	"testing"
+	"fmt"
+	"github.com/denverdino/aliyungo/util"
+)
 
 func testListeners(t *testing.T, client *Client, loadBalancerId string) {
 
@@ -40,4 +44,24 @@ func testListeners(t *testing.T, client *Client, loadBalancerId string) {
 		t.Errorf("Failed to DescribeLoadBalancerTCPListenerAttribute: %v", err)
 	}
 	t.Logf("Listener: %++v", *response)
+}
+
+func TestDescribeListener(t *testing.T) {
+
+	response, err := client.DescribeLoadBalancerTCPListenerAttribute(loadBalancerId,22)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Printf(util.PrettyJson(response))
+	}
+}
+
+func TestDescribeSLB(t *testing.T) {
+
+	response, err := client.DescribeLoadBalancerAttribute(loadBalancerId)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Printf(util.PrettyJson(response))
+	}
 }

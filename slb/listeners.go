@@ -106,6 +106,7 @@ type HTTPListenerType struct {
 	XForwardedFor_SLBID    FlagType
 	XForwardedFor_SLBIP    FlagType
 	XForwardedFor_proto    FlagType
+	Description			   string
 }
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 
@@ -160,6 +161,7 @@ type TCPListenerType struct {
 	HealthCheckHttpCode       HealthCheckHttpCodeType
 	VServerGroup              FlagType
 	VServerGroupId            string
+	Description 			  string
 }
 
 type CreateLoadBalancerTCPListenerArgs TCPListenerType
@@ -188,6 +190,7 @@ type UDPListenerType struct {
 	HealthCheckInterval       int
 	VServerGroup              FlagType
 	VServerGroupId            string
+	Description 			  string
 }
 type CreateLoadBalancerUDPListenerArgs UDPListenerType
 

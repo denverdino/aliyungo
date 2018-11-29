@@ -58,9 +58,9 @@ type IMetaDataRequest interface {
 
 type MetaData struct {
 	// mock for unit test.
-	mock requestMock
+	mock    requestMock
 
-	client *http.Client
+	client 	*http.Client
 }
 
 func NewMetaData(client *http.Client) *MetaData {

@@ -12,6 +12,7 @@ type VBackendServerType struct {
 }
 
 type VServerGroup struct {
+	RegionId 		 common.Region
 	VServerGroupName string
 	VServerGroupId   string
 }
@@ -53,6 +54,8 @@ type DeleteVServerGroupArgs struct {
 type DescribeVServerGroupsArgs struct {
 	LoadBalancerId string
 	RegionId       common.Region
+	IncludeRule    bool
+	IncludeListener bool
 }
 
 type DescribeVServerGroupAttributeArgs struct {
@@ -82,6 +85,10 @@ type DescribeVServerGroupsResponse struct {
 	common.Response
 	VServerGroups struct {
 		VServerGroup []VServerGroup
+	}
+	AssociatedObjects struct{
+		Listeners   string
+		Rules 		string
 	}
 }
 type DescribeVServerGroupAttributeResponse CreateVServerGroupResponse

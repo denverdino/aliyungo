@@ -204,6 +204,7 @@ type DescribeLoadBalancersArgs struct {
 type ListenerPortAndProtocolType struct {
 	ListenerPort     int
 	ListenerProtocol string
+	Description      string
 }
 
 type BackendServerType struct {

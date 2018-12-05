@@ -171,6 +171,7 @@ type KubernetesMultiAZCreationArgs struct {
 	ClusterType              string           `json:"cluster_type"`
 	MultiAZ                  bool             `json:"multi_az"`
 	VPCID                    string           `json:"vpcid,omitempty"`
+	ImageId                  string           `json:"image_id"`
 	ContainerCIDR            string           `json:"container_cidr"`
 	ServiceCIDR              string           `json:"service_cidr"`
 	VSwitchIdA               string           `json:"vswitch_id_a,omitempty"`
@@ -181,6 +182,11 @@ type KubernetesMultiAZCreationArgs struct {
 	MasterInstanceTypeC      string           `json:"master_instance_type_c,omitempty"`
 	MasterSystemDiskCategory ecs.DiskCategory `json:"master_system_disk_category"`
 	MasterSystemDiskSize     int64            `json:"master_system_disk_size"`
+	MasterInstanceChargeType string           `json:"master_instance_charge_type"`
+	MasterPeriodUnit         string           `json:"master_period_unit"`
+	MasterPeriod             int              `json:"master_period"`
+	MasterAutoRenew          bool             `json:"master_auto_renew"`
+	MasterAutoRenewPeriod    int              `json:"master_auto_renew_period"`
 	WorkerInstanceTypeA      string           `json:"worker_instance_type_a,omitempty"`
 	WorkerInstanceTypeB      string           `json:"worker_instance_type_b,omitempty"`
 	WorkerInstanceTypeC      string           `json:"worker_instance_type_c,omitempty"`
@@ -189,6 +195,11 @@ type KubernetesMultiAZCreationArgs struct {
 	WorkerDataDisk           bool             `json:"worker_data_disk"`
 	WorkerDataDiskCategory   string           `json:"worker_data_disk_category"`
 	WorkerDataDiskSize       int64            `json:"worker_data_disk_size"`
+	WorkerInstanceChargeType string           `json:"worker_instance_charge_type"`
+	WorkerPeriodUnit         string           `json:"worker_period_unit"`
+	WorkerPeriod             int              `json:"worker_period"`
+	WorkerAutoRenew          bool             `json:"worker_auto_renew"`
+	WorkerAutoRenewPeriod    int              `json:"worker_auto_renew_period"`
 	NumOfNodesA              int64            `json:"num_of_nodes_a"`
 	NumOfNodesB              int64            `json:"num_of_nodes_b"`
 	NumOfNodesC              int64            `json:"num_of_nodes_c"`
@@ -224,27 +235,45 @@ type KubernetesClusterMetaData struct {
 }
 
 type KubernetesClusterParameter struct {
-	ServiceCidr              string `json:"ServiceCIDR"`
-	ContainerCidr            string `json:"ContainerCIDR"`
-	DockerVersion            string `json:"DockerVersion"`
-	EtcdVersion              string `json:"EtcdVersion"`
-	KubernetesVersion        string `json:"KubernetesVersion"`
-	VPCID                    string `json:"VpcId"`
-	KeyPair                  string `json:"KeyPair"`
+	ServiceCidr       string `json:"ServiceCIDR"`
+	ContainerCidr     string `json:"ContainerCIDR"`
+	DockerVersion     string `json:"DockerVersion"`
+	EtcdVersion       string `json:"EtcdVersion"`
+	KubernetesVersion string `json:"KubernetesVersion"`
+	VPCID             string `json:"VpcId"`
+	ImageId           string `json:"ImageId"`
+	KeyPair           string `json:"KeyPair"`
+
 	MasterSystemDiskCategory string `json:"MasterSystemDiskCategory"`
 	MasterSystemDiskSize     string `json:"MasterSystemDiskSize"`
+
+	MasterInstanceChargeType string `json:"MasterInstanceChargeType"`
+	MasterPeriodUnit         string `json:"MasterPeriodUnit"`
+	MasterPeriod             string `json:"MasterPeriod"`
+	MasterAutoRenew          bool
+	RawMasterAutoRenew       string `json:"MasterAutoRenew"`
+	MasterAutoRenewPeriod    string `json:"MasterAutoRenewPeriod"`
+
 	WorkerSystemDiskCategory string `json:"WorkerSystemDiskCategory"`
 	WorkerSystemDiskSize     string `json:"WorkerSystemDiskSize"`
 	WorkerDataDisk           bool
 	RawWorkerDataDisk        string `json:"WorkerDataDisk"`
 	WorkerDataDiskCategory   string `json:"WorkerDataDiskCategory"`
 	WorkerDataDiskSize       string `json:"WorkerDataDiskSize"`
-	ZoneId                   string `json:"ZoneId"`
-	NodeCIDRMask             string `json:"NodeCIDRMask"`
-	LoggingType              string `json:"LoggingType"`
-	SLSProjectName           string `json:"SLSProjectName"`
-	PublicSLB                bool
-	RawPublicSLB             string `json:"PublicSLB"`
+
+	WorkerInstanceChargeType string `json:"WorkerInstanceChargeType"`
+	WorkerPeriodUnit         string `json:"WorkerPeriodUnit"`
+	WorkerPeriod             string `json:"WorkerPeriod"`
+	WorkerAutoRenew          bool
+	RawWorkerAutoRenew       string `json:"WorkerAutoRenew"`
+	WorkerAutoRenewPeriod    string `json:"WorkerAutoRenewPeriod"`
+
+	ZoneId         string `json:"ZoneId"`
+	NodeCIDRMask   string `json:"NodeCIDRMask"`
+	LoggingType    string `json:"LoggingType"`
+	SLSProjectName string `json:"SLSProjectName"`
+	PublicSLB      bool
+	RawPublicSLB   string `json:"PublicSLB"`
 
 	// Single AZ
 	MasterInstanceType string `json:"MasterInstanceType"`
@@ -305,17 +334,23 @@ func (client *Client) DescribeKubernetesCluster(id string) (cluster KubernetesCl
 	err = json.Unmarshal([]byte(cluster.RawMetaData), &metaData)
 	cluster.MetaData = metaData
 	cluster.RawMetaData = ""
-	cluster.Parameters.WorkerDataDisk = convertStringToBool(cluster.Parameters.RawWorkerDataDisk)
-	cluster.Parameters.PublicSLB = convertStringToBool(cluster.Parameters.RawPublicSLB)
-	return
-}
-
-func convertStringToBool(raw string) bool {
-	if raw == "True" {
-		return true
-	} else {
-		return false
+	cluster.Parameters.WorkerDataDisk, err = strconv.ParseBool(cluster.Parameters.RawWorkerDataDisk)
+	if err != nil {
+		return cluster, err
 	}
+	cluster.Parameters.PublicSLB, err = strconv.ParseBool(cluster.Parameters.RawPublicSLB)
+	if err != nil {
+		return cluster, err
+	}
+	cluster.Parameters.MasterAutoRenew, err = strconv.ParseBool(cluster.Parameters.RawMasterAutoRenew)
+	if err != nil {
+		return cluster, err
+	}
+	cluster.Parameters.WorkerAutoRenew, err = strconv.ParseBool(cluster.Parameters.RawWorkerAutoRenew)
+	if err != nil {
+		return cluster, err
+	}
+	return
 }
 
 type ClusterResizeArgs struct {

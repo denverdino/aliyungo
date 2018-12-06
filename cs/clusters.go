@@ -28,7 +28,7 @@ const (
 	Deleted      = ClusterState("deleted")
 	InActive     = ClusterState("inactive")
 
-	ClusterTypeKubernetes = "Kubernetes"
+	ClusterTypeKubernetes        = "Kubernetes"
 	ClusterTypeManagedKubernetes = "ManagedKubernetes"
 )
 
@@ -142,6 +142,7 @@ type KubernetesCreationArgs struct {
 	ZoneId          string `json:"zoneid,omitempty"`
 	VPCID           string `json:"vpcid,omitempty"`
 	VSwitchId       string `json:"vswitchid,omitempty"`
+	ImageId         string `json:"image_id"`
 	ContainerCIDR   string `json:"container_cidr,omitempty"`
 	ServiceCIDR     string `json:"service_cidr,omitempty"`
 
@@ -273,6 +274,7 @@ type KubernetesClusterParameter struct {
 
 	MasterSystemDiskCategory string `json:"MasterSystemDiskCategory"`
 	MasterSystemDiskSize     string `json:"MasterSystemDiskSize"`
+	MasterImageId            string `json:"MasterImageId"`
 
 	MasterInstanceChargeType string `json:"MasterInstanceChargeType"`
 	MasterPeriodUnit         string `json:"MasterPeriodUnit"`
@@ -283,6 +285,7 @@ type KubernetesClusterParameter struct {
 
 	WorkerSystemDiskCategory string `json:"WorkerSystemDiskCategory"`
 	WorkerSystemDiskSize     string `json:"WorkerSystemDiskSize"`
+	WorkerImageId            string `json:"WorkerImageId"`
 	WorkerDataDisk           bool
 	RawWorkerDataDisk        string `json:"WorkerDataDisk"`
 	WorkerDataDiskCategory   string `json:"WorkerDataDiskCategory"`
@@ -485,7 +488,8 @@ func (client *Client) GetKubernetesClusterNodes(id string, pagination common.Pag
 
 const ClusterDefaultTimeout = 300
 const DefaultWaitForInterval = 10
-const DefaultPreSleepTime = 240
+const DefaultPreCheckSleepTime = 20
+const DefaultPreSleepTime = 220
 
 // WaitForCluster waits for instance to given status
 // when instance.NotFound wait until timeout
@@ -493,15 +497,23 @@ func (client *Client) WaitForClusterAsyn(clusterId string, status ClusterState, 
 	if timeout <= 0 {
 		timeout = ClusterDefaultTimeout
 	}
+
+	// Sleep 20 second to check cluster creating or failed
+	sleep := math.Min(float64(timeout), float64(DefaultPreCheckSleepTime))
+	time.Sleep(time.Duration(sleep) * time.Second)
+
 	cluster, err := client.DescribeCluster(clusterId)
 	if err != nil {
 		return err
+	} else if cluster.State == Failed {
+		return fmt.Errorf("Waitting for cluster %s %s failed. Looking the specified reason in the web console.", clusterId, status)
 	} else if cluster.State == status {
 		//TODO
 		return nil
 	}
+
 	// Create or Reset cluster usually cost at least 4 min, so there will sleep a long time before polling
-	sleep := math.Min(float64(timeout), float64(DefaultPreSleepTime))
+	sleep = math.Min(float64(timeout), float64(DefaultPreSleepTime))
 	time.Sleep(time.Duration(sleep) * time.Second)
 
 	for {

@@ -27,7 +27,14 @@ const (
 	DeleteFailed = ClusterState("deleteFailed")
 	Deleted      = ClusterState("deleted")
 	InActive     = ClusterState("inactive")
+
+	ClusterTypeKubernetes = "Kubernetes"
+	ClusterTypeManagedKubernetes = "ManagedKubernetes"
 )
+
+var NodeStableClusterState = []ClusterState{Running, Updating, Failed, DeleteFailed, Deleted, InActive}
+
+var NodeUnstableClusterState = []ClusterState{Initial, Scaling, Deleting}
 
 type NodeStatus struct {
 	Health   int64 `json:"health"`
@@ -129,33 +136,48 @@ type KubernetesStackArgs struct {
 }
 
 type KubernetesCreationArgs struct {
-	DisableRollback          bool             `json:"disable_rollback"`
-	Name                     string           `json:"name"`
-	TimeoutMins              int64            `json:"timeout_mins"`
-	ZoneId                   string           `json:"zoneid,omitempty"`
-	VPCID                    string           `json:"vpcid,omitempty"`
-	VSwitchId                string           `json:"vswitchid,omitempty"`
-	ContainerCIDR            string           `json:"container_cidr,omitempty"`
-	ServiceCIDR              string           `json:"service_cidr,omitempty"`
+	DisableRollback bool   `json:"disable_rollback"`
+	Name            string `json:"name"`
+	TimeoutMins     int64  `json:"timeout_mins"`
+	ZoneId          string `json:"zoneid,omitempty"`
+	VPCID           string `json:"vpcid,omitempty"`
+	VSwitchId       string `json:"vswitchid,omitempty"`
+	ContainerCIDR   string `json:"container_cidr,omitempty"`
+	ServiceCIDR     string `json:"service_cidr,omitempty"`
+
 	MasterInstanceType       string           `json:"master_instance_type,omitempty"`
 	MasterSystemDiskSize     int64            `json:"master_system_disk_size,omitempty"`
 	MasterSystemDiskCategory ecs.DiskCategory `json:"master_system_disk_category,omitempty"`
+
+	MasterInstanceChargeType string `json:"master_instance_charge_type"`
+	MasterPeriodUnit         string `json:"master_period_unit"`
+	MasterPeriod             int    `json:"master_period"`
+	MasterAutoRenew          bool   `json:"master_auto_renew"`
+	MasterAutoRenewPeriod    int    `json:"master_auto_renew_period"`
+
 	WorkerInstanceType       string           `json:"worker_instance_type,omitempty"`
 	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size,omitempty"`
 	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category,omitempty"`
 	WorkerDataDisk           bool             `json:"worker_data_disk"`
 	WorkerDataDiskCategory   string           `json:"worker_data_disk_category,omitempty"`
 	WorkerDataDiskSize       int64            `json:"worker_data_disk_size,omitempty"`
-	LoginPassword            string           `json:"login_password,omitempty"`
-	KeyPair                  string           `json:"key_pair,omitempty"`
-	NumOfNodes               int64            `json:"num_of_nodes,omitempty"`
-	SNatEntry                bool             `json:"snat_entry"`
-	SSHFlags                 bool             `json:"ssh_flags"`
-	CloudMonitorFlags        bool             `json:"cloud_monitor_flags"`
-	NodeCIDRMask             string           `json:"node_cidr_mask,omitempty"`
-	LoggingType              string           `json:"logging_type,omitempty"`
-	SLSProjectName           string           `json:"sls_project_name,omitempty"`
-	PublicSLB                bool             `json:"public_slb"`
+
+	WorkerInstanceChargeType string `json:"worker_instance_charge_type"`
+	WorkerPeriodUnit         string `json:"worker_period_unit"`
+	WorkerPeriod             int    `json:"worker_period"`
+	WorkerAutoRenew          bool   `json:"worker_auto_renew"`
+	WorkerAutoRenewPeriod    int    `json:"worker_auto_renew_period"`
+
+	LoginPassword     string `json:"login_password,omitempty"`
+	KeyPair           string `json:"key_pair,omitempty"`
+	NumOfNodes        int64  `json:"num_of_nodes,omitempty"`
+	SNatEntry         bool   `json:"snat_entry"`
+	SSHFlags          bool   `json:"ssh_flags"`
+	CloudMonitorFlags bool   `json:"cloud_monitor_flags"`
+	NodeCIDRMask      string `json:"node_cidr_mask,omitempty"`
+	LoggingType       string `json:"logging_type,omitempty"`
+	SLSProjectName    string `json:"sls_project_name,omitempty"`
+	PublicSLB         bool   `json:"public_slb"`
 
 	ClusterType string `json:"cluster_type"`
 	Network     string `json:"network,omitempty"`
@@ -165,28 +187,31 @@ type KubernetesCreationArgs struct {
 }
 
 type KubernetesMultiAZCreationArgs struct {
-	DisableRollback          bool             `json:"disable_rollback"`
-	Name                     string           `json:"name"`
-	TimeoutMins              int64            `json:"timeout_mins"`
-	ClusterType              string           `json:"cluster_type"`
-	MultiAZ                  bool             `json:"multi_az"`
-	VPCID                    string           `json:"vpcid,omitempty"`
-	ImageId                  string           `json:"image_id"`
-	ContainerCIDR            string           `json:"container_cidr"`
-	ServiceCIDR              string           `json:"service_cidr"`
-	VSwitchIdA               string           `json:"vswitch_id_a,omitempty"`
-	VSwitchIdB               string           `json:"vswitch_id_b,omitempty"`
-	VSwitchIdC               string           `json:"vswitch_id_c,omitempty"`
+	DisableRollback bool   `json:"disable_rollback"`
+	Name            string `json:"name"`
+	TimeoutMins     int64  `json:"timeout_mins"`
+	ClusterType     string `json:"cluster_type"`
+	MultiAZ         bool   `json:"multi_az"`
+	VPCID           string `json:"vpcid,omitempty"`
+	ImageId         string `json:"image_id"`
+	ContainerCIDR   string `json:"container_cidr"`
+	ServiceCIDR     string `json:"service_cidr"`
+	VSwitchIdA      string `json:"vswitch_id_a,omitempty"`
+	VSwitchIdB      string `json:"vswitch_id_b,omitempty"`
+	VSwitchIdC      string `json:"vswitch_id_c,omitempty"`
+
 	MasterInstanceTypeA      string           `json:"master_instance_type_a,omitempty"`
 	MasterInstanceTypeB      string           `json:"master_instance_type_b,omitempty"`
 	MasterInstanceTypeC      string           `json:"master_instance_type_c,omitempty"`
 	MasterSystemDiskCategory ecs.DiskCategory `json:"master_system_disk_category"`
 	MasterSystemDiskSize     int64            `json:"master_system_disk_size"`
-	MasterInstanceChargeType string           `json:"master_instance_charge_type"`
-	MasterPeriodUnit         string           `json:"master_period_unit"`
-	MasterPeriod             int              `json:"master_period"`
-	MasterAutoRenew          bool             `json:"master_auto_renew"`
-	MasterAutoRenewPeriod    int              `json:"master_auto_renew_period"`
+
+	MasterInstanceChargeType string `json:"master_instance_charge_type"`
+	MasterPeriodUnit         string `json:"master_period_unit"`
+	MasterPeriod             int    `json:"master_period"`
+	MasterAutoRenew          bool   `json:"master_auto_renew"`
+	MasterAutoRenewPeriod    int    `json:"master_auto_renew_period"`
+
 	WorkerInstanceTypeA      string           `json:"worker_instance_type_a,omitempty"`
 	WorkerInstanceTypeB      string           `json:"worker_instance_type_b,omitempty"`
 	WorkerInstanceTypeC      string           `json:"worker_instance_type_c,omitempty"`
@@ -195,22 +220,24 @@ type KubernetesMultiAZCreationArgs struct {
 	WorkerDataDisk           bool             `json:"worker_data_disk"`
 	WorkerDataDiskCategory   string           `json:"worker_data_disk_category"`
 	WorkerDataDiskSize       int64            `json:"worker_data_disk_size"`
-	WorkerInstanceChargeType string           `json:"worker_instance_charge_type"`
-	WorkerPeriodUnit         string           `json:"worker_period_unit"`
-	WorkerPeriod             int              `json:"worker_period"`
-	WorkerAutoRenew          bool             `json:"worker_auto_renew"`
-	WorkerAutoRenewPeriod    int              `json:"worker_auto_renew_period"`
-	NumOfNodesA              int64            `json:"num_of_nodes_a"`
-	NumOfNodesB              int64            `json:"num_of_nodes_b"`
-	NumOfNodesC              int64            `json:"num_of_nodes_c"`
-	LoginPassword            string           `json:"login_password,omitempty"`
-	KeyPair                  string           `json:"key_pair,omitempty"`
-	SSHFlags                 bool             `json:"ssh_flags"`
-	CloudMonitorFlags        bool             `json:"cloud_monitor_flags"`
-	NodeCIDRMask             string           `json:"node_cidr_mask,omitempty"`
-	LoggingType              string           `json:"logging_type,omitempty"`
-	SLSProjectName           string           `json:"sls_project_name,omitempty"`
-	PublicSLB                bool             `json:"public_slb"`
+
+	WorkerInstanceChargeType string `json:"worker_instance_charge_type"`
+	WorkerPeriodUnit         string `json:"worker_period_unit"`
+	WorkerPeriod             int    `json:"worker_period"`
+	WorkerAutoRenew          bool   `json:"worker_auto_renew"`
+	WorkerAutoRenewPeriod    int    `json:"worker_auto_renew_period"`
+
+	NumOfNodesA       int64  `json:"num_of_nodes_a"`
+	NumOfNodesB       int64  `json:"num_of_nodes_b"`
+	NumOfNodesC       int64  `json:"num_of_nodes_c"`
+	LoginPassword     string `json:"login_password,omitempty"`
+	KeyPair           string `json:"key_pair,omitempty"`
+	SSHFlags          bool   `json:"ssh_flags"`
+	CloudMonitorFlags bool   `json:"cloud_monitor_flags"`
+	NodeCIDRMask      string `json:"node_cidr_mask,omitempty"`
+	LoggingType       string `json:"logging_type,omitempty"`
+	SLSProjectName    string `json:"sls_project_name,omitempty"`
+	PublicSLB         bool   `json:"public_slb"`
 
 	KubernetesVersion string `json:"kubernetes_version,omitempty"`
 	Network           string `json:"network,omitempty"`
@@ -339,11 +366,11 @@ func (client *Client) DescribeKubernetesCluster(id string) (cluster KubernetesCl
 		return cluster, err
 	}
 	cluster.Parameters.PublicSLB, err = strconv.ParseBool(cluster.Parameters.RawPublicSLB)
-	if err != nil {
+	if err != nil && cluster.ClusterType.ClusterType != ClusterTypeManagedKubernetes {
 		return cluster, err
 	}
 	cluster.Parameters.MasterAutoRenew, err = strconv.ParseBool(cluster.Parameters.RawMasterAutoRenew)
-	if err != nil {
+	if err != nil && cluster.ClusterType.ClusterType != ClusterTypeManagedKubernetes {
 		return cluster, err
 	}
 	cluster.Parameters.WorkerAutoRenew, err = strconv.ParseBool(cluster.Parameters.RawWorkerAutoRenew)

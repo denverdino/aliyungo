@@ -57,12 +57,14 @@ type Owner struct {
 // Options struct
 //
 type Options struct {
-	ServerSideEncryption bool
-	Meta                 map[string][]string
-	ContentEncoding      string
-	CacheControl         string
-	ContentMD5           string
-	ContentDisposition   string
+	ServerSideEncryption      bool
+	ServerSideEncryptionKeyID string
+
+	Meta               map[string][]string
+	ContentEncoding    string
+	CacheControl       string
+	ContentMD5         string
+	ContentDisposition string
 	//Range              string
 	//Expires int
 }
@@ -72,6 +74,9 @@ type CopyOptions struct {
 	CopySourceOptions string
 	MetadataDirective string
 	//ContentType       string
+
+	ServerSideEncryption      bool
+	ServerSideEncryptionKeyID string
 }
 
 // CopyObjectResult is the output from a Copy request
@@ -491,7 +496,10 @@ func (b *Bucket) PutFile(path string, file *os.File, perm ACL, options Options) 
 
 // addHeaders adds o's specified fields to headers
 func (o Options) addHeaders(headers http.Header) {
-	if o.ServerSideEncryption {
+	if len(o.ServerSideEncryptionKeyID) != 0 {
+		headers.Set("x-oss-server-side-encryption", "KMS")
+		headers.Set("x-oss-server-side-encryption-key-id", o.ServerSideEncryptionKeyID)
+	} else if o.ServerSideEncryption {
 		headers.Set("x-oss-server-side-encryption", "AES256")
 	}
 	if len(o.ContentEncoding) != 0 {
@@ -516,6 +524,13 @@ func (o Options) addHeaders(headers http.Header) {
 
 // addHeaders adds o's specified fields to headers
 func (o CopyOptions) addHeaders(headers http.Header) {
+	if len(o.ServerSideEncryptionKeyID) != 0 {
+		headers.Set("x-oss-server-side-encryption", "KMS")
+		headers.Set("x-oss-server-side-encryption-key-id", o.ServerSideEncryptionKeyID)
+	} else if o.ServerSideEncryption {
+		headers.Set("x-oss-server-side-encryption", "AES256")
+	}
+
 	if len(o.MetadataDirective) != 0 {
 		headers.Set("x-oss-metadata-directive", o.MetadataDirective)
 	}

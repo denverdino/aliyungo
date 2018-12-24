@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net/http"
-	"os"
 	"strconv"
 	"sync"
 	//"net/http"
@@ -23,15 +22,8 @@ var (
 )
 
 func init() {
-	AccessKeyId := os.Getenv("AccessKeyId")
-	AccessKeySecret := os.Getenv("AccessKeySecret")
-	if len(AccessKeyId) != 0 && len(AccessKeySecret) != 0 {
-		client = oss.NewOSSClient(TestRegion, false, AccessKeyId, AccessKeySecret, false)
-	} else {
-		client = oss.NewOSSClient(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, false)
-	}
-
-	assumeRoleClient = oss.NewOSSClientForAssumeRole(TestRegion, false, TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, false)
+	client = oss.NewOSSClient(TestRegion, false, TestAccessKeyID, TestAccessKeySecret, false)
+	assumeRoleClient = oss.NewOSSClientForAssumeRole(TestRegion, false, TestAccessKeyID, TestAccessKeySecret, TestSecurityToken, false)
 	assumeRoleClient.SetDebug(true)
 }
 
@@ -124,12 +116,39 @@ func TestPutCopy(t *testing.T) {
 	}
 }
 
+func TestPutObjectWithSSE(t *testing.T) {
+	const DISPOSITION = "attachment; filename=\"0x1a2b3c.jpg\""
+
+	b := client.Bucket(TestBucket)
+	err := b.Put("name-sse", []byte("content"), "content-type", oss.Private, oss.Options{
+		ContentDisposition:        DISPOSITION,
+		ServerSideEncryptionKeyID: TestServerSideEncryptionKeyID,
+	})
+	if err != nil {
+		t.Errorf("Failed for Put: %v", err)
+	}
+}
+
+func TestPutCopyWithSSE(t *testing.T) {
+	b := client.Bucket(TestBucket)
+	t.Log("Source: ", b.Path("name-sse"))
+	res, err := b.PutCopy("newname-sse", oss.Private, oss.CopyOptions{
+		ServerSideEncryptionKeyID: TestServerSideEncryptionKeyID,
+	},
+		b.Path("name"))
+	if err == nil {
+		t.Logf("Copy result: %v", res)
+	} else {
+		t.Errorf("Failed for PutCopy: %v", err)
+	}
+}
+
 func TestList(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
 
 	data, err := b.List("n", "", "", 0)
-	if err != nil || len(data.Contents) != 2 {
+	if err != nil || len(data.Contents) != 4 {
 		t.Errorf("Failed for List: %v", err)
 	} else {
 		t.Logf("Contents = %++v", data)
@@ -371,7 +390,11 @@ func TestDelObject(t *testing.T) {
 func TestDelMultiObjects(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
-	objects := []oss.Object{oss.Object{Key: "newname"}}
+	objects := []oss.Object{
+		oss.Object{Key: "newname"},
+		oss.Object{Key: "name-sse"},
+		oss.Object{Key: "newname-sse"},
+	}
 	err := b.DelMulti(oss.Delete{
 		Quiet:   false,
 		Objects: objects,

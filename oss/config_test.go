@@ -16,8 +16,10 @@ import (
 //
 
 var (
-	TestAccessKeyId     = os.Getenv("AccessKeyId")
+	TestAccessKeyID     = os.Getenv("AccessKeyId")
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
 	TestSecurityToken   = os.Getenv("SecurityToken")
 	TestRegion          = oss.Region(os.Getenv("RegionId"))
+
+	TestServerSideEncryptionKeyID = os.Getenv("ServerSideEncryptionKeyId")
 )

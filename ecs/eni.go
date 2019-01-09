@@ -81,6 +81,23 @@ type ModifyNetworkInterfaceAttributeArgs struct {
 }
 type ModifyNetworkInterfaceAttributeResponse common.Response
 
+type UnassignPrivateIpAddressesArgs struct {
+	RegionId           common.Region
+	NetworkInterfaceId string
+	PrivateIpAddress   []string `query:"list"`
+}
+
+type UnassignPrivateIpAddressesResponse common.Response
+
+type AssignPrivateIpAddressesArgs struct {
+	RegionId                       common.Region
+	NetworkInterfaceId             string
+	PrivateIpAddress               []string `query:"list"` // optional
+	SecondaryPrivateIpAddressCount int      // optional
+}
+
+type AssignPrivateIpAddressesResponse common.Response
+
 func (client *Client) CreateNetworkInterface(args *CreateNetworkInterfaceArgs) (resp *CreateNetworkInterfaceResponse, err error) {
 	resp = &CreateNetworkInterfaceResponse{}
 	err = client.Invoke("CreateNetworkInterface", args, resp)
@@ -114,6 +131,18 @@ func (client *Client) DetachNetworkInterface(args *DetachNetworkInterfaceArgs) (
 func (client *Client) ModifyNetworkInterfaceAttribute(args *ModifyNetworkInterfaceAttributeArgs) (resp *ModifyNetworkInterfaceAttributeResponse, err error) {
 	resp = &ModifyNetworkInterfaceAttributeResponse{}
 	err = client.Invoke("ModifyNetworkInterfaceAttribute", args, resp)
+	return resp, err
+}
+
+func (client *Client) UnassignPrivateIpAddresses(args *UnassignPrivateIpAddressesArgs) (resp *UnassignPrivateIpAddressesResponse, err error) {
+	resp = &UnassignPrivateIpAddressesResponse{}
+	err = client.Invoke("UnassignPrivateIpAddresses", args, resp)
+	return resp, err
+}
+
+func (client *Client) AssignPrivateIpAddresses(args *AssignPrivateIpAddressesArgs) (resp *AssignPrivateIpAddressesResponse, err error) {
+	resp = &AssignPrivateIpAddressesResponse{}
+	err = client.Invoke("AssignPrivateIpAddresses", args, resp)
 	return resp, err
 }
 

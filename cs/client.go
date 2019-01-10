@@ -76,6 +76,11 @@ func (client *Client) SetUserAgent(userAgent string) {
 	client.userAgent = userAgent
 }
 
+// SetEndpoint sets customer endpoint
+func (client *Client) SetEndpoint(endpoint string) {
+	client.endpoint = endpoint
+}
+
 type Request struct {
 	Method          string
 	URL             string

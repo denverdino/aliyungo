@@ -171,6 +171,7 @@ type KubernetesCreationArgs struct {
 
 	LoginPassword     string `json:"login_password,omitempty"`
 	KeyPair           string `json:"key_pair,omitempty"`
+	UserCA            string `json:"user_ca,omitempty"`
 	NumOfNodes        int64  `json:"num_of_nodes,omitempty"`
 	SNatEntry         bool   `json:"snat_entry"`
 	SSHFlags          bool   `json:"ssh_flags"`
@@ -233,6 +234,7 @@ type KubernetesMultiAZCreationArgs struct {
 	NumOfNodesC       int64  `json:"num_of_nodes_c"`
 	LoginPassword     string `json:"login_password,omitempty"`
 	KeyPair           string `json:"key_pair,omitempty"`
+	UserCA            string `json:"user_ca,omitempty"`
 	SSHFlags          bool   `json:"ssh_flags"`
 	CloudMonitorFlags bool   `json:"cloud_monitor_flags"`
 	NodeCIDRMask      string `json:"node_cidr_mask,omitempty"`

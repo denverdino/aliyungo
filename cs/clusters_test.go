@@ -204,7 +204,7 @@ func _TestCreateManagedKubernetesCluster(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	args := KubernetesCreationArgs{
-		Name:            "single-az-k8s",
+		Name:            "single-managed-az-k8s",
 		ClusterType:     "ManagedKubernetes",
 		DisableRollback: true,
 		//VPCID:                    "vpc-id",

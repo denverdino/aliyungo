@@ -205,7 +205,6 @@ type CreateOrderResponse struct {
 }
 
 // CreateOrder create db instance order
-// you can read doc at http://docs.alibaba-inc.com/pages/viewpage.action?pageId=259349053
 func (client *Client) CreateOrder(args *CreateOrderArgs) (resp CreateOrderResponse, err error) {
 	response := CreateOrderResponse{}
 	err = client.Invoke("CreateOrder", args, &response)

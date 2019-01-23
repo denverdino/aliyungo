@@ -48,7 +48,6 @@ func aTypeTest(r *url.URL, privateKey string, expires time.Time) string {
 	authKey := fmt.Sprintf("%d-%s-%s-%x", expires.Unix(), rand, uid, hashValue)
 	if r.RawQuery == "" {
 		return fmt.Sprintf("%s?auth_key=%s", r.String(), authKey)
-	} else {
-		return fmt.Sprintf("%s&auth_key=%s", r.String(), authKey)
 	}
+	return fmt.Sprintf("%s&auth_key=%s", r.String(), authKey)
 }

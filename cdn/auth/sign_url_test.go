@@ -28,13 +28,13 @@ func TestAtypeAuth(t *testing.T) {
 }
 
 func TestBtypeAuth(t *testing.T) {
-	signer := newURLSigner("b", testPrivKey)
+	signer := NewURLSigner("b", testPrivKey)
 	url, _ := signer.Sign("https://example.com/a?foo=bar", testSignTime)
 	assertEqual(t, "https://example.com/201811011732/3a19d83a89ccb00a73212420791b0123/a?foo=bar", url)
 }
 
 func TestCtypeAuth(t *testing.T) {
-	signer := newURLSigner("c", testPrivKey)
+	signer := NewURLSigner("c", testPrivKey)
 	url, _ := signer.Sign("https://example.com/a?foo=bar", testSignTime)
 	assertEqual(t, "https://example.com/7d6b308ce87beb16d9dba32d741220f6/5bdac81a/a?foo=bar", url)
 }

@@ -44,7 +44,7 @@ const (
 	VSWITCH_CIDR_BLOCK = "vswitch-cidr-block"
 	VSWITCH_ID         = "vswitch-id"
 	ZONE               = "zone-id"
-	RAM_SECURITY       = "Ram/security-credentials"
+	RAM_SECURITY       = "ram/security-credentials"
 )
 
 type IMetaDataRequest interface {

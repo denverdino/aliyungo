@@ -26,7 +26,7 @@ func RunWithTest(t *testing.T, test func(client *Client, t *testing.T)) {
 	client := getClient()
 	defer client.Delete("test", "test")
 
-	_, err := client.Publish("test", "test", "test")
+	_, err := client.Publish("test", "test", "test测试")
 
 	if err != nil {
 		t.Fatalf("pulish error:%s", err)
@@ -49,6 +49,9 @@ func TestClient_GetConfig(t *testing.T) {
 		ret, err := client.GetConfig("test", "test")
 		if err != nil {
 			t.Error(err)
+		}
+		if ret != "test测试"{
+			t.Error("wrong respond content")
 		}
 		fmt.Println(ret)
 	})

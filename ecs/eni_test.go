@@ -32,6 +32,22 @@ func TestAssignPrivateIPAddresses(t *testing.T) {
 	}
 }
 
+func TestDescribeENI(t *testing.T) {
+	req := DescribeNetworkInterfacesArgs{
+		RegionId:           common.Beijing,
+		NetworkInterfaceId: []string{"eni-testeni"},
+	}
+	client := NewTestClient()
+	resp, err := client.DescribeNetworkInterfaces(&req)
+	if err != nil {
+		t.Errorf("Failed to DescribeNetworkInterfaces: %v", err)
+	}
+	if len(resp.NetworkInterfaceSets.NetworkInterfaceSet[0].PrivateIpSets.PrivateIpSet) != 4 {
+		t.Errorf("assert network private ip count be 4, %+v", resp.NetworkInterfaceSets.NetworkInterfaceSet[0].PrivateIpSets.PrivateIpSet)
+	}
+	t.Logf("%+v", resp.NetworkInterfaceSets.NetworkInterfaceSet[0])
+}
+
 func TestUnAssignPrivateIPAddresses(t *testing.T) {
 	req := UnassignPrivateIpAddressesArgs{
 		RegionId:           common.Beijing,

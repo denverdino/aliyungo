@@ -2,6 +2,7 @@ package ecs
 
 import (
 	"fmt"
+	"github.com/denverdino/aliyungo/util"
 	"time"
 
 	"github.com/denverdino/aliyungo/common"
@@ -46,9 +47,34 @@ type NetworkInterfaceType struct {
 	NetworkInterfaceId   string
 	NetworkInterfaceName string
 	PrimaryIpAddress     string
-	MacAddress           string
-	Status               string
-	PrivateIpAddress     string
+	PrivateIpSets        struct {
+		PrivateIpSet []PrivateIpType
+	}
+	MacAddress         string
+	Status             string
+	Type               string
+	VpcId              string
+	VSwitchId          string
+	ZoneId             string
+	AssociatedPublicIp AssociatedPublicIp
+	SecurityGroupIds   struct {
+		SecurityGroupId []string
+	}
+	Description      string
+	InstanceId       string
+	CreationTime     util.ISO6801Time
+	PrivateIpAddress string
+}
+
+type PrivateIpType struct {
+	PrivateIpAddress   string
+	Primary            bool
+	AssociatedPublicIp AssociatedPublicIp
+}
+
+type AssociatedPublicIp struct {
+	PublicIpAddress string
+	AllocationId    string
 }
 
 type DescribeNetworkInterfacesResponse struct {

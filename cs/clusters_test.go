@@ -129,6 +129,16 @@ func TestListClusters(t *testing.T) {
 	}
 }
 
+func _TestGetClusterEndpoints(t *testing.T) {
+	client := NewTestClientForDebug()
+	clusterId := "c213c31b97430433c87afe4852b6a08ef"
+	clusterEndpoints, err := client.GetClusterEndpoints(clusterId)
+	if err != nil {
+		t.Fatalf("Failed to GetClusterEndpoints: %v", err)
+	}
+	t.Logf("Succeed getting clusterEndpoints %v", clusterEndpoints)
+}
+
 func _TestCreateClusters(t *testing.T) {
 
 	client := NewTestClientForDebug()

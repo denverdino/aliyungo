@@ -450,6 +450,19 @@ func (client *Client) GetClusterCerts(id string) (certs ClusterCerts, err error)
 	return
 }
 
+type ClusterEndpoints struct {
+	ApiServerEndpoint         string `json:"api_server_endpoint"`
+	DashboardEndpoint         string `json:"dashboard_endpoint"`
+	MiranaEndpoint            string `json:"mirana_endpoint"`
+	ReverseTunnelEndpoint     string `json:"reverse_tunnel_endpoint"`
+	IntranetApiServerEndpoint string `json:"intranet_api_server_endpoint"`
+}
+
+func (client *Client) GetClusterEndpoints(id string) (clusterEndpoints ClusterEndpoints, err error) {
+	err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/endpoints", nil, nil, &clusterEndpoints)
+	return
+}
+
 type ClusterConfig struct {
 	Config string `json:"config"`
 }

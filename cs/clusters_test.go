@@ -52,11 +52,11 @@ func TestClient_DescribeKubernetesClusters(t *testing.T) {
 		}
 		t.Logf("Cluster Describe: %++v", c)
 		t.Logf("Cluster KeyPair %v", c.Parameters.KeyPair)
-		t.Logf("Cluster WorkerDataDisk %v", c.Parameters.WorkerDataDisk)
+		t.Logf("Cluster WorkerDataDisk %v", *c.Parameters.WorkerDataDisk)
 
 		t.Logf("Cluster MasterInstanceChargeType %v", c.Parameters.MasterInstanceChargeType)
 		if c.Parameters.MasterInstanceChargeType == "PrePaid" {
-			t.Logf("Cluster MasterAutoRenew %v", c.Parameters.MasterAutoRenew)
+			t.Logf("Cluster MasterAutoRenew %v", *c.Parameters.MasterAutoRenew)
 			t.Logf("Cluster MasterAutoRenewPeriod %v", c.Parameters.MasterAutoRenewPeriod)
 			t.Logf("Cluster MasterPeriod %v", c.Parameters.MasterPeriod)
 			t.Logf("Cluster MasterPeriodUnit %v", c.Parameters.MasterPeriodUnit)
@@ -64,13 +64,13 @@ func TestClient_DescribeKubernetesClusters(t *testing.T) {
 
 		t.Logf("Cluster WorkerInstanceChargeType %v", c.Parameters.WorkerInstanceChargeType)
 		if c.Parameters.WorkerInstanceChargeType == "PrePaid" {
-			t.Logf("Cluster WorkerAutoRenew %v", c.Parameters.WorkerAutoRenew)
+			t.Logf("Cluster WorkerAutoRenew %v", *c.Parameters.WorkerAutoRenew)
 			t.Logf("Cluster WorkerAutoRenewPeriod %v", c.Parameters.WorkerAutoRenewPeriod)
 			t.Logf("Cluster WorkerPeriod %v", c.Parameters.WorkerPeriod)
 			t.Logf("Cluster WorkerPeriodUnit %v", c.Parameters.WorkerPeriodUnit)
 		}
 
-		if c.Parameters.WorkerDataDisk {
+		if c.Parameters.WorkerDataDisk != nil && *c.Parameters.WorkerDataDisk {
 			t.Logf("Cluster WorkerDataDiskSize %v", c.Parameters.WorkerDataDiskSize)
 			t.Logf("Cluster WorkerDataDiskCategory %v", c.Parameters.WorkerDataDiskCategory)
 		}
@@ -78,7 +78,7 @@ func TestClient_DescribeKubernetesClusters(t *testing.T) {
 		t.Logf("Cluster NodeCIDRMask %v", c.Parameters.NodeCIDRMask)
 		t.Logf("Cluster LoggingType %v", c.Parameters.LoggingType)
 		t.Logf("Cluster SLSProjectName %v", c.Parameters.SLSProjectName)
-		t.Logf("Cluster PublicSLB %v", c.Parameters.PublicSLB)
+		t.Logf("Cluster PublicSLB %v", *c.Parameters.PublicSLB)
 
 		if c.MetaData.MultiAZ || c.MetaData.SubClass == "3az" {
 			t.Logf("%v is a MultiAZ kubernetes cluster", c.ClusterID)

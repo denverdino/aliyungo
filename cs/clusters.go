@@ -371,21 +371,20 @@ func (client *Client) DescribeKubernetesCluster(id string) (cluster KubernetesCl
 	cluster.MetaData = metaData
 	cluster.RawMetaData = ""
 
-	parseBoolOrNil(cluster.Parameters.RawWorkerDataDisk, cluster.Parameters.WorkerDataDisk)
-	parseBoolOrNil(cluster.Parameters.RawPublicSLB, cluster.Parameters.PublicSLB)
-	parseBoolOrNil(cluster.Parameters.RawMasterAutoRenew, cluster.Parameters.MasterAutoRenew)
-	parseBoolOrNil(cluster.Parameters.RawWorkerAutoRenew, cluster.Parameters.WorkerAutoRenew)
+	cluster.Parameters.WorkerDataDisk = parseBoolOrNil(cluster.Parameters.RawWorkerDataDisk)
+	cluster.Parameters.PublicSLB = parseBoolOrNil(cluster.Parameters.RawPublicSLB)
+	cluster.Parameters.MasterAutoRenew = parseBoolOrNil(cluster.Parameters.RawMasterAutoRenew)
+	cluster.Parameters.WorkerAutoRenew = parseBoolOrNil(cluster.Parameters.RawWorkerAutoRenew)
 
 	return
 }
 
-func parseBoolOrNil(rawField string, field *bool) {
+func parseBoolOrNil(rawField string) *bool {
 	boolVal, err := strconv.ParseBool(rawField)
 	if err == nil {
-		field = &boolVal
-	} else {
-		field = nil
+		return &boolVal
 	}
+	return nil
 }
 
 type ClusterResizeArgs struct {

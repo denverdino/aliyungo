@@ -78,7 +78,9 @@ func TestClient_DescribeKubernetesClusters(t *testing.T) {
 		t.Logf("Cluster NodeCIDRMask %v", c.Parameters.NodeCIDRMask)
 		t.Logf("Cluster LoggingType %v", c.Parameters.LoggingType)
 		t.Logf("Cluster SLSProjectName %v", c.Parameters.SLSProjectName)
-		t.Logf("Cluster PublicSLB %v", *c.Parameters.PublicSLB)
+		if c.Parameters.PublicSLB != nil {
+			t.Logf("Cluster PublicSLB %v", *c.Parameters.PublicSLB)
+		}
 
 		if c.MetaData.MultiAZ || c.MetaData.SubClass == "3az" {
 			t.Logf("%v is a MultiAZ kubernetes cluster", c.ClusterID)

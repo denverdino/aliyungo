@@ -95,7 +95,7 @@ func TestVPCCreationAndDeletion(t *testing.T) {
 					}
 					t.Logf("Instance %s is stopped successfully.", instanceId)
 				}
-				err = client.DeleteInstance(instanceId)
+				err = client.DeleteInstance(instanceId, false)
 
 				if err != nil {
 					t.Errorf("Failed to delete instance %s: %v", instanceId, err)

@@ -152,7 +152,7 @@ type UpdateZoneRecordResponse struct {
 // UpdateZoneRecord update zone record
 //
 // You can read doc at https://help.aliyun.com/document_detail/66250.html
-func (client *Client) UpdateZoneRecord(args *AddZoneRecordArgs) (err error) {
+func (client *Client) UpdateZoneRecord(args *UpdateZoneRecordArgs) (err error) {
 	response := &UpdateZoneRecordResponse{}
 
 	err = client.Invoke("UpdateZoneRecord", args, &response)

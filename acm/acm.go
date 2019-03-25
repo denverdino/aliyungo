@@ -1,17 +1,17 @@
 package acm
 
 import (
-	"net/http"
-	"time"
-	"fmt"
-	"errors"
-	"io/ioutil"
-	"strings"
-	"encoding/base64"
-	"crypto/sha1"
 	"crypto/hmac"
-	"strconv"
+	"crypto/sha1"
+	"encoding/base64"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type Client struct {
@@ -148,11 +148,6 @@ func (c *Client) callApi(api string, params map[string]string, method string) (s
 		return "", err
 	}
 
-	byt, err = GbkToUtf8(byt)
-	if err != nil {
-		return "", err
-	}
-
 	body := string(byt)
 
 	if resp.StatusCode != 200 {
@@ -181,16 +176,12 @@ func (c *Client) GetAllConfigs(pageNo, pageSize int) (string, error) {
 }
 
 func (c *Client) Publish(dataId, group, content string) (string, error) {
-	bt, err := Utf8ToGbk([]byte(content))
-	if err != nil {
-		return "", err
-	}
 
 	return c.callApi("diamond-server/basestone.do?method=syncUpdateAll", map[string]string{
 		"tenant":  c.NameSpace,
 		"dataId":  dataId,
 		"group":   group,
-		"content": string(bt),
+		"content": content,
 	}, "POST")
 }
 

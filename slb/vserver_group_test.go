@@ -58,10 +58,10 @@ func TestCreateVServerGroup(t *testing.T) {
 
 func TestDescribeVServerGroups(t *testing.T) {
 	arg := &DescribeVServerGroupsArgs{
-		LoadBalancerId:loadBalancerId,
-		RegionId:	region,
+		LoadBalancerId:  loadBalancerId,
+		RegionId:        region,
 		IncludeListener: true,
-		IncludeRule: true,
+		IncludeRule:     true,
 	}
 	response, err := client.DescribeVServerGroups(arg)
 	if err != nil {

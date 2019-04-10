@@ -11,8 +11,8 @@ func TestCreateRules(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	rulesArr := []Rule{
-		Rule{RuleName: "rule-001", Domain: "datapaking.com", Url: "/rule0001", VServerGroupId: TestVServerGroupID},
-		Rule{RuleName: "rule-002", Domain: "datapaking.com", Url: "/rule0002", VServerGroupId: TestVServerGroupID},
+		{RuleName: "rule-001", Domain: "datapaking.com", Url: "/rule0001", VServerGroupId: TestVServerGroupID},
+		{RuleName: "rule-002", Domain: "datapaking.com", Url: "/rule0002", VServerGroupId: TestVServerGroupID},
 	}
 	ruleStr, _ := json.Marshal(rulesArr)
 

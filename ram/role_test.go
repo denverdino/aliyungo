@@ -20,13 +20,13 @@ var (
 
 	policyDocument = AssumeRolePolicyDocument{
 		Statement: []AssumeRolePolicyItem{
-			AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Allow", Principal: princpal},
+			{Action: "sts:AssumeRole", Effect: "Allow", Principal: princpal},
 		},
 		Version: "1"}
 
 	newPolicyDocument = AssumeRolePolicyDocument{
 		Statement: []AssumeRolePolicyItem{
-			AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Deny", Principal: princpal},
+			{Action: "sts:AssumeRole", Effect: "Deny", Principal: princpal},
 		},
 		Version: "1"}
 

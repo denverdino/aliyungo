@@ -26,7 +26,7 @@ var (
 
 	princpalPolicyDocument = ram.AssumeRolePolicyDocument{
 		Statement: []ram.AssumeRolePolicyItem{
-			ram.AssumeRolePolicyItem{Action: "sts:AssumeRole", Effect: "Allow", Principal: princpal},
+			{Action: "sts:AssumeRole", Effect: "Allow", Principal: princpal},
 		},
 		Version: "1"}
 
@@ -39,7 +39,7 @@ var (
 
 var policyDocument = ram.PolicyDocument{
 	Statement: []ram.PolicyItem{
-		ram.PolicyItem{
+		{
 			Action:   "oss:GetObject",
 			Effect:   "Allow",
 			Resource: "acs:oss:*:*:*/anyprefix",
@@ -66,7 +66,7 @@ func createAssumeRoleRequest(roleArn string) AssumeRoleRequest {
 func createPolicyDocument() *ram.PolicyDocument {
 	return &ram.PolicyDocument{
 		Statement: []ram.PolicyItem{
-			ram.PolicyItem{
+			{
 				Action:   "oss:GetObject",
 				Effect:   "Allow",
 				Resource: "acs:oss:*:*:*/*",

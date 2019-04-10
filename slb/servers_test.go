@@ -5,7 +5,7 @@ import "testing"
 func testBackendServers(t *testing.T, client *Client, loadBalancerId string) {
 
 	backendServers := []BackendServerType{
-		BackendServerType{
+		{
 			ServerId: TestInstanceId,
 			Weight:   100,
 			Type:     "ecs",

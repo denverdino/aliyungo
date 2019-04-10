@@ -11,8 +11,8 @@ func TestAddTags(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	tagItemArr := []TagItem{
-		TagItem{TagKey: "username", TagValue: "test"},
-		TagItem{TagKey: "birdthday", TagValue: "20170101"},
+		{TagKey: "username", TagValue: "test"},
+		{TagKey: "birdthday", TagValue: "20170101"},
 	}
 	tagItems, _ := json.Marshal(tagItemArr)
 
@@ -34,8 +34,8 @@ func TestRemoveTags(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	tagItemArr := []TagItem{
-		TagItem{TagKey: "username", TagValue: "test"},
-		TagItem{TagKey: "birdthday", TagValue: "20170101"},
+		{TagKey: "username", TagValue: "test"},
+		{TagKey: "birdthday", TagValue: "20170101"},
 	}
 	tagItems, _ := json.Marshal(tagItemArr)
 

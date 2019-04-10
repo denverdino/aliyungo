@@ -13,6 +13,7 @@ func TestLoadBalancer(t *testing.T) {
 	creationArgs := CreateLoadBalancerArgs{
 		RegionId:         common.Beijing,
 		LoadBalancerName: "test-slb",
+		LoadBalancerSpec: S2Medium, // eni not support slb.s0.share slb(default slb.s0.share)
 		AddressType:      InternetAddressType,
 		ClientToken:      client.GenerateClientToken(),
 	}

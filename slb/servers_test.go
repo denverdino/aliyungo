@@ -8,7 +8,13 @@ func testBackendServers(t *testing.T, client *Client, loadBalancerId string) {
 		BackendServerType{
 			ServerId: TestInstanceId,
 			Weight:   100,
+			Type:     "ecs",
 		},
+		//BackendServerType{
+		//	ServerId: TestENIId,
+		//	Weight:   100,
+		//	Type:     "eni",
+		//},
 	}
 
 	servers, err := client.AddBackendServers(loadBalancerId, backendServers)
@@ -29,7 +35,7 @@ func testBackendServers(t *testing.T, client *Client, loadBalancerId string) {
 
 	t.Logf("Backend servers: %++v", servers)
 
-	servers, err = client.RemoveBackendServers(loadBalancerId, []string{TestInstanceId})
+	servers, err = client.RemoveBackendServers(loadBalancerId, backendServers)
 	if err != nil {
 		t.Errorf("Failed to RemoveBackendServers: %v", err)
 	}

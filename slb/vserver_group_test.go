@@ -1,12 +1,11 @@
 package slb
 
 import (
-	"testing"
 	"encoding/json"
+	"testing"
 
-	"github.com/denverdino/aliyungo/common"
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
+	"github.com/denverdino/aliyungo/common"
 )
 
 var client = NewClient("your accessId", "your accessId secret")
@@ -68,7 +67,7 @@ func TestDescribeVServerGroups(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	} else {
-		fmt.Printf(util.PrettyJson(response))
+		fmt.Printf(PrettyJson(response))
 	}
 }
 

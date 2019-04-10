@@ -16,6 +16,7 @@ var (
 	TestVServerGroupID  = "MY_VSERVER_GROUPID"
 	TestListenerPort    = 9000
 	TestInstanceId      = "MY_INSTANCE_ID"
+	TestENIId           = "MY_ENI_ID"
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
 	TestIAmRich         = false
 	TestQuick           = false

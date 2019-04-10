@@ -90,7 +90,7 @@ func TestGetReader(t *testing.T) {
 	}
 }
 
-func aTestGetNotFound(t *testing.T) {
+func TestGetNotFound(t *testing.T) {
 
 	b := client.Bucket("non-existent-bucket")
 	_, err := b.Get("non-existent")

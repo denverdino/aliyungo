@@ -12,7 +12,7 @@ var (
 	policy_name      string
 	policy_document  = PolicyDocument{
 		Statement: []PolicyItem{
-			PolicyItem{
+			{
 				Action:   "*",
 				Effect:   "Allow",
 				Resource: "*",

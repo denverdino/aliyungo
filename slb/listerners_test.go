@@ -49,11 +49,11 @@ func testListeners(t *testing.T, client *Client, loadBalancerId string) {
 
 func TestDescribeListener(t *testing.T) {
 
-	response, err := client.DescribeLoadBalancerTCPListenerAttribute(loadBalancerId,22)
+	response, err := client.DescribeLoadBalancerTCPListenerAttribute(loadBalancerId, 22)
 	if err != nil {
 		t.Error(err)
 	} else {
-		fmt.Printf(PrettyJson(response))
+		fmt.Println(PrettyJson(response))
 	}
 }
 
@@ -63,7 +63,7 @@ func TestDescribeSLB(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	} else {
-		fmt.Printf(PrettyJson(response))
+		fmt.Println(PrettyJson(response))
 	}
 }
 

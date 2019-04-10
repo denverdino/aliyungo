@@ -51,7 +51,7 @@ func canonicalizeResource(req *request) string {
 	canonicalizedResource := req.path
 	var paramNames []string
 	if req.params != nil && len(req.params) > 0 {
-		for k, _ := range req.params {
+		for k := range req.params {
 			paramNames = append(paramNames, k)
 		}
 		sort.Strings(paramNames)
@@ -69,7 +69,7 @@ func canonicalizeResource(req *request) string {
 func canonicalizeHeader(headers map[string]string) string {
 	var canonicalizedHeaders []string
 
-	for k, _ := range headers {
+	for k := range headers {
 		if lower := strings.ToLower(k); strings.HasPrefix(lower, HeaderSLSPrefix1) || strings.HasPrefix(lower, HeaderSLSPrefix2) {
 			canonicalizedHeaders = append(canonicalizedHeaders, lower)
 		}

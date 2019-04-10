@@ -90,7 +90,7 @@ func TestGetReader(t *testing.T) {
 	}
 }
 
-func aTestGetNotFound(t *testing.T) {
+func TestGetNotFound(t *testing.T) {
 
 	b := client.Bucket("non-existent-bucket")
 	_, err := b.Get("non-existent")
@@ -391,9 +391,9 @@ func TestDelMultiObjects(t *testing.T) {
 
 	b := client.Bucket(TestBucket)
 	objects := []oss.Object{
-		oss.Object{Key: "newname"},
-		oss.Object{Key: "name-sse"},
-		oss.Object{Key: "newname-sse"},
+		{Key: "newname"},
+		{Key: "name-sse"},
+		{Key: "newname-sse"},
 	}
 	err := b.DelMulti(oss.Delete{
 		Quiet:   false,

@@ -6,7 +6,7 @@ func TestDescribeRegions(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	args := &DescribeRegionsArgs{
-	//RegionId: common.Beijing,
+		//RegionId: common.Beijing,
 	}
 
 	regions, err := client.DescribeRegions(args)

@@ -164,7 +164,11 @@ func testCreateInstanceVpc(t *testing.T, client *Client, regionId common.Region,
 	t.Logf("Instance %s is created successfully.", instanceId)
 	instance, err := client.DescribeInstanceAttribute(instanceId)
 	t.Logf("Instance: %++v  %v", instance, err)
+
 	err = client.WaitForInstance(instanceId, Stopped, 0)
+	if err != nil {
+		t.Errorf("Failed to wait instance to stopped %s: %v", instanceId, err)
+	}
 
 	err = client.StartInstance(instanceId)
 	if err != nil {

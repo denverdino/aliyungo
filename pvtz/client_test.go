@@ -43,7 +43,7 @@ func TestAddZone(t *testing.T) {
 	err = client.BindZoneVpc(&BindZoneVpcArgs{
 		ZoneId: zoneId,
 		Vpcs: []VPCType{
-			VPCType{
+			{
 				RegionId: common.Beijing,
 				VpcId:    TestVPCId,
 			},

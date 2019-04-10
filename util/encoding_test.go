@@ -65,8 +65,8 @@ func TestConvertToQueryValues(t *testing.T) {
 		StringArray:  []string{"abc", "xyz"},
 		StringArray2: []string{"abc", "xyz"},
 		StructArray: []SubStruct{
-			SubStruct{A: "a", B: 1},
-			SubStruct{A: "x", B: 2},
+			{A: "a", B: 1},
+			{A: "x", B: 2},
 		},
 		SubStruct: SubStruct{A: "M", B: 0},
 		test:      TestString("test"),

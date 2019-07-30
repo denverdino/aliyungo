@@ -136,15 +136,17 @@ type KubernetesStackArgs struct {
 }
 
 type KubernetesCreationArgs struct {
-	DisableRollback bool   `json:"disable_rollback"`
-	Name            string `json:"name"`
-	TimeoutMins     int64  `json:"timeout_mins"`
-	ZoneId          string `json:"zoneid,omitempty"`
-	VPCID           string `json:"vpcid,omitempty"`
-	VSwitchId       string `json:"vswitchid,omitempty"`
-	ImageId         string `json:"image_id"`
-	ContainerCIDR   string `json:"container_cidr,omitempty"`
-	ServiceCIDR     string `json:"service_cidr,omitempty"`
+	DisableRollback bool     `json:"disable_rollback"`
+	Name            string   `json:"name"`
+	TimeoutMins     int64    `json:"timeout_mins"`
+	ZoneId          string   `json:"zoneid,omitempty"`
+	VPCID           string   `json:"vpcid,omitempty"`
+	RegionId        string   `json:"region_id,omitempty"`
+	VSwitchId       string   `json:"vswitchid,omitempty"`
+	VSwitchIds      []string `json:"vswitch_ids,omitempty"`
+	ImageId         string   `json:"image_id"`
+	ContainerCIDR   string   `json:"container_cidr,omitempty"`
+	ServiceCIDR     string   `json:"service_cidr,omitempty"`
 
 	MasterInstanceType       string           `json:"master_instance_type,omitempty"`
 	MasterSystemDiskSize     int64            `json:"master_system_disk_size,omitempty"`
@@ -157,6 +159,7 @@ type KubernetesCreationArgs struct {
 	MasterAutoRenewPeriod    int    `json:"master_auto_renew_period"`
 
 	WorkerInstanceType       string           `json:"worker_instance_type,omitempty"`
+	WorkerInstanceTypes      []string         `json:"worker_instance_types,omitempty"`
 	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size,omitempty"`
 	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category,omitempty"`
 	WorkerDataDisk           bool             `json:"worker_data_disk"`
@@ -264,6 +267,7 @@ type KubernetesClusterMetaData struct {
 	SubClass          string `json:"SubClass"`
 }
 
+// deprecated
 type KubernetesClusterParameter struct {
 	ServiceCidr       string `json:"ServiceCIDR"`
 	ContainerCidr     string `json:"ContainerCIDR"`
@@ -371,20 +375,7 @@ func (client *Client) DescribeKubernetesCluster(id string) (cluster KubernetesCl
 	cluster.MetaData = metaData
 	cluster.RawMetaData = ""
 
-	cluster.Parameters.WorkerDataDisk = parseBoolOrNil(cluster.Parameters.RawWorkerDataDisk)
-	cluster.Parameters.PublicSLB = parseBoolOrNil(cluster.Parameters.RawPublicSLB)
-	cluster.Parameters.MasterAutoRenew = parseBoolOrNil(cluster.Parameters.RawMasterAutoRenew)
-	cluster.Parameters.WorkerAutoRenew = parseBoolOrNil(cluster.Parameters.RawWorkerAutoRenew)
-
 	return
-}
-
-func parseBoolOrNil(rawField string) *bool {
-	boolVal, err := strconv.ParseBool(rawField)
-	if err == nil {
-		return &boolVal
-	}
-	return nil
 }
 
 type ClusterResizeArgs struct {
@@ -406,7 +397,7 @@ func (client *Client) ResizeCluster(clusterID string, args *ClusterResizeArgs) e
 }
 
 // deprecated
-// use ResizeKubernetesCluster instead
+// use ScaleKubernetesCluster instead
 func (client *Client) ResizeKubernetes(clusterID string, args *KubernetesCreationArgs) error {
 	return client.Invoke("", http.MethodPut, "/clusters/"+clusterID, nil, args, nil)
 }
@@ -417,8 +408,9 @@ type KubernetesClusterResizeArgs struct {
 	LoginPassword   string `json:"login_password,omitempty"`
 
 	// Single AZ
-	WorkerInstanceType string `json:"worker_instance_type"`
-	NumOfNodes         int64  `json:"num_of_nodes"`
+	WorkerInstanceType  string   `json:"worker_instance_type"`
+	WorkerInstanceTypes []string `json:"worker_instance_types"`
+	NumOfNodes          int64    `json:"num_of_nodes"`
 
 	// Multi AZ
 	WorkerInstanceTypeA string `json:"worker_instance_type_a"`
@@ -429,8 +421,24 @@ type KubernetesClusterResizeArgs struct {
 	NumOfNodesC         int64  `json:"num_of_nodes_c"`
 }
 
+// deprecated
+// use ScaleKubernetesCluster instead
 func (client *Client) ResizeKubernetesCluster(clusterID string, args *KubernetesClusterResizeArgs) error {
 	return client.Invoke("", http.MethodPut, "/clusters/"+clusterID, nil, args, nil)
+}
+
+type KubernetesClusterScaleArgs struct {
+	LoginPassword            string           `json:"login_password,omitempty"`
+	KeyPair                  string           `json:"key_pair,omitempty"`
+	WorkerInstanceTypes      []string         `json:"worker_instance_types"`
+	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size"`
+	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category"`
+	WorkerDataDisk           bool             `json:"worker_data_disk"`
+	Count                    int              `json:"count"`
+}
+
+func (client *Client) ScaleKubernetesCluster(clusterID string, args *KubernetesClusterScaleArgs) error {
+	return client.Invoke("", http.MethodPost, "/api/v2/clusters/"+clusterID, nil, args, nil)
 }
 
 func (client *Client) ModifyClusterName(clusterID, clusterName string) error {

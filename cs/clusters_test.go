@@ -51,57 +51,15 @@ func TestClient_DescribeKubernetesClusters(t *testing.T) {
 			t.Errorf("Failed to DescribeCluster: %v", err)
 		}
 		t.Logf("Cluster Describe: %++v", c)
-		t.Logf("Cluster KeyPair %v", c.Parameters.KeyPair)
-		t.Logf("Cluster WorkerDataDisk %v", *c.Parameters.WorkerDataDisk)
-
-		t.Logf("Cluster MasterInstanceChargeType %v", c.Parameters.MasterInstanceChargeType)
-		if c.Parameters.MasterInstanceChargeType == "PrePaid" {
-			t.Logf("Cluster MasterAutoRenew %v", *c.Parameters.MasterAutoRenew)
-			t.Logf("Cluster MasterAutoRenewPeriod %v", c.Parameters.MasterAutoRenewPeriod)
-			t.Logf("Cluster MasterPeriod %v", c.Parameters.MasterPeriod)
-			t.Logf("Cluster MasterPeriodUnit %v", c.Parameters.MasterPeriodUnit)
-		}
-
-		t.Logf("Cluster WorkerInstanceChargeType %v", c.Parameters.WorkerInstanceChargeType)
-		if c.Parameters.WorkerInstanceChargeType == "PrePaid" {
-			t.Logf("Cluster WorkerAutoRenew %v", *c.Parameters.WorkerAutoRenew)
-			t.Logf("Cluster WorkerAutoRenewPeriod %v", c.Parameters.WorkerAutoRenewPeriod)
-			t.Logf("Cluster WorkerPeriod %v", c.Parameters.WorkerPeriod)
-			t.Logf("Cluster WorkerPeriodUnit %v", c.Parameters.WorkerPeriodUnit)
-		}
-
-		if c.Parameters.WorkerDataDisk != nil && *c.Parameters.WorkerDataDisk {
-			t.Logf("Cluster WorkerDataDiskSize %v", c.Parameters.WorkerDataDiskSize)
-			t.Logf("Cluster WorkerDataDiskCategory %v", c.Parameters.WorkerDataDiskCategory)
-		}
-		t.Logf("Cluster ImageId %v", c.Parameters.ImageId)
-		t.Logf("Cluster NodeCIDRMask %v", c.Parameters.NodeCIDRMask)
-		t.Logf("Cluster LoggingType %v", c.Parameters.LoggingType)
-		t.Logf("Cluster SLSProjectName %v", c.Parameters.SLSProjectName)
-		if c.Parameters.PublicSLB != nil {
-			t.Logf("Cluster PublicSLB %v", *c.Parameters.PublicSLB)
-		}
 
 		if c.MetaData.MultiAZ || c.MetaData.SubClass == "3az" {
 			t.Logf("%v is a MultiAZ kubernetes cluster", c.ClusterID)
-			t.Logf("Cluster VSWA ID %v", c.Parameters.VSwitchIdA)
-			t.Logf("Cluster VSWB ID %v", c.Parameters.VSwitchIdB)
-			t.Logf("Cluster VSWC ID %v", c.Parameters.VSwitchIdC)
-			t.Logf("Cluster MasterInstanceTypeA %v", c.Parameters.MasterInstanceTypeA)
-			t.Logf("Cluster MasterInstanceTypeB %v", c.Parameters.MasterInstanceTypeB)
-			t.Logf("Cluster MasterInstanceTypeC %v", c.Parameters.MasterInstanceTypeC)
-			t.Logf("Cluster NumOfNodeA %v", c.Parameters.NumOfNodesA)
-			t.Logf("Cluster NumOfNodeB %v", c.Parameters.NumOfNodesB)
-			t.Logf("Cluster NumOfNodeC %v", c.Parameters.NumOfNodesC)
 		} else {
 			if cluster.ClusterType == "ManagedKubernetes" {
 				t.Logf("%v is a Managed kubernetes cluster", c.ClusterID)
 			} else {
 				t.Logf("%v is a SingleAZ kubernetes cluster", c.ClusterID)
 			}
-			t.Logf("Cluster VSW ID %v", c.Parameters.VSwitchID)
-			t.Logf("Cluster MasterInstanceType %v", c.Parameters.MasterInstanceType)
-			t.Logf("Cluster NumOfNode %v", c.Parameters.NumOfNodes)
 		}
 	}
 }
@@ -312,19 +270,22 @@ func _TestCreateKubernetesMultiAZCluster(t *testing.T) {
 	t.Logf("Cluster: %++v", cluster)
 }
 
-func _TestResizeKubernetesCluster(t *testing.T) {
+func TestScaleKubernetesCluster(t *testing.T) {
+	// Comment below to test
+	t.SkipNow()
+
 	client := NewTestClientForDebug()
 
-	args := KubernetesClusterResizeArgs{
-		DisableRollback:    true,
-		TimeoutMins:        60,
-		LoginPassword:      "test-password123",
-		WorkerInstanceType: "ecs.sn1ne.large",
-		NumOfNodes:         2,
+	args := KubernetesClusterScaleArgs{
+		LoginPassword:            "test-password123",
+		WorkerInstanceTypes:      []string{"ecs.sn1ne.large"},
+		WorkerSystemDiskCategory: "cloud_ssd",
+		WorkerSystemDiskSize:     int64(40),
+		Count:                    2,
 	}
 
-	err := client.ResizeKubernetesCluster("c3419330390a94906bcacc55bfa9dd21f", &args)
+	err := client.ScaleKubernetesCluster("c3419330390a94906bcacc55bfa9dd21f", &args)
 	if err != nil {
-		t.Fatalf("Failed to TestResizeKubernetesCluster: %v", err)
+		t.Fatalf("Failed to TestScaleKubernetesCluster: %v", err)
 	}
 }

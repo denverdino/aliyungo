@@ -34,7 +34,9 @@ type DeleteNetworkInterfaceResponse struct {
 type DescribeNetworkInterfacesArgs struct {
 	RegionId             common.Region
 	VSwitchId            string
+	VpcID                string
 	PrimaryIpAddress     string
+	PrivateIpAddress     []string `query:"list"`
 	SecurityGroupId      string
 	NetworkInterfaceName string
 	Type                 string

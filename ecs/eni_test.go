@@ -48,6 +48,20 @@ func TestDescribeENI(t *testing.T) {
 	t.Logf("%+v", resp.NetworkInterfaceSets.NetworkInterfaceSet[0])
 }
 
+func TestFindENIByPrivateIP(t *testing.T) {
+	req := DescribeNetworkInterfacesArgs{
+		RegionId:           common.Shanghai,
+		VpcID:              "vpc-xxx",
+		PrivateIpAddress:   []string{"192.168.108.191"},
+	}
+	client := NewTestClient()
+	resp, err := client.DescribeNetworkInterfaces(&req)
+	if err != nil {
+		t.Errorf("Failed to DescribeNetworkInterfaces: %v", err)
+	}
+	t.Logf("%+v", resp.NetworkInterfaceSets.NetworkInterfaceSet)
+}
+
 func TestUnAssignPrivateIPAddresses(t *testing.T) {
 	req := UnassignPrivateIpAddressesArgs{
 		RegionId:           common.Beijing,

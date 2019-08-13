@@ -7,6 +7,7 @@ type CreateSnatEntryArgs struct {
 	SnatTableId     string
 	SourceVSwitchId string
 	SnatIp          string
+	SourceCIDR      string
 }
 
 type CreateSnatEntryResponse struct {

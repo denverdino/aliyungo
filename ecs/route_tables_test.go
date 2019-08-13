@@ -11,7 +11,7 @@ func testRouteTable(t *testing.T, client *Client, regionId common.Region, vpcId 
 	createArgs := CreateRouteEntryArgs{
 		RouteTableId:         routeTableId,
 		DestinationCidrBlock: cidrBlock,
-		NextHopType:          NextHopIntance,
+		NextHopType:          NextHopInstance,
 		NextHopId:            instanceId,
 		ClientToken:          client.GenerateClientToken(),
 	}

@@ -1,7 +1,16 @@
 package ecs
 
 import (
+	"time"
+
 	"github.com/denverdino/aliyungo/common"
+)
+
+type SnatEntryStatus string
+
+const (
+	SnatEntryStatusPending   = SnatEntryStatus("Pending")
+	SnatEntryStatusAvailable = SnatEntryStatus("Available")
 )
 
 type CreateSnatEntryArgs struct {
@@ -24,7 +33,7 @@ type SnatEntrySetType struct {
 	SnatTableId     string
 	SourceCIDR      string
 	SourceVSwitchId string
-	Status          string
+	Status          SnatEntryStatus
 }
 
 type DescribeSnatTableEntriesArgs struct {
@@ -109,4 +118,38 @@ func (client *Client) DeleteSnatEntry(args *DeleteSnatEntryArgs) error {
 	response := DeleteSnatEntryResponse{}
 	err := client.Invoke("DeleteSnatEntry", args, &response)
 	return err
+}
+
+// WaitForSnatEntryAvailable waits for SnatEntry to available status
+func (client *Client) WaitForSnatEntryAvailable(regionId common.Region, snatTableId, snatEntryId string, timeout int) error {
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+
+	args := &DescribeSnatTableEntriesArgs{
+		RegionId:    regionId,
+		SnatTableId: snatTableId,
+		SnatEntryId: snatEntryId,
+	}
+
+	for {
+		snatEntries, _, err := client.DescribeSnatTableEntries(args)
+		if err != nil {
+			return err
+		}
+
+		if len(snatEntries) == 0 {
+			return common.GetClientErrorFromString("Not found")
+		}
+		if snatEntries[0].Status == SnatEntryStatusAvailable {
+			break
+		}
+
+		timeout = timeout - DefaultWaitForInterval
+		if timeout <= 0 {
+			return common.GetClientErrorFromString("Timeout")
+		}
+		time.Sleep(DefaultWaitForInterval * time.Second)
+	}
+	return nil
 }

@@ -50,9 +50,9 @@ func TestDescribeENI(t *testing.T) {
 
 func TestFindENIByPrivateIP(t *testing.T) {
 	req := DescribeNetworkInterfacesArgs{
-		RegionId:           common.Shanghai,
-		VpcID:              "vpc-xxx",
-		PrivateIpAddress:   []string{"192.168.108.191"},
+		RegionId:         common.Shanghai,
+		VpcID:            "vpc-xxx",
+		PrivateIpAddress: []string{"192.168.108.191"},
 	}
 	client := NewTestClient()
 	resp, err := client.DescribeNetworkInterfaces(&req)

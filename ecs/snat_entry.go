@@ -1,6 +1,8 @@
 package ecs
 
-import "github.com/denverdino/aliyungo/common"
+import (
+	"github.com/denverdino/aliyungo/common"
+)
 
 type CreateSnatEntryArgs struct {
 	RegionId        common.Region
@@ -26,8 +28,13 @@ type SnatEntrySetType struct {
 }
 
 type DescribeSnatTableEntriesArgs struct {
-	RegionId    common.Region
-	SnatTableId string
+	RegionId        common.Region
+	SnatTableId     string
+	SnatEntryId     string
+	SnatEntryName   string
+	SnatIp          string
+	SourceCIDR      string
+	SourceVSwitchId string
 	common.Pagination
 }
 
@@ -40,10 +47,11 @@ type DescribeSnatTableEntriesResponse struct {
 }
 
 type ModifySnatEntryArgs struct {
-	RegionId    common.Region
-	SnatTableId string
-	SnatEntryId string
-	SnatIp      string
+	RegionId      common.Region
+	SnatTableId   string
+	SnatEntryId   string
+	SnatIp        string
+	SnatEntryName string
 }
 
 type ModifySnatEntryResponse struct {

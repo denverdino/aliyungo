@@ -13,6 +13,7 @@ var (
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
 	TestSecurityToken   = os.Getenv("SecurityToken")
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
+	TestClusterId = os.Getenv("ClusterId")
 )
 
 var testClient *Client

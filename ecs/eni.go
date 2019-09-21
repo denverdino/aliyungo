@@ -2,10 +2,10 @@ package ecs
 
 import (
 	"fmt"
-	"github.com/denverdino/aliyungo/util"
 	"time"
 
 	"github.com/denverdino/aliyungo/common"
+	"github.com/denverdino/aliyungo/util"
 )
 
 type CreateNetworkInterfaceArgs struct {
@@ -13,9 +13,10 @@ type CreateNetworkInterfaceArgs struct {
 	VSwitchId            string
 	PrimaryIpAddress     string // optional
 	SecurityGroupId      string
-	NetworkInterfaceName string // optional
-	Description          string // optional
-	ClientToken          string // optional
+	NetworkInterfaceName string            // optional
+	Description          string            // optional
+	ClientToken          string            // optional
+	Tag                  map[string]string // optional
 }
 
 type CreateNetworkInterfaceResponse struct {

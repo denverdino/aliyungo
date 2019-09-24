@@ -435,6 +435,12 @@ type KubernetesClusterScaleArgs struct {
 	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category"`
 	WorkerDataDisk           bool             `json:"worker_data_disk"`
 	Count                    int              `json:"count"`
+
+	//data disk
+	WorkerDataDiskCategory   string `json:"worker_data_disk_category"`
+	WorkerDataDiskSize       int64 `json:"worker_data_disk_size"`
+	WorkerDataDiskEncrypted  string 	`json:"worker_data_disk_encrypted"`
+	WorkerDataDiskKMSKeyId   string `json:"worker_data_disk_kms_key_id"`
 }
 
 func (client *Client) ScaleKubernetesCluster(clusterID string, args *KubernetesClusterScaleArgs) error {

@@ -272,7 +272,7 @@ func _TestCreateKubernetesMultiAZCluster(t *testing.T) {
 
 func TestScaleKubernetesCluster(t *testing.T) {
 	// Comment below to test
-	t.SkipNow()
+	//t.SkipNow()
 
 	client := NewTestClientForDebug()
 
@@ -282,9 +282,12 @@ func TestScaleKubernetesCluster(t *testing.T) {
 		WorkerSystemDiskCategory: "cloud_ssd",
 		WorkerSystemDiskSize:     int64(40),
 		Count:                    2,
+		WorkerDataDisk:true,
+		WorkerDataDiskCategory:"cloud_ssd",
+		WorkerDataDiskSize:int64(200),
 	}
 
-	err := client.ScaleKubernetesCluster("c3419330390a94906bcacc55bfa9dd21f", &args)
+	err := client.ScaleKubernetesCluster(TestClusterId, &args)
 	if err != nil {
 		t.Fatalf("Failed to TestScaleKubernetesCluster: %v", err)
 	}

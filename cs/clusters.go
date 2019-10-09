@@ -30,6 +30,8 @@ const (
 
 	ClusterTypeKubernetes        = "Kubernetes"
 	ClusterTypeManagedKubernetes = "ManagedKubernetes"
+
+	ClusterTypeServelessKubernetes = "Ask"
 )
 
 var NodeStableClusterState = []ClusterState{Running, Updating, Failed, DeleteFailed, Deleted, InActive}
@@ -437,10 +439,10 @@ type KubernetesClusterScaleArgs struct {
 	Count                    int              `json:"count"`
 
 	//data disk
-	WorkerDataDiskCategory   string `json:"worker_data_disk_category"`
-	WorkerDataDiskSize       int64 `json:"worker_data_disk_size"`
-	WorkerDataDiskEncrypted  string 	`json:"worker_data_disk_encrypted"`
-	WorkerDataDiskKMSKeyId   string `json:"worker_data_disk_kms_key_id"`
+	WorkerDataDiskCategory  string `json:"worker_data_disk_category"`
+	WorkerDataDiskSize      int64  `json:"worker_data_disk_size"`
+	WorkerDataDiskEncrypted string `json:"worker_data_disk_encrypted"`
+	WorkerDataDiskKMSKeyId  string `json:"worker_data_disk_kms_key_id"`
 }
 
 func (client *Client) ScaleKubernetesCluster(clusterID string, args *KubernetesClusterScaleArgs) error {
@@ -483,6 +485,8 @@ type ClusterConfig struct {
 	Config string `json:"config"`
 }
 
+// deprecated
+// Please use new api DescribeClusterUserConfig
 func (client *Client) GetClusterConfig(id string) (config ClusterConfig, err error) {
 	err = client.Invoke("", http.MethodGet, "/k8s/"+id+"/user_config", nil, nil, &config)
 	return

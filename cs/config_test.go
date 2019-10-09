@@ -2,6 +2,7 @@ package cs
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/denverdino/aliyungo/common"
 )
@@ -9,11 +10,14 @@ import (
 //Modify with your Access Key Id and Access Key Secret
 
 var (
-	TestAccessKeyId     = os.Getenv("AccessKeyId")
-	TestAccessKeySecret = os.Getenv("AccessKeySecret")
-	TestSecurityToken   = os.Getenv("SecurityToken")
-	TestRegionID        = common.Region(os.Getenv("RegionId"))
-	TestClusterId = os.Getenv("ClusterId")
+	TestAccessKeyId         = os.Getenv("AccessKeyId")
+	TestAccessKeySecret     = os.Getenv("AccessKeySecret")
+	TestSecurityToken       = os.Getenv("SecurityToken")
+	TestRegionID            = common.Region(os.Getenv("RegionId"))
+	TestVpcId               = os.Getenv("VpcId")
+	TestVSwitchId           = os.Getenv("VSwitchId")
+	TestClusterId           = os.Getenv("ClusterId")
+	TestPrivateIpAddress, _ = strconv.ParseBool(os.Getenv("PrivateIpAddress"))
 )
 
 var testClient *Client

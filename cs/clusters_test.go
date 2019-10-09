@@ -282,9 +282,9 @@ func TestScaleKubernetesCluster(t *testing.T) {
 		WorkerSystemDiskCategory: "cloud_ssd",
 		WorkerSystemDiskSize:     int64(40),
 		Count:                    2,
-		WorkerDataDisk:true,
-		WorkerDataDiskCategory:"cloud_ssd",
-		WorkerDataDiskSize:int64(200),
+		WorkerDataDisk:           true,
+		WorkerDataDiskCategory:   "cloud_ssd",
+		WorkerDataDiskSize:       int64(200),
 	}
 
 	err := client.ScaleKubernetesCluster(TestClusterId, &args)

@@ -79,3 +79,15 @@ func Test_DeleteServelessCluster(t *testing.T) {
 		t.Logf("OK")
 	}
 }
+
+func Test_DescribeServelessKubernetesClusters(t *testing.T) {
+	client := NewTestClientForDebug()
+	clusters, err := client.DescribeServelessKubernetesClusters()
+	if err != nil {
+		t.Errorf("Error = %++v", err)
+	} else {
+		for _, cluster := range clusters {
+			t.Logf("Cluster = %#v", cluster)
+		}
+	}
+}

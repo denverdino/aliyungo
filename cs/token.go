@@ -1,6 +1,8 @@
 package cs
 
 import (
+	"fmt"
+	"github.com/denverdino/aliyungo/common"
 	"net/http"
 )
 
@@ -35,4 +37,13 @@ func (client *Client) DescribeClusterTokens(clusterId string) ([]*ClusterTokenRe
 	response := make([]*ClusterTokenResponse, 0)
 	err := client.Invoke("", http.MethodGet, "/clusters/"+clusterId+"/tokens", nil, nil, &response)
 	return response, err
+}
+
+func (client *Client) DescribeClusterToken(clusterId, token string) (*ClusterTokenResponse, error) {
+	if clusterId == "" || token == "" {
+		return nil, common.GetCustomError("InvalidParamter", "The clusterId or token is empty")
+	}
+	tokenInfo := &ClusterTokenResponse{}
+	err := client.Invoke("", http.MethodGet, fmt.Sprintf("/clusters/%s/tokens/%s", clusterId, token), nil, nil, tokenInfo)
+	return tokenInfo, err
 }

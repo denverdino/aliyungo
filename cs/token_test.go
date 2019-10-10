@@ -60,3 +60,14 @@ func Test_DescribeClusterTokens(t *testing.T) {
 		}
 	}
 }
+
+func Test_DescribeClusterToken(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	token, err := client.DescribeClusterToken(TestClusterId, TestToken)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("Token = %++v", token)
+	}
+}

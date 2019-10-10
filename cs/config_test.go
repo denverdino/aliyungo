@@ -18,6 +18,7 @@ var (
 	TestVSwitchId           = os.Getenv("VSwitchId")
 	TestClusterId           = os.Getenv("ClusterId")
 	TestPrivateIpAddress, _ = strconv.ParseBool(os.Getenv("PrivateIpAddress"))
+	TestToken               = os.Getenv("Token")
 )
 
 var testClient *Client

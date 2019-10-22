@@ -51,8 +51,8 @@ func (this *ServerlessCreationArgs) Validate() error {
 	return nil
 }
 
-//create serveless cluster
-func (client *Client) CreateServelessKubernetesCluster(args *ServerlessCreationArgs) (*ClusterCreationResponse, error) {
+//create Serverless cluster
+func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreationArgs) (*ClusterCreationResponse, error) {
 	if args == nil {
 		return nil, common.GetCustomError("InvalidArgs", "The args is nil ")
 	}
@@ -62,7 +62,7 @@ func (client *Client) CreateServelessKubernetesCluster(args *ServerlessCreationA
 	}
 
 	//reset clusterType,
-	args.ClusterType = ClusterTypeServelessKubernetes
+	args.ClusterType = ClusterTypeServerlessKubernetes
 	cluster := &ClusterCreationResponse{}
 	err := client.Invoke(common.Region(args.RegionId), http.MethodPost, "/clusters", nil, args, &cluster)
 	if err != nil {
@@ -71,8 +71,8 @@ func (client *Client) CreateServelessKubernetesCluster(args *ServerlessCreationA
 	return cluster, nil
 }
 
-//describe serveless cluster
-func (client *Client) DescribeServelessKubernetesCluster(clusterId string) (*ServerlessClusterResponse, error) {
+//describe Serverless cluster
+func (client *Client) DescribeServerlessKubernetesCluster(clusterId string) (*ServerlessClusterResponse, error) {
 	cluster := &ServerlessClusterResponse{}
 	err := client.Invoke("", http.MethodGet, "/clusters/"+clusterId, nil, nil, cluster)
 	if err != nil {
@@ -81,8 +81,8 @@ func (client *Client) DescribeServelessKubernetesCluster(clusterId string) (*Ser
 	return cluster, nil
 }
 
-//describe serveless clsuters
-func (client *Client) DescribeServelessKubernetesClusters() ([]*ServerlessClusterResponse, error) {
+//describe Serverless clsuters
+func (client *Client) DescribeServerlessKubernetesClusters() ([]*ServerlessClusterResponse, error) {
 	allClusters := make([]*ServerlessClusterResponse, 0)
 	askClusters := make([]*ServerlessClusterResponse, 0)
 
@@ -92,7 +92,7 @@ func (client *Client) DescribeServelessKubernetesClusters() ([]*ServerlessCluste
 	}
 
 	for _, cluster := range allClusters {
-		if cluster.ClusterType == ClusterTypeServelessKubernetes {
+		if cluster.ClusterType == ClusterTypeServerlessKubernetes {
 			askClusters = append(askClusters, cluster)
 		}
 	}

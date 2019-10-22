@@ -81,6 +81,25 @@ func (client *Client) DescribeServelessKubernetesCluster(clusterId string) (*Ser
 	return cluster, nil
 }
 
+//describe serveless clsuters
+func (client *Client) DescribeServelessKubernetesClusters() ([]*ServerlessClusterResponse, error) {
+	allClusters := make([]*ServerlessClusterResponse, 0)
+	askClusters := make([]*ServerlessClusterResponse, 0)
+
+	err := client.Invoke("", http.MethodGet, "/clusters", nil, nil, &allClusters)
+	if err != nil {
+		return askClusters, err
+	}
+
+	for _, cluster := range allClusters {
+		if cluster.ClusterType == ClusterTypeServelessKubernetes {
+			askClusters = append(askClusters, cluster)
+		}
+	}
+
+	return askClusters, nil
+}
+
 //new api for get cluster kube user config
 func (client *Client) DescribeClusterUserConfig(clusterId string, privateIpAddress bool) (*ClusterConfig, error) {
 	config := &ClusterConfig{}

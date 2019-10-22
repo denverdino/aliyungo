@@ -9,6 +9,7 @@ type VBackendServerType struct {
 	Weight   int
 	Port     int
 	Type     string
+	Description string
 }
 
 type VServerGroup struct {

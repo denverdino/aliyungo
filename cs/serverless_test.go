@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func Test_CreateServelessKubernetesCluster(t *testing.T) {
+func Test_CreateServerlessKubernetesCluster(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	tags := make([]Tag, 0)
@@ -26,8 +26,8 @@ func Test_CreateServelessKubernetesCluster(t *testing.T) {
 	})
 
 	args := &ServerlessCreationArgs{
-		ClusterType:          ClusterTypeServelessKubernetes,
-		Name:                 fmt.Sprintf("serveless-cluster-%d", time.Now().Unix()),
+		ClusterType:          ClusterTypeServerlessKubernetes,
+		Name:                 fmt.Sprintf("Serverless-cluster-%d", time.Now().Unix()),
 		RegionId:             string(TestRegionID),
 		VpcId:                TestVpcId,
 		VSwitchId:            TestVSwitchId,
@@ -38,7 +38,7 @@ func Test_CreateServelessKubernetesCluster(t *testing.T) {
 		Tags:                 tags,
 	}
 
-	response, err := client.CreateServelessKubernetesCluster(args)
+	response, err := client.CreateServerlessKubernetesCluster(args)
 	if err != nil {
 		t.Errorf("Error %++v", err)
 	} else {
@@ -49,7 +49,7 @@ func Test_CreateServelessKubernetesCluster(t *testing.T) {
 func Test_DescribeCluster(t *testing.T) {
 	client := NewTestClientForDebug()
 
-	cluster, err := client.DescribeServelessKubernetesCluster(TestClusterId)
+	cluster, err := client.DescribeServerlessKubernetesCluster(TestClusterId)
 	if err != nil {
 		t.Errorf("Error = %++v", err)
 	} else {
@@ -69,7 +69,7 @@ func Test_DescribeClusterUserConfig(t *testing.T) {
 	}
 }
 
-func Test_DeleteServelessCluster(t *testing.T) {
+func Test_DeleteServerlessCluster(t *testing.T) {
 	client := NewTestClientForDebug()
 
 	err := client.DeleteCluster(TestClusterId)
@@ -80,9 +80,9 @@ func Test_DeleteServelessCluster(t *testing.T) {
 	}
 }
 
-func Test_DescribeServelessKubernetesClusters(t *testing.T) {
+func Test_DescribeServerlessKubernetesClusters(t *testing.T) {
 	client := NewTestClientForDebug()
-	clusters, err := client.DescribeServelessKubernetesClusters()
+	clusters, err := client.DescribeServerlessKubernetesClusters()
 	if err != nil {
 		t.Errorf("Error = %++v", err)
 	} else {

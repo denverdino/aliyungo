@@ -5,10 +5,11 @@ import (
 )
 
 type VBackendServerType struct {
-	ServerId string
-	Weight   int
-	Port     int
-	Type     string
+	ServerId    string
+	Weight      int
+	Port        int
+	Type        string
+	ServerIp    string
 	Description string
 }
 

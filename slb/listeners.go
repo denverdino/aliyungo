@@ -99,6 +99,8 @@ type HTTPListenerType struct {
 	UnhealthyThreshold     int
 	HealthCheckTimeout     int
 	HealthCheckInterval    int
+	ForwardPort            int
+	ListenerForward        FlagType
 	HealthCheckHttpCode    HealthCheckHttpCodeType
 	VServerGroup           FlagType
 	VServerGroupId         string
@@ -107,6 +109,9 @@ type HTTPListenerType struct {
 	XForwardedFor_SLBIP    FlagType
 	XForwardedFor_proto    FlagType
 	Description            string
+	AclId                  string
+	AclStatus              string
+	AclType                string
 }
 type CreateLoadBalancerHTTPListenerArgs HTTPListenerType
 
@@ -162,6 +167,9 @@ type TCPListenerType struct {
 	VServerGroup              FlagType
 	VServerGroupId            string
 	Description               string
+	AclId                     string
+	AclStatus                 string
+	AclType                   string
 }
 
 type CreateLoadBalancerTCPListenerArgs TCPListenerType
@@ -191,6 +199,10 @@ type UDPListenerType struct {
 	VServerGroup              FlagType
 	VServerGroupId            string
 	Description               string
+
+	AclId     string
+	AclStatus string
+	AclType   string
 }
 type CreateLoadBalancerUDPListenerArgs UDPListenerType
 

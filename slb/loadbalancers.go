@@ -52,6 +52,7 @@ type CreateLoadBalancerArgs struct {
 	SlaveZoneId        string
 	LoadBalancerSpec   LoadBalancerSpecType
 	AddressIPVersion   AddressIPVersionType
+	DeleteProtection   FlagType
 }
 
 type CreateLoadBalancerResponse struct {
@@ -228,6 +229,7 @@ type LoadBalancerType struct {
 	InternetChargeType InternetChargeType
 	CreateTime         string //Why not ISO 6801
 	CreateTimeStamp    util.ISO6801Time
+	DeleteProtection   FlagType
 	ListenerPorts      struct {
 		ListenerPort []int
 	}
@@ -335,4 +337,23 @@ func (client *Client) WaitForLoadBalancerAsyn(loadBalancerId string, status Stat
 		time.Sleep(DefaultWaitForInterval * time.Second)
 	}
 	return nil
+}
+
+type SetLoadBalancerDeleteProtectionArgs struct {
+	LoadBalancerId   string
+	DeleteProtection FlagType
+	RegionId         common.Region
+}
+
+type SetLoadBalancerDeleteProtectionResponse struct {
+	common.Response
+}
+
+// SetLoadBalancerDeleteProtection loadbalancer delete protection
+//
+// You can read doc at https://help.aliyun.com/document_detail/122674.html?spm=a2c4g.11186623.6.720.694f4265hwOdXQ
+func (client *Client) SetLoadBalancerDeleteProtection(args *SetLoadBalancerDeleteProtectionArgs) (err error) {
+	response := &SetLoadBalancerDeleteProtectionResponse{}
+	err = client.Invoke("SetLoadBalancerDeleteProtection", args, response)
+	return err
 }

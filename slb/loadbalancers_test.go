@@ -137,3 +137,42 @@ func TestClient_DescribeLoadBalancers(t *testing.T) {
 		t.Logf("Result = %++v", slbs)
 	}
 }
+
+func TestClient_SetLoadBalancerDeleteProtection(t *testing.T) {
+	client := NewTestNewSLBClientForDebug()
+
+	creationArgs := CreateLoadBalancerArgs{
+		RegionId:         common.Beijing,
+		LoadBalancerName: "test-slb",
+		LoadBalancerSpec: S2Medium,
+		AddressType:      InternetAddressType,
+		ClientToken:      client.GenerateClientToken(),
+	}
+
+	response, err := client.CreateLoadBalancer(&creationArgs)
+	if err != nil {
+		t.Fatalf("Failed to CreateLoadBalancer: %v", err)
+	}
+
+	t.Logf("CreateLoadBalancer result: %v", *response)
+	lbId := response.LoadBalancerId
+
+	args := &SetLoadBalancerDeleteProtectionArgs{
+		LoadBalancerId:   lbId,
+		DeleteProtection: OnFlag,
+		RegionId:         common.Beijing,
+	}
+
+	err = client.SetLoadBalancerDeleteProtection(args)
+	if err != nil {
+		t.Fatalf("Failed %++v", err)
+	}
+	t.Logf("SetLoadBalancerDeleteProtection result: %v", *response)
+
+	err = client.DeleteLoadBalancer(lbId)
+	if err != nil {
+		t.Logf("DeleteLoadBalancer result: %++v", err)
+	} else {
+		t.Fatalf("Failed to set LoadBalancer delete protection.")
+	}
+}

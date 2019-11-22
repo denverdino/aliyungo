@@ -14,6 +14,13 @@ const (
 	PostPaid = InstanceChargeType("PostPaid")
 )
 
+var  RegionalDomainServices = []string{
+	"ecs",
+	"vpc",
+	"slb",
+	"pvtz",
+}
+
 type DescribeEndpointArgs struct {
 	Id          Region
 	ServiceCode string

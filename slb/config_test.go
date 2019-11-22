@@ -45,7 +45,7 @@ var testDebugNewSLBClient *Client
 
 func NewTestNewSLBClientForDebug() *Client {
 	if testDebugNewSLBClient == nil {
-		testDebugNewSLBClient = NewSLBClientWithSecurityToken(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, TestRegionID)
+		testDebugNewSLBClient = NewSLBClientWithSecurityToken4RegionalDomain(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, TestRegionID)
 		testDebugNewSLBClient.SetDebug(true)
 	}
 	return testDebugNewSLBClient

@@ -60,6 +60,16 @@ func NewPVTZClientWithSecurityToken(accessKeyId string, accessKeySecret string, 
 	return NewPVTZClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)
 }
 
+//Onlyfor hangzhou
+func NewPVTZClientWithSecurityToken4RegionalDomain(accessKeyId string, accessKeySecret string, securityToken string, regionID common.Region) *Client {
+	endpoint := os.Getenv("PVTZ_ENDPOINT")
+	if endpoint == "" {
+		endpoint = PVTZDefaultEndpoint
+	}
+
+	return NewPVTZClientWithEndpointAndSecurityToken4RegionalDomain(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)
+}
+
 func NewPVTZClientWithEndpoint(endpoint string, accessKeyId string, accessKeySecret string, regionID common.Region) *Client {
 	return NewPVTZClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "", regionID)
 }
@@ -74,5 +84,19 @@ func NewPVTZClientWithEndpointAndSecurityToken(endpoint string, accessKeyId stri
 		WithServiceCode(PVTZServiceCode).
 		WithRegionID(regionID).
 		InitClient()
+	return client
+}
+
+//only for hangzhou
+func NewPVTZClientWithEndpointAndSecurityToken4RegionalDomain(endpoint string, accessKeyId string, accessKeySecret string, securityToken string, regionID common.Region) *Client {
+	client := &Client{}
+	client.WithEndpoint(endpoint).
+		WithVersion(PVTZAPIVersion).
+		WithAccessKeyId(accessKeyId).
+		WithAccessKeySecret(accessKeySecret).
+		WithSecurityToken(securityToken).
+		WithServiceCode(PVTZServiceCode).
+		WithRegionID(regionID).
+		InitClient4RegionalDomain()
 	return client
 }

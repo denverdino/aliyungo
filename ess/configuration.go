@@ -90,6 +90,7 @@ type ScalingConfigurationItemType struct {
 	CreationTime             string
 	InternetMaxBandwidthIn   int
 	InternetMaxBandwidthOut  int
+	SystemDiskSize           int
 	SystemDiskCategory       string
 	DataDisks                struct {
 		DataDisk []DataDiskItemType

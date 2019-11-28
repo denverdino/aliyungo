@@ -9,7 +9,7 @@ import (
 const (
 	Web                       = "web"
 	Download                  = "download"
-	video                     = "video"
+	Video                     = "video"
 	LiveStream                = "liveStream"
 	Ipaddr                    = "ipaddr"
 	Domain                    = "domain"
@@ -27,7 +27,7 @@ const (
 	AccessControlMaxAge       = "Access-Control-Max-Age"
 )
 
-var CdnTypes = []string{Web, Download, video, LiveStream}
+var CdnTypes = []string{Web, Download, Video, LiveStream}
 var SourceTypes = []string{Ipaddr, Domain, OSS}
 var Scopes = []string{Domestic, Overseas, Global}
 var HeaderKeys = []string{ContentType, CacheControl, ContentDisposition, ContentLanguage, Expires, AccessControlAllowMethods, AccessControlAllowOrigin, AccessControlMaxAge}

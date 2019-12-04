@@ -115,7 +115,7 @@ func testDescribeZoneRecords(t *testing.T, zoneId string) {
 }
 
 func TestDescribeChangeLogs(t *testing.T) {
-	client := NewTestClient()
+	client := NewTestLocationClientForDebug()
 
 	changeLogs, err := client.DescribeChangeLogs(&DescribeChangeLogsArgs{})
 

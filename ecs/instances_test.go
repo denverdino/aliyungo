@@ -332,7 +332,7 @@ func TestClient_DescribeInstances(t *testing.T) {
 		RegionId: TestRegionID,
 		Pagination: common.Pagination{
 			PageNumber: 1,
-			PageSize:   100,
+			PageSize:   2,
 		},
 		//SecurityToken: TestSecurityToken,
 	}

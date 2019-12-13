@@ -52,7 +52,7 @@ func (this *ServerlessCreationArgs) Validate() error {
 }
 
 //create Serverless cluster
-func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreationArgs) (*ClusterCreationResponse, error) {
+func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreationArgs) (*ClusterCommonResponse, error) {
 	if args == nil {
 		return nil, common.GetCustomError("InvalidArgs", "The args is nil ")
 	}
@@ -63,7 +63,7 @@ func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreation
 
 	//reset clusterType,
 	args.ClusterType = ClusterTypeServerlessKubernetes
-	cluster := &ClusterCreationResponse{}
+	cluster := &ClusterCommonResponse{}
 	err := client.Invoke(common.Region(args.RegionId), http.MethodPost, "/clusters", nil, args, &cluster)
 	if err != nil {
 		return nil, err

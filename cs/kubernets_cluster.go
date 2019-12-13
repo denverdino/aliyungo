@@ -25,6 +25,7 @@ type KubernetesClusterType string
 var (
 	DelicatedKubernetes = KubernetesClusterType("Kubernetes")
 	ManagedKubernetes   = KubernetesClusterType("ManagedKubernetes")
+	ServerlessKubernetes = KubernetesClusterType("Ask")
 )
 
 type ProxyMode string
@@ -128,6 +129,7 @@ type MasterArgs struct {
 	MasterDeletionProtection *bool `json:"master_deletion_protection"`
 }
 
+
 type WorkerArgs struct {
 	WorkerVSwitchIds    []string `json:"worker_vswitch_ids"`
 	WorkerInstanceTypes []string `json:"worker_instance_types"`
@@ -211,6 +213,8 @@ type ManagedKubernetesClusterCreationRequest struct {
 	ClusterArgs
 	WorkerArgs
 }
+
+//Validate
 
 //Create DelicatedKubernetes Cluster
 func (client *Client) CreateDelicatedKubernetesCluster(request *DelicatedKubernetesClusterCreationRequest) (*ClusterCommonResponse, error) {

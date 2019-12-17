@@ -63,9 +63,8 @@ type ClusterArgs struct {
 
 	NodePortRange string `json:"node_port_range"`
 
-	// disk snapshot policy
-	MasterSnapshotPolicyId string `json:"master_system_disk_snapshot_policy_id"`
-	WorkerSnapshotPolicyId string `json:"worker_system_disk_snapshot_policy_id"`
+	//ImageId
+	ImageId           string `json:"image_id"`
 
 	PodVswitchIds []string `json:"pod_vswitch_ids"` // eni多网卡模式下，需要传额外的vswitchid给addon
 
@@ -127,6 +126,9 @@ type MasterArgs struct {
 
 	//master node deletion protection
 	MasterDeletionProtection *bool `json:"master_deletion_protection"`
+
+	// disk snapshot policy
+	MasterSnapshotPolicyId string `json:"master_system_disk_snapshot_policy_id"`
 }
 
 
@@ -154,6 +156,9 @@ type WorkerArgs struct {
 
 	//Runtime only for worker nodes
 	Runtime Runtime `json:"runtime"`
+
+	// disk snapshot policy
+	WorkerSnapshotPolicyId string `json:"worker_system_disk_snapshot_policy_id"`
 }
 
 type ScaleOutKubernetesClusterRequest struct {
@@ -175,6 +180,7 @@ type ScaleOutKubernetesClusterRequest struct {
 
 	Tags   []Tag   `json:"tags"`
 	Taints []Taint `json:"taints"`
+	ImageId           string `json:"image_id"`
 
 	UserData string `json:"user_data"`
 

@@ -9,7 +9,7 @@ import (
 )
 
 type ServerlessCreationArgs struct {
-	ClusterType          string `json:"cluster_type"`
+	ClusterType          KubernetesClusterType `json:"cluster_type"`
 	Name                 string `json:"name"`
 	RegionId             string `json:"region_id"`
 	VpcId                string `json:"vpc_id"`
@@ -24,7 +24,7 @@ type ServerlessCreationArgs struct {
 type ServerlessClusterResponse struct {
 	ClusterId          string       `json:"cluster_id"`
 	Name               string       `json:"name"`
-	ClusterType        string       `json:"cluster_type"`
+	ClusterType        KubernetesClusterType       `json:"cluster_type"`
 	RegionId           string       `json:"region_id"`
 	State              ClusterState `json:"state"`
 	VpcId              string       `json:"vpc_id"`
@@ -52,7 +52,7 @@ func (this *ServerlessCreationArgs) Validate() error {
 }
 
 //create Serverless cluster
-func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreationArgs) (*ClusterCreationResponse, error) {
+func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreationArgs) (*ClusterCommonResponse, error) {
 	if args == nil {
 		return nil, common.GetCustomError("InvalidArgs", "The args is nil ")
 	}
@@ -62,8 +62,8 @@ func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreation
 	}
 
 	//reset clusterType,
-	args.ClusterType = ClusterTypeServerlessKubernetes
-	cluster := &ClusterCreationResponse{}
+	args.ClusterType = ServerlessKubernetes
+	cluster := &ClusterCommonResponse{}
 	err := client.Invoke(common.Region(args.RegionId), http.MethodPost, "/clusters", nil, args, &cluster)
 	if err != nil {
 		return nil, err

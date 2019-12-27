@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"sync"
+
 	//"net/http"
 	"testing"
 	"time"
@@ -291,7 +292,7 @@ func TestCopyLargeFile(t *testing.T) {
 		t.Fatalf("Failed for Get file: %v", err)
 	}
 
-	if bytes.Compare(bytes1, bytes2) != 0 {
+	if !bytes.Equal(bytes1, bytes2) {
 		t.Fatal("The result should be equal")
 	}
 }
@@ -327,7 +328,7 @@ func TestCopyLargeFileInParallel(t *testing.T) {
 		t.Fatalf("Failed for Get file: %v", err)
 	}
 
-	if bytes.Compare(bytes1, bytes2) != 0 {
+	if !bytes.Equal(bytes1, bytes2) {
 		t.Fatal("The result should be equal")
 	}
 }

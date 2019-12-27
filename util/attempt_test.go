@@ -14,9 +14,9 @@ func TestAttemptTiming(t *testing.T) {
 	got := make([]time.Duration, 0, len(want)) // avoid allocation when testing timing
 	t0 := time.Now()
 	for a := testAttempt.Start(); a.Next(); {
-		got = append(got, time.Now().Sub(t0))
+		got = append(got, time.Since(t0))
 	}
-	got = append(got, time.Now().Sub(t0))
+	got = append(got, time.Since(t0))
 	if len(got) != len(want) {
 		t.Fatalf("Failed!")
 	}

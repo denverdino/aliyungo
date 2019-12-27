@@ -66,7 +66,7 @@ func (c *Client) initServer() error {
 	servers := strings.Split(body, "\n")
 
 	for k, v := range servers {
-		if strings.Index(v, ":") == -1 {
+		if !strings.Contains(v, ":") {
 			c.servers[k] = v + ":8080"
 		} else {
 			c.servers[k] = v
@@ -101,7 +101,7 @@ func (c *Client) callApi(api string, params map[string]string, method string) (s
 	timeStamp = timeStamp[:13]
 
 	spec := "?"
-	if strings.Index(api, "?") != -1 {
+	if strings.Contains(api, "?") {
 		spec = "&"
 	}
 

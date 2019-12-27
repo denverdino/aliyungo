@@ -272,7 +272,7 @@ func (client *Client) DeleteKubernetesClusterNodes(clusterId string, request *De
 	return response, nil
 }
 
-//Cluster defination
+//Cluster definition
 type KubernetesClusterDetail struct {
 	RegionId common.Region `json:"region_id"`
 

@@ -2,7 +2,6 @@ package sls
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -154,5 +153,5 @@ func (proj *Project) GetAppliedConfigs(machineGroup string) ([]string, error) {
 		return v, nil
 	}
 
-	return nil, errors.New(fmt.Sprintf("%v is not a string array", configs["config"]))
+	return nil, fmt.Errorf("%v is not a string array", configs["config"])
 }

@@ -59,7 +59,7 @@ var testLocationClient *Client
 
 func NetTestLocationClientForDebug() *Client {
 	if testLocationClient == nil {
-		testLocationClient = NewECSClientWithSecurityToken4RegionalDomain(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken,TestRegionID)
+		testLocationClient = NewECSClientWithSecurityToken4RegionalDomain(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, TestRegionID)
 		testLocationClient.SetDebug(true)
 	}
 

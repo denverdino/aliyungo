@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"fmt"
+
 	"github.com/denverdino/aliyungo/common"
 )
 
@@ -67,7 +68,7 @@ func TestDescribeVServerGroups(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	} else {
-		fmt.Printf(PrettyJson(response))
+		fmt.Println(PrettyJson(response))
 	}
 }
 

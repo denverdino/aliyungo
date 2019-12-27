@@ -74,7 +74,6 @@ func NewECSClientWithSecurityToken4RegionalDomain(accessKeyId string, accessKeyS
 	return NewECSClientWithEndpointAndSecurityToken4RegionalDomain(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)
 }
 
-
 func NewECSClientWithEndpoint(endpoint string, accessKeyId string, accessKeySecret string, regionID common.Region) *Client {
 	return NewECSClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, "", regionID)
 }
@@ -91,7 +90,6 @@ func NewECSClientWithEndpointAndSecurityToken(endpoint string, accessKeyId strin
 		InitClient()
 	return client
 }
-
 
 func NewECSClientWithEndpointAndSecurityToken4RegionalDomain(endpoint string, accessKeyId string, accessKeySecret string, securityToken string, regionID common.Region) *Client {
 	client := &Client{}

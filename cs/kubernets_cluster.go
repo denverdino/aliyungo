@@ -23,8 +23,8 @@ func (client *Client) ModifyCluster(clusterId string, args *ModifyClusterArgs) e
 type KubernetesClusterType string
 
 var (
-	DelicatedKubernetes = KubernetesClusterType("Kubernetes")
-	ManagedKubernetes   = KubernetesClusterType("ManagedKubernetes")
+	DelicatedKubernetes  = KubernetesClusterType("Kubernetes")
+	ManagedKubernetes    = KubernetesClusterType("ManagedKubernetes")
 	ServerlessKubernetes = KubernetesClusterType("Ask")
 )
 
@@ -64,7 +64,7 @@ type ClusterArgs struct {
 	NodePortRange string `json:"node_port_range"`
 
 	//ImageId
-	ImageId           string `json:"image_id"`
+	ImageId string `json:"image_id"`
 
 	PodVswitchIds []string `json:"pod_vswitch_ids"` // eni多网卡模式下，需要传额外的vswitchid给addon
 
@@ -131,7 +131,6 @@ type MasterArgs struct {
 	MasterSnapshotPolicyId string `json:"master_system_disk_snapshot_policy_id"`
 }
 
-
 type WorkerArgs struct {
 	WorkerVSwitchIds    []string `json:"worker_vswitch_ids"`
 	WorkerInstanceTypes []string `json:"worker_instance_types"`
@@ -178,9 +177,9 @@ type ScaleOutKubernetesClusterRequest struct {
 	WorkerDataDisk  bool       `json:"worker_data_disk"`
 	WorkerDataDisks []DataDisk `json:"worker_data_disks"` //支持多个数据盘
 
-	Tags   []Tag   `json:"tags"`
-	Taints []Taint `json:"taints"`
-	ImageId           string `json:"image_id"`
+	Tags    []Tag   `json:"tags"`
+	Taints  []Taint `json:"taints"`
+	ImageId string  `json:"image_id"`
 
 	UserData string `json:"user_data"`
 

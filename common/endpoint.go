@@ -133,10 +133,10 @@ func (client *LocationClient) DescribeEndpoints(args *DescribeEndpointsArgs) (*D
 
 func getProductRegionEndpoint(region Region, serviceCode string) string {
 
-	if sp,ok := endpoints.Load(region); ok {
+	if sp, ok := endpoints.Load(region); ok {
 		spt, ok := sp.(*sync.Map)
 		if ok {
-			if endp,ok := spt.Load(serviceCode);ok {
+			if endp, ok := spt.Load(serviceCode); ok {
 				return endp.(string)
 			}
 		}
@@ -147,7 +147,7 @@ func getProductRegionEndpoint(region Region, serviceCode string) string {
 func setProductRegionEndpoint(region Region, serviceCode string, endpoint string) {
 	m := sync.Map{}
 	m.Store(serviceCode, endpoint)
-	endpoints.Store(region,&m)
+	endpoints.Store(region, &m)
 }
 
 func (client *LocationClient) DescribeOpenAPIEndpoint(region Region, serviceCode string) string {

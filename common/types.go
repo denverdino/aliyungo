@@ -14,7 +14,7 @@ const (
 	PostPaid = InstanceChargeType("PostPaid")
 )
 
-var  RegionalDomainServices = []string{
+var RegionalDomainServices = []string{
 	"ecs",
 	"vpc",
 	"slb",
@@ -22,7 +22,7 @@ var  RegionalDomainServices = []string{
 }
 
 var UnitRegions = map[Region]interface{}{
-	Hangzhou:Hangzhou,
+	Hangzhou: Hangzhou,
 }
 
 type DescribeEndpointArgs struct {

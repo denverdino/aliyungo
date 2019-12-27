@@ -10,33 +10,33 @@ import (
 
 type ServerlessCreationArgs struct {
 	ClusterType          KubernetesClusterType `json:"cluster_type"`
-	Name                 string `json:"name"`
-	RegionId             string `json:"region_id"`
-	VpcId                string `json:"vpc_id"`
-	VSwitchId            string `json:"vswitch_id"`
-	EndpointPublicAccess bool   `json:"public_slb"`
-	PrivateZone          bool   `json:"private_zone"`
-	NatGateway           bool   `json:"nat_gateway"`
-	DeletionProtection   bool   `json:"deletion_protection"`
-	Tags                 []Tag  `json:"tags"`
+	Name                 string                `json:"name"`
+	RegionId             string                `json:"region_id"`
+	VpcId                string                `json:"vpc_id"`
+	VSwitchId            string                `json:"vswitch_id"`
+	EndpointPublicAccess bool                  `json:"public_slb"`
+	PrivateZone          bool                  `json:"private_zone"`
+	NatGateway           bool                  `json:"nat_gateway"`
+	DeletionProtection   bool                  `json:"deletion_protection"`
+	Tags                 []Tag                 `json:"tags"`
 }
 
 type ServerlessClusterResponse struct {
-	ClusterId          string       `json:"cluster_id"`
-	Name               string       `json:"name"`
-	ClusterType        KubernetesClusterType       `json:"cluster_type"`
-	RegionId           string       `json:"region_id"`
-	State              ClusterState `json:"state"`
-	VpcId              string       `json:"vpc_id"`
-	VSwitchId          string       `json:"vswitch_id"`
-	SecurityGroupId    string       `json:"security_group_id"`
-	Tags               []Tag        `json:"tags"`
-	Created            time.Time    `json:"created"`
-	Updated            time.Time    `json:"updated"`
-	InitVersion        string       `json:"init_version"`
-	CurrentVersion     string       `json:"current_version"`
-	PrivateZone        bool         `json:"private_zone"`
-	DeletionProtection bool         `json:"deletion_protection"`
+	ClusterId          string                `json:"cluster_id"`
+	Name               string                `json:"name"`
+	ClusterType        KubernetesClusterType `json:"cluster_type"`
+	RegionId           string                `json:"region_id"`
+	State              ClusterState          `json:"state"`
+	VpcId              string                `json:"vpc_id"`
+	VSwitchId          string                `json:"vswitch_id"`
+	SecurityGroupId    string                `json:"security_group_id"`
+	Tags               []Tag                 `json:"tags"`
+	Created            time.Time             `json:"created"`
+	Updated            time.Time             `json:"updated"`
+	InitVersion        string                `json:"init_version"`
+	CurrentVersion     string                `json:"current_version"`
+	PrivateZone        bool                  `json:"private_zone"`
+	DeletionProtection bool                  `json:"deletion_protection"`
 }
 
 type Tag struct {

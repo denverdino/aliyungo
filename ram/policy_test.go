@@ -203,7 +203,7 @@ func TestListPoliciesForGroup(t *testing.T) {
 	t.Logf("pass ListPoliciesForGroup %++v", resp)
 }
 
-func TEstListEntitiesForPolicy(t *testing.T) {
+func TestListEntitiesForPolicy(t *testing.T) {
 	client := NewTestClient()
 	policyReq := PolicyRequest{
 		PolicyType: "Custom",

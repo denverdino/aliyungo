@@ -19,6 +19,43 @@ func Test_ModifyCluster(t *testing.T) {
 	}
 }
 
+func Test_UpgradeCluster(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	args := &UpgradeClusterArgs{
+		Version: "1.14.8-aliyun.1",
+	}
+
+	err := client.UpgradeCluster(TestClusterId, args)
+	if err != nil {
+		t.Errorf("Error %++v", err)
+	} else {
+		t.Logf("OK")
+	}
+}
+
+func Test_CancelUpgradeCluster(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	err := client.CancelUpgradeCluster(TestClusterId)
+	if err != nil {
+		t.Errorf("Error %++v", err)
+	} else {
+		t.Logf("OK")
+	}
+}
+
+func Test_QueryUpgradeClusterResult(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	result, err := client.QueryUpgradeClusterResult(TestClusterId)
+	if err != nil {
+		t.Errorf("Error %++v", err)
+	} else {
+		t.Logf("OK, result: %++v", result)
+	}
+}
+
 func Test_CreateDelicatedKubernetesCluster(t *testing.T) {
 	t.SkipNow()
 	client := NewTestClientForDebug()

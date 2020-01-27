@@ -23,6 +23,9 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+    - name: Run golangci-lint with reviewdog
+      uses: reviewdog/action-golangci-lint@v1.1.3
+      with:
+        github_token: ${{ secrets.github_token }}
 
-    - name: Build
-      run: go build -v .
+

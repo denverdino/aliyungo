@@ -1,6 +1,10 @@
 package common
 
-import "os"
+import (
+	"net/http"
+	"os"
+	"testing"
+)
 
 var (
 	TestAccessKeyId     = os.Getenv("AccessKeyId")
@@ -17,4 +21,19 @@ func NewTestClientForDebug() *LocationClient {
 		testDebugClient.SetDebug(true)
 	}
 	return testDebugClient
+}
+
+func TestClient_SetTransport(t *testing.T) {
+	client := NewTestClientForDebug()
+	transport := &myTransport{}
+	client.SetTransport(transport)
+	if client.httpClient.Transport.(*myTransport) != transport {
+		t.Fail()
+	}
+}
+
+type myTransport struct{}
+
+func (m *myTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	return http.DefaultTransport.RoundTrip(req)
 }

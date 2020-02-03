@@ -301,6 +301,14 @@ func (client *Client) SetSecurityToken(securityToken string) {
 	client.securityToken = securityToken
 }
 
+// SetTransport sets transport to the http client
+func (client *Client) SetTransport(transport http.RoundTripper) {
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	client.httpClient.Transport = transport
+}
+
 func (client *Client) initEndpoint() error {
 	// if set any value to "CUSTOMIZED_ENDPOINT" could skip location service.
 	// example: export CUSTOMIZED_ENDPOINT=true

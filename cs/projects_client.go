@@ -67,6 +67,14 @@ func (client *ProjectClient) SetUserAgent(userAgent string) {
 	client.userAgent = userAgent
 }
 
+// SetTransport sets transport to the http client
+func (client *ProjectClient) SetTransport(transport http.RoundTripper) {
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	client.httpClient.Transport = transport
+}
+
 func (client *ProjectClient) ClusterId() string {
 	return client.clusterId
 }

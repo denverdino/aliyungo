@@ -22,6 +22,14 @@ func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
 
+// SetTransport sets transport to the http client
+func (client *Client) SetTransport(transport http.RoundTripper) {
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	client.httpClient.Transport = transport
+}
+
 func NewClient(accessKeyId, accessKeySecret, endpoint string) (client *Client) {
 	client = &Client{
 		AccessKeyId:     accessKeyId,

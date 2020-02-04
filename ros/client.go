@@ -86,6 +86,14 @@ func (client *Client) SetSecurityToken(securityToken string) {
 	client.SecurityToken = securityToken
 }
 
+// SetTransport sets transport to the http client
+func (client *Client) SetTransport(transport http.RoundTripper) {
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	client.httpClient.Transport = transport
+}
+
 type Request struct {
 	Method          string
 	URL             string

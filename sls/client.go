@@ -28,6 +28,14 @@ func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
 
+// SetTransport sets transport to the http client
+func (client *Client) SetTransport(transport http.RoundTripper) {
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	client.httpClient.Transport = transport
+}
+
 type Project struct {
 	client      *Client
 	Name        string `json:"projectName,omitempty"`

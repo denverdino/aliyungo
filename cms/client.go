@@ -33,6 +33,14 @@ func (client *Client) SetDebug(debug bool) {
 	client.debug = debug
 }
 
+// SetTransport sets transport to the http client
+func (client *Client) SetTransport(transport http.RoundTripper) {
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	client.httpClient.Transport = transport
+}
+
 const (
 	//TODO 旧的API，暂时保留
 	DefaultEndpoint = "http://alert.aliyuncs.com"

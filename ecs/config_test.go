@@ -1,9 +1,8 @@
 package ecs
 
 import (
-	"os"
-
 	"github.com/denverdino/aliyungo/common"
+	"os"
 )
 
 //Modify with your Access Key Id and Access Key Secret

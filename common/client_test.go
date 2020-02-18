@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"testing"
@@ -36,4 +37,42 @@ type myTransport struct{}
 
 func (m *myTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return http.DefaultTransport.RoundTrip(req)
+}
+
+func Test_InitClient4RegionalDomain(t *testing.T) {
+
+	var tests = []struct {
+		service  string
+		version  string
+		endpoint string
+	}{
+		{"ecs", "2014-05-26", "https://ecs-cn-hangzhou.aliyuncs.com"},
+		{"pvtz", "2018-01-01", "https://pvtz.aliyuncs.com"},
+		{"slb", "2014-05-15", "https://slb.aliyuncs.com"},
+	}
+
+	for _, test := range tests {
+		for _, region := range ValidRegions {
+			if region == Qingdao {
+				continue
+			}
+
+			client := &Client{}
+			client.SetDebug(true)
+			client.WithEndpoint(test.endpoint).
+				WithVersion(test.version).
+				WithAccessKeyId(TestAccessKeyId).
+				WithAccessKeySecret(TestAccessKeySecret).
+				WithServiceCode(test.service).
+				WithRegionID(region).
+				InitClient4RegionalDomain()
+
+			domain := fmt.Sprintf("https://%s.%s.aliyuncs.com", test.service, region)
+
+			if client.endpoint != domain {
+				t.Fail()
+			}
+		}
+
+	}
 }

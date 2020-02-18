@@ -14,15 +14,28 @@ const (
 	PostPaid = InstanceChargeType("PostPaid")
 )
 
+var UnitDeployedProducts = []string{
+	"pvtz",
+}
+
 var RegionalDomainServices = []string{
 	"ecs",
 	"vpc",
 	"slb",
-	"pvtz",
 }
 
+// Unit-Domain of central product
 var UnitRegions = map[Region]interface{}{
-	Hangzhou: Hangzhou,
+	Hangzhou:        Hangzhou,
+	Beijing:         Beijing,
+	Shanghai:        Shanghai,
+	Shenzhen:        Shenzhen,
+	Hongkong:        Hongkong,
+	APSouthEast1:    APSouthEast1,
+	USWest1:         USWest1,
+	USEast1:         USEast1,
+	ShenZhenFinance: Shenzhen,
+	ShanghaiFinance: Shanghai,
 }
 
 type DescribeEndpointArgs struct {

@@ -144,8 +144,8 @@ func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKe
 //only for HangZhou Regional Domain, ecs.cn-hangzhou.aliyuncs.com
 func (client *Client) setEndpoint4RegionalDomain(region Region, serviceCode, accessKeyId, accessKeySecret, securityToken string) {
 	// Unit deployed products, return Regional-Domain directly
-	for _, service := range UnitDeployedProducts {
-		if service == serviceCode {
+	if regionConfig, ok := SpecialDeployedProducts[serviceCode]; ok {
+		if _, ok := regionConfig[region]; ok {
 			client.endpoint = fmt.Sprintf("https://%s.%s.aliyuncs.com", serviceCode, region)
 			return
 		}

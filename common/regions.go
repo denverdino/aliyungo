@@ -14,6 +14,8 @@ const (
 	Zhangjiakou = Region("cn-zhangjiakou")
 	Huhehaote   = Region("cn-huhehaote")
 
+	Chengdu   = Region("cn-chengdu")
+
 	APSouthEast1 = Region("ap-southeast-1")
 	APNorthEast1 = Region("ap-northeast-1")
 	APSouthEast2 = Region("ap-southeast-2")

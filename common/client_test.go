@@ -49,11 +49,12 @@ func Test_InitClient4RegionalDomain(t *testing.T) {
 		{"ecs", "2014-05-26", "https://ecs-cn-hangzhou.aliyuncs.com"},
 		{"pvtz", "2018-01-01", "https://pvtz.aliyuncs.com"},
 		{"slb", "2014-05-15", "https://slb.aliyuncs.com"},
+		{"vpc", "2016-04-28", "https://vpc.aliyuncs.com"},
 	}
 
 	for _, test := range tests {
 		for _, region := range ValidRegions {
-			if region == Qingdao {
+			if region == Qingdao || region == ShenZhenFinance || region == ShanghaiFinance {
 				continue
 			}
 
@@ -70,6 +71,9 @@ func Test_InitClient4RegionalDomain(t *testing.T) {
 			domain := fmt.Sprintf("https://%s.%s.aliyuncs.com", test.service, region)
 
 			if client.endpoint != domain {
+				if test.service == "vpc" && (region == Beijing || region == Hongkong || region == Shanghai) {
+					continue
+				}
 				t.Fail()
 			}
 		}

@@ -139,7 +139,7 @@ type CreateDiskArgs struct {
 	Encrypted    bool
 	DiskCategory DiskCategory
 	Size         int
-        Tag          map[string]string
+	Tag          map[string]string
 	SnapshotId   string
 	ClientToken  string
 	KMSKeyID     string

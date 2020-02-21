@@ -32,6 +32,7 @@ var SpecialDeployedProducts = map[string]map[Region]interface{}{
 		APSouthEast5: APSouthEast5,
 		APSouthEast2: APSouthEast2,
 		MEEast1:      MEEast1,
+		CNNorth2Gov1: CNNorth2Gov1,
 	},
 }
 
@@ -62,6 +63,7 @@ var UnitRegions = map[Region]interface{}{
 	APSouthEast5: APSouthEast5,
 	APSouthEast2: APSouthEast2,
 	MEEast1:      MEEast1,
+	CNNorth2Gov1: CNNorth2Gov1,
 }
 
 type DescribeEndpointArgs struct {

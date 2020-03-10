@@ -1,6 +1,7 @@
 package ros
 
 import (
+	"strings"
 	"testing"
 
 	"fmt"
@@ -155,6 +156,24 @@ func TestClient_UpdateStack(t *testing.T) {
 	response, err := debugClientForTestCase.UpdateStack(TestRegionID, stackId, stackName, args)
 	if err != nil {
 		t.Fatalf("Failed to UpdateStack %++v", err)
+	} else {
+		t.Logf("Success %++v", response)
+	}
+}
+
+func TestClient_DeleteStackWithParams(t *testing.T) {
+	stackId := os.Getenv("StackId")
+	resourceIds := os.Getenv("RetainResources")
+
+	args := &DeleteStackRpcRequest{
+		RegionId:        TestRegionID,
+		StackId:         stackId,
+		RetainResources: strings.Split(resourceIds, ","),
+	}
+
+	response, err := debugRpcClientForTestCase.DeleteStack(args)
+	if err != nil {
+		t.Fatalf("Failed to DeleteStack %++v", err)
 	} else {
 		t.Logf("Success %++v", response)
 	}

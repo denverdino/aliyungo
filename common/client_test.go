@@ -64,6 +64,7 @@ func Test_InitClient4RegionalDomain(t *testing.T) {
 				WithVersion(test.version).
 				WithAccessKeyId(TestAccessKeyId).
 				WithAccessKeySecret(TestAccessKeySecret).
+				WithSecurityToken(TestSecurityToken).
 				WithServiceCode(test.service).
 				WithRegionID(region).
 				InitClient4RegionalDomain()

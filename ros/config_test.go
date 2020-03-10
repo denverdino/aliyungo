@@ -14,8 +14,9 @@ var (
 	TestSecurityToken   = os.Getenv("SecurityToken")
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
 
-	clientForTestCase      = NewTestClient()
-	debugClientForTestCase = NewTestClientForDebug()
+	clientForTestCase         = NewTestClient()
+	debugClientForTestCase    = NewTestClientForDebug()
+	debugRpcClientForTestCase = NewTestRpcClientForDebug()
 )
 
 var testClient *Client
@@ -29,6 +30,7 @@ func NewTestClient() *Client {
 }
 
 var testDebugClient *Client
+var testDebugRpcClient *RpcClient
 
 func NewTestClientForDebug() *Client {
 	if testDebugClient == nil {
@@ -37,4 +39,13 @@ func NewTestClientForDebug() *Client {
 	}
 	testDebugClient.SetSecurityToken(TestSecurityToken)
 	return testDebugClient
+}
+
+func NewTestRpcClientForDebug() *RpcClient {
+	if testDebugRpcClient == nil {
+		testDebugRpcClient = NewRpcClient(TestAccessKeyId, TestAccessKeySecret)
+		testDebugRpcClient.SetDebug(true)
+	}
+	testDebugRpcClient.SetSecurityToken(TestSecurityToken)
+	return testDebugRpcClient
 }

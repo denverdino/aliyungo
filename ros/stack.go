@@ -210,10 +210,13 @@ func (client *Client) PreviewStack(regionId common.Region, args PreviewStackRequ
 
 //https://help.aliyun.com/document_detail/49066.html?spm=5176.doc28910.6.586.MJjWQh
 type UpdateStackRequest struct {
-	Template        string
-	Parameters      interface{}
-	DisableRollback bool
-	TimeoutMins     int
+	Template          string
+	Parameters        interface{}
+	DisableRollback   bool
+	TimeoutMins       int
+	StackPolicy       interface{}
+	UpdateAllowPolicy interface{}
+	Existing          bool
 }
 
 type UpdateStackResponse struct {

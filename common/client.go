@@ -324,6 +324,10 @@ func (client *Client) initEndpoint() error {
 		return nil
 	}
 
+	if client.endpoint != "" {
+		return nil
+	}
+
 	if client.serviceCode != "" && client.regionID != "" {
 		endpoint := client.getEndpointByLocation()
 		if endpoint == "" {

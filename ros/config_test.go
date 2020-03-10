@@ -13,7 +13,7 @@ var (
 	TestAccessKeySecret = os.Getenv("AccessKeySecret")
 	TestSecurityToken   = os.Getenv("SecurityToken")
 	TestRegionID        = common.Region(os.Getenv("RegionId"))
-	
+
 	debugClientForTestCase    = NewTestClientForDebug()
 	debugRpcClientForTestCase = NewTestRpcClientForDebug()
 )

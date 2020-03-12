@@ -218,6 +218,9 @@ type WorkerArgs struct {
 	WorkerAutoRenew       bool `json:"worker_auto_renew"`
 	WorkerAutoRenewPeriod int  `json:"worker_auto_renew_period"`
 
+	WorkerSystemDiskCategory string `json:"worker_system_disk_category"`
+	WorkerSystemDiskSize     int64  `json:"worker_system_disk_size"`
+
 	WorkerDataDisk  bool       `json:"worker_data_disk"`
 	WorkerDataDisks []DataDisk `json:"worker_data_disks"` //支持多个数据盘
 

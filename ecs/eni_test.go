@@ -74,3 +74,17 @@ func TestUnAssignPrivateIPAddresses(t *testing.T) {
 		t.Errorf("Failed to UnAssignPrivateIpAddresses: %v", err)
 	}
 }
+
+func TestModifyNetworkInterfaceAttribute(t *testing.T) {
+	args := &ModifyNetworkInterfaceAttributeArgs{
+		RegionId:           common.Shanghai,
+		NetworkInterfaceId: "eni-testeni",
+		SecurityGroupId:    []string{"sg-xxx", "sg-yyy"},
+	}
+
+	client := NewTestClient()
+	_, err := client.ModifyNetworkInterfaceAttribute(args)
+	if err != nil {
+		t.Errorf("failed to ModifyNetworkInterfaceAttribute: %v", err)
+	}
+}

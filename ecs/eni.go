@@ -104,7 +104,7 @@ type DetachNetworkInterfaceResponse common.Response
 type ModifyNetworkInterfaceAttributeArgs struct {
 	RegionId             common.Region
 	NetworkInterfaceId   string
-	SecurityGroupId      []string
+	SecurityGroupId      []string `query:"list"`
 	NetworkInterfaceName string
 	Description          string
 }
@@ -122,7 +122,7 @@ type AssignPrivateIpAddressesArgs struct {
 	RegionId                       common.Region
 	NetworkInterfaceId             string
 	PrivateIpAddress               []string `query:"list"` // optional
-	SecondaryPrivateIpAddressCount int      // optional
+	SecondaryPrivateIpAddressCount int                     // optional
 }
 
 type AssignPrivateIpAddressesResponse common.Response

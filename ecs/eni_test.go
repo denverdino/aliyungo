@@ -88,3 +88,18 @@ func TestModifyNetworkInterfaceAttribute(t *testing.T) {
 		t.Errorf("failed to ModifyNetworkInterfaceAttribute: %v", err)
 	}
 }
+
+func TestCreateNetworkInterface(t *testing.T) {
+	args := &CreateNetworkInterfaceArgs{
+		RegionId:                       common.Shanghai,
+		VSwitchId:                      "vsw-xxx",
+		SecurityGroupIds:               []string{"sg-xxx", "sg-yyy"},
+		SecondaryPrivateIpAddressCount: 9,
+	}
+	client := NewTestClient()
+	resp, err := client.CreateNetworkInterface(args)
+	if err != nil {
+		t.Errorf("failed to CreateNetworkInterface: %v", err)
+	}
+	t.Logf("new eni info: %+v", resp)
+}

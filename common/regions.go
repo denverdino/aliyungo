@@ -36,6 +36,7 @@ const (
 	ShanghaiFinance = Region("cn-shanghai-finance-1")
 
 	CNNorth2Gov1 = Region("cn-north-2-gov-1")
+	RUSWest1     = Region("rus-west-1")
 )
 
 var ValidRegions = []Region{

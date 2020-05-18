@@ -64,6 +64,7 @@ var UnitRegions = map[Region]interface{}{
 	APSouthEast2: APSouthEast2,
 	MEEast1:      MEEast1,
 	CNNorth2Gov1: CNNorth2Gov1,
+	RUSWest1:     RUSWest1,
 }
 
 type DescribeEndpointArgs struct {

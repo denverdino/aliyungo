@@ -15,6 +15,7 @@ type PublishRouteEntriesArgs struct {
 }
 
 type DescribePublishedRouteEntriesArgs struct {
+	common.Pagination
 	CenId 			string
 	ChildInstanceId string
 	ChildInstanceRegionId 		string

@@ -1,14 +1,14 @@
 package cen
 
 import (
-	"github.com/labstack/gommon/log"
 	"github.com/denverdino/aliyungo/common"
+	"github.com/labstack/gommon/log"
 )
 
 type PublishRouteEntriesArgs struct {
-	CenId  					string
-	ChildInstanceId 		string
-	ChildInstanceRegionId  	string
+	CenId                     string
+	ChildInstanceId           string
+	ChildInstanceRegionId     string
 	ChildInstanceRouteTableId string
 	ChildInstanceType         string
 	DestinationCidrBlock      string
@@ -16,12 +16,12 @@ type PublishRouteEntriesArgs struct {
 
 type DescribePublishedRouteEntriesArgs struct {
 	common.Pagination
-	CenId 			string
-	ChildInstanceId string
-	ChildInstanceRegionId 		string
-	ChildInstanceType  			string
-	ChildInstanceRouteTableId  	string
-	DestinationCidrBlock 		string
+	CenId                     string
+	ChildInstanceId           string
+	ChildInstanceRegionId     string
+	ChildInstanceType         string
+	ChildInstanceRouteTableId string
+	DestinationCidrBlock      string
 }
 
 type DescribePublishedRouteEntriesResponse struct {
@@ -33,7 +33,7 @@ type DescribePublishedRouteEntriesResponse struct {
 }
 
 type ConflictStatus string
-type NextHopType    string
+type NextHopType string
 
 const (
 	ConflictStatusConflict   = ConflictStatus("conflict")
@@ -42,19 +42,20 @@ const (
 )
 
 const (
-	NextHopTypeInstance = NextHopType("Instance")
-	NextHopTypeHaVip	= NextHopType("HaVip")
-	NextHopTypeRouterInterface	= NextHopType("RouterInterface")
+	NextHopTypeInstance        = NextHopType("Instance")
+	NextHopTypeHaVip           = NextHopType("HaVip")
+	NextHopTypeRouterInterface = NextHopType("RouterInterface")
 )
 
 type PublishStatus string
 
 const (
-	PublishStatusPublished	= PublishStatus("Published")
+	PublishStatusPublished    = PublishStatus("Published")
 	PublishStatusNotPublished = PublishStatus("NonPublished")
 )
 
 type RouteType string
+
 const (
 	RouteTypeSystem = RouteType("System")
 	RouteTypeCustom = RouteType("Custom")
@@ -62,39 +63,38 @@ const (
 )
 
 type PublishedRouteEntry struct {
-	ChildInstanceRouteTableId  string
-	Conflicts	struct{
+	ChildInstanceRouteTableId string
+	Conflicts                 struct {
 		Conflict []Conflict
 	}
-	DestinationCidrBlock  string
-	NextHopId		string
+	DestinationCidrBlock string
+	NextHopId            string
 
-	NextHopType		string
-	OperationalMode string
+	NextHopType     string
+	OperationalMode bool
 	PublishStatus   string
-	RouteType		string
+	RouteType       string
 }
 
 type Conflict struct {
-	DestinationCidrBlock	string
-	InstanceId		string
-	InstanceType	string
-	RegionId		string
-	Status			string
+	DestinationCidrBlock string
+	InstanceId           string
+	InstanceType         string
+	RegionId             string
+	Status               string
 }
 
 // PublishRouteEntries publish route
 //
 // You can read doc at https://help.aliyun.com/document_detail/85470.html
 func (client *Client) PublishRouteEntries(args *PublishRouteEntriesArgs) error {
-	response := common.Response{}
-	err := client.Invoke("PublishRouteEntries", &args, &response)
+	response := &common.Response{}
+	err := client.Invoke("PublishRouteEntries", args, response)
 	if err != nil {
-		log.Errorf("PublishRouteEntries: %s, %s",response.RequestId, err.Error())
+		log.Errorf("PublishRouteEntries: %s, %s", response.RequestId, err.Error())
 	}
 	return err
 }
-
 
 // DescribePublishedRouteEntries describe published route
 //
@@ -108,7 +108,7 @@ func (client *Client) DescribePublishedRouteEntries(
 	err = client.Invoke("DescribePublishedRouteEntries", args, response)
 
 	if err != nil {
-		log.Errorf("DescribePublishedRouteEntries: %s, %s", response)
+		log.Errorf("DescribePublishedRouteEntries: %v, %v", args, response)
 	}
 
 	return response, err

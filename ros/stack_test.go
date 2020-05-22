@@ -92,6 +92,24 @@ func TestClient_CreateStack(t *testing.T) {
 	}
 }
 
+func TestClient_CreateStack_DeletionProtection(t *testing.T) {
+	args := &CreateStackRequest{
+		Name:               fmt.Sprintf("my-k8s-test-stack-%d", time.Now().Unix()),
+		Template:           myTestTemplate,
+		Parameters:         map[string]interface{}{},
+		DisableRollback:    false,
+		DeletionProtection: DeletionProtectionEnabled,
+		TimeoutMins:        30,
+	}
+
+	response, err := debugClientForTestCase.CreateStack(TestRegionID, args)
+	if err != nil {
+		t.Fatalf("Failed to CreateStack %++v", err)
+	} else {
+		t.Logf("Success %++v", response)
+	}
+}
+
 func TestClient_DeleteStack(t *testing.T) {
 	stackName := os.Getenv("StackName")
 	stackId := os.Getenv("StackId")

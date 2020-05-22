@@ -196,3 +196,32 @@ func TestClient_DeleteStackWithParams(t *testing.T) {
 		t.Logf("Success %++v", response)
 	}
 }
+
+func TestClient_DeleteStack_DisabledProtection(t *testing.T) {
+	stackId := os.Getenv("StackId")
+
+	args := &SetDeletionProtectionRequest{
+		RegionId:           TestRegionID,
+		StackId:            stackId,
+		DeletionProtection: DeletionProtectionDisabled,
+	}
+
+	response, err := debugRpcClientForTestCase.SetDeletionProtection(args)
+	if err != nil {
+		t.Fatalf("Failed to SetDeletionProtection %++v", err)
+	} else {
+		t.Logf("Success %++v", response)
+	}
+
+	deleteArgs := &DeleteStackRpcRequest{
+		RegionId: TestRegionID,
+		StackId:  stackId,
+	}
+
+	resp, err := debugRpcClientForTestCase.DeleteStack(deleteArgs)
+	if err != nil {
+		t.Fatalf("Failed to DeleteStack %++v", err)
+	} else {
+		t.Logf("Success %++v", resp)
+	}
+}

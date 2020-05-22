@@ -9,13 +9,21 @@ import (
 	"github.com/denverdino/aliyungo/util"
 )
 
+type DeletionProtection string
+
+const (
+	DeletionProtectionEnabled  = DeletionProtection("Enabled")
+	DeletionProtectionDisabled = DeletionProtection("Disabled")
+)
+
 //https://help.aliyun.com/document_detail/28910.html?spm=5176.doc50083.6.580.b5wkQr
 type CreateStackRequest struct {
-	Name            string
-	Template        string
-	Parameters      interface{}
-	DisableRollback bool
-	TimeoutMins     int
+	Name               string
+	Template           string
+	Parameters         interface{}
+	DisableRollback    bool
+	DeletionProtection DeletionProtection
+	TimeoutMins        int
 }
 
 type CreateStackResponse struct {

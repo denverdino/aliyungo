@@ -85,6 +85,37 @@ func TestClient_AllocateEipAddress(t *testing.T) {
 
 }
 
+func TestClient_AssociateEipAddress_ENIIP(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	eipID := "eip-xxx"
+	eniID := "eni-yyy"
+	eniSecIP := "192.168.0.100"
+	region := common.Region("cn-hangzhou")
+
+	err := client.NewAssociateEipAddress(&AssociateEipAddressArgs{
+		AllocationId:     eipID,
+		InstanceId:       eniID,
+		InstanceType:     NetworkInterface,
+		PrivateIpAddress: eniSecIP,
+	})
+	if err != nil {
+		t.Errorf("Failed to associate EIP address: %v", err)
+	}
+	err = client.WaitForEip(region, eipID, EipStatusInUse, DefaultTimeout)
+	if err != nil {
+		t.Errorf("Failed wait associate EIP address: %v", err)
+	}
+	err = client.NewUnassociateEipAddress(&UnallocateEipAddressArgs{
+		AllocationId:     eipID,
+		InstanceId:       eniID,
+		InstanceType:     NetworkInterface,
+		PrivateIpAddress: eniSecIP,
+	})
+	if err != nil {
+		t.Errorf("Failed unassociate EIP address: %v", err)
+	}
+}
+
 func TestClient_DescribeEipAddresses(t *testing.T) {
 	client := NewVpcTestClientForDebug()
 	args := &DescribeEipAddressesArgs{

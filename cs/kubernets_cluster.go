@@ -161,6 +161,9 @@ type ClusterArgs struct {
 	Tags   []Tag   `json:"tags"`
 
 	Taints []Taint `json:"taints"`
+
+	ServiceAccountIssuer string `json:"service_account_issuer"`
+	ApiAudiences         string `json:"api_audiences"`
 }
 
 //addon

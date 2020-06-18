@@ -136,6 +136,7 @@ type ClusterArgs struct {
 	UserData string `json:"user_data"`
 
 	NodePortRange string `json:"node_port_range"`
+	NodeNameMode string  `json:"node_name_mode"`
 
 	//ImageId
 	ImageId string `json:"image_id"`
@@ -160,14 +161,15 @@ type ClusterArgs struct {
 	Addons []Addon `json:"addons"`
 	Tags   []Tag   `json:"tags"`
 
-	Taints []Taint `json:"taints"`
+	Taints       []Taint `json:"taints"`
 }
 
 //addon
 type Addon struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
-	Config  string `json:"config"`
+	Name     string `json:"name"`
+	Version  string `json:"version"`
+	Config   string `json:"config"`
+	Disabled bool   `json:"disabled"` // 是否禁止默认安装
 }
 
 //taint
@@ -378,6 +380,8 @@ type KubernetesClusterDetail struct {
 
 	Created time.Time `json:"created"`
 	Updated time.Time `json:"updated"`
+
+	WorkerRamRoleName string `json:"worker_ram_role_name"`
 }
 
 //GetMetaData

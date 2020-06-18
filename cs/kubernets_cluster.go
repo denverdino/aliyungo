@@ -161,6 +161,10 @@ type ClusterArgs struct {
 	Tags   []Tag   `json:"tags"`
 
 	Taints []Taint `json:"taints"`
+
+	ApiAudiences         string `json:"api_audiences,omitempty"`
+	ServiceAccountIssuer string `json:"service_account_issuer,omitempty"`
+	CustomSAN            string `json:"custom_san,omitempty"`
 }
 
 //addon

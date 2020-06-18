@@ -136,7 +136,7 @@ type ClusterArgs struct {
 	UserData string `json:"user_data"`
 
 	NodePortRange string `json:"node_port_range"`
-	NodeNameMode string  `json:"node_name_mode"`
+	NodeNameMode  string `json:"node_name_mode"`
 
 	//ImageId
 	ImageId string `json:"image_id"`
@@ -161,7 +161,11 @@ type ClusterArgs struct {
 	Addons []Addon `json:"addons"`
 	Tags   []Tag   `json:"tags"`
 
-	Taints       []Taint `json:"taints"`
+	Taints []Taint `json:"taints"`
+
+	ApiAudiences         string `json:"api_audiences,omitempty"`
+	ServiceAccountIssuer string `json:"service_account_issuer,omitempty"`
+	CustomSAN            string `json:"custom_san,omitempty"`
 }
 
 //addon

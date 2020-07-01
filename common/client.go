@@ -158,10 +158,6 @@ func (client *Client) setEndpoint4RegionalDomain(region Region, serviceCode, acc
 			}
 
 			client.endpoint = fmt.Sprintf("https://%s%s.%s.aliyuncs.com", serviceCode, "-vpc", region)
-			if region == HangZhouFinance {
-				client.endpoint = fmt.Sprintf("https://%s%s.%s.aliyuncs.com", serviceCode, "-vpc", Hangzhou)
-			}
-
 			return
 		}
 	}

@@ -71,7 +71,7 @@ var UnitRegions = map[Region]interface{}{
 	//Hongkong:        Hongkong,
 	//ShanghaiFinance: ShanghaiFinance,
 	//ShenZhenFinance: ShenZhenFinance,
-	//HangZhouFinance: Hangzhou,
+	HangZhouFinance: Hangzhou,
 }
 
 type DescribeEndpointArgs struct {

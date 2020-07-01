@@ -34,6 +34,7 @@ const (
 
 	ShenZhenFinance = Region("cn-shenzhen-finance-1")
 	ShanghaiFinance = Region("cn-shanghai-finance-1")
+	HangZhouFinance = Region("cn-hangzhou-finance-1")
 
 	CNNorth2Gov1 = Region("cn-north-2-gov-1")
 	RUSWest1     = Region("rus-west-1")
@@ -46,7 +47,7 @@ var ValidRegions = []Region{
 	APSouth1,
 	MEEast1,
 	EUCentral1, EUWest1,
-	ShenZhenFinance, ShanghaiFinance, CNNorth2Gov1,
+	ShenZhenFinance, ShanghaiFinance, HangZhouFinance, CNNorth2Gov1,
 }
 
 // IsValidRegion checks if r is an Ali supported region.

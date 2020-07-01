@@ -141,19 +141,23 @@ func (client *Client) setEndpointByLocation(region Region, serviceCode, accessKe
 	}
 }
 
-//only for HangZhou Regional Domain, ecs.cn-hangzhou.aliyuncs.com
+// Get openapi endpoint accessed by ecs instance.
+// For some UnitRegions, the endpoint pattern is https://[product].[regionid].aliyuncs.com
+// For some CentralRegions, the endpoint pattern is  https://[product].vpc-proxy.aliyuncs.com
+// The other region, the endpoint pattern is https://[product]-vpc.[regionid].aliyuncs.com
 func (client *Client) setEndpoint4RegionalDomain(region Region, serviceCode, accessKeyId, accessKeySecret, securityToken string) {
-	// Unit deployed products, return Regional-Domain directly
-	if regionConfig, ok := SpecialDeployedProducts[serviceCode]; ok {
-		if _, ok := regionConfig[region]; ok {
-			client.endpoint = fmt.Sprintf("https://%s.%s.aliyuncs.com", serviceCode, region)
-			return
-		}
+	if endpoint, ok := CentralDomainServices[serviceCode]; ok {
+		client.endpoint = fmt.Sprintf("https://%s", endpoint)
+		return
 	}
-
 	for _, service := range RegionalDomainServices {
-		if _, ok := UnitRegions[region]; ok && service == serviceCode {
-			client.endpoint = fmt.Sprintf("https://%s.%s.aliyuncs.com", serviceCode, region)
+		if service == serviceCode {
+			if ep, ok := UnitRegions[region]; ok {
+				client.endpoint = fmt.Sprintf("https://%s.%s.aliyuncs.com", serviceCode, ep)
+				return
+			}
+
+			client.endpoint = fmt.Sprintf("https://%s%s.%s.aliyuncs.com", serviceCode, "-vpc", region)
 			return
 		}
 	}

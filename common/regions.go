@@ -41,12 +41,12 @@ const (
 )
 
 var ValidRegions = []Region{
-	//Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, Zhangjiakou, Huhehaote,
-	//USWest1, USEast1,
-	//APNorthEast1, APSouthEast1, APSouthEast2, APSouthEast3, APSouthEast5,
-	//APSouth1,
-	//MEEast1,
-	//EUCentral1, EUWest1,
+	Hangzhou, Qingdao, Beijing, Shenzhen, Hongkong, Shanghai, Zhangjiakou, Huhehaote,
+	USWest1, USEast1,
+	APNorthEast1, APSouthEast1, APSouthEast2, APSouthEast3, APSouthEast5,
+	APSouth1,
+	MEEast1,
+	EUCentral1, EUWest1,
 	ShenZhenFinance, ShanghaiFinance, HangZhouFinance, CNNorth2Gov1,
 }
 

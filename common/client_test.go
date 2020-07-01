@@ -54,7 +54,7 @@ func Test_InitClient4RegionalDomain(t *testing.T) {
 
 	for _, test := range tests {
 		for _, region := range ValidRegions {
-			if region == Qingdao || region == ShenZhenFinance || region == ShanghaiFinance {
+			if region == Qingdao || region == HangZhouFinance {
 				continue
 			}
 

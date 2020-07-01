@@ -69,12 +69,24 @@ func Test_InitClient4RegionalDomain(t *testing.T) {
 				WithRegionID(region).
 				InitClient4RegionalDomain()
 
-			domain := fmt.Sprintf("https://%s.%s.aliyuncs.com", test.service, region)
-
-			if client.endpoint != domain {
-				if test.service == "vpc" && (region == Beijing || region == Hongkong || region == Shanghai) {
-					continue
+			if endpoint, ok := CentralDomainServices[test.service]; ok {
+				domain := fmt.Sprintf("https://%s", endpoint)
+				if client.endpoint != domain {
+					t.Fail()
 				}
+				continue
+			}
+
+			if ep, ok := UnitRegions[region]; ok {
+				domain := fmt.Sprintf("https://%s.%s.aliyuncs.com", test.service, ep)
+				if client.endpoint != domain {
+					t.Fail()
+				}
+				continue
+			}
+
+			domain := fmt.Sprintf("https://%s%s.%s.aliyuncs.com", test.service, "-vpc", region)
+			if client.endpoint != domain {
 				t.Fail()
 			}
 		}

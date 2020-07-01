@@ -36,35 +36,41 @@ var SpecialDeployedProducts = map[string]map[Region]interface{}{
 	},
 }
 
+var CentralDomainServices = map[string]string{
+	"pvtz": "pvtz.vpc-proxy.aliyuncs.com",
+}
+
 var RegionalDomainServices = []string{
-	"pvtz",
 	"ecs",
+	"vpc",
 	"slb",
 }
 
 // Unit-Domain of central product
 var UnitRegions = map[Region]interface{}{
-	Hangzhou:     Hangzhou,
-	Beijing:      Beijing,
-	Shanghai:     Shanghai,
-	Shenzhen:     Shenzhen,
-	Hongkong:     Hongkong,
-	APSouthEast1: APSouthEast1,
-	USWest1:      USWest1,
-	USEast1:      USEast1,
-	Chengdu:      Chengdu,
-	Zhangjiakou:  Zhangjiakou,
-	Huhehaote:    Huhehaote,
-	APSouthEast3: APSouthEast3,
-	EUCentral1:   EUCentral1,
-	EUWest1:      EUWest1,
-	APSouth1:     APSouth1,
-	APNorthEast1: APNorthEast1,
-	APSouthEast5: APSouthEast5,
-	APSouthEast2: APSouthEast2,
-	MEEast1:      MEEast1,
-	CNNorth2Gov1: CNNorth2Gov1,
-	RUSWest1:     RUSWest1,
+	Hangzhou:        Hangzhou,
+	Shenzhen:        Shenzhen,
+	APSouthEast1:    APSouthEast1,
+	USWest1:         USWest1,
+	USEast1:         USEast1,
+	Chengdu:         Chengdu,
+	Zhangjiakou:     Zhangjiakou,
+	Huhehaote:       Huhehaote,
+	APSouthEast3:    APSouthEast3,
+	EUCentral1:      EUCentral1,
+	EUWest1:         EUWest1,
+	APSouth1:        APSouth1,
+	APNorthEast1:    APNorthEast1,
+	APSouthEast5:    APSouthEast5,
+	APSouthEast2:    APSouthEast2,
+	CNNorth2Gov1:    CNNorth2Gov1,
+	RUSWest1:        RUSWest1,
+	Beijing:         Beijing,
+	Shanghai:        Shanghai,
+	Hongkong:        Hongkong,
+	ShanghaiFinance: ShanghaiFinance,
+	ShenZhenFinance: ShenZhenFinance,
+	HangZhouFinance: Hangzhou,
 }
 
 type DescribeEndpointArgs struct {

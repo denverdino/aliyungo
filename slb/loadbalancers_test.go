@@ -176,3 +176,62 @@ func TestClient_SetLoadBalancerDeleteProtection(t *testing.T) {
 		t.Fatalf("Failed to set LoadBalancer delete protection.")
 	}
 }
+
+func TestClient_SetLoadBalancerModificationProtection(t *testing.T) {
+	client := NewTestNewSLBClientForDebug()
+
+	creationArgs := CreateLoadBalancerArgs{
+		RegionId:                     common.Beijing,
+		LoadBalancerName:             "test-slb-modification-protection",
+		LoadBalancerSpec:             S1Small,
+		AddressType:                  InternetAddressType,
+		ModificationProtectionStatus: ConsoleProtection,
+		ModificationProtectionReason: "kubernetes.do.not.delete",
+		ClientToken:                  client.GenerateClientToken(),
+	}
+	response, err := client.CreateLoadBalancer(&creationArgs)
+	if err != nil {
+		t.Fatalf("Failed to CreateLoadBalancer: %v", err)
+	}
+
+	t.Logf("CreateLoadBalancer result: %v", *response)
+	lbId := response.LoadBalancerId
+
+	lb, err := client.DescribeLoadBalancerAttribute(lbId)
+	if err != nil {
+		t.Fatalf("Failed to DescribeLoadBalancerAttribute: %v", err)
+	}
+
+	if lb.ModificationProtectionStatus != ConsoleProtection {
+		t.Fatalf("Failed to SetLoadBalancerModificationProtection, slb %s, expected %s got %s",
+			lbId, ConsoleProtection, lb.ModificationProtectionStatus)
+	}
+
+	args := SetLoadBalancerModificationProtectionArgs{
+		RegionId:                     common.Beijing,
+		LoadBalancerId:               lbId,
+		ModificationProtectionStatus: NonProtection,
+	}
+
+	err = client.SetLoadBalancerModificationProtection(&args)
+	if err != nil {
+		t.Fatalf("Failed to SetLoadBalancerModificationProtection: %v", err)
+	}
+
+	lb, err = client.DescribeLoadBalancerAttribute(lbId)
+	if err != nil {
+		t.Fatalf("Failed to DescribeLoadBalancerAttribute: %v", err)
+	}
+
+	if lb.ModificationProtectionStatus != NonProtection {
+		t.Fatalf("Failed to SetLoadBalancerModificationProtection, slb %s, expected %s got %s",
+			lbId, ConsoleProtection, lb.ModificationProtectionStatus)
+	}
+
+	// Delete Slb
+	err = client.DeleteLoadBalancer(lbId)
+	if err != nil {
+		t.Fatalf("Failed to DeleteLoadBalancer: %v", err)
+	}
+
+}

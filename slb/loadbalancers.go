@@ -62,6 +62,7 @@ type CreateLoadBalancerArgs struct {
 	DeleteProtection             FlagType
 	ModificationProtectionStatus ModificationProtectionType
 	ModificationProtectionReason string
+	ResourceGroupId              string
 }
 
 type CreateLoadBalancerResponse struct {

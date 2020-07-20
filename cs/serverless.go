@@ -14,11 +14,14 @@ type ServerlessCreationArgs struct {
 	RegionId             string                `json:"region_id"`
 	VpcId                string                `json:"vpc_id"`
 	VSwitchId            string                `json:"vswitch_id"`
+	VswitchIds           []string              `json:"vswitch_ids"`
 	EndpointPublicAccess bool                  `json:"public_slb"`
 	PrivateZone          bool                  `json:"private_zone"`
 	NatGateway           bool                  `json:"nat_gateway"`
 	DeletionProtection   bool                  `json:"deletion_protection"`
+	SecurityGroupId      string                `json:"security_group_id"`
 	Tags                 []Tag                 `json:"tags"`
+	Addons               []Addon               `json:"addons"`
 }
 
 type ServerlessClusterResponse struct {

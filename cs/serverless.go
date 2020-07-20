@@ -48,8 +48,8 @@ type Tag struct {
 }
 
 func (this *ServerlessCreationArgs) Validate() error {
-	if this.Name == "" || this.RegionId == "" || this.VpcId == "" || this.VSwitchId == "" {
-		return common.GetCustomError("InvalidParameters", "The name,region_id,vpc_id,vswitch_id not allowed empty")
+	if this.Name == "" || this.RegionId == "" || this.VpcId == "" {
+		return common.GetCustomError("InvalidParameters", "The name,region_id,vpc_id not allowed empty")
 	}
 	return nil
 }

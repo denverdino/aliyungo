@@ -153,10 +153,11 @@ type ClusterArgs struct {
 
 	CloudMonitorFlags bool `json:"cloud_monitor_flags"`
 
-	SecurityGroupId      string    `json:"security_group_id"`
-	EndpointPublicAccess bool      `json:"endpoint_public_access"`
-	ProxyMode            ProxyMode `json:"proxy_mode"`
-	SnatEntry            bool      `json:"snat_entry"`
+	SecurityGroupId           string    `json:"security_group_id"`
+	IsEnterpriseSecurityGroup bool      `json:"is_enterprise_security_group"`
+	EndpointPublicAccess      bool      `json:"endpoint_public_access"`
+	ProxyMode                 ProxyMode `json:"proxy_mode"`
+	SnatEntry                 bool      `json:"snat_entry"`
 
 	Addons []Addon `json:"addons"`
 	Tags   []Tag   `json:"tags"`

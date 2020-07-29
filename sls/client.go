@@ -227,3 +227,26 @@ func (client *Client) PutLogs(putLogRequest *PutLogsRequest) error {
 	return newClient.requestWithClose(req)
 
 }
+
+type ProjectList struct {
+	Projects []Project `json:"projects"`
+	Count    int       `json:"count"`
+	Total    int       `json:"total"`
+}
+
+//获取全部项目
+func (client *Client) ListProject() (ProjectList, error) {
+	req := &request{
+		method: METHOD_GET,
+		path:   "/",
+		params: map[string]string{
+			"offset": "0",
+			"size":   "999",
+		},
+	}
+	var projectList ProjectList
+	if err := client.requestWithJsonResponse(req, &projectList); err != nil {
+		return projectList, err
+	}
+	return projectList, nil
+}

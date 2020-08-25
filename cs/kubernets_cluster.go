@@ -184,6 +184,11 @@ type Taint struct {
 	Effect Effect `json:"effect"`
 }
 
+type Label struct {
+	Key    string `json:"key"`
+	Value  string `json:"value"`
+}
+
 type MasterArgs struct {
 	MasterCount         int      `json:"master_count"`
 	MasterVSwitchIds    []string `json:"master_vswitch_ids"`

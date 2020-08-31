@@ -185,8 +185,8 @@ type Taint struct {
 }
 
 type Label struct {
-	Key    string `json:"key"`
-	Value  string `json:"value"`
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
 type MasterArgs struct {
@@ -282,6 +282,16 @@ type DataDisk struct {
 	Encrypted            string `json:"encrypted"` // true|false
 	Device               string `json:"device"`    //  could be /dev/xvd[a-z]. If not specification, will use default value.
 	Size                 string `json:"size"`
+	DiskName             string `json:"name"`
+	AutoSnapshotPolicyId string `json:"auto_snapshot_policy_id"`
+}
+
+type NodePoolDataDisk struct {
+	Category             string `json:"category"`
+	KMSKeyId             string `json:"kms_key_id"`
+	Encrypted            string `json:"encrypted"` // true|false
+	Device               string `json:"device"`    //  could be /dev/xvd[a-z]. If not specification, will use default value.
+	Size                 int    `json:"size"`
 	DiskName             string `json:"name"`
 	AutoSnapshotPolicyId string `json:"auto_snapshot_policy_id"`
 }

@@ -30,6 +30,7 @@ func Test_CreateNodePool(t *testing.T) {
 			LoginPassword:      LoginPassword,
 			SystemDiskCategory: "cloud_efficiency",
 			SystemDiskSize:     120,
+			DataDisks:          []NodePoolDataDisk{{Size: 100, Category: "cloud_ssd"}},
 		},
 		KubernetesConfig: KubernetesConfig{
 			NodeNameMode: "customized,aliyun.com,5,test",

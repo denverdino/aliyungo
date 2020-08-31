@@ -19,18 +19,18 @@ type NodePoolInfo struct {
 }
 
 type ScalingGroup struct {
-	VpcId              string     `json:"vpc_id"`
-	VswitchIds         []string   `json:"vswitch_ids"`
-	InstanceTypes      []string   `json:"instance_types"`
-	LoginPassword      string     `json:"login_password"`
-	KeyPair            string     `json:"key_pair"`
-	SecurityGroupId    string     `json:"security_group_id"`
-	SystemDiskCategory string     `json:"system_disk_category"`
-	SystemDiskSize     int64      `json:"system_disk_size"`
-	DataDisks          []DataDisk `json:"data_disks"` //支持多个数据盘
-	Tags               []Tag      `json:"tags"`
-	ImageId            string     `json:"image_id"`
-	Platform           string     `json:"platform"`
+	VpcId              string             `json:"vpc_id"`
+	VswitchIds         []string           `json:"vswitch_ids"`
+	InstanceTypes      []string           `json:"instance_types"`
+	LoginPassword      string             `json:"login_password"`
+	KeyPair            string             `json:"key_pair"`
+	SecurityGroupId    string             `json:"security_group_id"`
+	SystemDiskCategory string             `json:"system_disk_category"`
+	SystemDiskSize     int64              `json:"system_disk_size"`
+	DataDisks          []NodePoolDataDisk `json:"data_disks"` //支持多个数据盘
+	Tags               []Tag              `json:"tags"`
+	ImageId            string             `json:"image_id"`
+	Platform           string             `json:"platform"`
 }
 
 type AutoScaling struct {
@@ -84,6 +84,7 @@ type NodePoolDetail struct {
 type CreateNodePoolResponse struct {
 	Response
 	NodePoolID string `json:"nodepool_id"`
+	Message    string `json:"Message"`
 }
 
 type UpdateNodePoolRequest struct {

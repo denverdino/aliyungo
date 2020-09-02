@@ -18,6 +18,7 @@ type ServerlessCreationArgs struct {
 	EndpointPublicAccess bool                  `json:"public_slb"`
 	PrivateZone          bool                  `json:"private_zone"`
 	NatGateway           bool                  `json:"nat_gateway"`
+	KubernetesVersion    string                `json:"kubernetes_version"`
 	DeletionProtection   bool                  `json:"deletion_protection"`
 	SecurityGroupId      string                `json:"security_group_id"`
 	Tags                 []Tag                 `json:"tags"`

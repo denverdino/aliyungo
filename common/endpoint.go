@@ -145,6 +145,21 @@ func (client *LocationClient) DescribeAPIEndpoint(region Region, serviceCode str
 	return endpoint
 }
 
+func (client *LocationClient) DescribeAPIEndpointWithError(region Region, serviceCode string) (string, error) {
+	endpoint, err := client.DescribeAPIEndpointByTypeWithError(region, serviceCode, "localAPI")
+	if err != nil {
+		return "", err
+	}
+	if endpoint == "" {
+		endpoint, err = client.DescribeAPIEndpointByTypeWithError(region, serviceCode, "openAPI")
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return endpoint, nil
+}
+
 func (client *LocationClient) DescribeAPIEndpointByType(region Region, serviceCode string, apiType string) string {
 	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
 		return endpoint
@@ -174,6 +189,41 @@ func (client *LocationClient) DescribeAPIEndpointByType(region Region, serviceCo
 
 	//setProductRegionEndpoint(region, serviceCode, ep)
 	return ep
+}
+
+func (client *LocationClient) DescribeAPIEndpointByTypeWithError(region Region, serviceCode string, apiType string) (string, error) {
+	if endpoint := getProductRegionEndpoint(region, serviceCode); endpoint != "" {
+		return endpoint, nil
+	}
+
+	defaultProtocols := HTTP_PROTOCOL
+
+	args := &DescribeEndpointsArgs{
+		Id:          region,
+		ServiceCode: serviceCode,
+		Type:        apiType,
+	}
+
+	endpoint, err := client.DescribeEndpoints(args)
+	if err != nil || len(endpoint.Endpoints.Endpoint) <= 0 {
+		return "", fmt.Errorf("failed to query endpoints, error: %++v", err)
+	}
+
+	if len(endpoint.Endpoints.Endpoint) <= 0 {
+		return "", nil
+	}
+
+	for _, protocol := range endpoint.Endpoints.Endpoint[0].Protocols.Protocols {
+		if strings.ToLower(protocol) == HTTPS_PROTOCOL {
+			defaultProtocols = HTTPS_PROTOCOL
+			break
+		}
+	}
+
+	ep := fmt.Sprintf("%s://%s", defaultProtocols, endpoint.Endpoints.Endpoint[0].Endpoint)
+
+	//setProductRegionEndpoint(region, serviceCode, ep)
+	return ep, nil
 }
 
 func loadEndpointFromFile(region Region, serviceCode string) string {

@@ -239,7 +239,7 @@ func (client *Client) UpdateStack(req *UpdateStackRequest) (*UpdateStackResponse
 	return response, nil
 }
 
-type GetStackResourceResponse struct {
+type GetStackResourceRequest struct {
 	StackId                string
 	LogicalResourceId      string
 	ClientToken            string
@@ -247,7 +247,7 @@ type GetStackResourceResponse struct {
 	RegionId               common.Region
 }
 
-type GetStackResourceRequest struct {
+type GetStackResourceResponse struct {
 	Status            string
 	Description       string
 	LogicalResourceId string

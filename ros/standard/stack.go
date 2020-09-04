@@ -18,7 +18,7 @@ type CreateStackRequest struct {
 	DisableRollback    bool
 	TemplateBody       string
 	TemplateURL        string
-	Parameters         interface{}
+	Parameters         []Parameter
 	StackPolicyURL     string
 	TimeoutInMinutes   int
 	StackPolicyBody    string

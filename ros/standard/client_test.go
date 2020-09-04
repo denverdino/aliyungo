@@ -52,3 +52,26 @@ func TestListStackEvent(t *testing.T) {
 	}
 	fmt.Printf("ListEventResponse: %+v\n", res)
 }
+
+func TestCreateStack(t *testing.T) {
+	client := NewTestClient()
+	req := &CreateStackRequest{
+		StackName:          "TDDDDDDD",
+		TemplateBody:        tpl,
+		DisableRollback: 	true,
+		TimeoutInMinutes:     60,
+		Parameters:      []Parameter{
+			{ParameterKey: "SystemDisk",ParameterValue: ""},
+		},
+	}
+	res, err := client.CreateStack(req)
+	if err != nil {
+		t.Logf("create stack: %s", err.Error())
+		t.Fail()
+	}
+	fmt.Printf("ListEventResponse: %+v\n", res)
+}
+
+var tpl = `
+
+`

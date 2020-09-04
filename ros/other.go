@@ -18,6 +18,7 @@ type DescribeEventsRequest struct {
 }
 
 type Event struct {
+	Status             string
 	ResourceStatus     string
 	ResourceName       string
 	StatusReason       string

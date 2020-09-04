@@ -238,3 +238,79 @@ func (client *Client) UpdateStack(req *UpdateStackRequest) (*UpdateStackResponse
 
 	return response, nil
 }
+
+type GetStackResourceResponse struct {
+	StackId                string
+	LogicalResourceId      string
+	ClientToken            string
+	ShowResourceAttributes bool
+	RegionId               common.Region
+}
+
+type GetStackResourceRequest struct {
+	Status            string
+	Description       string
+	LogicalResourceId string
+	StackId           string
+
+	StackName           string
+	StatusReason        string
+	PhysicalResourceId  string
+	ResourceType        string
+	CreateTime          string
+	Metadata            map[string]string
+	UpdateTime          string
+	ResourceAttributes  []ResourceAttribute
+	RequestId           string
+	DriftDetectionTime  string
+	ResourceDriftStatus string
+}
+type ResourceAttribute struct {
+	ResourceAttributeValue string
+	ResourceAttributeKey   string
+}
+
+func (client *Client) GetStackResource(req *GetStackResourceRequest) (*GetStackResourceResponse, error) {
+	response := &GetStackResourceResponse{}
+	err := client.Invoke("GetStackResource", req, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+type ListStackResourcesRequest struct {
+	RegionId common.Region
+	StackId  string
+}
+
+type ListStackResourcesResponse struct {
+	common.Response
+	Resources []Resource
+}
+
+type Resource struct {
+	CreateTime         string
+	DriftDetectionTime string
+	LogicalResourceId  string
+	PhysicalResourceId string
+
+	ResourceDriftStatus string
+	ResourceType        string
+	StackId             string
+	StackName           string
+	Status              string
+	StatusReason        string
+	UpdateTime          string
+}
+
+func (client *Client) ListStackResources(req *ListStackResourcesRequest) (*ListStackResourcesResponse, error) {
+	response := &ListStackResourcesResponse{}
+	err := client.Invoke("ListStackResources", req, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}

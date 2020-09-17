@@ -359,10 +359,12 @@ type DescribeScalingActivitiesRequest struct {
 type DescribeScalingActivitiesResponse struct {
 	common.PaginationResult
 	common.Response
-	ScalingActivities []ScalingActivities
+	ScalingActivities                struct {
+		ScalingActivity []ScalingActivity
+	}
 }
 
-type ScalingActivities struct {
+type ScalingActivity struct {
 	AttachedCapacity      string
 	AutoCreatedCapacity   string
 	Cause                 string

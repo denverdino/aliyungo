@@ -1,6 +1,7 @@
 package ess
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/denverdino/aliyungo/common"
@@ -74,4 +75,23 @@ func TestEssScalingGroupCreationAndDeletion(t *testing.T) {
 		t.Errorf("Failed to delete instance %s: %v", instanceId, err)
 	}
 	t.Logf("Instance %s is deleted successfully.", instanceId)
+}
+
+
+
+func TestEssScalingActivity(t *testing.T) {
+
+	client := NewTestClient(common.Region(RegionId))
+	id := "asg-uf68jfxw7gqlao0wlc94"
+	result,err := client.DescribeScalingActivities(
+		&DescribeScalingActivitiesRequest{
+			ScalingGroupId: id,
+			RegionId: common.Shanghai,
+		},
+	)
+	if err != nil {
+		t.Errorf("get activity %s: %v", id, err)
+	}
+	fmt.Printf("%+v\n", result)
+	t.Logf("get activity succeed by id %s.", id)
 }

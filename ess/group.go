@@ -365,8 +365,8 @@ type DescribeScalingActivitiesResponse struct {
 }
 
 type ScalingActivity struct {
-	AttachedCapacity      string
-	AutoCreatedCapacity   string
+	AttachedCapacity      int
+	AutoCreatedCapacity   int
 	Cause                 string
 	Description           string
 	EndTime               string
@@ -377,7 +377,7 @@ type ScalingActivity struct {
 	StartTime             string
 	StatusCode            string
 	StatusMessage         string
-	TotalCapacity         string
+	TotalCapacity         int
 }
 
 func (client *Client) DescribeScalingActivities(args *DescribeScalingActivitiesRequest) (resp *DescribeScalingActivitiesResponse, err error) {

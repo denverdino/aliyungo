@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/denverdino/aliyungo/common"
@@ -39,6 +41,23 @@ func TestSecurityGroups(t *testing.T) {
 			t.Logf("SecurityGroup Attribute: %++v", sga)
 
 		}
+	}
+}
+
+func TestSecurityGroups_BatchQuery(t *testing.T) {
+
+	client := NewTestClient()
+	arg := DescribeSecurityGroupsArgs{
+		RegionId:         common.Region(os.Getenv("RegionId")),
+		SecurityGroupIds: strings.Split(os.Getenv("SecurityGroupIDs"), ","),
+	}
+
+	sgs, _, err := client.DescribeSecurityGroups(&arg)
+	if err != nil {
+		t.Errorf("Failed to DescribeSecurityGroups, error:%++v", err)
+	}
+	for _, sg := range sgs {
+		t.Logf("SecurityGroup: %++v", sg)
 	}
 }
 

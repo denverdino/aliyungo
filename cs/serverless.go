@@ -23,6 +23,7 @@ type ServerlessCreationArgs struct {
 	SecurityGroupId      string                `json:"security_group_id"`
 	Tags                 []Tag                 `json:"tags"`
 	Addons               []Addon               `json:"addons"`
+	ResourceGroupId      string                `json:"resource_group_id"`
 }
 
 type ServerlessClusterResponse struct {

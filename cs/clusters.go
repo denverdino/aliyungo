@@ -70,6 +70,7 @@ type ClusterType struct {
 	NodeStatus             string          `json:"node_status"`
 	DockerVersion          string          `json:"docker_version"`
 	ClusterType            string          `json:"cluster_type"`
+	Profile                string          `json:"profile"`
 }
 
 func (client *Client) DescribeClusters(nameFilter string) (clusters []ClusterType, err error) {

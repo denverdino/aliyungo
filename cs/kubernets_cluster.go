@@ -168,6 +168,7 @@ type ClusterArgs struct {
 	ApiAudiences         string `json:"api_audiences,omitempty"`
 	ServiceAccountIssuer string `json:"service_account_issuer,omitempty"`
 	CustomSAN            string `json:"custom_san,omitempty"`
+	ClusterSpec          string `json:"cluster_spec"`
 }
 
 //addon

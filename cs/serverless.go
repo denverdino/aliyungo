@@ -24,6 +24,7 @@ type ServerlessCreationArgs struct {
 	Tags                 []Tag                 `json:"tags"`
 	Addons               []Addon               `json:"addons"`
 	ResourceGroupId      string                `json:"resource_group_id"`
+	ClusterSpec          string                `json:"cluster_spec"`
 }
 
 type ServerlessClusterResponse struct {

@@ -1,6 +1,7 @@
 package cs
 
 import (
+	"fmt"
 	"github.com/denverdino/aliyungo/common"
 	"net/http"
 	"net/url"
@@ -70,7 +71,12 @@ func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreation
 	//reset clusterType,
 	args.ClusterType = ServerlessKubernetes
 	cluster := &ClusterCommonResponse{}
-	err := client.Invoke(common.Region(args.RegionId), http.MethodPost, "/clusters", nil, args, &cluster)
+	path := "/clusters"
+	if args.ResourceGroupId != "" {
+		// 创建集群到指定资源组
+		path = fmt.Sprintf("/resource_groups/%s/clusters", args.ResourceGroupId)
+	}
+	err := client.Invoke(common.Region(args.RegionId), http.MethodPost, path, nil, args, &cluster)
 	if err != nil {
 		return nil, err
 	}

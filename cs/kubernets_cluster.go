@@ -325,7 +325,12 @@ type ManagedKubernetesClusterCreationRequest struct {
 //Create DelicatedKubernetes Cluster
 func (client *Client) CreateDelicatedKubernetesCluster(request *DelicatedKubernetesClusterCreationRequest) (*ClusterCommonResponse, error) {
 	response := &ClusterCommonResponse{}
-	err := client.Invoke(request.RegionId, http.MethodPost, "/clusters", nil, request, response)
+	path := "/clusters"
+	if request.ResourceGroupId != "" {
+		// 创建集群到指定资源组
+		path = fmt.Sprintf("/resource_groups/%s/clusters", request.ResourceGroupId)
+	}
+	err := client.Invoke(request.RegionId, http.MethodPost, path, nil, request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -336,7 +341,12 @@ func (client *Client) CreateDelicatedKubernetesCluster(request *DelicatedKuberne
 //Create ManagedKubernetes Cluster
 func (client *Client) CreateManagedKubernetesCluster(request *ManagedKubernetesClusterCreationRequest) (*ClusterCommonResponse, error) {
 	response := &ClusterCommonResponse{}
-	err := client.Invoke(request.RegionId, http.MethodPost, "/clusters", nil, request, response)
+	path := "/clusters"
+	if request.ResourceGroupId != "" {
+		// 创建集群到指定资源组
+		path = fmt.Sprintf("/resource_groups/%s/clusters", request.ResourceGroupId)
+	}
+	err := client.Invoke(request.RegionId, http.MethodPost, path, nil, request, response)
 	if err != nil {
 		return nil, err
 	}

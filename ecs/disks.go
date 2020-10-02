@@ -29,6 +29,16 @@ const (
 	DiskCategoryCloudESSD       = DiskCategory("cloud_essd")
 )
 
+// Performance Level of disks
+type DiskPerformanceLevel string
+
+const (
+	DiskPL0 = DiskCategory("PL0")
+	DiskPL1 = DiskCategory("PL1")
+	DiskPL2 = DiskCategory("PL2")
+	DiskPL3 = DiskCategory("PL3")
+)
+
 // Status of disks
 type DiskStatus string
 
@@ -97,6 +107,8 @@ type DiskItemType struct {
 	AttachedTime       util.ISO6801Time
 	DetachedTime       util.ISO6801Time
 	DiskChargeType     DiskChargeType
+	StorageSetId       string
+	PerformanceLevel   DiskPerformanceLevel
 }
 
 type DescribeDisksResponse struct {
@@ -144,6 +156,9 @@ type CreateDiskArgs struct {
 	SnapshotId   string
 	ClientToken  string
 	KMSKeyID     string
+	StorageSetId string
+
+	PerformanceLevel DiskPerformanceLevel
 }
 
 type CreateDisksResponse struct {

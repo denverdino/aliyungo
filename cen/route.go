@@ -1,8 +1,9 @@
 package cen
 
 import (
+	"log"
+
 	"github.com/denverdino/aliyungo/common"
-	"github.com/labstack/gommon/log"
 )
 
 type PublishRouteEntriesArgs struct {
@@ -91,7 +92,7 @@ func (client *Client) PublishRouteEntries(args *PublishRouteEntriesArgs) error {
 	response := &common.Response{}
 	err := client.Invoke("PublishRouteEntries", args, response)
 	if err != nil {
-		log.Errorf("PublishRouteEntries: %s, %s", response.RequestId, err.Error())
+		log.Printf("PublishRouteEntries: %s, %s\n", response.RequestId, err.Error())
 	}
 	return err
 }
@@ -108,7 +109,7 @@ func (client *Client) DescribePublishedRouteEntries(
 	err = client.Invoke("DescribePublishedRouteEntries", args, response)
 
 	if err != nil {
-		log.Errorf("DescribePublishedRouteEntries: %v, %v", args, response)
+		log.Printf("DescribePublishedRouteEntries: %v, %v\n", args, response)
 	}
 
 	return response, err

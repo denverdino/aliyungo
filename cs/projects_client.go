@@ -142,13 +142,13 @@ func (client *ProjectClient) Invoke(method string, path string, query url.Values
 
 	if client.debug {
 		var prettyJSON bytes.Buffer
-		err = json.Indent(&prettyJSON, body, "", "    ")
+		_ = json.Indent(&prettyJSON, body, "", "    ")
 		log.Println(prettyJSON.String())
 	}
 
 	if statusCode >= 400 && statusCode <= 599 {
 		errorResponse := common.ErrorResponse{}
-		err = json.Unmarshal(body, &errorResponse)
+		_ = json.Unmarshal(body, &errorResponse)
 		ecsError := &common.Error{
 			ErrorResponse: errorResponse,
 			StatusCode:    statusCode,

@@ -359,7 +359,7 @@ type DescribeScalingActivitiesRequest struct {
 type DescribeScalingActivitiesResponse struct {
 	common.PaginationResult
 	common.Response
-	ScalingActivities                struct {
+	ScalingActivities struct {
 		ScalingActivity []ScalingActivity
 	}
 }

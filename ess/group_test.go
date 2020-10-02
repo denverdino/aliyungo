@@ -77,16 +77,14 @@ func TestEssScalingGroupCreationAndDeletion(t *testing.T) {
 	t.Logf("Instance %s is deleted successfully.", instanceId)
 }
 
-
-
 func TestEssScalingActivity(t *testing.T) {
 
 	client := NewTestClient(common.Region(RegionId))
 	id := "asg-uf68jfxw7gqlao0wlc94"
-	result,err := client.DescribeScalingActivities(
+	result, err := client.DescribeScalingActivities(
 		&DescribeScalingActivitiesRequest{
 			ScalingGroupId: id,
-			RegionId: common.Shanghai,
+			RegionId:       common.Shanghai,
 		},
 	)
 	if err != nil {

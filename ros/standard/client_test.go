@@ -56,12 +56,12 @@ func TestListStackEvent(t *testing.T) {
 func TestCreateStack(t *testing.T) {
 	client := NewTestClient()
 	req := &CreateStackRequest{
-		StackName:          "TDDDDDDD",
-		TemplateBody:        tpl,
-		DisableRollback: 	true,
-		TimeoutInMinutes:     60,
-		Parameters:      []Parameter{
-			{ParameterKey: "SystemDisk",ParameterValue: ""},
+		StackName:        "TDDDDDDD",
+		TemplateBody:     tpl,
+		DisableRollback:  true,
+		TimeoutInMinutes: 60,
+		Parameters: []Parameter{
+			{ParameterKey: "SystemDisk", ParameterValue: ""},
 		},
 	}
 	res, err := client.CreateStack(req)

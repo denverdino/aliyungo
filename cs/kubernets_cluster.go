@@ -3,6 +3,7 @@ package cs
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/denverdino/aliyungo/ecs"
 	"net/http"
 	"time"
 
@@ -203,8 +204,8 @@ type MasterArgs struct {
 	MasterAutoRenew       bool `json:"master_auto_renew"`
 	MasterAutoRenewPeriod int  `json:"master_auto_renew_period"`
 
-	MasterSystemDiskCategory string `json:"master_system_disk_category"`
-	MasterSystemDiskSize     int64  `json:"master_system_disk_size"`
+	MasterSystemDiskCategory ecs.DiskCategory `json:"master_system_disk_category"`
+	MasterSystemDiskSize     int64            `json:"master_system_disk_size"`
 
 	MasterDataDisks []DataDisk `json:"master_data_disks"` //支持多个数据盘
 
@@ -232,8 +233,8 @@ type WorkerArgs struct {
 	WorkerAutoRenew       bool `json:"worker_auto_renew"`
 	WorkerAutoRenewPeriod int  `json:"worker_auto_renew_period"`
 
-	WorkerSystemDiskCategory string `json:"worker_system_disk_category"`
-	WorkerSystemDiskSize     int64  `json:"worker_system_disk_size"`
+	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category"`
+	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size"`
 
 	WorkerDataDisk  bool       `json:"worker_data_disk"`
 	WorkerDataDisks []DataDisk `json:"worker_data_disks"` //支持多个数据盘

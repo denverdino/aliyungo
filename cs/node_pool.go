@@ -3,6 +3,7 @@ package cs
 import (
 	"fmt"
 	"github.com/denverdino/aliyungo/common"
+	"github.com/denverdino/aliyungo/ecs"
 	"net/http"
 	"time"
 )
@@ -25,7 +26,7 @@ type ScalingGroup struct {
 	LoginPassword      string             `json:"login_password"`
 	KeyPair            string             `json:"key_pair"`
 	SecurityGroupId    string             `json:"security_group_id"`
-	SystemDiskCategory string             `json:"system_disk_category"`
+	SystemDiskCategory ecs.DiskCategory   `json:"system_disk_category"`
 	SystemDiskSize     int64              `json:"system_disk_size"`
 	DataDisks          []NodePoolDataDisk `json:"data_disks"` //支持多个数据盘
 	Tags               []Tag              `json:"tags"`

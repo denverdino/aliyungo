@@ -44,6 +44,8 @@ type ServerlessClusterResponse struct {
 	CurrentVersion     string                `json:"current_version"`
 	PrivateZone        bool                  `json:"private_zone"`
 	DeletionProtection bool                  `json:"deletion_protection"`
+	ResourceGroupId    string                `json:"resource_group_id"`
+	ClusterSpec        string                `json:"cluster_spec"`
 }
 
 type Tag struct {

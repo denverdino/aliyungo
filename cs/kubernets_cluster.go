@@ -415,6 +415,7 @@ type KubernetesClusterDetail struct {
 	Updated time.Time `json:"updated"`
 
 	WorkerRamRoleName string `json:"worker_ram_role_name"`
+	ClusterSpec       string `json:"cluster_spec"`
 }
 
 //GetMetaData

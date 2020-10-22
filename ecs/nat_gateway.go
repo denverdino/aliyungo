@@ -4,6 +4,13 @@ import (
 	"github.com/denverdino/aliyungo/common"
 )
 
+type NatType string
+
+const (
+	NgwNatTypeNormal   = NatType("Normal")
+	NgwNatTypeEnhanced = NatType("Enhanced")
+)
+
 type BandwidthPackageType struct {
 	IpCount   int
 	Bandwidth int
@@ -17,6 +24,7 @@ type CreateNatGatewayArgs struct {
 	BandwidthPackage []BandwidthPackageType
 	Name             string
 	Description      string
+	NatType          NatType
 	ClientToken      string
 }
 
@@ -75,6 +83,7 @@ type NatGatewaySetType struct {
 	Spec                string
 	Status              string
 	VpcId               string
+	NatType             NatType
 }
 
 type DescribeNatGatewayResponse struct {

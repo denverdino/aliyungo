@@ -35,10 +35,10 @@ type ScalingGroup struct {
 }
 
 type AutoScaling struct {
-	EnableAutoScaling bool   `json:"enable_auto_scaling"`
-	MaxInstance       int64  `json:"max_instance"`
-	MinInstance       int64  `json:"min_instance"`
-	Type              string `json:"type"`
+	Enable      bool   `json:"enable"`
+	MaxInstance int64  `json:"max_instance"`
+	MinInstance int64  `json:"min_instance"`
+	Type        string `json:"type"`
 }
 
 type KubernetesConfig struct {

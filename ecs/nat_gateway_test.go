@@ -38,3 +38,20 @@ func TestClient_DescribeNatGateways(t *testing.T) {
 		}
 	}
 }
+
+func TestClient_CreateNatGateway(t *testing.T) {
+	client := NewVpcTestClientForDebug()
+	args := &CreateNatGatewayArgs{
+		RegionId:  TestRegionID,
+		VpcId:     TestVpcId,
+		VSwitchId: TestVswitchID,
+		NatType:   NgwNatTypeEnhanced,
+	}
+
+	resp, err := client.CreateNatGateway(args)
+	if err != nil {
+		t.Fatalf("Error %++v", err)
+	} else {
+		t.Logf("ngw id :%s", resp.NatGatewayId)
+	}
+}

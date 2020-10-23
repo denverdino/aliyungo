@@ -20,6 +20,7 @@ type BandwidthPackageType struct {
 type CreateNatGatewayArgs struct {
 	RegionId         common.Region
 	VpcId            string
+	VSwitchId        string
 	Spec             string
 	BandwidthPackage []BandwidthPackageType
 	Name             string

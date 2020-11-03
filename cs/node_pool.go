@@ -157,6 +157,11 @@ func (client *Client) DeleteNodePool(clusterId, nodePoolId string) error {
 	return client.Invoke("", http.MethodDelete, fmt.Sprintf("/clusters/%s/nodepools/%s", clusterId, nodePoolId), nil, nil, nil)
 }
 
-func (client *Client) DescribeClusterNodePools(clusterId string) error {
-	return client.Invoke("", http.MethodGet, fmt.Sprintf("/clusters/%s/nodepools", clusterId), nil, nil, nil)
+func (client *Client) DescribeClusterNodePools(clusterId string) (*[]NodePoolDetail, error) {
+	nodePools := &[]NodePoolDetail{}
+	err := client.Invoke("", http.MethodGet, fmt.Sprintf("/clusters/%s/nodepools", clusterId), nil, nil, nodePools)
+	if err != nil {
+		return nil, err
+	}
+	return nodePools, nil
 }

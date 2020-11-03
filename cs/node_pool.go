@@ -143,6 +143,15 @@ func (client *Client) DescribeNodePoolDetail(clusterId, nodePoolId string) (*Nod
 	return nodePool, nil
 }
 
+func (client *Client) DescribeClusterNodePools(clusterId string) (*[]NodePoolDetail, error) {
+	nodePools := &[]NodePoolDetail{}
+	err := client.Invoke("", http.MethodGet, fmt.Sprintf("/clusters/%s/nodepools", clusterId), nil, nil, nodePools)
+	if err != nil {
+		return nil, err
+	}
+	return nodePools, nil
+}
+
 func (client *Client) UpdateNodePool(clusterId string, nodePoolId string, request *UpdateNodePoolRequest) (*Response, error) {
 	response := &Response{}
 	err := client.Invoke(request.RegionId, http.MethodPut, fmt.Sprintf("/clusters/%s/nodepools/%s", clusterId, nodePoolId), nil, request, response)

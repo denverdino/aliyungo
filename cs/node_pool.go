@@ -156,3 +156,7 @@ func (client *Client) UpdateNodePool(clusterId string, nodePoolId string, reques
 func (client *Client) DeleteNodePool(clusterId, nodePoolId string) error {
 	return client.Invoke("", http.MethodDelete, fmt.Sprintf("/clusters/%s/nodepools/%s", clusterId, nodePoolId), nil, nil, nil)
 }
+
+func (client *Client) DescribeClusterNodePools(clusterId string) error {
+	return client.Invoke("", http.MethodGet, fmt.Sprintf("/clusters/%s/nodepools", clusterId), nil, nil, nil)
+}

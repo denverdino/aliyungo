@@ -28,7 +28,8 @@ const (
 
 //modify cluster,include DeletionProtection and so on
 type ModifyClusterArgs struct {
-	DeletionProtection bool `json:"deletion_protection"`
+	DeletionProtection bool   `json:"deletion_protection"`
+	ResourceGroupId    string `json:"resource_group_id"`
 }
 
 type UpgradeClusterArgs struct {
@@ -166,14 +167,14 @@ type ClusterArgs struct {
 
 	Taints []Taint `json:"taints"`
 
-	ApiAudiences          string `json:"api_audiences,omitempty"`
-	ServiceAccountIssuer  string `json:"service_account_issuer,omitempty"`
-	CustomSAN             string `json:"custom_san,omitempty"`
-	ClusterSpec           string `json:"cluster_spec"`
-	Timezone              string `json:"timezone"`
-	ClusterDomain         string `json:"cluster_domain"`
-	RdsInstances          string `json:"rds_instances"`
-	EncryptionProviderKey string `json:"encryption_provider_key"`
+	ApiAudiences          string   `json:"api_audiences,omitempty"`
+	ServiceAccountIssuer  string   `json:"service_account_issuer,omitempty"`
+	CustomSAN             string   `json:"custom_san,omitempty"`
+	ClusterSpec           string   `json:"cluster_spec"`
+	Timezone              string   `json:"timezone"`
+	ClusterDomain         string   `json:"cluster_domain"`
+	RdsInstances          []string `json:"rds_instances"`
+	EncryptionProviderKey string   `json:"encryption_provider_key"`
 }
 
 //addon

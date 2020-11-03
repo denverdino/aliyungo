@@ -85,3 +85,14 @@ func Test_DeleteNodePool(t *testing.T) {
 		t.Logf("success")
 	}
 }
+
+func Test_DescribeClusterNodePools(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	resp, err := client.DescribeClusterNodePools(TestClusterId)
+	if err != nil {
+		t.Errorf("Error %++v", err)
+	} else {
+		t.Logf("response: %++v", resp)
+	}
+}

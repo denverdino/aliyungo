@@ -32,6 +32,14 @@ type ScalingGroup struct {
 	Tags               []Tag              `json:"tags"`
 	ImageId            string             `json:"image_id"`
 	Platform           string             `json:"platform"`
+	// 支持包年包月
+	InstanceChargeType string   `json:"instance_charge_type"`
+	Period             int      `json:"period"`
+	PeriodUnit         string   `json:"period_unit"`
+	AutoRenew          bool     `json:"auto_renew"`
+	AutoRenewPeriod    int      `json:"auto_renew_period"`
+	RdsInstances       []string ` json:"rds_instances"`
+	ScalingPolicy      string   `json:"scaling_policy"`
 }
 
 type AutoScaling struct {
@@ -39,6 +47,12 @@ type AutoScaling struct {
 	MaxInstance int64  `json:"max_instance"`
 	MinInstance int64  `json:"min_instance"`
 	Type        string `json:"type"`
+	// eip
+	IsBindEip *bool `json:"is_bond_eip"`
+	// value: PayByBandwidth / PayByTraffic
+	EipInternetChargeType string `json:"eip_internet_charge_type"`
+	// default 5
+	EipBandWidth int64 `json:"eip_bandwidth"`
 }
 
 type KubernetesConfig struct {
@@ -47,6 +61,17 @@ type KubernetesConfig struct {
 	Labels       []Label `json:"labels"`
 	CpuPolicy    string  `json:"cpu_policy"`
 	UserData     string  `json:"user_data"`
+
+	Runtime           string `json:"runtime,omitempty"`
+	RuntimeVersion    string `json:"runtime_version"`
+	CmsEnabled        bool   `json:"cms_enabled"`
+	OverwriteHostname bool   `json:"overwrite_hostname"`
+}
+
+// 加密计算节点池
+type TEEConfig struct {
+	TEEType   string `json:"tee_type"`
+	TEEEnable bool   `json:"tee_enable"`
 }
 
 type CreateNodePoolRequest struct {
@@ -56,6 +81,7 @@ type CreateNodePoolRequest struct {
 	ScalingGroup     `json:"scaling_group"`
 	KubernetesConfig `json:"kubernetes_config"`
 	AutoScaling      `json:"auto_scaling"`
+	TEEConfig        `json:"tee_config"`
 }
 
 type BasicNodePool struct {
@@ -80,6 +106,7 @@ type NodePoolDetail struct {
 	KubernetesConfig `json:"kubernetes_config"`
 	ScalingGroup     `json:"scaling_group"`
 	AutoScaling      `json:"auto_scaling"`
+	TEEConfig        `json:"tee_config"`
 }
 
 type CreateNodePoolResponse struct {

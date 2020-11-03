@@ -166,11 +166,14 @@ type ClusterArgs struct {
 
 	Taints []Taint `json:"taints"`
 
-	ApiAudiences         string `json:"api_audiences,omitempty"`
-	ServiceAccountIssuer string `json:"service_account_issuer,omitempty"`
-	CustomSAN            string `json:"custom_san,omitempty"`
-	ClusterSpec          string `json:"cluster_spec"`
-	Timezone             string `json:"timezone"`
+	ApiAudiences          string `json:"api_audiences,omitempty"`
+	ServiceAccountIssuer  string `json:"service_account_issuer,omitempty"`
+	CustomSAN             string `json:"custom_san,omitempty"`
+	ClusterSpec           string `json:"cluster_spec"`
+	Timezone              string `json:"timezone"`
+	ClusterDomain         string `json:"cluster_domain"`
+	RdsInstances          string `json:"rds_instances"`
+	EncryptionProviderKey string `json:"encryption_provider_key"`
 }
 
 //addon
@@ -276,7 +279,11 @@ type ScaleOutKubernetesClusterRequest struct {
 
 	UserData string `json:"user_data"`
 
-	Count int64 `json:"count"`
+	Count             int64    `json:"count"`
+	CpuPolicy         string   `json:"cpu_policy"`
+	Runtime           Runtime  `json:"runtime"`
+	CloudMonitorFlags bool     `json:"cloud_monitor_flags"`
+	RdsInstances      []string ` json:"rds_instances"`
 }
 
 //datadiks
@@ -417,6 +424,7 @@ type KubernetesClusterDetail struct {
 
 	WorkerRamRoleName string `json:"worker_ram_role_name"`
 	ClusterSpec       string `json:"cluster_spec"`
+	OSType            string `json:"os_type"`
 }
 
 //GetMetaData

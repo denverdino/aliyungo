@@ -124,6 +124,11 @@ type UpdateNodePoolRequest struct {
 	AutoScaling      `json:"auto_scaling"`
 }
 
+type NodePoolsDetail struct {
+	Response
+	NodePools []NodePoolDetail `json:"nodepools"`
+}
+
 func (client *Client) CreateNodePool(request *CreateNodePoolRequest, clusterId string) (*CreateNodePoolResponse, error) {
 	response := &CreateNodePoolResponse{}
 	err := client.Invoke(request.RegionId, http.MethodPost, fmt.Sprintf("/clusters/%s/nodepools", clusterId), nil, request, response)
@@ -144,12 +149,12 @@ func (client *Client) DescribeNodePoolDetail(clusterId, nodePoolId string) (*Nod
 }
 
 func (client *Client) DescribeClusterNodePools(clusterId string) (*[]NodePoolDetail, error) {
-	nodePools := &[]NodePoolDetail{}
+	nodePools := &NodePoolsDetail{}
 	err := client.Invoke("", http.MethodGet, fmt.Sprintf("/clusters/%s/nodepools", clusterId), nil, nil, nodePools)
 	if err != nil {
 		return nil, err
 	}
-	return nodePools, nil
+	return &nodePools.NodePools, nil
 }
 
 func (client *Client) UpdateNodePool(clusterId string, nodePoolId string, request *UpdateNodePoolRequest) (*Response, error) {

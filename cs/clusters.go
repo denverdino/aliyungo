@@ -527,6 +527,7 @@ type KubernetesNodeType struct {
 	HostName           string   `json:"host_name"`
 	ImageId            string   `json:"image_id"`
 	InstanceId         string   `json:"instance_id"`
+	NodeName           string   `json:"node_name"`
 }
 
 type GetKubernetesClusterNodesResponse struct {

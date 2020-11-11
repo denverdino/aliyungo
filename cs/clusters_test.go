@@ -292,3 +292,14 @@ func TestScaleKubernetesCluster(t *testing.T) {
 		t.Fatalf("Failed to TestScaleKubernetesCluster: %v", err)
 	}
 }
+
+func Test_GetKubernetesClusterNodes(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	resp, _, err := client.GetKubernetesClusterNodes(TestClusterId,common.Pagination{PageNumber: 1, PageSize: 1000}, NodePoolId)
+	if err != nil {
+		t.Errorf("Error %++v", err)
+	} else {
+		t.Logf("response: %++v", resp)
+	}
+}

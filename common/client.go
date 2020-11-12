@@ -264,6 +264,10 @@ func (client *Client) SetEndpoint(endpoint string) {
 	client.endpoint = endpoint
 }
 
+func (client *Client) GetEndpoint() string {
+	return client.endpoint
+}
+
 // SetEndpoint sets custom version
 func (client *Client) SetVersion(version string) {
 	client.version = version

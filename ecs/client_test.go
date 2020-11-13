@@ -1,6 +1,9 @@
 package ecs
 
 import (
+	"github.com/denverdino/aliyungo/common"
+	"github.com/magiconair/properties/assert"
+	"os"
 	"testing"
 )
 
@@ -72,4 +75,13 @@ func TestECSDescribe(t *testing.T) {
 			}
 		}
 	}
+}
+
+func Test_NewVPCClientWithSecurityToken4RegionalDomain(t *testing.T) {
+	client := NewVPCClientWithSecurityToken4RegionalDomain(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, common.Beijing)
+	assert.Equal(t, client.GetEndpoint(), "https://vpc-vpc.cn-beijing.aliyuncs.com")
+
+	os.Setenv("VPC_ENDPOINT", "vpc.aliyuncs.com")
+	client = NewVPCClientWithSecurityToken4RegionalDomain(TestAccessKeyId, TestAccessKeySecret, TestSecurityToken, common.Beijing)
+	assert.Equal(t, client.GetEndpoint(), "vpc.aliyuncs.com")
 }

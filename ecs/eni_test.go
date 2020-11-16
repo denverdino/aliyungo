@@ -13,9 +13,13 @@ func TestAssignPrivateIPAddresses(t *testing.T) {
 		PrivateIpAddress:   []string{"192.168.1.200", "192.168.1.201"},
 	}
 	client := NewTestClient()
-	_, err := client.AssignPrivateIpAddresses(&req)
+	assignPrivateIpAddressesResponse, err := client.AssignPrivateIpAddresses(&req)
 	if err != nil {
 		t.Errorf("Failed to AssignPrivateIpAddresses: %v", err)
+	}
+
+	if assignPrivateIpAddressesResponse.AssignedPrivateIpAddressesSet.NetworkInterfaceId != "eni-testeni" {
+		t.Errorf("assert network id mismatch.%s\n", assignPrivateIpAddressesResponse.AssignedPrivateIpAddressesSet.NetworkInterfaceId)
 	}
 
 	time.Sleep(5 * time.Second)

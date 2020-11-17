@@ -129,7 +129,16 @@ type AssignPrivateIpAddressesArgs struct {
 	SecondaryPrivateIpAddressCount int      // optional
 }
 
-type AssignPrivateIpAddressesResponse common.Response
+type AssignPrivateIpAddressesResponse struct {
+	common.Response
+
+	AssignedPrivateIpAddressesSet struct {
+		NetworkInterfaceId string
+		PrivateIpSet       struct {
+			PrivateIpAddress []string
+		}
+	}
+}
 
 func (client *Client) CreateNetworkInterface(args *CreateNetworkInterfaceArgs) (resp *CreateNetworkInterfaceResponse, err error) {
 	resp = &CreateNetworkInterfaceResponse{}

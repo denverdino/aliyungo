@@ -426,6 +426,7 @@ type KubernetesClusterDetail struct {
 	WorkerRamRoleName string `json:"worker_ram_role_name"`
 	ClusterSpec       string `json:"cluster_spec"`
 	OSType            string `json:"os_type"`
+	MasterURL         string `json:"master_url"`
 }
 
 //GetMetaData

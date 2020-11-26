@@ -540,7 +540,7 @@ type GetKubernetesClusterNodesResponse struct {
 func (client *Client) GetKubernetesClusterNodes(id string, pagination common.Pagination, nodepoolId string) (nodes []KubernetesNodeType, paginationResult *PaginationResult, err error) {
 	response := &GetKubernetesClusterNodesResponse{}
 	if nodepoolId != "" {
-		err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/nodes?nodepool_id="+nodepoolId+"&pageNumber="+strconv.Itoa(pagination.PageNumber)+"&pageSize="+strconv.Itoa(pagination.PageSize),nil, nil, &response)
+		err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/nodes?nodepool_id="+nodepoolId+"&pageNumber="+strconv.Itoa(pagination.PageNumber)+"&pageSize="+strconv.Itoa(pagination.PageSize), nil, nil, &response)
 	} else {
 		err = client.Invoke("", http.MethodGet, "/clusters/"+id+"/nodes?pageNumber="+strconv.Itoa(pagination.PageNumber)+"&pageSize="+strconv.Itoa(pagination.PageSize), nil, nil, &response)
 	}

@@ -40,6 +40,7 @@ type ScalingGroup struct {
 	AutoRenewPeriod    int      `json:"auto_renew_period"`
 	RdsInstances       []string ` json:"rds_instances"`
 	ScalingPolicy      string   `json:"scaling_policy"`
+	ScalingGroupId     string   `json:"scaling_group_id"`
 }
 
 type AutoScaling struct {

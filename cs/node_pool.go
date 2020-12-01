@@ -75,6 +75,21 @@ type TEEConfig struct {
 	TEEEnable bool   `json:"tee_enable"`
 }
 
+// 托管节点池配置
+type Management struct {
+	Enable      bool        `json:"enable"`
+	AutoRepair  bool        `json:"auto_repair"`
+	UpgradeConf UpgradeConf `json:"upgrade_config"`
+}
+
+type UpgradeConf struct {
+	AutoUpgrade       bool  `json:"auto_upgrade"`
+	Surge             int64 `json:"surge"`
+	SurgePercentage   int64 `json:"surge_percentage,omitempty"`
+	MaxUnavailable    int64 `json:"max_unavailable"`
+	KeepSurgeOnFailed bool  `json:"keep_surge_on_failed"`
+}
+
 type CreateNodePoolRequest struct {
 	RegionId         common.Region `json:"region_id"`
 	Count            int64         `json:"count"`
@@ -83,6 +98,7 @@ type CreateNodePoolRequest struct {
 	KubernetesConfig `json:"kubernetes_config"`
 	AutoScaling      `json:"auto_scaling"`
 	TEEConfig        `json:"tee_config"`
+	Management       `json:"management"`
 }
 
 type BasicNodePool struct {
@@ -108,6 +124,7 @@ type NodePoolDetail struct {
 	ScalingGroup     `json:"scaling_group"`
 	AutoScaling      `json:"auto_scaling"`
 	TEEConfig        `json:"tee_config"`
+	Management       `json:"management"`
 }
 
 type CreateNodePoolResponse struct {
@@ -123,6 +140,7 @@ type UpdateNodePoolRequest struct {
 	ScalingGroup     `json:"scaling_group"`
 	KubernetesConfig `json:"kubernetes_config"`
 	AutoScaling      `json:"auto_scaling"`
+	Management       `json:"management"`
 }
 
 type NodePoolsDetail struct {

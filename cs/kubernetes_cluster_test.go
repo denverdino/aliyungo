@@ -9,6 +9,12 @@ func Test_ModifyCluster(t *testing.T) {
 
 	args := &ModifyClusterArgs{
 		DeletionProtection: false,
+		MaintenanceWindow: MaintenanceWindow{
+			Enable: true,
+			MaintenanceTime: "2020-12-02T13:06:50.224Z",
+			Duration: "3h",
+			WeeklyPeriod: "Wednesday",
+		},
 	}
 
 	err := client.ModifyCluster(TestClusterId, args)

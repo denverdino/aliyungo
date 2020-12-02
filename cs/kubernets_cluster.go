@@ -26,10 +26,22 @@ const (
 	UpgradeStep_Success     = "success"
 )
 
+type WeeklyPeriod string
+type MaintenanceTime string
+// maintenance window
+type MaintenanceWindow struct {
+	Enable          bool            `json:"enable"`
+	MaintenanceTime MaintenanceTime `json:"maintenance_time"`
+	Duration        string          `json:"duration"`
+	Recurrence      string          `json:"recurrence,omitempty"`
+	WeeklyPeriod    WeeklyPeriod    `json:"weekly_period"`
+}
+
 //modify cluster,include DeletionProtection and so on
 type ModifyClusterArgs struct {
 	DeletionProtection bool   `json:"deletion_protection"`
 	ResourceGroupId    string `json:"resource_group_id"`
+	MaintenanceWindow MaintenanceWindow `json:"maintenance_window"`
 }
 
 type UpgradeClusterArgs struct {

@@ -226,6 +226,7 @@ type BackendServerType struct {
 
 type LoadBalancerType struct {
 	LoadBalancerId               string
+	ResourceGroupId              string
 	LoadBalancerName             string
 	LoadBalancerStatus           string
 	Address                      string

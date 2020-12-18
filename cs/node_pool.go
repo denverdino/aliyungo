@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+type SpotPrice struct {
+	InstanceType string `json:"instance_type"`
+	PriceLimit   string `json:"price_limit"`
+}
+
 type NodePoolInfo struct {
 	NodePoolId      string        `json:"nodepool_id"`
 	RegionId        common.Region `json:"region_id"`
@@ -33,21 +38,25 @@ type ScalingGroup struct {
 	ImageId            string             `json:"image_id"`
 	Platform           string             `json:"platform"`
 	// 支持包年包月
-	InstanceChargeType string   `json:"instance_charge_type"`
-	Period             int      `json:"period"`
-	PeriodUnit         string   `json:"period_unit"`
-	AutoRenew          bool     `json:"auto_renew"`
-	AutoRenewPeriod    int      `json:"auto_renew_period"`
-	RdsInstances       []string ` json:"rds_instances"`
-	ScalingPolicy      string   `json:"scaling_policy"`
-	ScalingGroupId     string   `json:"scaling_group_id"`
+	InstanceChargeType string `json:"instance_charge_type"`
+	Period             int    `json:"period"`
+	PeriodUnit         string `json:"period_unit"`
+	AutoRenew          bool   `json:"auto_renew"`
+	AutoRenewPeriod    int    `json:"auto_renew_period"`
+	// spot实例
+	SpotStrategy   string      `json:"spot_strategy"`
+	SpotPriceLimit []SpotPrice `json:"spot_price_limit"`
+
+	RdsInstances   []string `json:"rds_instances"`
+	ScalingPolicy  string   `json:"scaling_policy"`
+	ScalingGroupId string   `json:"scaling_group_id"`
 }
 
 type AutoScaling struct {
-	Enable      bool   `json:"enable"`
-	MaxInstance int64  `json:"max_instance"`
-	MinInstance int64  `json:"min_instance"`
-	Type        string `json:"type"`
+	Enable       bool   `json:"enable"`
+	MaxInstances int64  `json:"max_instances"`
+	MinInstances int64  `json:"min_instances"`
+	Type         string `json:"type"`
 	// eip
 	IsBindEip *bool `json:"is_bond_eip"`
 	// value: PayByBandwidth / PayByTraffic

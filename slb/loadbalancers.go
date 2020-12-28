@@ -387,3 +387,45 @@ func (client *Client) SetLoadBalancerModificationProtection(args *SetLoadBalance
 	err = client.Invoke("SetLoadBalancerModificationProtection", args, response)
 	return err
 }
+
+type CreateLoadBalancerForCloudServiceArgs struct {
+	RegionId          common.Region
+	AddressIPVersion  AddressIPVersionType
+	ClientToken       string
+	DeleteProtection  FlagType
+	LoadBalancerName  string
+	LoadBalancerSpec  LoadBalancerSpecType
+	MasterZoneId      string
+	SlaveZoneId       string
+	VSwitchId         string
+	VpcId             string
+	CloudInstanceType string
+	CloudInstanceUid  string
+	TunnelType        string
+	ResourceId        string
+	SegmentId         string
+}
+
+type CreateLoadBalancerForCloudServiceResponse struct {
+	common.Response
+	LoadBalancerId   string
+	Address          string
+	NetworkType      string
+	VpcId            string
+	VSwitchId        string
+	LoadBalancerName string
+	AddressIPVersion AddressIPVersionType
+	TunnelType       string
+}
+
+// CreateLoadBalancerForCloudService create LoadBalancer for cloud service (support single/any tunnel)
+//
+// You can read doc at https://yuque.antfin-inc.com/docs/share/0383e1ee-9d5c-487d-b594-b05d025bf7ee
+func (client *Client) CreateLoadBalancerForCloudService(args *CreateLoadBalancerForCloudServiceArgs) (response *CreateLoadBalancerForCloudServiceResponse, err error) {
+	response = &CreateLoadBalancerForCloudServiceResponse{}
+	err = client.Invoke("CreateLoadBalancerForCloudService", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return response, err
+}

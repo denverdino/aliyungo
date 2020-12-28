@@ -170,6 +170,8 @@ type TCPListenerType struct {
 	AclId                     string
 	AclStatus                 string
 	AclType                   string
+	ConnectionDrain           FlagType
+	ConnectionDrainTimeout    int
 }
 
 type CreateLoadBalancerTCPListenerArgs TCPListenerType
@@ -199,10 +201,11 @@ type UDPListenerType struct {
 	VServerGroup              FlagType
 	VServerGroupId            string
 	Description               string
-
-	AclId     string
-	AclStatus string
-	AclType   string
+	AclId                     string
+	AclStatus                 string
+	AclType                   string
+	ConnectionDrain           FlagType
+	ConnectionDrainTimeout    int
 }
 type CreateLoadBalancerUDPListenerArgs UDPListenerType
 

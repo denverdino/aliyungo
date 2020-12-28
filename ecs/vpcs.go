@@ -164,3 +164,32 @@ func (client *Client) WaitForVpcAvailable(regionId common.Region, vpcId string, 
 	}
 	return nil
 }
+
+type ModifyBypassToaAttributeArgs struct {
+	RegionId     common.Region
+	InstanceId   string
+	InstanceType string
+	BypassToa    int
+}
+
+type FailInstance struct {
+	InstanceId string
+	Reason     string
+}
+
+type ModifyBypassToaAttributeResponse struct {
+	common.Response
+	FailInstances struct {
+		instances []FailInstance
+	}
+	asynToken string
+}
+
+func (client *Client) ModifyBypassToaAttribute(args *ModifyBypassToaAttributeArgs) (instances []FailInstance, err error) {
+	response := &ModifyBypassToaAttributeResponse{}
+	err = client.Invoke("ModifyBypassToaAttribute", args, response)
+	if err != nil {
+		return nil, err
+	}
+	return response.FailInstances.instances, err
+}

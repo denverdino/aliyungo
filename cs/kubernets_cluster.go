@@ -171,6 +171,7 @@ type ClusterArgs struct {
 	SecurityGroupId           string    `json:"security_group_id"`
 	IsEnterpriseSecurityGroup bool      `json:"is_enterprise_security_group"`
 	EndpointPublicAccess      bool      `json:"endpoint_public_access"`
+	LoadBalancerSpec          string    `json:"load_balancer_spec"` //api server slb实例规格
 	ProxyMode                 ProxyMode `json:"proxy_mode"`
 	SnatEntry                 bool      `json:"snat_entry"`
 	ResourceGroupId           string    `json:"resource_group_id"`
@@ -223,8 +224,9 @@ type MasterArgs struct {
 	MasterAutoRenew       bool `json:"master_auto_renew"`
 	MasterAutoRenewPeriod int  `json:"master_auto_renew_period"`
 
-	MasterSystemDiskCategory ecs.DiskCategory `json:"master_system_disk_category"`
-	MasterSystemDiskSize     int64            `json:"master_system_disk_size"`
+	MasterSystemDiskCategory         ecs.DiskCategory `json:"master_system_disk_category"`
+	MasterSystemDiskSize             int64            `json:"master_system_disk_size"`
+	MasterSystemDiskPerformanceLevel string           `json:"master_system_disk_performance_level"`
 
 	MasterDataDisks []DataDisk `json:"master_data_disks"` //支持多个数据盘
 
@@ -252,8 +254,9 @@ type WorkerArgs struct {
 	WorkerAutoRenew       bool `json:"worker_auto_renew"`
 	WorkerAutoRenewPeriod int  `json:"worker_auto_renew_period"`
 
-	WorkerSystemDiskCategory ecs.DiskCategory `json:"worker_system_disk_category"`
-	WorkerSystemDiskSize     int64            `json:"worker_system_disk_size"`
+	WorkerSystemDiskCategory         ecs.DiskCategory `json:"worker_system_disk_category"`
+	WorkerSystemDiskSize             int64            `json:"worker_system_disk_size"`
+	WorkerSystemDiskPerformanceLevel string           `json:"worker_system_disk_performance_level"`
 
 	WorkerDataDisk  bool       `json:"worker_data_disk"`
 	WorkerDataDisks []DataDisk `json:"worker_data_disks"` //支持多个数据盘

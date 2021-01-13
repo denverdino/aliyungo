@@ -288,6 +288,11 @@ type ScaleOutKubernetesClusterRequest struct {
 	WorkerAutoRenew       bool `json:"worker_auto_renew"`
 	WorkerAutoRenewPeriod int  `json:"worker_auto_renew_period"`
 
+	WorkerSystemDiskCategory         ecs.DiskCategory `json:"worker_system_disk_category"`
+	WorkerSystemDiskSize             int64            `json:"worker_system_disk_size"`
+	WorkerSnapshotPolicyId           string           `json:"worker_system_disk_snapshot_policy_id"`
+	WorkerSystemDiskPerformanceLevel string           `json:"worker_system_disk_performance_level"`
+
 	WorkerDataDisk  bool       `json:"worker_data_disk"`
 	WorkerDataDisks []DataDisk `json:"worker_data_disks"` //支持多个数据盘
 
@@ -313,6 +318,7 @@ type DataDisk struct {
 	Size                 string `json:"size"`
 	DiskName             string `json:"name"`
 	AutoSnapshotPolicyId string `json:"auto_snapshot_policy_id"`
+	PerformanceLevel     string `json:"performance_Level"`
 }
 
 type NodePoolDataDisk struct {
@@ -323,6 +329,7 @@ type NodePoolDataDisk struct {
 	Size                 int    `json:"size"`
 	DiskName             string `json:"name"`
 	AutoSnapshotPolicyId string `json:"auto_snapshot_policy_id"`
+	PerformanceLevel     string `json:"performance_Level"`
 }
 
 //runtime

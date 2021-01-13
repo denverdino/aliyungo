@@ -25,18 +25,19 @@ type NodePoolInfo struct {
 }
 
 type ScalingGroup struct {
-	VpcId              string             `json:"vpc_id"`
-	VswitchIds         []string           `json:"vswitch_ids"`
-	InstanceTypes      []string           `json:"instance_types"`
-	LoginPassword      string             `json:"login_password"`
-	KeyPair            string             `json:"key_pair"`
-	SecurityGroupId    string             `json:"security_group_id"`
-	SystemDiskCategory ecs.DiskCategory   `json:"system_disk_category"`
-	SystemDiskSize     int64              `json:"system_disk_size"`
-	DataDisks          []NodePoolDataDisk `json:"data_disks"` //支持多个数据盘
-	Tags               []Tag              `json:"tags"`
-	ImageId            string             `json:"image_id"`
-	Platform           string             `json:"platform"`
+	VpcId                      string             `json:"vpc_id"`
+	VswitchIds                 []string           `json:"vswitch_ids"`
+	InstanceTypes              []string           `json:"instance_types"`
+	LoginPassword              string             `json:"login_password"`
+	KeyPair                    string             `json:"key_pair"`
+	SecurityGroupId            string             `json:"security_group_id"`
+	SystemDiskCategory         ecs.DiskCategory   `json:"system_disk_category"`
+	SystemDiskSize             int64              `json:"system_disk_size"`
+	SystemDiskPerformanceLevel string             `json:"system_disk_performance_level"`
+	DataDisks                  []NodePoolDataDisk `json:"data_disks"` //支持多个数据盘
+	Tags                       []Tag              `json:"tags"`
+	ImageId                    string             `json:"image_id"`
+	Platform                   string             `json:"platform"`
 	// 支持包年包月
 	InstanceChargeType string `json:"instance_charge_type"`
 	Period             int    `json:"period"`

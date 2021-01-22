@@ -82,7 +82,10 @@ func (client *Client) InitClient() *Client {
 			TLSHandshakeTimeout: time.Duration(handshakeTimeout) * time.Second}
 		client.httpClient = &http.Client{Transport: t}
 	}
-	client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret)
+	if strings.ToLower(os.Getenv("DISABLE_LOCATION")) != "true" {
+		client.setEndpointByLocation(client.regionID, client.serviceCode, client.AccessKeyId, client.AccessKeySecret)
+	}
+
 	return client
 }
 

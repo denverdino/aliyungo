@@ -14,6 +14,25 @@ const (
 	PostPaid = InstanceChargeType("PostPaid")
 )
 
+type DestinationResource string
+
+const (
+	DestinationResource_Zone         = DestinationResource("Zone")
+	DestinationResource_IoOptimized  = DestinationResource("IoOptimized")
+	DestinationResource_InstanceType = DestinationResource("InstanceType")
+	DestinationResource_SystemDisk   = DestinationResource("SystemDisk")
+	DestinationResource_DataDisk     = DestinationResource("DataDisk")
+	DestinationResource_Network      = DestinationResource("Network")
+)
+
+type SpotStrategy string
+
+const (
+	NoSpot             = SpotStrategy("NoSpot")
+	SpotWithPriceLimit = SpotStrategy("SpotWithPriceLimit")
+	SpotAsPriceGo      = SpotStrategy("SpotAsPriceGo")
+)
+
 type DescribeEndpointArgs struct {
 	Id          Region
 	ServiceCode string

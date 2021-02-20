@@ -10,7 +10,7 @@ func TestCreateIndex(t *testing.T) {
 	p := DefaultProject(t)
 	config := &IndexConfig{
 		TTL: 7,
-		LineConfig: IndexLineConfig{
+		LineConfig: &IndexLineConfig{
 			TokenList:     []string{",", "\t", "\n", " ", ";"},
 			CaseSensitive: false,
 		},

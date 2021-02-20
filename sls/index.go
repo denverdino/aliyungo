@@ -6,7 +6,7 @@ import (
 
 type IndexLineConfig struct {
 	TokenList     []string `json:"token,omitempty"`
-	CaseSensitive bool     `json:"caseSensitive,omitempty"`
+	CaseSensitive bool     `json:"caseSensitive"`
 	IncludeKeys   []string `json:"include_keys,omitempty"`
 	ExcludeKeys   []string `json:"exclude_keys,omitempty"`
 }

@@ -1,22 +1,28 @@
 package sls
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type IndexLineConfig struct {
 	TokenList     []string `json:"token,omitempty"`
-	CaseSensitive bool     `json:"caseSensitive"`
+	CaseSensitive bool     `json:"caseSensitive,omitempty"`
 	IncludeKeys   []string `json:"include_keys,omitempty"`
-	Exclude_keys  []string `json:"exclude_keys,omitempty"`
+	ExcludeKeys   []string `json:"exclude_keys,omitempty"`
 }
 
 type IndexKeyConfig struct {
+	Type          string   `json:"type,omitempty"`
+	Alias         string   `json:"alias,omitempty"`
+	Chn           bool     `json:"chn"`
 	TokenList     []string `json:"token,omitempty"`
-	CaseSensitive bool     `json:"caseSensitive,omitempty"`
+	CaseSensitive bool     `json:"caseSensitive"`
+	DocValue      bool     `json:"doc_value"`
 }
 
 type IndexConfig struct {
 	TTL           int                       `json:"ttl,omitempty"`
-	LineConfig    IndexLineConfig           `json:"line,omitempty"`
+	LineConfig    *IndexLineConfig          `json:"line,omitempty"`
 	KeyConfigList map[string]IndexKeyConfig `json:"keys,omitempty"`
 }
 

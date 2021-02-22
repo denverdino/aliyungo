@@ -26,6 +26,7 @@ type ServerlessCreationArgs struct {
 	Addons               []Addon               `json:"addons"`
 	ResourceGroupId      string                `json:"resource_group_id"`
 	ClusterSpec          string                `json:"cluster_spec"`
+	LoadBalancerSpec     string                `json:"load_balancer_spec"` //api server slb实例规格
 }
 
 type ServerlessClusterResponse struct {

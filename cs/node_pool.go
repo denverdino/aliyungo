@@ -51,6 +51,11 @@ type ScalingGroup struct {
 	RdsInstances   []string `json:"rds_instances"`
 	ScalingPolicy  string   `json:"scaling_policy"`
 	ScalingGroupId string   `json:"scaling_group_id"`
+
+	WorkerSnapshotPolicyId string `json:"worker_system_disk_snapshot_policy_id"`
+	// 公网ip
+	InternetChargeType      string `json:"internet_charge_type"`
+	InternetMaxBandwidthOut int    `json:"internet_max_bandwidth_out"`
 }
 
 type AutoScaling struct {
@@ -77,6 +82,7 @@ type KubernetesConfig struct {
 	RuntimeVersion    string `json:"runtime_version"`
 	CmsEnabled        bool   `json:"cms_enabled"`
 	OverwriteHostname bool   `json:"overwrite_hostname"`
+	Unschedulable     bool   `json:"unschedulable"`
 }
 
 // 加密计算节点池
@@ -141,6 +147,7 @@ type CreateNodePoolResponse struct {
 	Response
 	NodePoolID string `json:"nodepool_id"`
 	Message    string `json:"Message"`
+	TaskID     string `json:"task_id"`
 }
 
 type UpdateNodePoolRequest struct {

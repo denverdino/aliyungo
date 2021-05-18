@@ -10,23 +10,29 @@ import (
 )
 
 type ServerlessCreationArgs struct {
-	ClusterType          KubernetesClusterType `json:"cluster_type"`
-	Name                 string                `json:"name"`
-	RegionId             string                `json:"region_id"`
-	VpcId                string                `json:"vpc_id"`
-	VSwitchId            string                `json:"vswitch_id"`
-	VswitchIds           []string              `json:"vswitch_ids"`
-	EndpointPublicAccess bool                  `json:"public_slb"`
-	PrivateZone          bool                  `json:"private_zone"`
-	NatGateway           bool                  `json:"nat_gateway"`
-	KubernetesVersion    string                `json:"kubernetes_version"`
-	DeletionProtection   bool                  `json:"deletion_protection"`
-	SecurityGroupId      string                `json:"security_group_id"`
-	Tags                 []Tag                 `json:"tags"`
-	Addons               []Addon               `json:"addons"`
-	ResourceGroupId      string                `json:"resource_group_id"`
-	ClusterSpec          string                `json:"cluster_spec"`
-	LoadBalancerSpec     string                `json:"load_balancer_spec"` //api server slb实例规格
+	ClusterType           KubernetesClusterType `json:"cluster_type"`
+	Name                  string                `json:"name"`
+	RegionId              string                `json:"region_id"`
+	VpcId                 string                `json:"vpc_id"`
+	VSwitchId             string                `json:"vswitch_id"`
+	VswitchIds            []string              `json:"vswitch_ids"`
+	EndpointPublicAccess  bool                  `json:"public_slb"`
+	PrivateZone           bool                  `json:"private_zone"`
+	NatGateway            bool                  `json:"nat_gateway"`
+	KubernetesVersion     string                `json:"kubernetes_version"`
+	DeletionProtection    bool                  `json:"deletion_protection"`
+	SecurityGroupId       string                `json:"security_group_id"`
+	Tags                  []Tag                 `json:"tags"`
+	Addons                []Addon               `json:"addons"`
+	ResourceGroupId       string                `json:"resource_group_id"`
+	ClusterSpec           string                `json:"cluster_spec"`
+	LoadBalancerSpec      string                `json:"load_balancer_spec"` //api server slb实例规格
+	ServiceCIDR           string                `json:"service_cidr"`
+	TimeZone              string                `json:"timezone"`
+	ServiceDiscoveryTypes []string              `json:"service_discovery_types"`
+	ZoneID                string                `json:"zone_id"`
+	LoggingType           string                `json:"logging_type"`
+	SLSProjectName        string                `json:"sls_project_name"`
 }
 
 type ServerlessClusterResponse struct {

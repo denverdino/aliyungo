@@ -133,7 +133,12 @@ func (c *Client) callApi(api string, params map[string]string, method string) (s
 		request.Header.Add("Spas-Signature", c.getSign([]string{probe}))
 		c.HttpClient.Timeout = time.Duration(c.TimeOut+30) * time.Second
 	} else {
-		request.Header.Add("Spas-Signature", c.getSign([]string{c.NameSpace, params["group"], timeStamp}))
+		if group,exists := params["group"]; exists {
+			request.Header.Add("Spas-Signature", c.getSign([]string{c.NameSpace, group, timeStamp}))
+		} else {
+			request.Header.Add("Spas-Signature", c.getSign([]string{c.NameSpace, timeStamp}))
+		}
+
 	}
 
 	resp, err := c.HttpClient.Do(request)
@@ -172,11 +177,12 @@ func (c *Client) GetAllConfigs(pageNo, pageSize int) (string, error) {
 	return c.callApi("diamond-server/basestone.do?method=getAllConfigByTenant", map[string]string{
 		"pageNo":   strconv.Itoa(pageNo),
 		"pageSize": strconv.Itoa(pageSize),
+		"tenant": c.NameSpace,
+		"method": "getAllConfigByTenant",
 	}, "GET")
 }
 
 func (c *Client) Publish(dataId, group, content string) (string, error) {
-
 	return c.callApi("diamond-server/basestone.do?method=syncUpdateAll", map[string]string{
 		"tenant":  c.NameSpace,
 		"dataId":  dataId,

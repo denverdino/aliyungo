@@ -40,6 +40,17 @@ func (client *Client) DescribeResource(stackId, stackName, resourceName string) 
 	return response, nil
 }
 
+//https://help.aliyun.com/document_detail/28917.html?spm=5176.doc28916.6.589.BUPJqx
+func (client *Client) DescribeResourceByRegion(regionId common.Region, stackId, stackName, resourceName string) (*Resource, error) {
+	response := &Resource{}
+	err := client.Invoke(regionId, http.MethodGet, fmt.Sprintf("/stacks/%s/%s/resources/%s", stackName, stackId, resourceName), nil, nil, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
 //https://help.aliyun.com/document_detail/28918.html?spm=5176.doc28917.6.590.smknll
 type SupportStatus string
 

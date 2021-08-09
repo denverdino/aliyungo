@@ -261,13 +261,13 @@ func TestClient_ServiceManagedControl(t *testing.T) {
 		t.Fatalf("Failed to DescribeLoadBalancerAttribute: %v", err)
 	}
 
-	resource := make([]ManagedResourceModel,0)
+	resource := make([]ManagedResourceModel, 0)
 	resource = append(resource, ManagedResourceModel{ResourceId: lb.LoadBalancerId})
 	args := ServiceManagedControlArgs{
-		RegionId:			common.Beijing,
+		RegionId:           common.Beijing,
 		ServiceManagedMode: Managed,
-		ResourceType: 		ManagedLoadBalancer,
-		Resources: 			resource,
+		ResourceType:       ManagedLoadBalancer,
+		Resources:          resource,
 	}
 
 	err = client.ServiceManagedControl(&args)

@@ -227,8 +227,8 @@ type BackendServerType struct {
 type ServiceManagedModeType string
 
 const (
-	Managed = ServiceManagedModeType("Managed")
-	Unmanaged = ServiceManagedModeType("Unmanaged")
+	Managed           = ServiceManagedModeType("Managed")
+	Unmanaged         = ServiceManagedModeType("Unmanaged")
 	DependencyManaged = ServiceManagedModeType("DependencyManaged")
 )
 
@@ -260,10 +260,10 @@ type LoadBalancerType struct {
 	BackendServers struct {
 		BackendServer []BackendServerType
 	}
-	LoadBalancerSpec LoadBalancerSpecType
-	MasterZoneId     string
-	SlaveZoneId      string
-	AddressIPVersion AddressIPVersionType
+	LoadBalancerSpec   LoadBalancerSpecType
+	MasterZoneId       string
+	SlaveZoneId        string
+	AddressIPVersion   AddressIPVersionType
 	ServiceManagedMode ServiceManagedModeType
 }
 
@@ -400,28 +400,28 @@ func (client *Client) SetLoadBalancerModificationProtection(args *SetLoadBalance
 type ManagedResourceType string
 
 const (
-	ManagedLoadBalancer = ManagedResourceType("LoadBalancer")
-	ManagedTls = ManagedResourceType("Tls")
-	ManagedVServerGroup = ManagedResourceType("VServerGroup")
+	ManagedLoadBalancer           = ManagedResourceType("LoadBalancer")
+	ManagedTls                    = ManagedResourceType("Tls")
+	ManagedVServerGroup           = ManagedResourceType("VServerGroup")
 	ManagedMasterSlaveServerGroup = ManagedResourceType("MasterSlaveServerGroup")
-	ManagedAcl = ManagedResourceType("Acl")
-	ManagedListener = ManagedResourceType("Listener")
-	ManagedRule = ManagedResourceType("Rule")
-	ManagedAppRule = ManagedResourceType("AppRule")
-	ManagedDomainExtension = ManagedResourceType("DomainExtension")
+	ManagedAcl                    = ManagedResourceType("Acl")
+	ManagedListener               = ManagedResourceType("Listener")
+	ManagedRule                   = ManagedResourceType("Rule")
+	ManagedAppRule                = ManagedResourceType("AppRule")
+	ManagedDomainExtension        = ManagedResourceType("DomainExtension")
 )
 
 type ManagedResourceModel struct {
 	ResourceId string
-	Port int
-	Protocol string
+	Port       int
+	Protocol   string
 }
 
 type ServiceManagedControlArgs struct {
-	RegionId common.Region
+	RegionId           common.Region
 	ServiceManagedMode ServiceManagedModeType
-	ResourceType ManagedResourceType
-	Resources []ManagedResourceModel
+	ResourceType       ManagedResourceType
+	Resources          []ManagedResourceModel
 }
 
 type ServiceManagedControlResponse struct {

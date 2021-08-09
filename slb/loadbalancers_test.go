@@ -235,3 +235,60 @@ func TestClient_SetLoadBalancerModificationProtection(t *testing.T) {
 	}
 
 }
+
+func TestClient_ServiceManagedControl(t *testing.T) {
+	client := NewTestNewSLBClientForDebug()
+
+	creationArgs := CreateLoadBalancerArgs{
+		RegionId:                     common.Beijing,
+		LoadBalancerName:             "test-slb-modification-protection",
+		LoadBalancerSpec:             S1Small,
+		AddressType:                  InternetAddressType,
+		ModificationProtectionStatus: ConsoleProtection,
+		ModificationProtectionReason: "kubernetes.do.not.delete",
+		ClientToken:                  client.GenerateClientToken(),
+	}
+	response, err := client.CreateLoadBalancer(&creationArgs)
+	if err != nil {
+		t.Fatalf("Failed to CreateLoadBalancer: %v", err)
+	}
+
+	t.Logf("CreateLoadBalancer result: %v", *response)
+	lbId := response.LoadBalancerId
+
+	lb, err := client.DescribeLoadBalancerAttribute(lbId)
+	if err != nil {
+		t.Fatalf("Failed to DescribeLoadBalancerAttribute: %v", err)
+	}
+
+	resource := make([]ManagedResourceModel, 0)
+	resource = append(resource, ManagedResourceModel{ResourceId: lb.LoadBalancerId})
+	args := ServiceManagedControlArgs{
+		RegionId:           common.Beijing,
+		ServiceManagedMode: Managed,
+		ResourceType:       ManagedLoadBalancer,
+		Resources:          resource,
+	}
+
+	err = client.ServiceManagedControl(&args)
+	if err != nil {
+		t.Fatalf("Failed to modify resource managed status: %v", err)
+	}
+
+	lb, err = client.DescribeLoadBalancerAttribute(lbId)
+	if err != nil {
+		t.Fatalf("Failed to DescribeLoadBalancerAttribute: %v", err)
+	}
+
+	if lb.ServiceManagedMode != Managed {
+		t.Fatalf("Failed to modify resource managed status, slb %s, expected %s got %s",
+			lbId, Managed, lb.ServiceManagedMode)
+	}
+
+	// Delete Slb
+	err = client.DeleteLoadBalancer(lbId)
+	if err != nil {
+		t.Fatalf("Failed to DeleteLoadBalancer: %v", err)
+	}
+
+}

@@ -420,6 +420,8 @@ type ManagedResourceModel struct {
 type ServiceManagedControlArgs struct {
 	RegionId           common.Region
 	ServiceManagedMode ServiceManagedModeType
+	ResourceUid        string
+	ResourceBid        string
 	ResourceType       ManagedResourceType
 	Resources          []ManagedResourceModel
 }

@@ -56,6 +56,9 @@ type ScalingGroup struct {
 	// 公网ip
 	InternetChargeType      string `json:"internet_charge_type"`
 	InternetMaxBandwidthOut int    `json:"internet_max_bandwidth_out"`
+	// Operating system hardening
+	SocEnabled *bool `json:"soc_enabled"`
+	CisEnabled *bool `json:"cis_enabled"`
 }
 
 type AutoScaling struct {

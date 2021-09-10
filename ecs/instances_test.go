@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/denverdino/aliyungo/common"
 )
@@ -345,4 +346,90 @@ func TestClient_DescribeInstances(t *testing.T) {
 			t.Logf("response[%d] = %++v", index, instance)
 		}
 	}
+}
+
+func Test_CreateDescribeAndDeletiongInstances(t *testing.T) {
+	if TestAccessKeyId == "" || TestAccessKeySecret == "" || TestVpcId == "" || TestVswitchID == "" {
+		t.Skip("missing env")
+		return
+	}
+	client := NewTestClientForDebug()
+
+	//createInstance
+	createInstanceArgs := &CreateInstanceArgs{
+		RegionId:           TestRegionID,
+		InstanceType:       TestInstanceType,
+		VSwitchId:          TestVswitchID,
+		ResourceGroupId:    TestResourceGroupId,
+		SecurityGroupId:    TestSecurityGroupId,
+		ImageId:            TestImageId,
+		InstanceChargeType: common.PostPaid,
+	}
+
+	instanceId, err := client.CreateInstance(createInstanceArgs)
+	if err != nil {
+		t.Fatalf("CreateInstance error %v", err)
+	}
+
+	//wait for stoppend
+	err = client.WaitForInstance(instanceId, Stopped, 60)
+	if err != nil {
+		t.Fatalf("WaitForInstance Stopped error %v", err)
+	}
+
+	// start Instance
+	err = client.StartInstance(instanceId)
+	if err != nil {
+		t.Fatalf("StartInstance %s error %v", instanceId, err)
+	}
+
+	//wait for running
+	err = client.WaitForInstance(instanceId, Running, 0)
+	if err != nil {
+		t.Fatalf("WaitForInstance Running error %v", err)
+	}
+
+	time.Sleep(10 * time.Second)
+	t.Logf("After 30s ,describe instance %s", instanceId)
+
+	//describe Instances
+	instanceB, _ := json.Marshal([]string{instanceId})
+	describeInstancesArgs := &DescribeInstancesArgs{
+		RegionId:    TestRegionID,
+		InstanceIds: string(instanceB),
+	}
+
+	instances, pageInfo, err := client.DescribeInstances(describeInstancesArgs)
+	if err != nil {
+		t.Fatalf("Error %v", err)
+	}
+
+	t.Logf("PageInfo = %#v", pageInfo)
+	for _, instance := range instances {
+		t.Logf("Instance = %#v", instance)
+	}
+
+	time.Sleep(30 * time.Second)
+	t.Logf("After 30s ,delete instance %s", instanceId)
+
+	//stop instance
+	err = client.StopInstance(instanceId, true)
+	if err != nil {
+		t.Fatalf("StopInstance %s error %v", instanceId, err)
+	}
+
+	//wait for stoppend
+	err = client.WaitForInstance(instanceId, Stopped, 60)
+	if err != nil {
+		t.Fatalf("WaitForInstance Stopped error %v", err)
+	}
+	t.Logf("Instance %s is stopped successfully.", instanceId)
+
+	// delete instance
+	err = client.DeleteInstance(instanceId)
+	if err != nil {
+		t.Fatalf("DeleteInstance %s error %v", instanceId, err)
+	}
+	t.Logf("Instance %s is deleted successfully.", instanceId)
+
 }

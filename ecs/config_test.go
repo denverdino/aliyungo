@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/denverdino/aliyungo/common"
 	"os"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 //Modify with your Access Key Id and Access Key Secret
@@ -16,10 +17,11 @@ var (
 	TestVswitchID       = os.Getenv("TestVswitchID")
 
 	TestInstanceId      = os.Getenv("InstanceId")
-	TestSecurityGroupId = "MY_TEST_SECURITY_GROUP_ID"
-	TestImageId         = "MY_IMAGE_ID"
+	TestSecurityGroupId = os.Getenv("TestSecurityGroupId")
+	TestResourceGroupId = os.Getenv("TestResourceGroupId")
+	TestImageId         = os.Getenv("TestImageId")
 	TestAccountId       = "MY_TEST_ACCOUNT_ID" //Get from https://account.console.aliyun.com
-	TestInstanceType    = "ecs.n4.large"
+	TestInstanceType    = os.Getenv("InstanceType")
 	TestVSwitchID       = "MY_TEST_VSWITCHID"
 
 	TestIAmRich = false

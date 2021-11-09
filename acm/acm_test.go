@@ -65,3 +65,12 @@ func TestClient_Subscribe(t *testing.T) {
 		}
 	})
 }
+
+func TestClient_GetAllConfig(t *testing.T) {
+	RunWithTest(t, func(client *Client, t *testing.T) {
+		_, err := client.GetAllConfigs(1, 200)
+		if err != nil {
+			t.Error(err)
+		}
+	})
+}

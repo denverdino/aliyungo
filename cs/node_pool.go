@@ -63,6 +63,8 @@ type ScalingGroup struct {
 	CisEnabled *bool `json:"cis_enabled"`
 	// ipv6
 	SupportIPv6 bool `json:"support_ipv6"`
+	// deploymentset
+	DeploymentSetId string `json:"deploymentset_id"`
 }
 
 type AutoScaling struct {

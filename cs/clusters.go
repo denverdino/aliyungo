@@ -33,6 +33,8 @@ const (
 	ClusterTypeManagedKubernetes = "ManagedKubernetes"
 
 	ClusterTypeServerlessKubernetes = "Ask"
+
+	ProfileServerlessKubernetes = "Serverless"
 )
 
 var NodeStableClusterState = []ClusterState{Running, Updating, Failed, DeleteFailed, Deleted, InActive}

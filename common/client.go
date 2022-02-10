@@ -76,7 +76,7 @@ func (client *Client) InitClient() *Client {
 	client.debug = false
 
 	// create DefaultTransport manully, because transport doesn't has clone method in go 1.10
-	t :=&http.Transport{
+	t := &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
 			Timeout:   30 * time.Second,

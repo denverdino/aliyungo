@@ -16,9 +16,11 @@ var (
 	TestRegionID            = common.Region(os.Getenv("RegionId"))
 	TestVpcId               = os.Getenv("VpcId")
 	TestVSwitchId           = os.Getenv("VSwitchId")
+	TestServiceCIDR         = os.Getenv("ServiceCIDR")
 	TestClusterId           = os.Getenv("ClusterId")
 	TestPrivateIpAddress, _ = strconv.ParseBool(os.Getenv("PrivateIpAddress"))
 	TestToken               = os.Getenv("Token")
+	TestLoggingType         = os.Getenv("LoggingType")
 )
 
 var testClient *Client

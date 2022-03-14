@@ -10,29 +10,30 @@ import (
 )
 
 type ServerlessCreationArgs struct {
-	ClusterType           KubernetesClusterType `json:"cluster_type"`
-	Name                  string                `json:"name"`
-	RegionId              string                `json:"region_id"`
-	VpcId                 string                `json:"vpc_id"`
-	VSwitchId             string                `json:"vswitch_id"`
-	VswitchIds            []string              `json:"vswitch_ids"`
-	EndpointPublicAccess  bool                  `json:"public_slb"`
-	PrivateZone           bool                  `json:"private_zone"`
-	NatGateway            bool                  `json:"nat_gateway"`
-	KubernetesVersion     string                `json:"kubernetes_version"`
-	DeletionProtection    bool                  `json:"deletion_protection"`
-	SecurityGroupId       string                `json:"security_group_id"`
-	Tags                  []Tag                 `json:"tags"`
-	Addons                []Addon               `json:"addons"`
-	ResourceGroupId       string                `json:"resource_group_id"`
-	ClusterSpec           string                `json:"cluster_spec"`
-	LoadBalancerSpec      string                `json:"load_balancer_spec"` //api server slb实例规格
-	ServiceCIDR           string                `json:"service_cidr"`
-	TimeZone              string                `json:"timezone"`
-	ServiceDiscoveryTypes []string              `json:"service_discovery_types"`
-	ZoneID                string                `json:"zone_id"`
-	LoggingType           string                `json:"logging_type"`
-	SLSProjectName        string                `json:"sls_project_name"`
+	ClusterType           KubernetesClusterType    `json:"cluster_type"`
+	Profile               KubernetesClusterProfile `json:"profile"`
+	Name                  string                   `json:"name"`
+	RegionId              string                   `json:"region_id"`
+	VpcId                 string                   `json:"vpcid"`
+	VSwitchId             string                   `json:"vswitch_id"`
+	VswitchIds            []string                 `json:"vswitch_ids"`
+	EndpointPublicAccess  bool                     `json:"public_slb"`
+	PrivateZone           bool                     `json:"private_zone"`
+	NatGateway            bool                     `json:"nat_gateway"`
+	KubernetesVersion     string                   `json:"kubernetes_version"`
+	DeletionProtection    bool                     `json:"deletion_protection"`
+	SecurityGroupId       string                   `json:"security_group_id"`
+	Tags                  []Tag                    `json:"tags"`
+	Addons                []Addon                  `json:"addons"`
+	ResourceGroupId       string                   `json:"resource_group_id"`
+	ClusterSpec           string                   `json:"cluster_spec"`
+	LoadBalancerSpec      string                   `json:"load_balancer_spec"` //api server slb实例规格
+	ServiceCIDR           string                   `json:"service_cidr"`
+	TimeZone              string                   `json:"timezone"`
+	ServiceDiscoveryTypes []string                 `json:"service_discovery_types"`
+	ZoneID                string                   `json:"zone_id"`
+	LoggingType           string                   `json:"logging_type"`
+	SLSProjectName        string                   `json:"sls_project_name"`
 }
 
 type ServerlessClusterResponse struct {
@@ -53,6 +54,7 @@ type ServerlessClusterResponse struct {
 	DeletionProtection bool                  `json:"deletion_protection"`
 	ResourceGroupId    string                `json:"resource_group_id"`
 	ClusterSpec        string                `json:"cluster_spec"`
+	Profile            string                `json:"profile"`
 }
 
 type Tag struct {
@@ -77,8 +79,6 @@ func (client *Client) CreateServerlessKubernetesCluster(args *ServerlessCreation
 		return nil, err
 	}
 
-	//reset clusterType,
-	args.ClusterType = ServerlessKubernetes
 	cluster := &ClusterCommonResponse{}
 	path := "/clusters"
 	if args.ResourceGroupId != "" {
@@ -113,7 +113,12 @@ func (client *Client) DescribeServerlessKubernetesClusters() ([]*ServerlessClust
 	}
 
 	for _, cluster := range allClusters {
+		// Ask 1.0/2.0
 		if cluster.ClusterType == ClusterTypeServerlessKubernetes {
+			askClusters = append(askClusters, cluster)
+		}
+		// Ask 3.0
+		if cluster.ClusterType == ClusterTypeManagedKubernetes && cluster.Profile == ProfileServerlessKubernetes {
 			askClusters = append(askClusters, cluster)
 		}
 	}

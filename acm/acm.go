@@ -133,7 +133,7 @@ func (c *Client) callApi(api string, params map[string]string, method string) (s
 		request.Header.Add("Spas-Signature", c.getSign([]string{probe}))
 		c.HttpClient.Timeout = time.Duration(c.TimeOut+30) * time.Second
 	} else {
-		if group,exists := params["group"]; exists {
+		if group, exists := params["group"]; exists {
 			request.Header.Add("Spas-Signature", c.getSign([]string{c.NameSpace, group, timeStamp}))
 		} else {
 			request.Header.Add("Spas-Signature", c.getSign([]string{c.NameSpace, timeStamp}))
@@ -177,8 +177,8 @@ func (c *Client) GetAllConfigs(pageNo, pageSize int) (string, error) {
 	return c.callApi("diamond-server/basestone.do?method=getAllConfigByTenant", map[string]string{
 		"pageNo":   strconv.Itoa(pageNo),
 		"pageSize": strconv.Itoa(pageSize),
-		"tenant": c.NameSpace,
-		"method": "getAllConfigByTenant",
+		"tenant":   c.NameSpace,
+		"method":   "getAllConfigByTenant",
 	}, "GET")
 }
 

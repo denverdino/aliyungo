@@ -26,11 +26,14 @@ func Test_CreateServerlessKubernetesCluster(t *testing.T) {
 	})
 
 	args := &ServerlessCreationArgs{
-		ClusterType:          ClusterTypeServerlessKubernetes,
+		ClusterType:          ClusterTypeManagedKubernetes,
+		Profile:              ProfileServerlessKubernetes,
 		Name:                 fmt.Sprintf("Serverless-cluster-%d", time.Now().Unix()),
 		RegionId:             string(TestRegionID),
 		VpcId:                TestVpcId,
-		VSwitchId:            TestVSwitchId,
+		VswitchIds:           []string{TestVSwitchId},
+		ServiceCIDR:          TestServiceCIDR,
+		LoggingType:          TestLoggingType,
 		PrivateZone:          true,
 		EndpointPublicAccess: true,
 		NatGateway:           true,

@@ -112,9 +112,14 @@ func (client *Client) QueryUpgradeClusterResult(clusterId string) (*UpgradeClust
 type KubernetesClusterType string
 
 var (
-	DelicatedKubernetes  = KubernetesClusterType("Kubernetes")
-	ManagedKubernetes    = KubernetesClusterType("ManagedKubernetes")
-	ServerlessKubernetes = KubernetesClusterType("Ask")
+	DelicatedKubernetes = KubernetesClusterType("Kubernetes")
+	ManagedKubernetes   = KubernetesClusterType("ManagedKubernetes")
+)
+
+type KubernetesClusterProfile string
+
+var (
+	Profile4Serverless = KubernetesClusterProfile("Serverless")
 )
 
 type ProxyMode string

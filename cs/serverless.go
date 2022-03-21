@@ -34,7 +34,7 @@ type ServerlessCreationArgs struct {
 	ZoneID                string                   `json:"zone_id"`
 	LoggingType           string                   `json:"logging_type"`
 	SLSProjectName        string                   `json:"sls_project_name"`
-	SnatEntry             string                   `json:"snat_entry"`
+	SnatEntry             bool                     `json:"snat_entry"`
 }
 
 type ServerlessClusterResponse struct {

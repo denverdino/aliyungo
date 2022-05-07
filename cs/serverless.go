@@ -2,11 +2,12 @@ package cs
 
 import (
 	"fmt"
-	"github.com/denverdino/aliyungo/common"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/denverdino/aliyungo/common"
 )
 
 type ServerlessCreationArgs struct {
@@ -22,6 +23,7 @@ type ServerlessCreationArgs struct {
 	NatGateway            bool                     `json:"nat_gateway"`
 	KubernetesVersion     string                   `json:"kubernetes_version"`
 	DeletionProtection    bool                     `json:"deletion_protection"`
+	EnableRRSA            bool                     `json:"enable_rrsa"`
 	SecurityGroupId       string                   `json:"security_group_id"`
 	Tags                  []Tag                    `json:"tags"`
 	Addons                []Addon                  `json:"addons"`
@@ -53,6 +55,7 @@ type ServerlessClusterResponse struct {
 	CurrentVersion     string                `json:"current_version"`
 	PrivateZone        bool                  `json:"private_zone"`
 	DeletionProtection bool                  `json:"deletion_protection"`
+	EnableRRSA         bool                  `json:"enable_rrsa"`
 	ResourceGroupId    string                `json:"resource_group_id"`
 	ClusterSpec        string                `json:"cluster_spec"`
 	Profile            string                `json:"profile"`

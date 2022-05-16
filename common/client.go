@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/opentracing/opentracing-go/ext"
 	"io/ioutil"
 	"log"
 	"net"
@@ -16,6 +17,7 @@ import (
 	"time"
 
 	"github.com/denverdino/aliyungo/util"
+	"github.com/opentracing/opentracing-go"
 )
 
 // RemovalPolicy.N add index to array item
@@ -39,6 +41,8 @@ type Client struct {
 	regionID        Region
 	businessInfo    string
 	userAgent       string
+	disableTrace    bool
+	span            opentracing.Span
 }
 
 // Initialize properties of a client instance
@@ -292,6 +296,12 @@ func (client *Client) WithUserAgent(userAgent string) *Client {
 	return client
 }
 
+// WithUserAgent sets user agent to the request/response message
+func (client *Client) WithDisableTrace(disableTrace bool) *Client {
+	client.SetDisableTrace(disableTrace)
+	return client
+}
+
 // ----------------------------------------------------
 // SetXXX methods
 // ----------------------------------------------------
@@ -362,6 +372,16 @@ func (client *Client) SetTransport(transport http.RoundTripper) {
 	client.httpClient.Transport = transport
 }
 
+// SetDisableTrace close trace mode
+func (client *Client) SetDisableTrace(disableTrace bool) {
+	client.disableTrace = disableTrace
+}
+
+// SetSpan set the parent span
+func (client *Client) SetSpan(span opentracing.Span) {
+	client.span = span
+}
+
 func (client *Client) initEndpoint() error {
 	// if set any value to "CUSTOMIZED_ENDPOINT" could skip location service.
 	// example: export CUSTOMIZED_ENDPOINT=true
@@ -417,16 +437,46 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 
 	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+" "+client.userAgent)
 
+	// Set tracer
+	var span opentracing.Span
+	if ok := opentracing.IsGlobalTracerRegistered(); ok && !client.disableTrace {
+		tracer := opentracing.GlobalTracer()
+		var rootCtx opentracing.SpanContext
+
+		if client.span != nil {
+			rootCtx = client.span.Context()
+		}
+
+		span = tracer.StartSpan(
+			"AliyunGO-"+request.Action,
+			opentracing.ChildOf(rootCtx),
+			opentracing.Tag{string(ext.Component), "AliyunGO"},
+			opentracing.Tag{"ActionName", request.Action})
+
+		defer span.Finish()
+		tracer.Inject(
+			span.Context(),
+			opentracing.HTTPHeaders,
+			opentracing.HTTPHeadersCarrier(httpReq.Header))
+	}
+
 	t0 := time.Now()
 	httpResp, err := client.httpClient.Do(httpReq)
 	t1 := time.Now()
 	if err != nil {
+		if span != nil {
+			ext.LogError(span, err)
+		}
 		return GetClientError(err)
 	}
 	statusCode := httpResp.StatusCode
 
 	if client.debug {
 		log.Printf("Invoke %s %s %d (%v)", ECSRequestMethod, requestURL, statusCode, t1.Sub(t0))
+	}
+
+	if span != nil {
+		ext.HTTPStatusCode.Set(span, uint16(httpResp.StatusCode))
 	}
 
 	defer httpResp.Body.Close()

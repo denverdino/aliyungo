@@ -65,7 +65,7 @@ type ScalingGroup struct {
 	SupportIPv6 bool `json:"support_ipv6"`
 	// deploymentset
 	DeploymentSetId string `json:"deploymentset_id"`
-	DesiredSize *int64 `json:"desired_size,omitempty"`
+	DesiredSize     *int64 `json:"desired_size,omitempty"`
 }
 
 type AutoScaling struct {

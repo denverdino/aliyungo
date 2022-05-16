@@ -104,7 +104,7 @@ func Test_InvokeTracer(t *testing.T) {
 	assert.NotNil(t, client)
 	args := &DescribeEndpointsArgs{
 		Id:          Hangzhou,
-		ServiceCode:  "ecs",
+		ServiceCode: "ecs",
 		Type:        "openAPI",
 	}
 	// not set global tracer
@@ -120,7 +120,7 @@ func Test_InvokeTracer(t *testing.T) {
 			Param: 1,
 		},
 		Reporter: &jaegercfg.ReporterConfig{
-			LogSpans:          true,
+			LogSpans: true,
 		},
 	}
 	jLogger := jaegerlog.StdLogger

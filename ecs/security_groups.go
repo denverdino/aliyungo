@@ -76,7 +76,7 @@ type DescribeSecurityGroupAttributeResponse struct {
 	Permissions       struct {
 		Permission []PermissionType
 	}
-	VpcId string
+	VpcId             string
 	InnerAccessPolicy GroupInnerAccessPolicy
 }
 

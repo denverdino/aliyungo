@@ -321,14 +321,14 @@ func TestClient_DescribeEipAddressesWithRaw(t *testing.T) {
 	}
 }
 
-func TestClient_ReleaseEipAddress (t *testing.T) {
+func TestClient_ReleaseEipAddress(t *testing.T) {
 	client := NewVpcTestClientForDebug()
 	regions, err := client.DescribeRegions()
 	if err == nil {
 		for _, region := range regions {
-			eipAddress := make([]EipAddressSetType,0)
+			eipAddress := make([]EipAddressSetType, 0)
 
-			vpcClient := NewVPCClient(TestAccessKeyId,TestAccessKeySecret,region.RegionId)
+			vpcClient := NewVPCClient(TestAccessKeyId, TestAccessKeySecret, region.RegionId)
 			vpcClient.SetDebug(true)
 
 			args := DescribeEipAddressesArgs{
@@ -341,19 +341,19 @@ func TestClient_ReleaseEipAddress (t *testing.T) {
 
 			for {
 				eips, page, err := vpcClient.DescribeEipAddresses(&args)
-				if err!=nil{
+				if err != nil {
 					break
 				}
 
 				eipAddress = append(eipAddress, eips...)
-				if page.NextPage()==nil{
+				if page.NextPage() == nil {
 					break
 				}
 
 				args.Pagination = *page.NextPage()
 			}
 
-			for _,eip := range eipAddress{
+			for _, eip := range eipAddress {
 				vpcClient.ReleaseEipAddress(eip.AllocationId)
 			}
 		}

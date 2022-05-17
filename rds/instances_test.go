@@ -254,7 +254,7 @@ func TestAccountAllocatePublicConnection(t *testing.T) {
 	args := AllocateInstancePublicConnectionArgs{
 		DBInstanceId:           DBInstanceId,
 		ConnectionStringPrefix: DBInstanceId + "o",
-		Port: "3306",
+		Port:                   "3306",
 	}
 
 	_, err := client.AllocateInstancePublicConnection(&args)

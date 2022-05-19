@@ -79,3 +79,26 @@ func Test_InvokeTracer(t *testing.T) {
 	parentSpan.Finish()
 	closer.Close()
 }
+
+func Test_CustomHeader(t *testing.T) {
+	client := NewTestClientForDebug()
+	assert.NotNil(t, client)
+	args := &DescribeEndpointsArgs{
+		Id:          Hangzhou,
+		ServiceCode: "ecs",
+		Type:        "openAPI",
+	}
+	// not set global tracer
+	resp, err := client.DescribeEndpoints(args)
+	t.Log(resp)
+	assert.Nil(t, err)
+
+	//set custom header
+	client.SetHeaders(map[string]string{
+		"EagleEye-TraceId":"0a58315316529473823863827d52ad",
+		"EagleEye-RpcId":"0a58315316529473823863827d52ad",
+	})
+	resp, err = client.DescribeEndpoints(args)
+	t.Log(resp)
+	assert.Nil(t, err)
+}

@@ -43,6 +43,7 @@ type Client struct {
 	disableTrace    bool
 	span            opentracing.Span
 	logger          *Logger
+	Headers         map[string]string
 }
 
 // Initialize properties of a client instance
@@ -199,16 +200,21 @@ func (client *Client) WithUserAgent(userAgent string) *Client {
 	return client
 }
 
-// WithUserAgent sets user agent to the request/response message
+// WithDisableTrace set whether to disable trace
 func (client *Client) WithDisableTrace(disableTrace bool) *Client {
 	client.SetDisableTrace(disableTrace)
 	return client
 }
 
-// WithUserAgent sets user agent to the request/response message
+// WithSpan sets root span
 func (client *Client) WithSpan(span opentracing.Span) *Client {
 	client.SetSpan(span)
 	return client
+}
+
+// WithHeader
+func (client *Client) WithHeader(headers map[string]string) {
+	client.Headers = headers
 }
 
 // ----------------------------------------------------
@@ -269,14 +275,19 @@ func (client *Client) SetSecurityToken(securityToken string) {
 	client.securityToken = securityToken
 }
 
-//set SecurityToken
+//set disable trace
 func (client *Client) SetDisableTrace(disableTrace bool) {
 	client.disableTrace = disableTrace
 }
 
-//set SecurityToken
+//set span
 func (client *Client) SetSpan(span opentracing.Span) {
 	client.span = span
+}
+
+//set header
+func (client *Client) SetHeaders(headers map[string]string) {
+	client.Headers = headers
 }
 
 // Invoke sends the raw HTTP request for ECS services
@@ -313,6 +324,9 @@ func (client *Client) Invoke(action string, args interface{}, response interface
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+" "+client.userAgent)
+	for k, v := range client.Headers {
+		httpReq.Header.Set(k, v)
+	}
 
 	// Set tracer
 	var span opentracing.Span
@@ -436,6 +450,9 @@ func (client *Client) InvokeByFlattenMethod(action string, args interface{}, res
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 	httpReq.Header.Set("User-Agent", httpReq.UserAgent()+" "+client.userAgent)
+	for k, v := range client.Headers {
+		httpReq.Header.Set(k, v)
+	}
 
 	// Set tracer
 	var span opentracing.Span
@@ -573,6 +590,9 @@ func (client *Client) InvokeByAnyMethod(method, action, path string, args interf
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("X-SDK-Client", `AliyunGO/`+Version+client.businessInfo)
 	httpReq.Header.Set("User-Agent", httpReq.Header.Get("User-Agent")+" "+client.userAgent)
+	for k, v := range client.Headers {
+		httpReq.Header.Set(k, v)
+	}
 
 	// Set tracer
 	var span opentracing.Span

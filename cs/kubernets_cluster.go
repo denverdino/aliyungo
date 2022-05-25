@@ -3,9 +3,10 @@ package cs
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/denverdino/aliyungo/ecs"
 	"net/http"
 	"time"
+
+	"github.com/denverdino/aliyungo/ecs"
 
 	"github.com/denverdino/aliyungo/common"
 )
@@ -43,6 +44,7 @@ type ModifyClusterArgs struct {
 	DeletionProtection bool              `json:"deletion_protection"`
 	ResourceGroupId    string            `json:"resource_group_id"`
 	MaintenanceWindow  MaintenanceWindow `json:"maintenance_window"`
+	EnableRRSA         bool              `json:"enable_rrsa"`
 }
 
 type UpgradeClusterArgs struct {
@@ -146,6 +148,7 @@ type ClusterArgs struct {
 	Profile            string                `json:"profile"`
 	KubernetesVersion  string                `json:"kubernetes_version"`
 	DeletionProtection bool                  `json:"deletion_protection"`
+	EnableRRSA         bool                  `json:"enable_rrsa"`
 
 	NodeCidrMask string `json:"node_cidr_mask"`
 	UserCa       string `json:"user_ca"`
@@ -202,8 +205,8 @@ type ClusterArgs struct {
 	ControlplaneComponents []string `json:"controlplane_log_components"`
 
 	// Operating system hardening
-	SocEnabled *bool `json:"soc_enabled"`
-	CisEnabled *bool `json:"cis_enabled"`
+	SocEnabled bool `json:"soc_enabled"`
+	CisEnabled bool `json:"cis_enabled"`
 }
 
 //addon
@@ -456,6 +459,7 @@ type KubernetesClusterDetail struct {
 	CurrentVersion     string `json:"current_version"`
 	PrivateZone        bool   `json:"private_zone"`
 	DeletionProtection bool   `json:"deletion_protection"`
+	EnableRRSA         bool   `json:"enable_rrsa"`
 	MetaData           string `json:"meta_data"`
 
 	Created time.Time `json:"created"`

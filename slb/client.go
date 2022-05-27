@@ -61,7 +61,7 @@ func NewSLBClientWithSecurityToken(accessKeyId string, accessKeySecret string, s
 func NewSLBClientWithSecurityToken4RegionalDomain(accessKeyId string, accessKeySecret string, securityToken string, regionID common.Region) *Client {
 	endpoint := os.Getenv("SLB_ENDPOINT")
 	if endpoint == "" {
-		endpoint = SLBDefaultEndpoint
+		return NewSLBClientWithEndpointAndSecurityToken(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)
 	}
 
 	return NewSLBClientWithEndpointAndSecurityToken4RegionalDomain(endpoint, accessKeyId, accessKeySecret, securityToken, regionID)

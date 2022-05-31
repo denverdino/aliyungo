@@ -157,8 +157,8 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	}
 
 	if (client.secureTransport == "false" || client.secureTransport == "true") && client.sourceIp != "" {
-		httpReq.Header.Set("x-acs-proxy-source-ip", client.sourceIp)
-		httpReq.Header.Set("x-acs-proxy-secure-transport", client.secureTransport)
+		httpReq.Header["x-acs-source-ip"] = []string{client.sourceIp}
+		httpReq.Header["x-acs-secure-transport"] = []string{client.secureTransport}
 	}
 
 	// TODO move to util and add build val flag

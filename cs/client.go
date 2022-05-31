@@ -32,6 +32,8 @@ type Client struct {
 	debug           bool
 	userAgent       string
 	httpClient      *http.Client
+	sourceIp        string
+	secureTransport string
 }
 
 type PaginationResult struct {
@@ -89,6 +91,16 @@ func (client *Client) SetTransport(transport http.RoundTripper) {
 	client.httpClient.Transport = transport
 }
 
+// SetSourceIp set the source ip
+func (client *Client) SetSourceIp(sourceIp string) {
+	client.sourceIp = sourceIp
+}
+
+// SetSecureTransport set the secure transport
+func (client *Client) SetSecureTransport(secureTransport string) {
+	client.secureTransport = secureTransport
+}
+
 type Request struct {
 	Method          string
 	URL             string
@@ -143,6 +155,12 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 	if contentMD5 != "" {
 		httpReq.Header.Set("Content-MD5", contentMD5)
 	}
+
+	if (client.secureTransport == "false" || client.secureTransport == "true") && client.sourceIp != "" {
+		httpReq.Header.Set("x-acs-proxy-source-ip", client.sourceIp)
+		httpReq.Header.Set("x-acs-proxy-secure-transport", client.secureTransport)
+	}
+
 	// TODO move to util and add build val flag
 	httpReq.Header.Set("Date", util.GetGMTime())
 	httpReq.Header.Set("Accept", "application/json")

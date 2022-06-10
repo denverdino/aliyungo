@@ -465,11 +465,12 @@ type KubernetesClusterDetail struct {
 	Created time.Time `json:"created"`
 	Updated time.Time `json:"updated"`
 
-	WorkerRamRoleName string            `json:"worker_ram_role_name"`
-	ClusterSpec       string            `json:"cluster_spec"`
-	OSType            string            `json:"os_type"`
-	MasterURL         string            `json:"master_url"`
-	MaintenanceWindow MaintenanceWindow `json:"maintenance_window"`
+	WorkerRamRoleName string                 `json:"worker_ram_role_name"`
+	ClusterSpec       string                 `json:"cluster_spec"`
+	OSType            string                 `json:"os_type"`
+	MasterURL         string                 `json:"master_url"`
+	MaintenanceWindow MaintenanceWindow      `json:"maintenance_window"`
+	Parameters        map[string]interface{} `json:"parameters"`
 }
 
 //GetMetaData

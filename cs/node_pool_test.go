@@ -11,6 +11,9 @@ var (
 	VswitchIds    = os.Getenv("VswitchIds")
 	LoginPassword = os.Getenv("LoginPassword")
 	NodePoolId    = os.Getenv("NodePoolId")
+
+	nodepoolName   = "test-npl"
+	systemDiskSize = int64(120)
 )
 
 func Test_CreateNodePool(t *testing.T) {
@@ -20,16 +23,16 @@ func Test_CreateNodePool(t *testing.T) {
 		Count:    1,
 		RegionId: TestRegionID,
 		NodePoolInfo: NodePoolInfo{
-			Name:         "test-npl",
+			Name:         &nodepoolName,
 			NodePoolType: "ess",
 		},
 		ScalingGroup: ScalingGroup{
 			VpcId:              VpcId,
 			VswitchIds:         strings.Split(VswitchIds, ","),
 			InstanceTypes:      []string{"ecs.n6.large"},
-			LoginPassword:      LoginPassword,
+			LoginPassword:      &LoginPassword,
 			SystemDiskCategory: "cloud_efficiency",
-			SystemDiskSize:     120,
+			SystemDiskSize:     &systemDiskSize,
 			DataDisks:          []NodePoolDataDisk{{Size: 100, Category: "cloud_ssd"}},
 		},
 		KubernetesConfig: KubernetesConfig{

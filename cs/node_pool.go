@@ -5,6 +5,7 @@ import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -16,72 +17,72 @@ type SpotPrice struct {
 type NodePoolInfo struct {
 	NodePoolId      string        `json:"nodepool_id"`
 	RegionId        common.Region `json:"region_id"`
-	Name            string        `json:"name"`
+	Name            *string       `json:"name"`
 	Created         time.Time     `json:"created"`
 	Updated         time.Time     `json:"updated"`
-	IsDefault       bool          `json:"is_default"`
+	IsDefault       *bool         `json:"is_default"`
 	NodePoolType    string        `json:"type"`
-	ResourceGroupId string        `json:"resource_group_id"`
+	ResourceGroupId *string       `json:"resource_group_id"`
 }
 
 type ScalingGroup struct {
 	VpcId                      string             `json:"vpc_id"`
 	VswitchIds                 []string           `json:"vswitch_ids"`
 	InstanceTypes              []string           `json:"instance_types"`
-	LoginPassword              string             `json:"login_password"`
-	KeyPair                    string             `json:"key_pair"`
+	LoginPassword              *string            `json:"login_password"`
+	KeyPair                    *string            `json:"key_pair"`
 	SecurityGroupId            string             `json:"security_group_id"`
 	SecurityGroupIds           []string           `json:"security_group_ids"`
 	SystemDiskCategory         ecs.DiskCategory   `json:"system_disk_category"`
-	SystemDiskSize             int64              `json:"system_disk_size"`
-	SystemDiskPerformanceLevel string             `json:"system_disk_performance_level"`
-	SystemDiskEncryptAlgorithm string             `json:"system_disk_encrypt_algorithm"`
-	SystemDiskEncrypted        bool               `json:"system_disk_encrypted"`
-	SystemDiskKMSKeyId         string             `json:"system_disk_kms_key_id"`
+	SystemDiskSize             *int64             `json:"system_disk_size"`
+	SystemDiskPerformanceLevel *string            `json:"system_disk_performance_level"`
+	SystemDiskEncryptAlgorithm *string            `json:"system_disk_encrypt_algorithm"`
+	SystemDiskEncrypted        *bool              `json:"system_disk_encrypted"`
+	SystemDiskKMSKeyId         *string            `json:"system_disk_kms_key_id"`
 	DataDisks                  []NodePoolDataDisk `json:"data_disks"` //支持多个数据盘
 	Tags                       []Tag              `json:"tags"`
-	ImageId                    string             `json:"image_id"`
-	Platform                   string             `json:"platform"`
-	OSType                     string             `json:"os_type"`
-	ImageType                  string             `json:"image_type"`
-	InstanceChargeType         string             `json:"instance_charge_type"`
-	Period                     int                `json:"period"`
-	PeriodUnit                 string             `json:"period_unit"`
-	AutoRenew                  bool               `json:"auto_renew"`
-	AutoRenewPeriod            int                `json:"auto_renew_period"`
+	ImageId                    *string            `json:"image_id"`
+	Platform                   *string            `json:"platform"`
+	OSType                     *string            `json:"os_type"`
+	ImageType                  *string            `json:"image_type"`
+	InstanceChargeType         *string            `json:"instance_charge_type"`
+	Period                     *int               `json:"period"`
+	PeriodUnit                 *string            `json:"period_unit"`
+	AutoRenew                  *bool              `json:"auto_renew"`
+	AutoRenewPeriod            *int               `json:"auto_renew_period"`
 	// spot实例
-	SpotStrategy   string      `json:"spot_strategy"`
+	SpotStrategy   *string     `json:"spot_strategy"`
 	SpotPriceLimit []SpotPrice `json:"spot_price_limit"`
 
 	RdsInstances   []string `json:"rds_instances"`
-	ScalingPolicy  string   `json:"scaling_policy"`
-	ScalingGroupId string   `json:"scaling_group_id"`
+	ScalingPolicy  *string  `json:"scaling_policy"`
+	ScalingGroupId *string  `json:"scaling_group_id"`
 
-	WorkerSnapshotPolicyId string `json:"worker_system_disk_snapshot_policy_id"`
+	WorkerSnapshotPolicyId *string `json:"worker_system_disk_snapshot_policy_id"`
 	// 公网ip
-	InternetChargeType      string `json:"internet_charge_type"`
-	InternetMaxBandwidthOut int    `json:"internet_max_bandwidth_out"`
+	InternetChargeType      *string `json:"internet_charge_type"`
+	InternetMaxBandwidthOut *int    `json:"internet_max_bandwidth_out"`
 	// Operating system hardening
 	SocEnabled *bool `json:"soc_enabled"`
 	CisEnabled *bool `json:"cis_enabled"`
 	// ipv6
-	SupportIPv6 bool `json:"support_ipv6"`
+	SupportIPv6 *bool `json:"support_ipv6"`
 	// deploymentset
-	DeploymentSetId string `json:"deploymentset_id"`
-	DesiredSize     *int64 `json:"desired_size,omitempty"`
+	DeploymentSetId *string `json:"deploymentset_id"`
+	DesiredSize     *int64  `json:"desired_size,omitempty"`
 }
 
 type AutoScaling struct {
-	Enable       bool   `json:"enable"`
-	MaxInstances int64  `json:"max_instances"`
-	MinInstances int64  `json:"min_instances"`
-	Type         string `json:"type"`
+	Enable       *bool   `json:"enable"`
+	MaxInstances *int64  `json:"max_instances"`
+	MinInstances *int64  `json:"min_instances"`
+	Type         *string `json:"type"`
 	// eip
 	IsBindEip *bool `json:"is_bond_eip"`
 	// value: PayByBandwidth / PayByTraffic
-	EipInternetChargeType string `json:"eip_internet_charge_type"`
+	EipInternetChargeType *string `json:"eip_internet_charge_type"`
 	// default 5
-	EipBandWidth int64 `json:"eip_bandwidth"`
+	EipBandWidth *int64 `json:"eip_bandwidth"`
 }
 
 type KubernetesConfig struct {
@@ -89,13 +90,13 @@ type KubernetesConfig struct {
 	Taints       []Taint `json:"taints"`
 	Labels       []Label `json:"labels"`
 	CpuPolicy    string  `json:"cpu_policy"`
-	UserData     string  `json:"user_data"`
+	UserData     *string `json:"user_data"`
 
 	Runtime           string `json:"runtime,omitempty"`
 	RuntimeVersion    string `json:"runtime_version"`
-	CmsEnabled        bool   `json:"cms_enabled"`
-	OverwriteHostname bool   `json:"overwrite_hostname"`
-	Unschedulable     bool   `json:"unschedulable"`
+	CmsEnabled        *bool  `json:"cms_enabled"`
+	OverwriteHostname *bool  `json:"overwrite_hostname"`
+	Unschedulable     *bool  `json:"unschedulable"`
 }
 
 // 加密计算节点池
@@ -106,17 +107,17 @@ type TEEConfig struct {
 
 // 托管节点池配置
 type Management struct {
-	Enable      bool        `json:"enable"`
-	AutoRepair  bool        `json:"auto_repair"`
+	Enable      *bool       `json:"enable"`
+	AutoRepair  *bool       `json:"auto_repair"`
 	UpgradeConf UpgradeConf `json:"upgrade_config"`
 }
 
 type UpgradeConf struct {
-	AutoUpgrade       bool  `json:"auto_upgrade"`
-	Surge             int64 `json:"surge"`
-	SurgePercentage   int64 `json:"surge_percentage,omitempty"`
-	MaxUnavailable    int64 `json:"max_unavailable"`
-	KeepSurgeOnFailed bool  `json:"keep_surge_on_failed"`
+	AutoUpgrade       *bool  `json:"auto_upgrade"`
+	Surge             *int64 `json:"surge"`
+	SurgePercentage   *int64 `json:"surge_percentage,omitempty"`
+	MaxUnavailable    *int64 `json:"max_unavailable"`
+	KeepSurgeOnFailed *bool  `json:"keep_surge_on_failed"`
 }
 
 type CreateNodePoolRequest struct {
@@ -216,6 +217,13 @@ func (client *Client) UpdateNodePool(clusterId string, nodePoolId string, reques
 	return response, nil
 }
 
+//Deprecated
 func (client *Client) DeleteNodePool(clusterId, nodePoolId string) error {
 	return client.Invoke("", http.MethodDelete, fmt.Sprintf("/clusters/%s/nodepools/%s", clusterId, nodePoolId), nil, nil, nil)
+}
+
+func (client *Client) ForceDeleteNodePool(clusterId, nodePoolId string) error {
+	query := url.Values{}
+	query.Add("force", "true")
+	return client.Invoke("", http.MethodDelete, fmt.Sprintf("/clusters/%s/nodepools/%s", clusterId, nodePoolId), query, nil, nil)
 }

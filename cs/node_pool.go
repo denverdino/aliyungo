@@ -120,6 +120,31 @@ type UpgradeConf struct {
 	KeepSurgeOnFailed *bool  `json:"keep_surge_on_failed"`
 }
 
+type NodeConfig struct {
+	KubeletConfiguration `json:"kubelet_configuration,omitempty"`
+	RolloutPolicy        `json:"rollout_policy,omitempty"`
+}
+
+type KubeletConfiguration struct {
+	CpuManagerPolicy        *string                `json:"cpuManagerPolicy,omitempty"`
+	EventBurst              *int64                 `json:"eventBurst,omitempty"`
+	EventRecordQPS          *int64                 `json:"eventRecordQPS,omitempty"`
+	EvictionHard            map[string]interface{} `json:"evictionHard,omitempty"`
+	EvictionSoft            map[string]interface{} `json:"evictionSoft,omitempty"`
+	EvictionSoftGracePeriod map[string]interface{} `json:"evictionSoftGracePeriod,omitempty"`
+	KubeAPIBurst            *int64                 `json:"kubeAPIBurst,omitempty"`
+	KubeAPIQPS              *int64                 `json:"kubeAPIQPS,omitempty"`
+	KubeReserved            map[string]interface{} `json:"kubeReserved,omitempty"`
+	RegistryBurst           *int64                 `json:"registryBurst,omitempty"`
+	RegistryPullQPS         *int64                 `json:"registryPullQPS,omitempty"`
+	SerializeImagePulls     *bool                  `json:"serializeImagePulls,omitempty"`
+	SystemReserved          map[string]interface{} `json:"systemReserved,omitempty"`
+}
+
+type RolloutPolicy struct {
+	MaxUnavailable *int64 `json:"max_unavailable,omitempty"`
+}
+
 type CreateNodePoolRequest struct {
 	RegionId         common.Region `json:"region_id"`
 	Count            int64         `json:"count"`
@@ -129,6 +154,7 @@ type CreateNodePoolRequest struct {
 	AutoScaling      `json:"auto_scaling"`
 	TEEConfig        `json:"tee_config"`
 	Management       `json:"management"`
+	NodeConfig       `json:"node_config,omitempty"`
 }
 
 type BasicNodePool struct {
@@ -172,6 +198,7 @@ type UpdateNodePoolRequest struct {
 	KubernetesConfig `json:"kubernetes_config"`
 	AutoScaling      `json:"auto_scaling"`
 	Management       `json:"management"`
+	NodeConfig       `json:"node_config,omitempty"`
 }
 
 type NodePoolsDetail struct {

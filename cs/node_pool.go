@@ -121,8 +121,8 @@ type UpgradeConf struct {
 }
 
 type NodeConfig struct {
-	KubeletConfiguration `json:"kubelet_configuration,omitempty"`
-	RolloutPolicy        `json:"rollout_policy,omitempty"`
+	KubeletConfiguration *KubeletConfiguration `json:"kubelet_configuration,omitempty"`
+	RolloutPolicy        *RolloutPolicy        `json:"rollout_policy,omitempty"`
 }
 
 type KubeletConfiguration struct {
@@ -154,7 +154,7 @@ type CreateNodePoolRequest struct {
 	AutoScaling      `json:"auto_scaling"`
 	TEEConfig        `json:"tee_config"`
 	Management       `json:"management"`
-	NodeConfig       `json:"node_config,omitempty"`
+	NodeConfig       *NodeConfig `json:"node_config,omitempty"`
 }
 
 type BasicNodePool struct {
@@ -198,7 +198,7 @@ type UpdateNodePoolRequest struct {
 	KubernetesConfig `json:"kubernetes_config"`
 	AutoScaling      `json:"auto_scaling"`
 	Management       `json:"management"`
-	NodeConfig       `json:"node_config,omitempty"`
+	NodeConfig       *NodeConfig `json:"node_config,omitempty"`
 }
 
 type NodePoolsDetail struct {

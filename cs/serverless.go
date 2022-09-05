@@ -59,6 +59,7 @@ type ServerlessClusterResponse struct {
 	ResourceGroupId    string                `json:"resource_group_id"`
 	ClusterSpec        string                `json:"cluster_spec"`
 	Profile            string                `json:"profile"`
+	MetaData           string                `json:"meta_data"`
 }
 
 type Tag struct {

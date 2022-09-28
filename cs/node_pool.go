@@ -70,6 +70,8 @@ type ScalingGroup struct {
 	// deploymentset
 	DeploymentSetId *string `json:"deploymentset_id"`
 	DesiredSize     *int64  `json:"desired_size,omitempty"`
+	
+	PolarDBIds []string `json:"polardb_ids"`
 }
 
 type AutoScaling struct {

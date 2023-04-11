@@ -33,6 +33,7 @@ type Client struct {
 	Version         string
 	debug           bool
 	userAgent       string
+	Headers         map[string]string
 	httpClient      *http.Client
 }
 
@@ -107,6 +108,11 @@ func (client *Client) SetTransport(transport http.RoundTripper) {
 	client.httpClient.Transport = transport
 }
 
+// SetHeaders set headers
+func (client *Client) SetHeaders(headers map[string]string) {
+	client.Headers = headers
+}
+
 type Request struct {
 	Method          string
 	URL             string
@@ -177,6 +183,10 @@ func (client *Client) Invoke(region common.Region, method string, path string, q
 
 	if client.SecurityToken != "" {
 		httpReq.Header["x-acs-security-token"] = []string{client.SecurityToken}
+	}
+
+	for k, v := range client.Headers {
+		httpReq.Header.Set(k, v)
 	}
 
 	client.signRequest(httpReq)

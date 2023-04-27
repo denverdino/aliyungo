@@ -152,6 +152,23 @@ func TestReplaceSystemDisk(t *testing.T) {
 	t.Logf("Replace system disk %s successfully ", diskId)
 }
 
+func TestReplaceSystemDiskWithLoginAsNonRoot(t *testing.T) {
+	client := NewTestClientForDebug()
+
+	args := ReplaceSystemDiskArgs{
+		InstanceId:     TestInstanceId,
+		ImageId:        TestImageId,
+		LoginAsNonRoot: true,
+	}
+
+	diskId, err := client.ReplaceSystemDisk(&args)
+	if err != nil {
+		t.Errorf("Failed to replace system disk %v", err)
+	} else {
+		t.Logf("diskId is %s", diskId)
+	}
+}
+
 func TestResizeDisk(t *testing.T) {
 	accessKeyId := os.Getenv("ACCESS_KEY_ID")
 	accessKeySecret := os.Getenv("ACCESS_KEY_SECRET")

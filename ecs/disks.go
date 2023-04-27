@@ -80,7 +80,6 @@ type DescribeDisksArgs struct {
 	common.Pagination
 }
 
-//
 // You can read doc at http://docs.aliyun.com/#/pub/ecs/open-api/datatype&diskitemtype
 type DiskItemType struct {
 	DiskId             string
@@ -269,7 +268,6 @@ type ResizeDiskResponse struct {
 	common.Response
 }
 
-//
 // ResizeDisk can only support to enlarge disk size
 // You can read doc at https://help.aliyun.com/document_detail/25522.html
 func (client *Client) ResizeDisk(diskId string, sizeGB int) error {
@@ -327,10 +325,11 @@ func (client *Client) ModifyDiskAttribute(args *ModifyDiskAttributeArgs) error {
 }
 
 type ReplaceSystemDiskArgs struct {
-	InstanceId  string
-	ImageId     string
-	SystemDisk  SystemDiskType
-	ClientToken string
+	InstanceId     string
+	ImageId        string
+	SystemDisk     SystemDiskType
+	ClientToken    string
+	LoginAsNonRoot bool
 }
 
 type ReplaceSystemDiskResponse struct {

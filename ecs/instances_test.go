@@ -88,7 +88,7 @@ func ExampleClient_DeleteInstance() {
 
 	client := NewTestClient()
 
-	err := client.DeleteInstance(TestInstanceId)
+	err := client.DeleteInstance(TestInstanceId, false)
 
 	if err != nil {
 		fmt.Printf("Failed to delete Instance %s vnc url: %v \n", TestInstanceId, err)
@@ -178,7 +178,7 @@ func TestECSInstanceCreationAndDeletion(t *testing.T) {
 	}
 	t.Logf("Instance %s is stopped successfully.", instanceId)
 
-	err = client.DeleteInstance(instanceId)
+	err = client.DeleteInstance(instanceId, false)
 
 	if err != nil {
 		t.Errorf("Failed to delete instance %s: %v", instanceId, err)
@@ -281,7 +281,7 @@ func TestLocationECSClient(t *testing.T) {
 	t.Logf("InstanceAttribute is %++v", attr)
 
 	//DeleteInstance
-	err = client.DeleteInstance(instanceId)
+	err = client.DeleteInstance(instanceId, false)
 	if err != nil {
 		t.Fatalf("Failed to delete instance %++v", err)
 	}

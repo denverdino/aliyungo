@@ -217,13 +217,13 @@ func (client *Client) ensureProperties() error {
 	var msg string
 
 	if client.endpoint == "" {
-		msg = fmt.Sprintf("endpoint cannot be empty!")
+		msg = "endpoint cannot be empty!"
 	} else if client.version == "" {
-		msg = fmt.Sprintf("version cannot be empty!")
+		msg = "version cannot be empty!"
 	} else if client.AccessKeyId == "" {
-		msg = fmt.Sprintf("AccessKeyId cannot be empty!")
+		msg = "AccessKeyId cannot be empty!"
 	} else if client.AccessKeySecret == "" {
-		msg = fmt.Sprintf("AccessKeySecret cannot be empty!")
+		msg = "AccessKeySecret cannot be empty!"
 	}
 
 	if msg != "" {
